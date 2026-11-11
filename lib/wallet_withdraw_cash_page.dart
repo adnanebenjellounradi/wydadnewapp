@@ -18,21 +18,29 @@ class _WalletWithdrawCashPageState extends State<WalletWithdrawCashPage> {
   int _step = 0; // 0: form, 1: code
   bool _isLoading = true;
   double _balance = 0;
-  String _amount = '300';
-  String _pin = '';
   bool _isSubmitting = false;
-  String? _withdrawCode;
 
+  // ✅ Contrôleurs déclarés ici pour éviter les sauts de curseur
+  final TextEditingController _amountCtrl = TextEditingController(text: '300');
   final TextEditingController _pinCtrl = TextEditingController();
+
+  String _amount = '300';
+  String? _withdrawCode;
 
   @override
   void initState() {
     super.initState();
+    _amountCtrl.addListener(() {
+      setState(() {
+        _amount = _amountCtrl.text;
+      });
+    });
     _loadBalance();
   }
 
   @override
   void dispose() {
+    _amountCtrl.dispose();
     _pinCtrl.dispose();
     super.dispose();
   }
@@ -58,7 +66,9 @@ class _WalletWithdrawCashPageState extends State<WalletWithdrawCashPage> {
   }
 
   Future<void> _submit() async {
-    if (_pin.length < 4) {
+    final pin = _pinCtrl.text;
+
+    if (pin.length < 4) {
       _showError('Code PIN à 4 chiffres');
       return;
     }
@@ -72,27 +82,41 @@ class _WalletWithdrawCashPageState extends State<WalletWithdrawCashPage> {
     }
     setState(() => _isSubmitting = true);
 
-    final res = await WalletService.cashoutAgency(
-      token: widget.token,
-      amount: _amountValue,
-      pin: _pin,
-      description: 'Retrait espèces en agence',
-    );
+    try {
+      final res = await WalletService.cashoutAgency(
+        token: widget.token,
+        amount: _amountValue,
+        pin: pin,
+        description: 'Retrait espèces en agence',
+      );
 
-    if (!mounted) return;
-    setState(() => _isSubmitting = false);
+      if (!mounted) return;
+      setState(() => _isSubmitting = false);
 
-    if (res != null && res['success'] == true) {
-      final code = res['data']?['withdrawal_code']?.toString() ??
-          res['data']?['code']?.toString() ??
-          res['data']?['reference']?.toString() ??
-          '482917';
-      setState(() {
-        _withdrawCode = code;
-        _step = 1;
-      });
-    } else {
-      _showError(res?['message']?.toString() ?? 'Retrait échoué');
+      // 🔍 LOGS POUR DEBUG
+      print("🔍 [WITHDRAW CASH] Réponse API = $res");
+
+      if (res != null && res['success'] == true) {
+        final data = res['data'];
+
+        // ✅ Extraction robuste du code
+        final code = data?['withdrawal_code']?.toString() ??
+            data?['code']?.toString() ??
+            data?['reference']?.toString() ??
+            '------';
+
+        setState(() {
+          _withdrawCode = code;
+          _step = 1;
+        });
+      } else {
+        _showError(res?['message']?.toString() ?? 'Retrait échoué. Veuillez réessayer.');
+      }
+    } catch (e) {
+      if (!mounted) return;
+      setState(() => _isSubmitting = false);
+      print("🔍 [WITHDRAW CASH] Erreur = $e");
+      _showError('Erreur de connexion. Veuillez réessayer.');
     }
   }
 
@@ -211,16 +235,13 @@ class _WalletWithdrawCashPageState extends State<WalletWithdrawCashPage> {
             children: [
               Expanded(
                 child: TextField(
+                  controller: _amountCtrl,
                   textAlign: TextAlign.right,
                   keyboardType: TextInputType.number,
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
                     LengthLimitingTextInputFormatter(5),
                   ],
-                  controller: TextEditingController(text: _amount)
-                    ..selection =
-                    TextSelection.collapsed(offset: _amount.length),
-                  onChanged: (v) => setState(() => _amount = v),
                   cursorColor: Colors.white,
                   style: const TextStyle(
                     fontFamily: 'Inter',
@@ -264,7 +285,12 @@ class _WalletWithdrawCashPageState extends State<WalletWithdrawCashPage> {
               child: Padding(
                 padding: EdgeInsets.only(right: v == 500 ? 0 : 8),
                 child: GestureDetector(
-                  onTap: () => setState(() => _amount = v.toString()),
+                  onTap: () {
+                    setState(() {
+                      _amountCtrl.text = v.toString();
+                      _amount = v.toString();
+                    });
+                  },
                   child: Container(
                     height: 38,
                     decoration: BoxDecoration(
@@ -334,7 +360,6 @@ class _WalletWithdrawCashPageState extends State<WalletWithdrawCashPage> {
             FilteringTextInputFormatter.digitsOnly,
             LengthLimitingTextInputFormatter(4),
           ],
-          onChanged: (v) => setState(() => _pin = v),
           cursorColor: Colors.white,
           style: const TextStyle(
             fontFamily: 'Inter',
@@ -456,8 +481,7 @@ class _WalletWithdrawCashPageState extends State<WalletWithdrawCashPage> {
               Container(height: 1, color: Colors.black.withOpacity(0.10)),
               const SizedBox(height: 10),
               _kvWhite('Montant', '$_amount,00 MAD'),
-              const SizedBox(height: 8),
-              _kvWhite('Valable jusqu\'au', '[DATE · HEURE]'),
+              // ✅ Ligne "Valable jusqu'au" retirée ici
             ],
           ),
         ),
@@ -494,9 +518,9 @@ class _WalletWithdrawCashPageState extends State<WalletWithdrawCashPage> {
           width: double.infinity,
           height: 50,
           child: ElevatedButton(
-            onPressed: () => Navigator.pushNamedAndRemoveUntil(
-              context,
-              '/wallet',
+            // ✅ Redirection vers l'Accueil
+            onPressed: () => Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
+              '/acceuil',
                   (r) => false,
               arguments: {'token': widget.token},
             ),
@@ -509,7 +533,7 @@ class _WalletWithdrawCashPageState extends State<WalletWithdrawCashPage> {
               elevation: 0,
             ),
             child: const Text(
-              'Retour au Wallet',
+              'Retour à l\'accueil', // ✅ Texte modifié
               style: TextStyle(
                 fontFamily: 'Inter',
                 fontSize: 14,

@@ -118,12 +118,29 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
       final response = await http.get(uri);
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        if (data["success"] == true) return data["data"];
+        if (data["success"] == true) {
+          final orgData = data["data"] as Map<String, dynamic>;
+          if (mounted) {
+            setState(() => organizationData = orgData);
+          }
+          await _saveOrgSettingsToPrefs(orgData);
+          return orgData;
+        }
       }
       return null;
     } catch (e) {
       return null;
     }
+  }
+
+  /// Sauvegarde les 3 toggles d'organisation dans SharedPreferences
+  /// pour pouvoir les consulter rapidement sans re-fetch.
+  Future<void> _saveOrgSettingsToPrefs(Map<String, dynamic> orgData) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('activatedcmi', orgData['activatedcmi'] == true);
+    await prefs.setBool('activatedchari', orgData['activatedchari'] == true);
+    await prefs.setBool(
+        'ticketplaceactivated', orgData['ticketplaceactivated'] == true);
   }
 
   Future<bool> _isUserLoggedIn() async {
@@ -198,14 +215,71 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
     }
   }
 
+  // ✅ MODIFICATION ICI : Ajout de la vérification enable_shop
   Future<void> _handleStoreTap(BuildContext context) async {
     if (!isLoggedIn) {
       Navigator.pushNamed(context, '/login');
       return;
     }
-    _showStoreChoiceModal(context);
+
+    setState(() => isLoading = true);
+    try {
+      // On recharge les paramètres pour être sûr d'avoir la dernière valeur
+      await _fetchOrganizationSettings();
+
+      if (organizationSettings != null && organizationSettings!["enable_shop"] == 1) {
+        _showStoreChoiceModal(context);
+      } else {
+        _showShopMaintenanceModal(context);
+      }
+    } catch (e) {
+      _showShopMaintenanceModal(context);
+    } finally {
+      setState(() => isLoading = false);
+    }
   }
 
+  // ═══════════════════════════════════════════════════════════
+  // TICKETPLACE HANDLER
+  // ═══════════════════════════════════════════════════════════
+
+  /// Lit `ticketplaceactivated` depuis SharedPreferences.
+  /// - Si `true` → modal maintenance (feature pas encore prête)
+  /// - Sinon → redirection vers /events (fallback temporaire)
+  /// Lit `ticketplaceactivated` depuis SharedPreferences.
+  /// - Si `false` (inactif) → modal maintenance
+  /// - Si `true` (actif)   → redirection vers /events (en attendant la vraie page TicketPlace)
+  Future<void> _handleTicketplaceTap(BuildContext context) async {
+    if (!isLoggedIn) {
+      Navigator.pushNamed(context, '/login');
+      return;
+    }
+
+    setState(() => isLoading = true);
+    try {
+      // S'assurer d'avoir les données les plus récentes
+      await _fetchOrganizationData();
+
+      final prefs = await SharedPreferences.getInstance();
+      final activated = prefs.getBool('ticketplaceactivated') ?? false;
+
+      if (activated) {
+        // ✅ Actif → rediriger vers /events pour l'instant
+        Navigator.pushNamed(context, '/events', arguments: {
+          'token': widget.token,
+          'organizationId': widget.organizationId,
+        });
+      } else {
+        // ❌ Inactif → modal maintenance
+        _showComingSoonModal(context, 'Ticketplace');
+      }
+    } catch (e) {
+      // En cas d'erreur de récupération, on considère la feature indisponible
+      _showComingSoonModal(context, 'Ticketplace');
+    } finally {
+      if (mounted) setState(() => isLoading = false);
+    }
+  }
   // ═══════════════════════════════════════════════════════════
   // MODAL CHOIX BOUTIQUE
   // ═══════════════════════════════════════════════════════════
@@ -675,7 +749,6 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
     );
   }
 
-  // ✅ Icône blanche sur fond blanc translucide (plus de jaune)
   Widget _dialogIcon(IconData icon) {
     return Container(
       width: 68,
@@ -1375,7 +1448,7 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
         'title': 'TICKETPLACE',
         'sub': 'Revente entre supporters',
         'icon': Icons.swap_horiz,
-        'onTap': () => _showComingSoonModal(context, 'Ticketplace'),
+        'onTap': () => _handleTicketplaceTap(context),
       },
       {
         'title': 'STORE',

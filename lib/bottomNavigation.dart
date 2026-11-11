@@ -30,7 +30,6 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
   final Color primary = const Color(0xFFA8161F);
 
   Future<void> _fetchOrganizationSettings() async {
-    setState(() => isLoadingBoutique = true);
     try {
       final response = await http.get(
         Uri.parse(
@@ -43,13 +42,13 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         if (data["success"] == true) {
-          setState(() => organizationSettings = data["data"]);
+          if (mounted) {
+            setState(() => organizationSettings = data["data"]);
+          }
         }
       }
     } catch (e) {
       print("Error fetching organization settings: $e");
-    } finally {
-      setState(() => isLoadingBoutique = false);
     }
   }
 
@@ -59,6 +58,7 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
     }
     final settings = organizationSettings;
     if (settings == null) return false;
+
     final enabled = settings["enable_shop"];
     if (enabled is bool) return enabled;
     if (enabled is int) return enabled == 1;
@@ -66,8 +66,36 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
     return false;
   }
 
+  // ✅ NOUVEAU : Vérification avant d'ouvrir le modal de choix
+  Future<void> _handleBoutiqueTap(BuildContext context) async {
+    if (widget.token.isEmpty) {
+      Navigator.pushNamed(context, '/login');
+      return;
+    }
+
+    setState(() => isLoadingBoutique = true);
+
+    try {
+      // Recharge les paramètres pour être sûr d'avoir la dernière valeur
+      await _fetchOrganizationSettings();
+      final enabled = await _isShopEnabled();
+
+      if (!mounted) return;
+
+      if (enabled) {
+        _showStoreChoiceModal(context);
+      } else {
+        _showShopMaintenanceModal(context);
+      }
+    } catch (e) {
+      if (mounted) _showShopMaintenanceModal(context);
+    } finally {
+      if (mounted) setState(() => isLoadingBoutique = false);
+    }
+  }
+
   // ═══════════════════════════════════════════════════════════
-  // MODAL CHOIX BOUTIQUE (identique à acceuil)
+  // MODAL CHOIX BOUTIQUE
   // ═══════════════════════════════════════════════════════════
   void _showStoreChoiceModal(BuildContext context) {
     showDialog(
@@ -112,13 +140,9 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                   label: 'KAPPA',
                   subtitle: 'Boutique officielle Kappa',
                   icon: Icons.checkroom,
-                  onTap: () async {
+                  onTap: () {
                     Navigator.of(dialogContext).pop();
-                    final enabled = await _isShopEnabled();
-                    if (!enabled) {
-                      if (mounted) _showShopMaintenanceModal(context);
-                      return;
-                    }
+                    // ✅ Plus besoin de vérifier enable_shop ici, c'est déjà fait en amont
                     Navigator.pushNamed(
                       context,
                       '/boutique',
@@ -361,14 +385,6 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
         );
       },
     );
-  }
-
-  Future<void> _handleBoutiqueTap(BuildContext context) async {
-    if (widget.token.isEmpty) {
-      Navigator.pushNamed(context, '/login');
-      return;
-    }
-    _showStoreChoiceModal(context);
   }
 
   Future<void> _handleWalletTap(BuildContext context) async {

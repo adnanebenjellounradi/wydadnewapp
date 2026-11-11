@@ -78,7 +78,40 @@ class _BoutiquePageState extends State<BoutiquePage> {
     super.initState();
     isLoggedIn = widget.token.isNotEmpty;
     _loadCartFromStorage();
+    _checkShopStatus(); // ✅ Vérification de sécurité
     fetchData();
+  }
+
+  // ✅ Vérifie si la boutique n'a pas été désactivée entre temps
+  Future<void> _checkShopStatus() async {
+    try {
+      final response = await http.get(
+        Uri.parse(
+            "https://ticketing.ma/api/customer/organization-setting?organization_id=20"),
+        headers: {
+          "Authorization": "Bearer ${widget.token}",
+          "Content-Type": "application/json"
+        },
+      );
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        if (data["success"] == true) {
+          final settings = data["data"];
+          final enabled = settings["enable_shop"];
+          bool isEnabled = false;
+          if (enabled is bool) isEnabled = enabled;
+          if (enabled is int) isEnabled = enabled == 1;
+          if (enabled is String) isEnabled = enabled == "1" || enabled.toLowerCase() == "true";
+
+          if (!isEnabled && mounted) {
+            // Bloque l'accès si c'est désactivé
+            _showShopMaintenanceModal(context);
+          }
+        }
+      }
+    } catch (e) {
+      print("Error checking shop status: $e");
+    }
   }
 
   @override
@@ -1982,6 +2015,108 @@ class _BoutiquePageState extends State<BoutiquePage> {
           ),
         ),
       ),
+    );
+  }
+
+  // ✅ Modal de maintenance
+  void _showShopMaintenanceModal(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      barrierColor: Colors.black.withOpacity(0.75),
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          insetPadding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(24, 28, 24, 20),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(24),
+              gradient: const LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Color(0xFF5E0A13), Color(0xFF2E0409)],
+              ),
+              border: Border.all(color: Colors.white.withOpacity(0.16)),
+              boxShadow: const [
+                BoxShadow(
+                  color: Color(0x80000000),
+                  blurRadius: 40,
+                  offset: Offset(0, 20),
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 68,
+                  height: 68,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white.withOpacity(0.12),
+                    border: Border.all(color: Colors.white.withOpacity(0.25)),
+                  ),
+                  child: const Icon(Icons.build_rounded, color: Colors.white, size: 34),
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  l10n.comingSoon,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: 20,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  l10n.shopUnderMaintenance,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: 13,
+                    height: 1.45,
+                    color: Colors.white.withOpacity(0.75),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                SizedBox(
+                  width: double.infinity,
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pop(); // Ferme le modal
+                      Navigator.of(context).pop(); // Quitte la page boutique
+                    },
+                    child: Container(
+                      height: 48,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(14),
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFFD11A2A), Color(0xFFA8161F)],
+                        ),
+                      ),
+                      child: Center(
+                        child: Text(
+                          l10n.close,
+                          style: const TextStyle(
+                            fontFamily: 'Inter',
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 

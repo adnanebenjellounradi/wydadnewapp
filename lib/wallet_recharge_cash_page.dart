@@ -22,7 +22,6 @@ class _WalletRechargeCashPageState extends State<WalletRechargeCashPage> {
 
   String _amount = '300';
   String? _depositCode;
-  String? _expiryDate; // ✅ Pour afficher la vraie date d'expiration
 
   @override
   void initState() {
@@ -80,15 +79,8 @@ class _WalletRechargeCashPageState extends State<WalletRechargeCashPage> {
             data?['reference']?.toString() ??
             '------';
 
-        // ✅ Extraction robuste de la date d'expiration
-        final expiry = data?['expires_at']?.toString() ??
-            data?['expiration_date']?.toString() ??
-            data?['valid_until']?.toString() ??
-            'Non spécifiée';
-
         setState(() {
           _depositCode = code;
-          _expiryDate = expiry;
           _step = 1;
         });
       } else {
@@ -390,9 +382,7 @@ class _WalletRechargeCashPageState extends State<WalletRechargeCashPage> {
               Container(height: 1, color: Colors.black.withOpacity(0.10)),
               const SizedBox(height: 10),
               _kvWhite('Montant', '$_amount,00 MAD'),
-              const SizedBox(height: 8),
-              // ✅ Affiche la vraie date d'expiration reçue de l'API
-              _kvWhite('Valable jusqu\'au', _expiryDate ?? 'Non spécifiée'),
+              // ✅ LIGNE "Valable jusqu'au" SUPPRIMÉE ICI
             ],
           ),
         ),

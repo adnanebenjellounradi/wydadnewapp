@@ -203,8 +203,33 @@ class _EventsPageState extends State<EventsPage> {
     );
   }
 
+  // ✅ NOUVEAU : Vérification API avant d'afficher le modal
+  Future<void> _handleBoutiqueTap(BuildContext context) async {
+    if (widget.token == null || widget.token!.isEmpty) {
+      _showLoginDialog();
+      return;
+    }
+
+    // On affiche un petit loader pendant la vérification
+    setState(() => isLoading = true);
+    try {
+      final enabled = await _isShopEnabled();
+      if (!mounted) return;
+
+      if (enabled) {
+        _showStoreChoiceModal(context);
+      } else {
+        _showShopMaintenanceModal(context);
+      }
+    } catch (e) {
+      if (mounted) _showShopMaintenanceModal(context);
+    } finally {
+      if (mounted) setState(() => isLoading = false);
+    }
+  }
+
   // ═══════════════════════════════════════════════════════════
-  // MODAL CHOIX BOUTIQUE (comme acceuil.dart)
+  // MODAL CHOIX BOUTIQUE
   // ═══════════════════════════════════════════════════════════
   void _showStoreChoiceModal(BuildContext context) {
     showDialog(
@@ -249,13 +274,9 @@ class _EventsPageState extends State<EventsPage> {
                   label: 'KAPPA',
                   subtitle: 'Boutique officielle Kappa',
                   icon: Icons.checkroom,
-                  onTap: () async {
+                  onTap: () {
                     Navigator.of(dialogContext).pop();
-                    final enabled = await _isShopEnabled();
-                    if (!enabled) {
-                      if (mounted) _showShopMaintenanceModal(context);
-                      return;
-                    }
+                    // ✅ La vérification a déjà été faite dans _handleBoutiqueTap
                     Navigator.pushNamed(
                       context,
                       '/boutique',
@@ -636,12 +657,8 @@ class _EventsPageState extends State<EventsPage> {
                   // Déjà sur Événements
                     break;
                   case 1:
-                  // Boutique → modal Kappa / WAC Brand
-                    if (widget.token == null || widget.token!.isEmpty) {
-                      _showLoginDialog();
-                    } else {
-                      _showStoreChoiceModal(context);
-                    }
+                  // ✅ Boutique : Vérification via _handleBoutiqueTap
+                    _handleBoutiqueTap(context);
                     break;
                   case 2:
                   // Accueil

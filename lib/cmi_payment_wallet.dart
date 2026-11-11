@@ -1,6 +1,4 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:webview_flutter/webview_flutter.dart';
 import 'l10n/app_localizations.dart';
 
@@ -31,12 +29,12 @@ class _CMIPaymentWebViewWalletState extends State<CMIPaymentWebViewWallet> {
   String _errorMessage = '';
   bool _paymentCompleted = false;
 
+  static const String _returnUrlBase = 'https://ticketing.ma/api/customer/wallet/return';
+
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () {
-      _initWebView();
-    });
+    Future.delayed(Duration.zero, _initWebView);
   }
 
   Future<void> _initWebView() async {
@@ -50,21 +48,26 @@ class _CMIPaymentWebViewWalletState extends State<CMIPaymentWebViewWallet> {
       controller.setNavigationDelegate(
         NavigationDelegate(
           onProgress: (progress) {
-            if (progress > 80 && mounted) setState(() => _isLoading = false);
+            if (progress > 60 && mounted && _isLoading) {
+              setState(() => _isLoading = false);
+            }
           },
           onPageStarted: (url) {
-            if (mounted) setState(() => _isLoading = true);
-            print('Page started: $url');
+            // On ne remet PAS _isLoading = true ici pour éviter que l'overlay
+            // ne revienne bloquer l'écran lors des redirections internes (3DS).
             _checkUrlForRedirect(url);
           },
-          onPageFinished: (url) {
-            if (mounted) setState(() => _isLoading = false);
-            print('Page finished: $url');
+          onPageFinished: (url) async {
+            if (mounted && _isLoading) setState(() => _isLoading = false);
             _checkUrlForRedirect(url);
             _checkPageContent();
+
+            // ✅ Injection du correctif d'affichage et de focus
+            await _injectMobileFix(controller);
           },
           onWebResourceError: (error) {
-            print('WebView Error: ${error.errorCode} - ${error.description}');
+            // Ignore les erreurs de sous-ressources (images, pubs, etc.)
+            if (error.isForMainFrame == false) return;
             if (mounted) {
               setState(() {
                 _isLoading = false;
@@ -73,20 +76,13 @@ class _CMIPaymentWebViewWalletState extends State<CMIPaymentWebViewWallet> {
               });
             }
           },
-          onUrlChange: (change) {
-            print('URL changed: ${change.url}');
-            _checkUrlForRedirect(change.url ?? '');
-          },
+          onUrlChange: (change) => _checkUrlForRedirect(change.url ?? ''),
         ),
       );
 
       if (mounted) setState(() => _controller = controller);
-
-      // Charge l'URL CMI reçue de l'API
-      await _controller!.loadRequest(Uri.parse(widget.redirectUrl));
-
+      await controller.loadRequest(Uri.parse(widget.redirectUrl));
     } catch (e) {
-      print('WebView initialization error: $e');
       if (mounted) {
         setState(() {
           _hasError = true;
@@ -97,48 +93,75 @@ class _CMIPaymentWebViewWalletState extends State<CMIPaymentWebViewWallet> {
     }
   }
 
+  // ✅ CORRECTIF : Force l'affichage mobile et le clavier
+  Future<void> _injectMobileFix(WebViewController controller) async {
+    try {
+      await controller.runJavaScript(r'''
+        (function() {
+          // 1. Force le viewport pour mobile (corrige l'écran tronqué)
+          var meta = document.createElement('meta');
+          meta.name = 'viewport';
+          meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
+          document.getElementsByTagName('head')[0].appendChild(meta);
+
+          // 2. Force le corps à prendre 100% de la largeur
+          document.body.style.width = '100%';
+          document.body.style.margin = '0';
+          document.body.style.padding = '0';
+          document.body.style.overflowX = 'hidden';
+
+          // 3. Force le focus et agrandit la police des inputs
+          document.querySelectorAll('input').forEach(function(input) {
+            input.addEventListener('touchstart', function() { this.focus(); });
+            input.addEventListener('click', function() { this.focus(); });
+            input.style.fontSize = '16px'; // Empêche le zoom automatique
+          });
+        })();
+      ''');
+    } catch (e) {
+      print("Erreur injection JS: $e");
+    }
+  }
+
+  // ✅ CORRECTIF : Détection stricte de l'URL de retour
   void _checkUrlForRedirect(String url) {
-    if (url.contains('success') || url.contains('ok_page') || url.contains('payment=success')) {
+    if (!url.startsWith(_returnUrlBase)) return;
+
+    if (url.contains('success')) {
       _handlePaymentSuccess();
-    } else if (url.contains('fail') || url.contains('failed_page') || url.contains('cancel') || url.contains('error')) {
+    } else {
       _handlePaymentCancelled();
     }
   }
 
   void _checkPageContent() async {
     if (_controller == null || _paymentCompleted) return;
-
     try {
-      await Future.delayed(const Duration(milliseconds: 500));
-      final pageContent = await _controller!.runJavaScriptReturningResult('document.body.innerText');
-      if (pageContent != null) {
-        final content = pageContent.toString();
-        if (content.contains('"success":true')) {
-          _handlePaymentSuccess();
-        } else if (content.contains('"success":false') || content.contains('Order not processed')) {
-          _handlePaymentCancelled();
-        }
+      await Future.delayed(const Duration(milliseconds: 600));
+      final result = await _controller!.runJavaScriptReturningResult('document.body.innerText');
+      final content = result.toString();
+
+      if (content.contains('"success":true')) {
+        _handlePaymentSuccess();
+      } else if (content.contains('"success":false') || content.contains('Order not processed')) {
+        _handlePaymentCancelled();
       }
-    } catch (e) {
-      print('Error checking page content: $e');
-    }
+    } catch (_) {}
   }
 
   void _handlePaymentSuccess() {
     if (_paymentCompleted) return;
     _paymentCompleted = true;
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) => _WalletRechargeSuccess(
-              amount: widget.amount,
-              reference: widget.reference,
-            ),
+      if (!mounted) return;
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (_) => _WalletRechargeSuccess(
+            amount: widget.amount,
+            reference: widget.reference,
           ),
-        );
-      }
+        ),
+      );
     });
   }
 
@@ -146,23 +169,23 @@ class _CMIPaymentWebViewWalletState extends State<CMIPaymentWebViewWallet> {
     if (_paymentCompleted) return;
     _paymentCompleted = true;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) Navigator.of(context).pop();
+      if (mounted) Navigator.of(context).maybePop();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.cmiPayment),
-        backgroundColor: isDarkMode ? Colors.black : Colors.white,
+        backgroundColor: isDark ? Colors.black : Colors.white,
         elevation: 0,
-        iconTheme: IconThemeData(color: isDarkMode ? Colors.white : Colors.black),
+        iconTheme: IconThemeData(color: isDark ? Colors.white : Colors.black),
         titleTextStyle: TextStyle(
-          color: isDarkMode ? Colors.white : Colors.black,
+          color: isDark ? Colors.white : Colors.black,
           fontWeight: FontWeight.w600,
           fontSize: 18,
           fontFamily: 'Inter',
@@ -175,15 +198,24 @@ class _CMIPaymentWebViewWalletState extends State<CMIPaymentWebViewWallet> {
       body: _hasError
           ? _buildError(l10n)
           : _controller == null
-          ? const Center(child: CircularProgressIndicator(color: Color(0xFFA8161F)))
+          ? const Center(
+        child: CircularProgressIndicator(color: Color(0xFFA8161F)),
+      )
           : Stack(
         children: [
           WebViewWidget(controller: _controller!),
           if (_isLoading)
-            Container(
-              color: isDarkMode ? Colors.black : Colors.white,
-              child: const Center(
-                child: CircularProgressIndicator(color: Color(0xFFA8161F)),
+          // ✅ CORRECTIF : IgnorePointer permet de cliquer à travers le loader
+            IgnorePointer(
+              child: Container(
+                color: isDark
+                    ? Colors.black.withOpacity(0.85)
+                    : Colors.white.withOpacity(0.85),
+                child: const Center(
+                  child: CircularProgressIndicator(
+                    color: Color(0xFFA8161F),
+                  ),
+                ),
               ),
             ),
         ],
@@ -198,10 +230,24 @@ class _CMIPaymentWebViewWalletState extends State<CMIPaymentWebViewWallet> {
         children: [
           const Icon(Icons.error_outline, color: Colors.red, size: 64),
           const SizedBox(height: 16),
-          Text(_errorMessage, style: const TextStyle(color: Colors.red), textAlign: TextAlign.center),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Text(
+              _errorMessage,
+              style: const TextStyle(color: Colors.red),
+              textAlign: TextAlign.center,
+            ),
+          ),
           const SizedBox(height: 20),
           ElevatedButton(
-            onPressed: _initWebView,
+            onPressed: () {
+              setState(() {
+                _hasError = false;
+                _errorMessage = '';
+                _isLoading = true;
+              });
+              _initWebView();
+            },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
             child: Text(l10n.retry),
           ),
@@ -241,7 +287,8 @@ class _WalletRechargeSuccess extends StatelessWidget {
                     shape: BoxShape.circle,
                     color: const Color(0xFFF5CD52).withOpacity(0.14),
                   ),
-                  child: const Icon(Icons.check, color: Color(0xFFF5CD52), size: 32),
+                  child: const Icon(Icons.check,
+                      color: Color(0xFFF5CD52), size: 32),
                 ),
                 const SizedBox(height: 18),
                 const Text(
@@ -287,8 +334,23 @@ class _WalletRechargeSuccess extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('Référence', style: TextStyle(color: Colors.white60, fontFamily: 'Inter', fontSize: 11)),
-                      Text(reference, style: const TextStyle(color: Colors.white, fontFamily: 'Inter', fontSize: 11, fontWeight: FontWeight.w600)),
+                      const Text(
+                        'Référence',
+                        style: TextStyle(
+                          color: Colors.white60,
+                          fontFamily: 'Inter',
+                          fontSize: 11,
+                        ),
+                      ),
+                      Text(
+                        reference,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Inter',
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -297,13 +359,21 @@ class _WalletRechargeSuccess extends StatelessWidget {
                   width: double.infinity,
                   height: 50,
                   child: ElevatedButton(
-                    onPressed: () => Navigator.pushNamedAndRemoveUntil(context, '/wallet', (r) => false),
+                    onPressed: () => Navigator.pushNamedAndRemoveUntil(
+                        context, '/wallet', (r) => false),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                       foregroundColor: const Color(0xFFA8161F),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
                     ),
-                    child: const Text('Retour au Wallet', style: TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.w600)),
+                    child: const Text(
+                      'Retour au Wallet',
+                      style: TextStyle(
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ),
                 ),
               ],

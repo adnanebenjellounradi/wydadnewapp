@@ -13,11 +13,10 @@ class WalletRechargePage extends StatefulWidget {
 }
 
 class _WalletRechargePageState extends State<WalletRechargePage> {
-  // 0: montant, 1: choix méthode, 2: sélection carte, 3: CVV, 4: succès
+  // 0: montant, 1: sélection carte, 2: CVV, 3: succès
   int _step = 0;
   String _amount = '200';
   bool _isLoading = false;
-  String _paymentMethod = 'chari'; // 'chari' ou 'cmi'
 
   List<Map<String, dynamic>> _savedCards = [];
   Map<String, dynamic>? _selectedCard;
@@ -54,21 +53,19 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
         _showError('Montant entre 50 et 1000 MAD (niveau 1)');
         return;
       }
-      setState(() => _step = 1);
-    } else if (_step == 1) {
-      // Choix de la méthode effectué, on passe à la sélection de carte
+      // On vérifie s'il y a des cartes avant d'avancer
       if (_savedCards.isEmpty) {
         _showError('Aucune carte enregistrée.');
         return;
       }
-      setState(() => _step = 2);
-    } else if (_step == 2) {
+      setState(() => _step = 1); // Passe directement à la sélection de carte
+    } else if (_step == 1) {
       if (_selectedCard == null) {
         _showError('Veuillez sélectionner une carte');
         return;
       }
-      setState(() => _step = 3);
-    } else if (_step == 3) {
+      setState(() => _step = 2); // Passe au CVV
+    } else if (_step == 2) {
       if (_cvvCtrl.text.length < 3) {
         _showError('CVV invalide');
         return;
@@ -161,10 +158,8 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
                   child: _step == 0
                       ? _buildAmountStep()
                       : _step == 1
-                      ? _buildPaymentMethodChoice()
-                      : _step == 2
                       ? _buildCardSelectionStep()
-                      : _step == 3
+                      : _step == 2
                       ? _buildCvvStep()
                       : _buildSuccessStep(),
                 ),
@@ -183,7 +178,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
         children: [
           GestureDetector(
             onTap: () {
-              if (_step > 0 && _step < 4) {
+              if (_step > 0 && _step < 3) {
                 setState(() => _step--);
               } else {
                 Navigator.maybePop(context);
@@ -203,7 +198,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
           ),
           const Spacer(),
           Text(
-            _step == 4 ? 'Succès' : 'Recharger',
+            _step == 3 ? 'Succès' : 'Recharger',
             style: const TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.w600,
@@ -407,143 +402,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
     );
   }
 
-  // ─── STEP 1 : CHOIX MÉTHODE ───
-  Widget _buildPaymentMethodChoice() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 16),
-        const Text(
-          'Mode de paiement',
-          style: TextStyle(
-            fontFamily: 'Inter',
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
-            color: Colors.white,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          'Comment souhaitez-vous régler $_amount,00 MAD ?',
-          style: TextStyle(
-            fontFamily: 'Inter',
-            fontSize: 13,
-            color: Colors.white.withOpacity(0.7),
-          ),
-        ),
-        const SizedBox(height: 24),
-
-        _buildMethodCard(
-          icon: Icons.credit_card,
-          title: 'Payer par Chari (Carte)',
-          subtitle: 'Paiement sécurisé par carte bancaire',
-          isSelected: _paymentMethod == 'chari',
-          onTap: () => setState(() => _paymentMethod = 'chari'),
-        ),
-        const SizedBox(height: 12),
-        _buildMethodCard(
-          icon: Icons.public,
-          title: 'Payer par CMI',
-          subtitle: 'Redirection vers le portail CMI',
-          isSelected: _paymentMethod == 'cmi',
-          onTap: () => setState(() => _paymentMethod = 'cmi'),
-        ),
-
-        const SizedBox(height: 24),
-        SizedBox(
-          width: double.infinity,
-          height: 50,
-          child: ElevatedButton(
-            onPressed: _goNext,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white,
-              foregroundColor: primary,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              elevation: 0,
-            ),
-            child: Text(
-              _paymentMethod == 'chari' ? 'Payer par Chari' : 'Payer par CMI',
-              style: const TextStyle(
-                fontFamily: 'Inter',
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildMethodCard({
-    required IconData icon,
-    required String title,
-    required String subtitle,
-    required bool isSelected,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          color: isSelected ? Colors.white.withOpacity(0.15) : Colors.white.withOpacity(0.06),
-          border: Border.all(
-            color: isSelected ? Colors.white : Colors.white.withOpacity(0.14),
-            width: isSelected ? 1.5 : 1,
-          ),
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                gradient: const LinearGradient(
-                  colors: [Color(0xFFD11A2A), Color(0xFFA8161F)],
-                ),
-              ),
-              child: Icon(icon, color: Colors.white, size: 22),
-            ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontFamily: 'Inter',
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    subtitle,
-                    style: TextStyle(
-                      fontFamily: 'Inter',
-                      fontSize: 11,
-                      color: Colors.white.withOpacity(0.6),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            if (isSelected)
-              const Icon(Icons.check_circle, color: Color(0xFFF5CD52)),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // ─── STEP 2 : SÉLECTION DE LA CARTE ───
+  // ─── STEP 1 : SÉLECTION DE LA CARTE ───
   Widget _buildCardSelectionStep() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -677,7 +536,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
     );
   }
 
-  // ─── STEP 3 : CVV ───
+  // ─── STEP 2 : CVV ───
   Widget _buildCvvStep() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -694,7 +553,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
         ),
         const SizedBox(height: 8),
         Text(
-          'Saisissez le cryptogramme (CVV) pour valider le paiement par ${_paymentMethod == 'chari' ? 'Chari' : 'CMI'}.',
+          'Saisissez le cryptogramme (CVV) pour valider le paiement.',
           style: TextStyle(
             fontFamily: 'Inter',
             fontSize: 13,
@@ -784,9 +643,9 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
                 color: Color(0xFFA8161F),
               ),
             )
-                : Text(
-              _paymentMethod == 'chari' ? 'Payer par Chari' : 'Payer par CMI',
-              style: const TextStyle(
+                : const Text(
+              'Payer',
+              style: TextStyle(
                 fontFamily: 'Inter',
                 fontSize: 14,
                 fontWeight: FontWeight.w600,

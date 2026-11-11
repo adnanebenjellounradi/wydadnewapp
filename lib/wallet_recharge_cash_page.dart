@@ -16,11 +16,28 @@ class _WalletRechargeCashPageState extends State<WalletRechargeCashPage> {
 
   int _step = 0; // 0: form, 1: code
   bool _isSubmitting = false;
+
+  // ✅ Contrôleurs déclarés au niveau du State pour éviter le bug de focus
+  final TextEditingController _amountCtrl = TextEditingController(text: '300');
+
   String _amount = '300';
   String? _depositCode;
+  String? _expiryDate; // ✅ Pour afficher la vraie date d'expiration
+
+  @override
+  void initState() {
+    super.initState();
+    // Écouteur pour mettre à jour _amount quand le texte change
+    _amountCtrl.addListener(() {
+      setState(() {
+        _amount = _amountCtrl.text;
+      });
+    });
+  }
 
   @override
   void dispose() {
+    _amountCtrl.dispose();
     super.dispose();
   }
 
@@ -41,26 +58,47 @@ class _WalletRechargeCashPageState extends State<WalletRechargeCashPage> {
     }
     setState(() => _isSubmitting = true);
 
-    final res = await WalletService.rechargeAgency(
-      token: widget.token,
-      amount: _amountValue,
-      description: 'Alimentation espèces en agence',
-    );
+    try {
+      final res = await WalletService.rechargeAgency(
+        token: widget.token,
+        amount: _amountValue,
+        description: 'Alimentation espèces en agence',
+      );
 
-    if (!mounted) return;
-    setState(() => _isSubmitting = false);
+      if (!mounted) return;
+      setState(() => _isSubmitting = false);
 
-    if (res != null && res['success'] == true) {
-      final code = res['data']?['deposit_code']?.toString() ??
-          res['data']?['code']?.toString() ??
-          res['data']?['reference']?.toString() ??
-          '------';
-      setState(() {
-        _depositCode = code;
-        _step = 1;
-      });
-    } else {
-      _showError(res?['message']?.toString() ?? 'Opération échouée');
+      // 🔍 LOGS POUR DEBUG (à retirer une fois validé)
+      print("🔍 [RECHARGE AGENCY] Réponse API = $res");
+
+      if (res != null && res['success'] == true) {
+        final data = res['data'];
+
+        // ✅ Extraction robuste du code
+        final code = data?['deposit_code']?.toString() ??
+            data?['code']?.toString() ??
+            data?['reference']?.toString() ??
+            '------';
+
+        // ✅ Extraction robuste de la date d'expiration
+        final expiry = data?['expires_at']?.toString() ??
+            data?['expiration_date']?.toString() ??
+            data?['valid_until']?.toString() ??
+            'Non spécifiée';
+
+        setState(() {
+          _depositCode = code;
+          _expiryDate = expiry;
+          _step = 1;
+        });
+      } else {
+        _showError(res?['message']?.toString() ?? 'Opération échouée. Contactez le support.');
+      }
+    } catch (e) {
+      if (!mounted) return;
+      setState(() => _isSubmitting = false);
+      print("🔍 [RECHARGE AGENCY] Erreur = $e");
+      _showError('Erreur de connexion. Veuillez réessayer.');
     }
   }
 
@@ -161,16 +199,13 @@ class _WalletRechargeCashPageState extends State<WalletRechargeCashPage> {
             children: [
               Expanded(
                 child: TextField(
+                  controller: _amountCtrl,
                   textAlign: TextAlign.right,
                   keyboardType: TextInputType.number,
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
                     LengthLimitingTextInputFormatter(5),
                   ],
-                  controller: TextEditingController(text: _amount)
-                    ..selection =
-                    TextSelection.collapsed(offset: _amount.length),
-                  onChanged: (v) => setState(() => _amount = v),
                   cursorColor: Colors.white,
                   style: const TextStyle(
                     fontFamily: 'Inter',
@@ -214,7 +249,12 @@ class _WalletRechargeCashPageState extends State<WalletRechargeCashPage> {
               child: Padding(
                 padding: EdgeInsets.only(right: v == 1000 ? 0 : 8),
                 child: GestureDetector(
-                  onTap: () => setState(() => _amount = v.toString()),
+                  onTap: () {
+                    setState(() {
+                      _amountCtrl.text = v.toString();
+                      _amount = v.toString();
+                    });
+                  },
                   child: Container(
                     height: 38,
                     decoration: BoxDecoration(
@@ -351,7 +391,8 @@ class _WalletRechargeCashPageState extends State<WalletRechargeCashPage> {
               const SizedBox(height: 10),
               _kvWhite('Montant', '$_amount,00 MAD'),
               const SizedBox(height: 8),
-              _kvWhite('Valable jusqu\'au', '[DATE · HEURE]'),
+              // ✅ Affiche la vraie date d'expiration reçue de l'API
+              _kvWhite('Valable jusqu\'au', _expiryDate ?? 'Non spécifiée'),
             ],
           ),
         ),
@@ -389,7 +430,6 @@ class _WalletRechargeCashPageState extends State<WalletRechargeCashPage> {
           width: double.infinity,
           height: 50,
           child: ElevatedButton(
-            // ✅ MODIFICATION ICI : Redirection vers l'Accueil
             onPressed: () => Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
               '/acceuil',
                   (r) => false,
@@ -404,7 +444,7 @@ class _WalletRechargeCashPageState extends State<WalletRechargeCashPage> {
               elevation: 0,
             ),
             child: const Text(
-              'Retour à l\'accueil', // ✅ Texte modifié
+              'Retour à l\'accueil',
               style: TextStyle(
                 fontFamily: 'Inter',
                 fontSize: 14,

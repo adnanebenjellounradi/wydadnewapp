@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
 import 'cmi_payment_ticket.dart';
+import 'wallet_service.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'l10n/app_localizations.dart';
 
@@ -25,15 +26,24 @@ class AcheterTicketInEventPage extends StatefulWidget {
 }
 
 class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
+  static const String _GENERIC_ERROR_MSG =
+      "Nous rencontrons actuellement des problèmes, veuillez contacter le support.";
+
   Map<String, dynamic>? event;
   bool isLoading = false;
+  bool _isProcessing = false; // ✅ Loader overlay pendant les requêtes
   Map<int, int> ticketQuantities = {};
   bool _hasTicketsSelected = false;
   final TextEditingController _cinController = TextEditingController();
   final TextEditingController _fullNameController = TextEditingController();
+  final TextEditingController _walletPinController = TextEditingController();
 
   bool _isCinValid = false;
   bool _isFullNameValid = false;
+
+  double _walletBalance = 0.0;
+  bool _isWalletLoading = true;
+  String? _walletPhone;
 
   final Color primary = const Color(0xFFA8161F);
 
@@ -41,6 +51,7 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
   void initState() {
     super.initState();
     fetchEventDetails();
+    _fetchWalletBalance();
 
     _cinController.addListener(_validateCin);
     _fullNameController.addListener(_validateFullName);
@@ -50,7 +61,23 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
   void dispose() {
     _cinController.dispose();
     _fullNameController.dispose();
+    _walletPinController.dispose();
     super.dispose();
+  }
+
+  Future<void> _fetchWalletBalance() async {
+    try {
+      final info = await WalletService.getWalletInfo(widget.token);
+      if (mounted) {
+        setState(() {
+          _walletBalance = (info?['balance'] as num?)?.toDouble() ?? 0.0;
+          _walletPhone = info?['phone'] as String?;
+          _isWalletLoading = false;
+        });
+      }
+    } catch (_) {
+      if (mounted) setState(() => _isWalletLoading = false);
+    }
   }
 
   void _validateCin() {
@@ -72,9 +99,7 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
   bool get _allFieldsValid => _isCinValid && _isFullNameValid;
 
   String _formatPrice(double price) {
-    if (price == price.roundToDouble()) {
-      return "${price.round()} MAD";
-    }
+    if (price == price.roundToDouble()) return "${price.round()} MAD";
     return "${price.toStringAsFixed(2)} MAD";
   }
 
@@ -82,8 +107,7 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
     setState(() => isLoading = true);
     try {
       final response = await http.get(
-        Uri.parse(
-            "https://ticketing.ma/api/customer/events/${widget.eventId}"),
+        Uri.parse("https://ticketing.ma/api/customer/events/${widget.eventId}"),
         headers: {
           "Authorization": "Bearer ${widget.token}",
           "Content-Type": "application/json"
@@ -92,29 +116,21 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         if (data["success"] == true) {
-          setState(() {
-            event = data["data"];
-          });
+          setState(() => event = data["data"]);
         }
       }
-    } catch (e) {
-      print("Error fetching event details: $e");
+    } catch (_) {
+      // silent
     } finally {
       setState(() => isLoading = false);
     }
   }
 
-  /// ✅ SÉLECTION EXCLUSIVE : une seule catégorie à la fois
-  /// - Si on augmente une catégorie → désélectionne toutes les autres
-  /// - Si on met à 0 → désélectionne simplement cette catégorie
   void _updateTicketQuantity(int ticketId, int newQuantity) {
     setState(() {
       if (newQuantity > 0) {
-        // Désélectionne toutes les autres catégories
         ticketQuantities.forEach((key, _) {
-          if (key != ticketId) {
-            ticketQuantities[key] = 0;
-          }
+          if (key != ticketId) ticketQuantities[key] = 0;
         });
       }
       ticketQuantities[ticketId] = newQuantity;
@@ -161,34 +177,42 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
     return total;
   }
 
+  // ═══════════════════════════════════════════════════════════
+  // BUILD
+  // ═══════════════════════════════════════════════════════════
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF170205),
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Color(0xFF4A0710), Color(0xFF23030A), Color(0xFF120104)],
-            stops: [0.0, 0.3, 1.0],
+      body: Stack(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Color(0xFF4A0710),
+                  Color(0xFF23030A),
+                  Color(0xFF120104)
+                ],
+                stops: [0.0, 0.3, 1.0],
+              ),
+            ),
+            child: SafeArea(bottom: false, child: _buildBody()),
           ),
-        ),
-        child: SafeArea(
-          bottom: false,
-          child: _buildBody(),
-        ),
+
+          // ✅ Loader overlay
+          if (_isProcessing) _buildProcessingOverlay(),
+        ],
       ),
     );
   }
 
   Widget _buildBody() {
     if (isLoading && event == null) {
-      return Center(
-        child: CircularProgressIndicator(color: primary),
-      );
+      return Center(child: CircularProgressIndicator(color: primary));
     }
-
     if (event == null) {
       return _buildErrorState(
         icon: Icons.error_outline,
@@ -196,7 +220,6 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
         subtitle: AppLocalizations.of(context)!.pleaseTryAgainLater,
       );
     }
-
     if (event!["is_closed"] == true) {
       return _buildErrorState(
         icon: Icons.event_busy,
@@ -210,7 +233,6 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
 
     return Column(
       children: [
-        // ── Header ──
         Padding(
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
           child: Row(
@@ -223,57 +245,44 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
                     color: Colors.white.withOpacity(0.07),
-                    border:
-                    Border.all(color: Colors.white.withOpacity(0.14)),
+                    border: Border.all(color: Colors.white.withOpacity(0.14)),
                   ),
                   child: const Icon(Icons.chevron_left,
                       color: Colors.white, size: 20),
                 ),
               ),
               const SizedBox(width: 12),
-              Text(
-                l10n.buyTickets,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w900,
-                  color: Colors.white,
-                  fontFamily: 'Inter',
-                ),
-              ),
+              Text(l10n.buyTickets,
+                  style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w900,
+                      color: Colors.white,
+                      fontFamily: 'Inter')),
             ],
           ),
         ),
-
-        // ── Bannière event ──
         Padding(
           padding: const EdgeInsets.fromLTRB(20, 14, 20, 0),
           child: _buildEventBanner(),
         ),
-
-        // ── Liste des catégories ──
         Expanded(
           child: SingleChildScrollView(
             padding: const EdgeInsets.fromLTRB(20, 18, 20, 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  l10n.selectNumberOfTickets,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white.withOpacity(0.86),
-                    fontFamily: 'Inter',
-                  ),
-                ),
+                Text(l10n.selectNumberOfTickets,
+                    style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white.withOpacity(0.86),
+                        fontFamily: 'Inter')),
                 const SizedBox(height: 12),
                 ...tickets.map((ticket) => _buildTicketRow(ticket)).toList(),
               ],
             ),
           ),
         ),
-
-        // ── Bottom bar fixe ──
         if (_hasTicketsSelected) _buildBottomBar(),
       ],
     );
@@ -300,26 +309,20 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
           fit: StackFit.expand,
           children: [
             if (image != null && image.isNotEmpty)
-              Image.network(
-                image,
-                fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => Container(
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [Color(0xFFD11A2A), Color(0xFF6E0B12)],
+              Image.network(image, fit: BoxFit.cover,
+                  errorBuilder: (_, __, ___) => Container(
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                          colors: [Color(0xFFD11A2A), Color(0xFF6E0B12)]),
                     ),
-                  ),
-                ),
-              )
+                  ))
             else
               Container(
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [Color(0xFFD11A2A), Color(0xFF6E0B12)],
-                  ),
+                      colors: [Color(0xFFD11A2A), Color(0xFF6E0B12)]),
                 ),
               ),
-            // Gradient horizontal gauche → droite
             Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
@@ -343,39 +346,30 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    'BILLETTERIE',
-                    style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: 1.4,
-                      color: Colors.white.withOpacity(0.8),
-                      fontFamily: 'Inter',
-                    ),
-                  ),
+                  Text('BILLETTERIE',
+                      style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: 1.4,
+                          color: Colors.white.withOpacity(0.8),
+                          fontFamily: 'Inter')),
                   const SizedBox(height: 4),
-                  Text(
-                    name,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w900,
-                      color: Colors.white,
-                      fontFamily: 'Inter',
-                    ),
-                  ),
+                  Text(name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w900,
+                          color: Colors.white,
+                          fontFamily: 'Inter')),
                   const SizedBox(height: 4),
-                  Text(
-                    '$date · $address',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.white.withOpacity(0.8),
-                      fontFamily: 'Inter',
-                    ),
-                  ),
+                  Text('$date · $address',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.white.withOpacity(0.8),
+                          fontFamily: 'Inter')),
                 ],
               ),
             ),
@@ -415,14 +409,11 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
       ),
       child: Column(
         children: [
-          // Ligne principale
           InkWell(
             onTap: () {
               if (isSelected) {
-                // Clic sur la catégorie déjà sélectionnée → la désélectionne
                 _updateTicketQuantity(ticketId, 0);
               } else {
-                // Clic sur une autre catégorie → désélectionne l'ancienne + sélectionne celle-ci
                 _updateTicketQuantity(ticketId, 1);
               }
             },
@@ -432,7 +423,6 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: Row(
                 children: [
-                  // Radio dot
                   Container(
                     width: 20,
                     height: 20,
@@ -442,8 +432,7 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                       border: isSelected
                           ? null
                           : Border.all(
-                          color: Colors.white.withOpacity(0.35),
-                          width: 2),
+                          color: Colors.white.withOpacity(0.35), width: 2),
                     ),
                     child: isSelected
                         ? Center(
@@ -451,63 +440,48 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                         width: 8,
                         height: 8,
                         decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: primary,
-                        ),
+                            shape: BoxShape.circle, color: primary),
                       ),
                     )
                         : null,
                   ),
                   const SizedBox(width: 14),
-                  // Nom + dispo
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          ticket["name"]?.toString() ?? l10n.ticket,
-                          style: const TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white,
-                            fontFamily: 'Inter',
-                          ),
-                        ),
+                        Text(ticket["name"]?.toString() ?? l10n.ticket,
+                            style: const TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white,
+                                fontFamily: 'Inter')),
                         const SizedBox(height: 2),
-                        Text(
-                          _availabilityLabel(ticket),
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: _availabilityColor(ticket),
-                            fontFamily: 'Inter',
-                          ),
-                        ),
+                        Text(_availabilityLabel(ticket),
+                            style: TextStyle(
+                                fontSize: 12,
+                                color: _availabilityColor(ticket),
+                                fontFamily: 'Inter')),
                       ],
                     ),
                   ),
-                  // Prix
-                  Text(
-                    _formatPrice(price),
-                    style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w800,
-                      color: Colors.white,
-                      fontFamily: 'Inter',
-                    ),
-                  ),
+                  Text(_formatPrice(price),
+                      style: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w800,
+                          color: Colors.white,
+                          fontFamily: 'Inter')),
                 ],
               ),
             ),
           ),
-          // Qty stepper inline (visible seulement si sélectionné)
           if (isSelected)
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 16),
               padding: const EdgeInsets.symmetric(vertical: 12),
               decoration: BoxDecoration(
                 border: Border(
-                  top: BorderSide(color: Colors.white.withOpacity(0.12)),
-                ),
+                    top: BorderSide(color: Colors.white.withOpacity(0.12))),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -515,24 +489,18 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Nombre de billets',
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                          fontFamily: 'Inter',
-                        ),
-                      ),
+                      const Text('Nombre de billets',
+                          style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white,
+                              fontFamily: 'Inter')),
                       const SizedBox(height: 2),
-                      Text(
-                        '$maxPerOrder maximum par compte',
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: Colors.white.withOpacity(0.6),
-                          fontFamily: 'Inter',
-                        ),
-                      ),
+                      Text('$maxPerOrder maximum par compte',
+                          style: TextStyle(
+                              fontSize: 11,
+                              color: Colors.white.withOpacity(0.6),
+                              fontFamily: 'Inter')),
                     ],
                   ),
                   Container(
@@ -541,13 +509,12 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
                       color: Colors.black.withOpacity(0.25),
-                      border: Border.all(
-                          color: Colors.white.withOpacity(0.14)),
+                      border:
+                      Border.all(color: Colors.white.withOpacity(0.14)),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        // Minus
                         GestureDetector(
                           onTap: quantity > 1
                               ? () => _updateTicketQuantity(
@@ -566,18 +533,14 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                         ),
                         SizedBox(
                           width: 30,
-                          child: Text(
-                            '$quantity',
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w800,
-                              color: Colors.white,
-                              fontFamily: 'Inter',
-                            ),
-                          ),
+                          child: Text('$quantity',
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w800,
+                                  color: Colors.white,
+                                  fontFamily: 'Inter')),
                         ),
-                        // Plus
                         GestureDetector(
                           onTap: quantity < maxPerOrder
                               ? () => _updateTicketQuantity(
@@ -646,37 +609,61 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
       padding: const EdgeInsets.fromLTRB(20, 14, 20, 28),
       decoration: BoxDecoration(
         color: const Color(0xFF120104).withOpacity(0.92),
-        border: Border(
-          top: BorderSide(color: Colors.white.withOpacity(0.10)),
-        ),
+        border:
+        Border(top: BorderSide(color: Colors.white.withOpacity(0.10))),
       ),
       child: Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  const Icon(Icons.account_balance_wallet_outlined,
+                      color: Color(0xFFF5CD52), size: 16),
+                  const SizedBox(width: 6),
+                  Text('Solde: ',
+                      style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.white.withOpacity(0.6),
+                          fontFamily: 'Inter')),
+                  _isWalletLoading
+                      ? const SizedBox(
+                      width: 40,
+                      height: 10,
+                      child: LinearProgressIndicator(
+                          color: Colors.white24, minHeight: 2))
+                      : Text(
+                      '${_walletBalance.toStringAsFixed(2).replaceAll('.', ',')} MAD',
+                      style: const TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w700,
+                          color: Color(0xFFF5CD52),
+                          fontFamily: 'Inter')),
+                ],
+              ),
+              Text('${total.toStringAsFixed(0)},00 MAD',
+                  style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w900,
+                      color: Colors.white,
+                      fontFamily: 'Inter')),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.baseline,
             textBaseline: TextBaseline.alphabetic,
             children: [
-              Text(
-                '$qty ${qty > 1 ? "billets" : "billet"} · $name',
-                style: TextStyle(
-                  fontSize: 13,
-                  color: Colors.white.withOpacity(0.72),
-                  fontFamily: 'Inter',
-                ),
-              ),
-              Text(
-                '${total.toStringAsFixed(0)},00 MAD',
-                style: const TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w900,
-                  color: Colors.white,
-                  fontFamily: 'Inter',
-                ),
-              ),
+              Text('$qty ${qty > 1 ? "billets" : "billet"} · $name',
+                  style: TextStyle(
+                      fontSize: 13,
+                      color: Colors.white.withOpacity(0.72),
+                      fontFamily: 'Inter')),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 14),
           SizedBox(
             width: double.infinity,
             height: 54,
@@ -686,18 +673,14 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                 backgroundColor: Colors.white,
                 foregroundColor: primary,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
+                    borderRadius: BorderRadius.circular(12)),
                 elevation: 0,
               ),
-              child: Text(
-                AppLocalizations.of(context)!.continueText,
-                style: const TextStyle(
-                  fontFamily: 'Inter',
-                  fontSize: 16,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
+              child: Text(AppLocalizations.of(context)!.continueText,
+                  style: const TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w800)),
             ),
           ),
         ],
@@ -716,41 +699,106 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
         children: [
           Icon(icon, size: 80, color: Colors.white.withOpacity(0.5)),
           const SizedBox(height: 16),
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: Colors.white.withOpacity(0.7),
-              fontFamily: 'Inter',
-            ),
-          ),
+          Text(title,
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white.withOpacity(0.7),
+                  fontFamily: 'Inter')),
           const SizedBox(height: 8),
-          Text(
-            subtitle,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.white.withOpacity(0.5),
-              fontFamily: 'Inter',
-            ),
-          ),
+          Text(subtitle,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.white.withOpacity(0.5),
+                  fontFamily: 'Inter')),
         ],
       ),
     );
   }
 
   // ═══════════════════════════════════════════════════════════
-  // MODAL CIN / NOM — dark Wydad
+  // LOADER OVERLAY
+  // ═══════════════════════════════════════════════════════════
+  Widget _buildProcessingOverlay() {
+    return Positioned.fill(
+      child: AbsorbPointer(
+        child: Container(
+          color: Colors.black.withOpacity(0.65),
+          child: Center(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 32),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                gradient: const LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [Color(0xFF5E0A13), Color(0xFF2E0409)],
+                ),
+                border: Border.all(color: Colors.white.withOpacity(0.16)),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Color(0x80000000),
+                    blurRadius: 40,
+                    offset: Offset(0, 20),
+                  ),
+                ],
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(
+                    width: 46,
+                    height: 46,
+                    child: CircularProgressIndicator(
+                      valueColor:
+                      AlwaysStoppedAnimation<Color>(Color(0xFFF5CD52)),
+                      strokeWidth: 3.5,
+                    ),
+                  ),
+                  const SizedBox(height: 22),
+                  const Text(
+                    'Traitement en cours...',
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    'Veuillez patienter quelques instants',
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 12,
+                      color: Colors.white.withOpacity(0.7),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  // ═══════════════════════════════════════════════════════════
+  // DIALOG CIN / NOM / PAIEMENT
   // ═══════════════════════════════════════════════════════════
   void _showCinInputDialog() {
     final l10n = AppLocalizations.of(context)!;
     _cinController.clear();
     _fullNameController.clear();
+    _walletPinController.clear();
     setState(() {
       _isCinValid = false;
       _isFullNameValid = false;
     });
+
+    String paymentMethod = 'CMI';
+    bool hasEnoughWallet = false;
 
     showDialog(
       context: context,
@@ -766,169 +814,301 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                     .hasMatch(_fullNameController.text) &&
                 _fullNameController.text.split(' ').length >= 2;
             bool allFieldsValid = isCinValid && isFullNameValid;
+            bool pinValid = _walletPinController.text.length == 4;
+
+            hasEnoughWallet = _walletBalance >= _totalPrice;
+            bool canPay = allFieldsValid &&
+                (paymentMethod == 'CMI' ||
+                    (paymentMethod == 'WALLET' &&
+                        hasEnoughWallet &&
+                        pinValid));
 
             return Dialog(
               backgroundColor: Colors.transparent,
               insetPadding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Container(
-                padding: const EdgeInsets.fromLTRB(24, 28, 24, 20),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(24),
-                  gradient: const LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [Color(0xFF5E0A13), Color(0xFF2E0409)],
-                  ),
-                  border: Border.all(color: Colors.white.withOpacity(0.16)),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Color(0x80000000),
-                      blurRadius: 40,
-                      offset: Offset(0, 20),
+              child: SingleChildScrollView(
+                child: Container(
+                  padding: const EdgeInsets.fromLTRB(24, 28, 24, 20),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(24),
+                    gradient: const LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [Color(0xFF5E0A13), Color(0xFF2E0409)],
                     ),
-                  ],
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          width: 56,
-                          height: 56,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: const Color(0xFFE8B10E)
-                                .withOpacity(0.14),
-                            border: Border.all(
-                              color: const Color(0xFFE8B10E)
-                                  .withOpacity(0.3),
+                    border: Border.all(color: Colors.white.withOpacity(0.16)),
+                    boxShadow: const [
+                      BoxShadow(
+                          color: Color(0x80000000),
+                          blurRadius: 40,
+                          offset: Offset(0, 20)),
+                    ],
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            width: 56,
+                            height: 56,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color:
+                              const Color(0xFFE8B10E).withOpacity(0.14),
+                              border: Border.all(
+                                  color: const Color(0xFFE8B10E)
+                                      .withOpacity(0.3)),
+                            ),
+                            child: const Icon(Icons.person_outline,
+                                color: Color(0xFFF5CD52), size: 28),
+                          ),
+                          const SizedBox(width: 14),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(l10n.personalInformation,
+                                    style: const TextStyle(
+                                        fontFamily: 'Inter',
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w900,
+                                        color: Colors.white)),
+                                const SizedBox(height: 4),
+                                Text(l10n.enterPersonalInfoToFinalizeOrder,
+                                    style: TextStyle(
+                                        fontFamily: 'Inter',
+                                        fontSize: 12,
+                                        height: 1.4,
+                                        color:
+                                        Colors.white.withOpacity(0.7))),
+                              ],
                             ),
                           ),
-                          child: const Icon(
-                            Icons.person_outline,
-                            color: Color(0xFFF5CD52),
-                            size: 28,
+                        ],
+                      ),
+                      const SizedBox(height: 22),
+                      _darkField(
+                        label: l10n.fullNameRequired,
+                        hint: l10n.fullNameHint,
+                        controller: _fullNameController,
+                        icon: Icons.person_outline,
+                        onChanged: (_) =>
+                            setDialogState(() => _validateFullName()),
+                        errorText: _fullNameController.text.isNotEmpty &&
+                            !isFullNameValid
+                            ? l10n.fullNameInvalid
+                            : null,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(
+                              RegExp(r'[a-zA-ZÀ-ÿ\s\-]')),
+                          LengthLimitingTextInputFormatter(100),
+                        ],
+                        textCapitalization: TextCapitalization.words,
+                      ),
+                      const SizedBox(height: 14),
+                      _darkField(
+                        label: l10n.cinRequired,
+                        hint: l10n.cinHint,
+                        controller: _cinController,
+                        icon: Icons.badge_outlined,
+                        onChanged: (_) =>
+                            setDialogState(() => _validateCin()),
+                        errorText:
+                        _cinController.text.isNotEmpty && !isCinValid
+                            ? l10n.cinInvalid
+                            : null,
+                        inputFormatters: [
+                          CinTextFormatter(),
+                          LengthLimitingTextInputFormatter(20),
+                        ],
+                        textCapitalization: TextCapitalization.characters,
+                      ),
+                      const SizedBox(height: 20),
+                      const Divider(color: Colors.white12),
+                      const SizedBox(height: 12),
+                      const Text('Mode de paiement',
+                          style: TextStyle(
+                              fontFamily: 'Inter',
+                              fontSize: 13,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white)),
+                      const SizedBox(height: 10),
+
+                      // Wallet
+                      GestureDetector(
+                        onTap: hasEnoughWallet
+                            ? () => setDialogState(
+                                () => paymentMethod = 'WALLET')
+                            : null,
+                        child: Container(
+                          padding: const EdgeInsets.all(12),
+                          margin: const EdgeInsets.only(bottom: 8),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: paymentMethod == 'WALLET'
+                                ? Colors.white.withOpacity(0.15)
+                                : Colors.white.withOpacity(0.05),
+                            border: Border.all(
+                                color: paymentMethod == 'WALLET'
+                                    ? Colors.white
+                                    : Colors.white.withOpacity(0.1)),
                           ),
-                        ),
-                        const SizedBox(width: 14),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          child: Row(
                             children: [
-                              Text(
-                                l10n.personalInformation,
-                                style: const TextStyle(
-                                  fontFamily: 'Inter',
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w900,
-                                  color: Colors.white,
+                              Icon(Icons.account_balance_wallet,
+                                  color: hasEnoughWallet
+                                      ? const Color(0xFFF5CD52)
+                                      : Colors.grey,
+                                  size: 20),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                                  children: [
+                                    const Text('Wydad Pay',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontFamily: 'Inter',
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 13)),
+                                    Text(
+                                      hasEnoughWallet
+                                          ? 'Solde: ${_walletBalance.toStringAsFixed(2)} MAD'
+                                          : 'Solde insuffisant',
+                                      style: TextStyle(
+                                          color: hasEnoughWallet
+                                              ? Colors.white54
+                                              : Colors.redAccent,
+                                          fontFamily: 'Inter',
+                                          fontSize: 11),
+                                    ),
+                                  ],
                                 ),
                               ),
-                              const SizedBox(height: 4),
-                              Text(
-                                l10n.enterPersonalInfoToFinalizeOrder,
-                                style: TextStyle(
-                                  fontFamily: 'Inter',
-                                  fontSize: 12,
-                                  height: 1.4,
-                                  color: Colors.white.withOpacity(0.7),
-                                ),
-                              ),
+                              if (paymentMethod == 'WALLET')
+                                const Icon(Icons.check_circle,
+                                    color: Color(0xFFF5CD52), size: 18),
                             ],
                           ),
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: 22),
+                      ),
 
-                    // Nom complet
-                    _darkField(
-                      label: l10n.fullNameRequired,
-                      hint: l10n.fullNameHint,
-                      controller: _fullNameController,
-                      icon: Icons.person_outline,
-                      onChanged: (_) => setDialogState(() {
-                        _validateFullName();
-                      }),
-                      errorText:
-                      _fullNameController.text.isNotEmpty &&
-                          !isFullNameValid
-                          ? l10n.fullNameInvalid
-                          : null,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.allow(
-                            RegExp(r'[a-zA-ZÀ-ÿ\s\-]')),
-                        LengthLimitingTextInputFormatter(100),
+                      // PIN
+                      if (paymentMethod == 'WALLET') ...[
+                        const SizedBox(height: 10),
+                        _darkField(
+                          label: 'Code PIN Wydad Pay (4 chiffres)',
+                          hint: '••••',
+                          controller: _walletPinController,
+                          icon: Icons.lock_outline,
+                          obscureText: true,
+                          onChanged: (_) => setDialogState(() {}),
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                            LengthLimitingTextInputFormatter(4),
+                          ],
+                        ),
                       ],
-                      textCapitalization: TextCapitalization.words,
-                    ),
-                    const SizedBox(height: 14),
 
-                    // CIN
-                    _darkField(
-                      label: l10n.cinRequired,
-                      hint: l10n.cinHint,
-                      controller: _cinController,
-                      icon: Icons.badge_outlined,
-                      onChanged: (_) => setDialogState(() {
-                        _validateCin();
-                      }),
-                      errorText:
-                      _cinController.text.isNotEmpty && !isCinValid
-                          ? l10n.cinInvalid
-                          : null,
-                      inputFormatters: [
-                        CinTextFormatter(),
-                        LengthLimitingTextInputFormatter(20),
-                      ],
-                      textCapitalization: TextCapitalization.characters,
-                    ),
-                    const SizedBox(height: 22),
+                      const SizedBox(height: 10),
 
-                    Row(
-                      children: [
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () => Navigator.of(context).pop(),
-                            child: Container(
-                              height: 48,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(14),
-                                color: Colors.white.withOpacity(0.08),
-                                border: Border.all(
-                                    color: Colors.white.withOpacity(0.18)),
+                      // CMI
+                      GestureDetector(
+                        onTap: () =>
+                            setDialogState(() => paymentMethod = 'CMI'),
+                        child: Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: paymentMethod == 'CMI'
+                                ? Colors.white.withOpacity(0.15)
+                                : Colors.white.withOpacity(0.05),
+                            border: Border.all(
+                                color: paymentMethod == 'CMI'
+                                    ? Colors.white
+                                    : Colors.white.withOpacity(0.1)),
+                          ),
+                          child: Row(
+                            children: [
+                              const Icon(Icons.credit_card,
+                                  color: Colors.white, size: 20),
+                              const SizedBox(width: 10),
+                              const Expanded(
+                                child: Column(
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                                  children: [
+                                    Text('Carte bancaire (CMI)',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontFamily: 'Inter',
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 13)),
+                                    Text('Payer par carte bancaire',
+                                        style: TextStyle(
+                                            color: Colors.white54,
+                                            fontFamily: 'Inter',
+                                            fontSize: 11)),
+                                  ],
+                                ),
                               ),
-                              child: Center(
-                                child: Text(
-                                  l10n.cancel,
-                                  style: TextStyle(
-                                    fontFamily: 'Inter',
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.white.withOpacity(0.9),
-                                  ),
+                              if (paymentMethod == 'CMI')
+                                const Icon(Icons.check_circle,
+                                    color: Color(0xFFF5CD52), size: 18),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(height: 22),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () => Navigator.of(context).pop(),
+                              child: Container(
+                                height: 48,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(14),
+                                  color: Colors.white.withOpacity(0.08),
+                                  border: Border.all(
+                                      color:
+                                      Colors.white.withOpacity(0.18)),
+                                ),
+                                child: Center(
+                                  child: Text(l10n.cancel,
+                                      style: TextStyle(
+                                          fontFamily: 'Inter',
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.white
+                                              .withOpacity(0.9))),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: allFieldsValid
-                                ? () {
-                              Navigator.of(context).pop();
-                              _createOrder();
-                            }
-                                : null,
-                            child: Container(
-                              height: 48,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(14),
-                                gradient: LinearGradient(
-                                  colors: allFieldsValid
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: canPay
+                                  ? () {
+                                Navigator.of(context).pop();
+                                _createOrder(
+                                  paymentMethod,
+                                  pin: paymentMethod == 'WALLET'
+                                      ? _walletPinController.text
+                                      : null,
+                                );
+                              }
+                                  : null,
+                              child: Container(
+                                height: 48,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(14),
+                                  gradient: LinearGradient(colors: canPay
                                       ? [
                                     const Color(0xFFD11A2A),
                                     const Color(0xFFA8161F)
@@ -936,26 +1116,25 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                                       : [
                                     Colors.grey.withOpacity(0.3),
                                     Colors.grey.withOpacity(0.3)
-                                  ],
+                                  ]),
                                 ),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  l10n.continueText,
-                                  style: const TextStyle(
-                                    fontFamily: 'Inter',
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.white,
+                                child: Center(
+                                  child: Text(
+                                    'Payer ${_totalPrice.toStringAsFixed(0)} MAD',
+                                    style: const TextStyle(
+                                        fontFamily: 'Inter',
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w700,
+                                        color: Colors.white),
                                   ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             );
@@ -974,38 +1153,35 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
     String? errorText,
     List<TextInputFormatter>? inputFormatters,
     TextCapitalization textCapitalization = TextCapitalization.none,
+    bool obscureText = false,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: TextStyle(
-            fontFamily: 'Inter',
-            fontSize: 11,
-            fontWeight: FontWeight.w500,
-            color: Colors.white.withOpacity(0.72),
-          ),
-        ),
+        Text(label,
+            style: TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 11,
+                fontWeight: FontWeight.w500,
+                color: Colors.white.withOpacity(0.72))),
         const SizedBox(height: 5),
         TextField(
           controller: controller,
           onChanged: onChanged,
           inputFormatters: inputFormatters,
           textCapitalization: textCapitalization,
+          obscureText: obscureText,
+          keyboardType:
+          obscureText ? TextInputType.number : TextInputType.text,
           cursorColor: Colors.white,
           style: const TextStyle(
-            fontFamily: 'Inter',
-            fontSize: 13,
-            color: Colors.white,
-          ),
+              fontFamily: 'Inter', fontSize: 13, color: Colors.white),
           decoration: InputDecoration(
             hintText: hint,
             hintStyle: TextStyle(
-              fontFamily: 'Inter',
-              fontSize: 13,
-              color: Colors.white.withOpacity(0.4),
-            ),
+                fontFamily: 'Inter',
+                fontSize: 13,
+                color: Colors.white.withOpacity(0.4)),
             prefixIcon:
             Icon(icon, color: Colors.white.withOpacity(0.6), size: 18),
             filled: true,
@@ -1014,10 +1190,9 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
             const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
             errorText: errorText,
             errorStyle: const TextStyle(
-              fontFamily: 'Inter',
-              fontSize: 11,
-              color: Color(0xFFE5484D),
-            ),
+                fontFamily: 'Inter',
+                fontSize: 11,
+                color: Color(0xFFE5484D)),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide(color: Colors.white.withOpacity(0.14)),
@@ -1045,13 +1220,23 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
     );
   }
 
-  Future<void> _createOrder() async {
+  // ═══════════════════════════════════════════════════════════
+  // CRÉATION COMMANDE + DÉBIT WALLET
+  // ═══════════════════════════════════════════════════════════
+  Future<void> _createOrder(String paymentMethod, {String? pin}) async {
     final l10n = AppLocalizations.of(context)!;
+
     final selectedTickets =
     ticketQuantities.entries.where((e) => e.value > 0).toList();
     if (selectedTickets.isEmpty) return;
 
-    setState(() => isLoading = true);
+    if (paymentMethod == 'WALLET' && (pin == null || pin.length != 4)) {
+      _showErrorDialog('Code PIN requis (4 chiffres).');
+      return;
+    }
+
+    // ✅ Active le loader overlay
+    setState(() => _isProcessing = true);
 
     try {
       final firstTicket = selectedTickets.first;
@@ -1060,63 +1245,171 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
       final name =
       fullNameParts.length > 1 ? fullNameParts.sublist(1).join(' ') : '';
 
+      final Map<String, dynamic> orderPayload = {
+        "event_id": widget.eventId.toString(),
+        "ticket_id": firstTicket.key.toString(),
+        "quantity": firstTicket.value.toString(),
+        "payment_type": paymentMethod == 'WALLET' ? 'BAAS_WALLET' : 'CMI',
+        "cin": _cinController.text,
+        "name": name,
+        "first_name": firstName,
+      };
+      if (paymentMethod == 'WALLET' && pin != null) {
+        orderPayload["pin"] = pin;
+      }
+
       final response = await http.post(
         Uri.parse("https://ticketing.ma/api/customer/orders"),
         headers: {
           "Authorization": "Bearer ${widget.token}",
+          "Content-Type": "application/json",
         },
-        body: {
-          "event_id": widget.eventId.toString(),
-          "ticket_id": firstTicket.key.toString(),
-          "quantity": firstTicket.value.toString(),
-          "payment_type": "CMI",
-          "cin": _cinController.text,
-          "name": name,
-          "first_name": firstName,
-        },
+        body: jsonEncode(orderPayload),
       );
 
-      setState(() => isLoading = false);
-
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        final data = jsonDecode(response.body);
-        if (data["success"] == true) {
-          final orderData = data["data"];
-          if (orderData is Map<String, dynamic> &&
-              orderData.containsKey("order_number")) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => CMIPaymentWebViewTicket(
-                  amount: _totalPrice,
-                  orderData: {
-                    "token": widget.token,
-                    "order": orderData,
-                    "order_number": orderData["order_number"],
-                    "eventId": widget.eventId,
-                    "organizationId": widget.currentOrganizationId,
-                    "name": name,
-                    "first_name": firstName,
-                  },
-                  selectedTickets: selectedTickets,
-                ),
-              ),
-            );
-          } else {
-            _showErrorDialog(l10n.orderNumberMissing);
-          }
-        } else {
-          _showErrorDialog(data['message'] ?? l10n.orderCreationFailed);
-        }
-      } else {
-        _showErrorDialog(l10n.orderCreationError);
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        _showErrorDialog(_GENERIC_ERROR_MSG);
+        return;
       }
-    } catch (e) {
-      setState(() => isLoading = false);
-      _showErrorDialog("${l10n.connectionError}: $e");
+
+      final data = jsonDecode(response.body);
+      if (data["success"] != true) {
+        _showErrorDialog(_GENERIC_ERROR_MSG);
+        return;
+      }
+
+      final orderData = data["data"];
+
+      // ═══ CMI : flow WebView (inchangé) ═══
+      if (paymentMethod != 'WALLET') {
+        if (orderData is Map<String, dynamic> &&
+            orderData.containsKey("order_number")) {
+          // ⚠️ Désactive le loader AVANT de pousser le Navigator
+          setState(() => _isProcessing = false);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CMIPaymentWebViewTicket(
+                amount: _totalPrice,
+                orderData: {
+                  "token": widget.token,
+                  "order": orderData,
+                  "order_number": orderData["order_number"],
+                  "eventId": widget.eventId,
+                  "organizationId": widget.currentOrganizationId,
+                  "name": name,
+                  "first_name": firstName,
+                },
+                selectedTickets: selectedTickets,
+              ),
+            ),
+          );
+        } else {
+          _showErrorDialog(_GENERIC_ERROR_MSG);
+        }
+        return;
+      }
+
+      // ═══ WALLET : backend débite via /orders (PIN inline) ═══
+      await _fetchWalletBalance();
+      _showSuccessDialog();
+    } catch (_) {
+      _showErrorDialog(_GENERIC_ERROR_MSG);
+    } finally {
+      // ✅ Garantie absolue : le loader s'arrête dans TOUS les cas
+      if (mounted) setState(() => _isProcessing = false);
     }
   }
 
+  // ═══════════════════════════════════════════════════════════
+  // DIALOG SUCCÈS
+  // ═══════════════════════════════════════════════════════════
+  void _showSuccessDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => Dialog(
+        backgroundColor: Colors.transparent,
+        insetPadding: const EdgeInsets.symmetric(horizontal: 24),
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(24, 28, 24, 20),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(24),
+            gradient: const LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [Color(0xFF5E0A13), Color(0xFF2E0409)],
+            ),
+            border: Border.all(color: Colors.white.withOpacity(0.16)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 68,
+                height: 68,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: const Color(0xFFF5CD52).withOpacity(0.14),
+                  border: Border.all(
+                      color: const Color(0xFFF5CD52).withOpacity(0.3)),
+                ),
+                child: const Icon(Icons.check_circle_outline,
+                    color: Color(0xFFF5CD52), size: 34),
+              ),
+              const SizedBox(height: 20),
+              const Text('Paiement réussi',
+                  style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 20,
+                      fontWeight: FontWeight.w900,
+                      color: Colors.white)),
+              const SizedBox(height: 10),
+              Text(
+                'Vos billets ont été payés avec succès via votre portefeuille Wydad Pay.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: 13,
+                    height: 1.45,
+                    color: Colors.white.withOpacity(0.75)),
+              ),
+              const SizedBox(height: 24),
+              SizedBox(
+                width: double.infinity,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                    height: 48,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(14),
+                      gradient: const LinearGradient(
+                          colors: [Color(0xFFD11A2A), Color(0xFFA8161F)]),
+                    ),
+                    child: const Center(
+                      child: Text('Retour aux évènements',
+                          style: TextStyle(
+                              fontFamily: 'Inter',
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white)),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // ═══════════════════════════════════════════════════════════
+  // DIALOG ERREUR
+  // ═══════════════════════════════════════════════════════════
   void _showErrorDialog(String message) {
     final l10n = AppLocalizations.of(context)!;
     showDialog(
@@ -1152,26 +1445,20 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                     color: Color(0xFFE5484D), size: 34),
               ),
               const SizedBox(height: 20),
-              Text(
-                l10n.error,
-                style: const TextStyle(
-                  fontFamily: 'Inter',
-                  fontSize: 20,
-                  fontWeight: FontWeight.w900,
-                  color: Colors.white,
-                ),
-              ),
+              Text(l10n.error,
+                  style: const TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 20,
+                      fontWeight: FontWeight.w900,
+                      color: Colors.white)),
               const SizedBox(height: 10),
-              Text(
-                message,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontFamily: 'Inter',
-                  fontSize: 13,
-                  height: 1.45,
-                  color: Colors.white.withOpacity(0.75),
-                ),
-              ),
+              Text(message,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 13,
+                      height: 1.45,
+                      color: Colors.white.withOpacity(0.75))),
               const SizedBox(height: 24),
               SizedBox(
                 width: double.infinity,
@@ -1182,19 +1469,15 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(14),
                       gradient: const LinearGradient(
-                        colors: [Color(0xFFD11A2A), Color(0xFFA8161F)],
-                      ),
+                          colors: [Color(0xFFD11A2A), Color(0xFFA8161F)]),
                     ),
                     child: Center(
-                      child: Text(
-                        l10n.ok,
-                        style: const TextStyle(
-                          fontFamily: 'Inter',
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                        ),
-                      ),
+                      child: Text(l10n.ok,
+                          style: const TextStyle(
+                              fontFamily: 'Inter',
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white)),
                     ),
                   ),
                 ),
@@ -1212,9 +1495,7 @@ class UpperCaseTextFormatter extends TextInputFormatter {
   TextEditingValue formatEditUpdate(
       TextEditingValue oldValue, TextEditingValue newValue) {
     return TextEditingValue(
-      text: newValue.text.toUpperCase(),
-      selection: newValue.selection,
-    );
+        text: newValue.text.toUpperCase(), selection: newValue.selection);
   }
 }
 
@@ -1223,10 +1504,8 @@ class CinTextFormatter extends TextInputFormatter {
   TextEditingValue formatEditUpdate(
       TextEditingValue oldValue, TextEditingValue newValue) {
     String text = newValue.text.toUpperCase();
-
     String result = '';
     bool hasFirstLetter = false;
-
     for (String char in text.split('')) {
       if (!hasFirstLetter && RegExp(r'[A-Z]').hasMatch(char)) {
         result += char;
@@ -1237,10 +1516,8 @@ class CinTextFormatter extends TextInputFormatter {
         result += char;
       }
     }
-
     return TextEditingValue(
-      text: result,
-      selection: TextSelection.collapsed(offset: result.length),
-    );
+        text: result,
+        selection: TextSelection.collapsed(offset: result.length));
   }
 }

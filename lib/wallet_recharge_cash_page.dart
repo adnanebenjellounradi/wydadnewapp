@@ -389,9 +389,9 @@ class _WalletRechargeCashPageState extends State<WalletRechargeCashPage> {
           width: double.infinity,
           height: 50,
           child: ElevatedButton(
-            onPressed: () => Navigator.pushNamedAndRemoveUntil(
-              context,
-              '/wallet',
+            // ✅ MODIFICATION ICI : Redirection vers l'Accueil
+            onPressed: () => Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
+              '/acceuil',
                   (r) => false,
               arguments: {'token': widget.token},
             ),
@@ -404,7 +404,7 @@ class _WalletRechargeCashPageState extends State<WalletRechargeCashPage> {
               elevation: 0,
             ),
             child: const Text(
-              'Retour au Wallet',
+              'Retour à l\'accueil', // ✅ Texte modifié
               style: TextStyle(
                 fontFamily: 'Inter',
                 fontSize: 14,

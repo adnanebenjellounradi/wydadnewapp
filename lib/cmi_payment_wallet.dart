@@ -53,20 +53,15 @@ class _CMIPaymentWebViewWalletState extends State<CMIPaymentWebViewWallet> {
             }
           },
           onPageStarted: (url) {
-            // On ne remet PAS _isLoading = true ici pour éviter que l'overlay
-            // ne revienne bloquer l'écran lors des redirections internes (3DS).
             _checkUrlForRedirect(url);
           },
           onPageFinished: (url) async {
             if (mounted && _isLoading) setState(() => _isLoading = false);
             _checkUrlForRedirect(url);
             _checkPageContent();
-
-            // ✅ Injection du correctif d'affichage et de focus
             await _injectMobileFix(controller);
           },
           onWebResourceError: (error) {
-            // Ignore les erreurs de sous-ressources (images, pubs, etc.)
             if (error.isForMainFrame == false) return;
             if (mounted) {
               setState(() {
@@ -93,28 +88,24 @@ class _CMIPaymentWebViewWalletState extends State<CMIPaymentWebViewWallet> {
     }
   }
 
-  // ✅ CORRECTIF : Force l'affichage mobile et le clavier
   Future<void> _injectMobileFix(WebViewController controller) async {
     try {
       await controller.runJavaScript(r'''
         (function() {
-          // 1. Force le viewport pour mobile (corrige l'écran tronqué)
           var meta = document.createElement('meta');
           meta.name = 'viewport';
           meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
           document.getElementsByTagName('head')[0].appendChild(meta);
 
-          // 2. Force le corps à prendre 100% de la largeur
           document.body.style.width = '100%';
           document.body.style.margin = '0';
           document.body.style.padding = '0';
           document.body.style.overflowX = 'hidden';
 
-          // 3. Force le focus et agrandit la police des inputs
           document.querySelectorAll('input').forEach(function(input) {
             input.addEventListener('touchstart', function() { this.focus(); });
             input.addEventListener('click', function() { this.focus(); });
-            input.style.fontSize = '16px'; // Empêche le zoom automatique
+            input.style.fontSize = '16px';
           });
         })();
       ''');
@@ -123,7 +114,6 @@ class _CMIPaymentWebViewWalletState extends State<CMIPaymentWebViewWallet> {
     }
   }
 
-  // ✅ CORRECTIF : Détection stricte de l'URL de retour
   void _checkUrlForRedirect(String url) {
     if (!url.startsWith(_returnUrlBase)) return;
 
@@ -159,6 +149,7 @@ class _CMIPaymentWebViewWalletState extends State<CMIPaymentWebViewWallet> {
           builder: (_) => _WalletRechargeSuccess(
             amount: widget.amount,
             reference: widget.reference,
+            token: widget.token, // ✅ On passe le token ici
           ),
         ),
       );
@@ -205,7 +196,6 @@ class _CMIPaymentWebViewWalletState extends State<CMIPaymentWebViewWallet> {
         children: [
           WebViewWidget(controller: _controller!),
           if (_isLoading)
-          // ✅ CORRECTIF : IgnorePointer permet de cliquer à travers le loader
             IgnorePointer(
               child: Container(
                 color: isDark
@@ -260,7 +250,13 @@ class _CMIPaymentWebViewWalletState extends State<CMIPaymentWebViewWallet> {
 class _WalletRechargeSuccess extends StatelessWidget {
   final double amount;
   final String reference;
-  const _WalletRechargeSuccess({required this.amount, required this.reference});
+  final String token; // ✅ Ajout du token
+
+  const _WalletRechargeSuccess({
+    required this.amount,
+    required this.reference,
+    required this.token, // ✅ Ajout du token
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -359,8 +355,12 @@ class _WalletRechargeSuccess extends StatelessWidget {
                   width: double.infinity,
                   height: 50,
                   child: ElevatedButton(
-                    onPressed: () => Navigator.pushNamedAndRemoveUntil(
-                        context, '/wallet', (r) => false),
+                    // ✅ Redirection vers l'Accueil
+                    onPressed: () => Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
+                      '/acceuil',
+                          (r) => false,
+                      arguments: {'token': token}, // ✅ On passe le token
+                    ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                       foregroundColor: const Color(0xFFA8161F),
@@ -368,7 +368,7 @@ class _WalletRechargeSuccess extends StatelessWidget {
                           borderRadius: BorderRadius.circular(12)),
                     ),
                     child: const Text(
-                      'Retour au Wallet',
+                      'Retour à l\'accueil', // ✅ Texte modifié
                       style: TextStyle(
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w600,

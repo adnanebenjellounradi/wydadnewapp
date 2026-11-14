@@ -602,7 +602,7 @@ class _SecureAppState extends State<SecureApp> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    _initializeSecurity();
+    //_initializeSecurity();
   }
 
   @override

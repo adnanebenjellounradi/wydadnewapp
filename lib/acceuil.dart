@@ -911,7 +911,7 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
           Positioned(
             left: 16,
             right: 16,
-            bottom: 40,
+            bottom: 60,
             child: CustomBottomNavigation(
               currentIndex: 2,
               onTap: (index) {

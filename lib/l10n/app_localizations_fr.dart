@@ -542,7 +542,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get vote => 'Voter';
 
   @override
-  String get myTickets => 'Mes Tickets';
+  String get myTickets => 'Mes tickets';
 
   @override
   String get ticket => 'Ticket';

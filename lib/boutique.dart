@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'l10n/app_localizations.dart';
 import 'bottomnavigation.dart';
+import 'wallet_service.dart'; // ✅ Import nécessaire pour le solde
 
 class BoutiquePage extends StatefulWidget {
   final String token;
@@ -36,7 +37,11 @@ class _BoutiquePageState extends State<BoutiquePage> {
   int? selectedCategoryId;
   Map<String, Map<String, dynamic>> selectedProducts = {};
 
-  /// l10n helper
+  // ✅ Nouveaux champs pour le wallet
+  double _walletBalance = 0.0;
+  bool _isWalletLoading = true;
+  final TextEditingController _walletPinController = TextEditingController();
+
   AppLocalizations get l10n => AppLocalizations.of(context)!;
 
   String _truncateName(String? name, {int max = 20}) {
@@ -81,8 +86,23 @@ class _BoutiquePageState extends State<BoutiquePage> {
     super.initState();
     isLoggedIn = widget.token.isNotEmpty;
     _loadCartFromStorage();
+    _fetchWalletBalance(); // ✅ Récupérer le solde
     _checkShopStatus();
     fetchData();
+  }
+
+  Future<void> _fetchWalletBalance() async {
+    try {
+      final info = await WalletService.getWalletInfo(widget.token);
+      if (mounted) {
+        setState(() {
+          _walletBalance = (info?['balance'] as num?)?.toDouble() ?? 0.0;
+          _isWalletLoading = false;
+        });
+      }
+    } catch (_) {
+      if (mounted) setState(() => _isWalletLoading = false);
+    }
   }
 
   Future<void> _checkShopStatus() async {
@@ -122,6 +142,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
     _fullNameController.dispose();
     phoneController.dispose();
     _addressController.dispose();
+    _walletPinController.dispose();
     super.dispose();
   }
 
@@ -1222,7 +1243,6 @@ class _BoutiquePageState extends State<BoutiquePage> {
                   ),
                 ),
                 Padding(
-                  // ✅ 40px + safe area en bas du panier
                   padding: EdgeInsets.fromLTRB(
                     20,
                     8,
@@ -1398,12 +1418,32 @@ class _BoutiquePageState extends State<BoutiquePage> {
 
   void _showDeliveryForm() {
     _loadUserInfoFromPrefs(_fullNameController, phoneController);
+    _addressController.clear(); // ← Ajouter si tu veux repartir de zéro
+    setState(() {
+      fullNameError = null;
+      phoneError = null;
+      addressError = null;
+    });
     String paymentMethod = 'wallet';
+    _walletPinController.clear();
+    final safeBottom = MediaQuery.of(context).padding.bottom;
 
     showDialog(
       context: context,
       builder: (_) => StatefulBuilder(
         builder: (context, setModal) {
+          final hasEnoughWallet = _walletBalance >= totalAmount;
+          final pinValid = _walletPinController.text.length == 4;
+// ✅ AJOUT : vérification adresse + nom + téléphone
+          final addressOk = validateAddress(_addressController.text, l10n) == null;
+          final nameOk = validateFullName(_fullNameController.text, l10n) == null;
+          final phoneOk = validatePhoneNumber(phoneController.text, l10n) == null;
+          final personalOk = addressOk && nameOk && phoneOk;
+
+          final canPay = personalOk &&
+              ((paymentMethod == 'wallet' && hasEnoughWallet && pinValid) ||
+                  (paymentMethod == 'card'));
+
           return Dialog(
             insetPadding: EdgeInsets.zero,
             backgroundColor: const Color(0xFF170205),
@@ -1448,12 +1488,11 @@ class _BoutiquePageState extends State<BoutiquePage> {
                       ),
                       Expanded(
                         child: SingleChildScrollView(
-                          // ✅ 40px + safe area dans le scroll
                           padding: EdgeInsets.fromLTRB(
                             20,
                             18,
                             20,
-                            40 + MediaQuery.of(context).padding.bottom,
+                            40 + safeBottom,
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1483,6 +1522,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
                                               validateFullName(v, l10n);
                                         });
                                       },
+                                      validator: (v) => validateFullName(v, l10n),
                                     ),
                                   ),
                                   const SizedBox(width: 10),
@@ -1504,24 +1544,26 @@ class _BoutiquePageState extends State<BoutiquePage> {
                                         });
                                         formatPhoneNumber(v);
                                       },
+                                      validator: (v) => validatePhoneNumber(v, l10n),
                                     ),
                                   ),
                                 ],
                               ),
                               const SizedBox(height: 10),
-                              _darkInput(
-                                controller: _addressController,
-                                label: l10n.fullAddress,
-                                hint: l10n.addressHint,
-                                errorText: addressError,
-                                onChanged: (v) {
-                                  setModal(() {
-                                    customerAddress = v;
-                                    addressError =
-                                        validateAddress(v, l10n);
-                                  });
-                                },
-                              ),
+                            _darkInput(
+                              controller: _addressController,
+                              label: l10n.fullAddress,
+                              hint: l10n.addressHint,
+                              errorText: addressError,
+                              onChanged: (v) {
+                                setModal(() {
+                                  customerAddress = v;
+                                  addressError = validateAddress(v, l10n);
+                                });
+                              },
+                              // ✅ AJOUT : bloque la validation si l'adresse est vide
+                              validator: (v) => validateAddress(v, l10n),
+                            ),
                               const SizedBox(height: 8),
                               Text(
                                 '${l10n.estimatedDelivery}: ${isCasablancaDelivery ? "1-2" : "3-5"} ${l10n.days} · ${deliveryFee.toStringAsFixed(0)} MAD',
@@ -1542,17 +1584,43 @@ class _BoutiquePageState extends State<BoutiquePage> {
                                 ),
                               ),
                               const SizedBox(height: 10),
+
+                              // ✅ WALLET TILE
                               _paymentTile(
                                 icon: Icons.account_balance_wallet,
                                 title: l10n.wydadPayLabel,
-                                subtitle:
-                                '${l10n.balanceLabel}: 1 250,00 MAD',
+                                subtitle: _isWalletLoading
+                                    ? "Chargement..."
+                                    : hasEnoughWallet
+                                    ? '${l10n.balanceLabel}: ${_walletBalance.toStringAsFixed(2)} MAD'
+                                    : l10n.insufficientBalance,
                                 selected: paymentMethod == 'wallet',
-                                highlightSub: true,
-                                onTap: () => setModal(
-                                        () => paymentMethod = 'wallet'),
+                                highlightSub: hasEnoughWallet,
+                                onTap: hasEnoughWallet
+                                    ? () => setModal(() => paymentMethod = 'wallet')
+                                    : null,
                               ),
+
+                              // ✅ CHAMP PIN WALLET
+                              if (paymentMethod == 'wallet') ...[
+                                const SizedBox(height: 10),
+                                _darkInput(
+                                  controller: _walletPinController,
+                                  label: l10n.pinCodeLabel,
+                                  hint: l10n.pinCodeHint,
+                                  keyboardType: TextInputType.number,
+                                  obscureText: true,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly,
+                                    LengthLimitingTextInputFormatter(4),
+                                  ],
+                                  onChanged: (v) => setModal(() {}),
+                                ),
+                              ],
+
                               const SizedBox(height: 8),
+
+                              // ✅ CARD TILE
                               _paymentTile(
                                 icon: Icons.credit_card,
                                 title: l10n.bankCard,
@@ -1590,18 +1658,21 @@ class _BoutiquePageState extends State<BoutiquePage> {
                                 width: double.infinity,
                                 height: 54,
                                 child: ElevatedButton(
-                                  onPressed: isCreatingOrder
+                                  onPressed: (isCreatingOrder || !canPay)
                                       ? null
                                       : () {
-                                    if (_formKey.currentState!
-                                        .validate()) {
+                                    if (_formKey.currentState!.validate()) {
                                       Navigator.pop(context);
-                                      _createOrder();
+                                      _createOrder(
+                                        paymentMethod: paymentMethod,
+                                        pin: paymentMethod == 'wallet' ? _walletPinController.text : null,
+                                      );
                                     }
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.white,
                                     foregroundColor: primary,
+                                    disabledBackgroundColor: Colors.white.withOpacity(0.3),
                                     shape: RoundedRectangleBorder(
                                       borderRadius:
                                       BorderRadius.circular(12),
@@ -1653,6 +1724,8 @@ class _BoutiquePageState extends State<BoutiquePage> {
     String? errorText,
     ValueChanged<String>? onChanged,
     List<TextInputFormatter>? inputFormatters,
+    bool obscureText = false,
+    FormFieldValidator<String>? validator, // ✅ AJOUT
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1667,13 +1740,15 @@ class _BoutiquePageState extends State<BoutiquePage> {
           ),
         ),
         const SizedBox(height: 5),
-        TextField(
+        TextFormField( // ✅ Changé de TextField à TextFormField
           controller: controller,
           keyboardType: keyboardType,
           autofillHints: autofillHints,
           inputFormatters: inputFormatters,
+          obscureText: obscureText,
           cursorColor: Colors.white,
           onChanged: onChanged,
+          validator: validator, // ✅ AJOUT
           style: const TextStyle(
             fontSize: 14,
             color: Colors.white,
@@ -1723,7 +1798,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
     required String title,
     required String subtitle,
     required bool selected,
-    required VoidCallback onTap,
+    required VoidCallback? onTap,
     bool highlightSub = false,
   }) {
     return GestureDetector(
@@ -1778,7 +1853,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
                       fontSize: 12,
                       color: highlightSub
                           ? const Color(0xFFF5CD52)
-                          : Colors.white.withOpacity(0.6),
+                          : (onTap == null ? Colors.redAccent : Colors.white.withOpacity(0.6)),
                       fontFamily: 'urbanist',
                     ),
                   ),
@@ -1802,7 +1877,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
     );
   }
 
-  Future<void> _createOrder() async {
+  Future<void> _createOrder({required String paymentMethod, String? pin}) async {
     setState(() => isCreatingOrder = true);
     try {
       final availabilityData = await checkProductAvailability();
@@ -1868,7 +1943,13 @@ class _BoutiquePageState extends State<BoutiquePage> {
         'customer_name': customerName,
         'customer_phone': '0' + customerPhone.replaceAll(' ', ''),
         'customer_address': customerAddress,
+        // ✅ Envoi du payment_type
+        'payment_type': paymentMethod == 'wallet' ? 'BAAS_WALLET' : 'CMI',
       };
+      // ✅ Envoi du PIN
+      if (paymentMethod == 'wallet' && pin != null) {
+        body['pin'] = pin;
+      }
 
       final res = await http.post(
         Uri.parse('https://ticketing.ma/api/customer/store/orders'),
@@ -1882,9 +1963,18 @@ class _BoutiquePageState extends State<BoutiquePage> {
       if (res.statusCode == 201 || res.statusCode == 200) {
         final data = json.decode(res.body);
         final orderId = data['data']['order_id'];
+
         if (mounted) {
           Navigator.of(context).popUntil((r) => r.isFirst);
-          _navigateToCMIPayment(orderId);
+
+          // ✅ Si WALLET, on affiche le succès direct
+          if (paymentMethod == 'wallet') {
+            await _fetchWalletBalance(); // Mettre à jour le solde
+            _showSuccessDialog();
+          } else {
+            // ✅ Si CARD, on redirige CMI
+            _navigateToCMIPayment(orderId);
+          }
         }
       } else {
         throw Exception('create_order_failed');
@@ -2127,6 +2217,89 @@ class _BoutiquePageState extends State<BoutiquePage> {
     );
   }
 
+  void _showSuccessDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => Dialog(
+        backgroundColor: Colors.transparent,
+        insetPadding: const EdgeInsets.symmetric(horizontal: 24),
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(24, 28, 24, 20),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(24),
+            gradient: const LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [Color(0xFF5E0A13), Color(0xFF2E0409)],
+            ),
+            border: Border.all(color: Colors.white.withOpacity(0.16)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 68,
+                height: 68,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: const Color(0xFFF5CD52).withOpacity(0.14),
+                  border: Border.all(
+                      color: const Color(0xFFF5CD52).withOpacity(0.3)),
+                ),
+                child: const Icon(Icons.check_circle_outline,
+                    color: Color(0xFFF5CD52), size: 34),
+              ),
+              const SizedBox(height: 20),
+              Text(l10n.paymentSuccessTitle,
+                  style: const TextStyle(
+                      fontFamily: 'urbanist',
+                      fontSize: 20,
+                      fontWeight: FontWeight.w900,
+                      color: Colors.white)),
+              const SizedBox(height: 10),
+              Text(l10n.paymentSuccessMessage,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontFamily: 'urbanist',
+                      fontSize: 13,
+                      height: 1.45,
+                      color: Colors.white.withOpacity(0.75))),
+              const SizedBox(height: 24),
+              SizedBox(
+                width: double.infinity,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context); // Fermer dialog
+                    _loadCartFromStorage(); // Rafraichir le panier
+                  },
+                  child: Container(
+                    height: 48,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(14),
+                      gradient: const LinearGradient(colors: [
+                        Color(0xFFD11A2A),
+                        Color(0xFFA8161F)
+                      ]),
+                    ),
+                    child: Center(
+                      child: Text(l10n.backToEvents,
+                          style: const TextStyle(
+                              fontFamily: 'urbanist',
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white)),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   void _showErrorDialog(String msg) {
     showDialog(
       context: context,
@@ -2260,7 +2433,6 @@ class _ProductDetailsSheetState extends State<_ProductDetailsSheet> {
   int _imgIdx = 0;
   late PageController _pageCtrl;
 
-  /// l10n helper
   AppLocalizations get l10n => AppLocalizations.of(context)!;
 
   @override
@@ -2405,7 +2577,6 @@ class _ProductDetailsSheetState extends State<_ProductDetailsSheet> {
                               child: Text(
                                 p['name'] ?? '',
                                 style: const TextStyle(
-                                  // ✅ Font size réduit de 22 → 18
                                   fontSize: 18,
                                   fontWeight: FontWeight.w700,
                                   letterSpacing: -0.3,
@@ -2617,7 +2788,6 @@ class _ProductDetailsSheetState extends State<_ProductDetailsSheet> {
             ),
           ),
           Container(
-            // ✅ 40px + safe area en bas du bouton "Ajouter au panier"
             padding: EdgeInsets.fromLTRB(
               20,
               10,

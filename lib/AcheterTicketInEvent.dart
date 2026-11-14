@@ -1,11 +1,12 @@
+// lib/screens/acheter_ticket_in_event_page.dart
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'cmi_payment_ticket.dart';
+import 'wallet_service.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'cmi_payment_ticket.dart'; // Gardé pour le flux CMI
 import 'l10n/app_localizations.dart';
 
 class AcheterTicketInEventPage extends StatefulWidget {
@@ -34,7 +35,6 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
   final TextEditingController _cinController = TextEditingController();
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _walletPinController = TextEditingController();
-  final TextEditingController _cvvController = TextEditingController();
 
   bool _isCinValid = false;
   bool _isFullNameValid = false;
@@ -42,12 +42,6 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
   double _walletBalance = 0.0;
   bool _isWalletLoading = true;
   String? _walletPhone;
-
-  // Chari BaaS Variables
-  bool _useChariForCard = false;
-  List<Map<String, dynamic>> _savedCards = [];
-  bool _isLoadingCards = false;
-  Map<String, dynamic>? _selectedCard;
 
   final Color primary = const Color(0xFFA8161F);
 
@@ -59,7 +53,6 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
     super.initState();
     fetchEventDetails();
     _fetchWalletBalance();
-    _loadChariSetting();
 
     _cinController.addListener(_validateCin);
     _fullNameController.addListener(_validateFullName);
@@ -70,72 +63,18 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
     _cinController.dispose();
     _fullNameController.dispose();
     _walletPinController.dispose();
-    _cvvController.dispose();
     super.dispose();
-  }
-
-  Future<void> _loadChariSetting() async {
-    final prefs = await SharedPreferences.getInstance();
-    final useChari = prefs.getBool('activatedchari') ?? false;
-    if (mounted) {
-      setState(() {
-        _useChariForCard = useChari;
-      });
-      if (useChari) {
-        _fetchSavedCards();
-      }
-    }
-  }
-
-  // Récupérer les cartes enregistrées (Chari BaaS)
-  Future<void> _fetchSavedCards() async {
-    setState(() => _isLoadingCards = true);
-    try {
-      // ⚠️ URL exacte à confirmer avec ton backend (GET /wallet/cards)
-      final response = await http.get(
-        Uri.parse("https://ticketing.ma/api/customer/wallet/cards"),
-        headers: {
-          "Authorization": "Bearer ${widget.token}",
-          "Content-Type": "application/json",
-        },
-      );
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        if (data["success"] == true && data["data"] != null) {
-          setState(() {
-            final rawCards = data["data"]["cards"] ?? data["data"];
-            _savedCards = List<Map<String, dynamic>>.from(rawCards);
-            if (_savedCards.isNotEmpty) {
-              _selectedCard = _savedCards.first;
-            }
-          });
-        }
-      }
-    } catch (e) {
-      print("Erreur chargement cartes: $e");
-    } finally {
-      if (mounted) setState(() => _isLoadingCards = false);
-    }
   }
 
   Future<void> _fetchWalletBalance() async {
     try {
-      final info = await http.get(
-        Uri.parse("https://ticketing.ma/api/customer/wallet"),
-        headers: {
-          'Authorization': 'Bearer ${widget.token}',
-          'Content-Type': 'application/json',
-        },
-      );
-      if (info.statusCode == 200) {
-        final data = jsonDecode(info.body);
-        if (data["success"] == true) {
-          setState(() {
-            _walletBalance = (data["data"]?['balance'] as num?)?.toDouble() ?? 0.0;
-            _walletPhone = data["data"]?['phone'] as String?;
-            _isWalletLoading = false;
-          });
-        }
+      final info = await WalletService.getWalletInfo(widget.token);
+      if (mounted) {
+        setState(() {
+          _walletBalance = (info?['balance'] as num?)?.toDouble() ?? 0.0;
+          _walletPhone = info?['phone'] as String?;
+          _isWalletLoading = false;
+        });
       }
     } catch (_) {
       if (mounted) setState(() => _isWalletLoading = false);
@@ -158,6 +97,8 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
     });
   }
 
+  bool get _allFieldsValid => _isCinValid && _isFullNameValid;
+
   String _formatPrice(double price) {
     if (price == price.roundToDouble()) return "${price.round()} MAD";
     return "${price.toStringAsFixed(2)} MAD";
@@ -179,8 +120,9 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
           setState(() => event = data["data"]);
         }
       }
-    } catch (_) {}
-    finally {
+    } catch (_) {
+      // silent
+    } finally {
       setState(() => isLoading = false);
     }
   }
@@ -283,6 +225,8 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
     }
 
     final tickets = _getAvailableTickets();
+    // ⚠️ Espace de sécurité pour iPhone / Android gestuel
+    final safeBottom = MediaQuery.of(context).padding.bottom;
 
     return Column(
       children: [
@@ -320,7 +264,14 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
         ),
         Expanded(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(20, 18, 20, 20),
+            // ✅ 40px + safe area + 80px pour la hauteur de la bottom bar
+            // quand elle est visible
+            padding: EdgeInsets.fromLTRB(
+              20,
+              18,
+              20,
+              _hasTicketsSelected ? 40 + safeBottom + 80 : 40 + safeBottom,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -657,11 +608,16 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
     final qty = _totalQuantity;
     final total = _totalPrice;
 
+    // ✅ Espace système (encoche / barre home iPhone / gestes Android)
+    final safeBottom = MediaQuery.of(context).padding.bottom;
+
     return Container(
-      padding: const EdgeInsets.fromLTRB(20, 14, 20, 0),
+      // ✅ 40px visibles + safe area
+      padding: EdgeInsets.fromLTRB(20, 14, 20, 40 + safeBottom),
       decoration: BoxDecoration(
         color: const Color(0xFF120104).withOpacity(0.92),
-        border: Border(top: BorderSide(color: Colors.white.withOpacity(0.10))),
+        border:
+        Border(top: BorderSide(color: Colors.white.withOpacity(0.10))),
       ),
       child: Column(
         children: [
@@ -707,7 +663,8 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
             crossAxisAlignment: CrossAxisAlignment.baseline,
             textBaseline: TextBaseline.alphabetic,
             children: [
-              Text('$qty ${qty > 1 ? l10n.ticketPlural : l10n.ticket} · $name',
+              Text(
+                  '$qty ${qty > 1 ? l10n.ticketPlural : l10n.ticket} · $name',
                   style: TextStyle(
                       fontSize: 13,
                       color: Colors.white.withOpacity(0.72),
@@ -734,7 +691,6 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                       fontWeight: FontWeight.w800)),
             ),
           ),
-          const SizedBox(height: 30),
         ],
       ),
     );
@@ -769,6 +725,9 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
     );
   }
 
+  // ═══════════════════════════════════════════════════════════
+  // LOADER OVERLAY
+  // ═══════════════════════════════════════════════════════════
   Widget _buildProcessingOverlay() {
     return Positioned.fill(
       child: AbsorbPointer(
@@ -833,19 +792,23 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
     );
   }
 
+  // ═══════════════════════════════════════════════════════════
+  // DIALOG CIN / NOM / PAIEMENT
+  // ═══════════════════════════════════════════════════════════
   void _showCinInputDialog() {
     _cinController.clear();
     _fullNameController.clear();
     _walletPinController.clear();
-    _cvvController.clear();
     setState(() {
       _isCinValid = false;
       _isFullNameValid = false;
-      if (_savedCards.isNotEmpty) _selectedCard = _savedCards.first;
     });
 
     String paymentMethod = 'CMI';
     bool hasEnoughWallet = false;
+
+    // ✅ Espace système pour le dialog aussi
+    final safeBottom = MediaQuery.of(context).padding.bottom;
 
     showDialog(
       context: context,
@@ -862,16 +825,10 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                 _fullNameController.text.split(' ').length >= 2;
             bool allFieldsValid = isCinValid && isFullNameValid;
             bool pinValid = _walletPinController.text.length == 4;
-            bool cvvValid = _cvvController.text.length == 3;
-
-            bool cardSelectionValid = true;
-            if (_useChariForCard && paymentMethod == 'CMI') {
-              cardSelectionValid = _selectedCard != null && cvvValid;
-            }
 
             hasEnoughWallet = _walletBalance >= _totalPrice;
             bool canPay = allFieldsValid &&
-                ((paymentMethod == 'CMI' && cardSelectionValid) ||
+                (paymentMethod == 'CMI' ||
                     (paymentMethod == 'WALLET' &&
                         hasEnoughWallet &&
                         pinValid));
@@ -881,7 +838,8 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
               insetPadding: const EdgeInsets.symmetric(horizontal: 24),
               child: SingleChildScrollView(
                 child: Container(
-                  padding: const EdgeInsets.fromLTRB(24, 28, 24, 20),
+                  // ✅ 40px en bas + safe area
+                  padding: EdgeInsets.fromLTRB(24, 28, 24, 40 + safeBottom),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(24),
                     gradient: const LinearGradient(
@@ -908,7 +866,8 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                             height: 56,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: const Color(0xFFE8B10E).withOpacity(0.14),
+                              color:
+                              const Color(0xFFE8B10E).withOpacity(0.14),
                               border: Border.all(
                                   color: const Color(0xFFE8B10E)
                                       .withOpacity(0.3)),
@@ -967,7 +926,8 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                         icon: Icons.badge_outlined,
                         onChanged: (_) =>
                             setDialogState(() => _validateCin()),
-                        errorText: _cinController.text.isNotEmpty && !isCinValid
+                        errorText:
+                        _cinController.text.isNotEmpty && !isCinValid
                             ? l10n.cinInvalid
                             : null,
                         inputFormatters: [
@@ -1066,7 +1026,7 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
 
                       const SizedBox(height: 10),
 
-                      // Carte bancaire
+                      // CMI
                       GestureDetector(
                         onTap: () =>
                             setDialogState(() => paymentMethod = 'CMI'),
@@ -1114,99 +1074,6 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                         ),
                       ),
 
-                      // Cartes Chari / CVV
-                      if (_useChariForCard && paymentMethod == 'CMI') ...[
-                        const SizedBox(height: 12),
-                        Text(
-                          "Mes cartes enregistrées",
-                          style: TextStyle(
-                            fontFamily: 'Inter',
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white.withOpacity(0.8),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        if (_isLoadingCards)
-                          const Center(child: CircularProgressIndicator())
-                        else if (_savedCards.isEmpty)
-                          Text(
-                            "Aucune carte enregistrée.",
-                            style: TextStyle(
-                                color: Colors.white54, fontFamily: 'Inter'),
-                          )
-                        else
-                          ..._savedCards.map((card) {
-                            final isSelected =
-                                _selectedCard?["customerTokenizedCardId"] ==
-                                    card["customerTokenizedCardId"];
-                            return GestureDetector(
-                              onTap: () => setDialogState(
-                                      () => _selectedCard = card),
-                              child: Container(
-                                margin: const EdgeInsets.only(bottom: 8),
-                                padding: const EdgeInsets.all(12),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  color: isSelected
-                                      ? Colors.white.withOpacity(0.15)
-                                      : Colors.white.withOpacity(0.05),
-                                  border: Border.all(
-                                    color: isSelected
-                                        ? Colors.white
-                                        : Colors.white.withOpacity(0.1),
-                                  ),
-                                ),
-                                child: Row(
-                                  children: [
-                                    const Icon(Icons.credit_card,
-                                        color: Colors.white, size: 20),
-                                    const SizedBox(width: 10),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            card['maskedPan'] ?? "**** **** **** ????",
-                                            style: const TextStyle(
-                                                color: Colors.white,
-                                                fontFamily: 'Inter'),
-                                          ),
-                                          Text(
-                                            card['scheme'] ?? "Carte",
-                                            style: TextStyle(
-                                                color: Colors.white54,
-                                                fontFamily: 'Inter',
-                                                fontSize: 11),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    if (isSelected)
-                                      const Icon(Icons.check_circle,
-                                          color: Color(0xFFF5CD52),
-                                          size: 18),
-                                  ],
-                                ),
-                              ),
-                            );
-                          }).toList(),
-                        const SizedBox(height: 10),
-                        _darkField(
-                          label: "CVV",
-                          hint: "123",
-                          controller: _cvvController,
-                          icon: Icons.lock_outline,
-                          obscureText: true,
-                          onChanged: (_) => setDialogState(() {}),
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly,
-                            LengthLimitingTextInputFormatter(3),
-                          ],
-                        ),
-                      ],
-
                       const SizedBox(height: 22),
                       Row(
                         children: [
@@ -1219,7 +1086,8 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                                   borderRadius: BorderRadius.circular(14),
                                   color: Colors.white.withOpacity(0.08),
                                   border: Border.all(
-                                      color: Colors.white.withOpacity(0.18)),
+                                      color:
+                                      Colors.white.withOpacity(0.18)),
                                 ),
                                 child: Center(
                                   child: Text(l10n.cancel,
@@ -1243,10 +1111,6 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                                   paymentMethod,
                                   pin: paymentMethod == 'WALLET'
                                       ? _walletPinController.text
-                                      : null,
-                                  cvv: paymentMethod == 'CMI' &&
-                                      _useChariForCard
-                                      ? _cvvController.text
                                       : null,
                                 );
                               }
@@ -1368,9 +1232,9 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
   }
 
   // ═══════════════════════════════════════════════════════════
-  // LOGIQUE MÉTIER : CRÉATION COMMANDE ET PAIEMENT
+  // CRÉATION COMMANDE + DÉBIT WALLET
   // ═══════════════════════════════════════════════════════════
-  Future<void> _createOrder(String paymentMethod, {String? pin, String? cvv}) async {
+  Future<void> _createOrder(String paymentMethod, {String? pin}) async {
     final selectedTickets =
     ticketQuantities.entries.where((e) => e.value > 0).toList();
     if (selectedTickets.isEmpty) return;
@@ -1378,17 +1242,6 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
     if (paymentMethod == 'WALLET' && (pin == null || pin.length != 4)) {
       _showErrorDialog(l10n.pinRequired);
       return;
-    }
-
-    if (_useChariForCard && paymentMethod == 'CMI') {
-      if (_selectedCard == null) {
-        _showErrorDialog("Veuillez sélectionner une carte.");
-        return;
-      }
-      if (cvv == null || cvv.length != 3) {
-        _showErrorDialog("Veuillez saisir un CVV valide.");
-        return;
-      }
     }
 
     setState(() => _isProcessing = true);
@@ -1400,13 +1253,11 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
       final name =
       fullNameParts.length > 1 ? fullNameParts.sublist(1).join(' ') : '';
 
-      // 1. Créer la commande
-      final String cardPaymentType = _useChariForCard ? 'BAAS_CARD' : 'CMI';
       final Map<String, dynamic> orderPayload = {
         "event_id": widget.eventId.toString(),
         "ticket_id": firstTicket.key.toString(),
         "quantity": firstTicket.value.toString(),
-        "payment_type": paymentMethod == 'WALLET' ? 'BAAS_WALLET' : cardPaymentType,
+        "payment_type": paymentMethod == 'WALLET' ? 'BAAS_WALLET' : 'CMI',
         "cin": _cinController.text,
         "name": name,
         "first_name": firstName,
@@ -1436,95 +1287,39 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
       }
 
       final orderData = data["data"];
-      final int orderId = int.tryParse(orderData["order_id"].toString()) ?? 0;
 
-      // 2. Gérer le paiement selon le type
-      if (paymentMethod == 'WALLET') {
-        await _fetchWalletBalance();
-        _showSuccessDialog();
-        return;
-      }
-
-      // === FLUX CHARI (BAAS_CARD) ===
-      if (_useChariForCard) {
-        // Appel à l'API de paiement pour initier le 3DS
-        final payResponse = await http.post(
-          Uri.parse("https://ticketing.ma/api/customer/payment/baas/$orderId"),
-          headers: {
-            "Authorization": "Bearer ${widget.token}",
-            "Content-Type": "application/json",
-          },
-          body: jsonEncode({
-            "customerTokenizedCardId": _selectedCard!["customerTokenizedCardId"],
-            "baas_card_cvv": cvv,
-            "redirect_url": "https://ticketing.ma/api/customer/wallet/return", // À adapter si besoin
-          }),
-        );
-
-        if (!mounted) return;
-        setState(() => _isProcessing = false);
-
-        if (payResponse.statusCode == 200) {
-          final payData = jsonDecode(payResponse.body);
-          if (payData["success"] == true) {
-            // Le backend doit renvoyer une URL de redirection 3DS
-            final redirectUrl = payData["data"]?["redirect_url"]?.toString() ??
-                payData["data"]?["payment_url"]?.toString() ??
-                payData["data"]?["url"]?.toString();
-
-            if (redirectUrl != null && redirectUrl.isNotEmpty) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ChariPaymentWebView(
-                    checkoutUrl: redirectUrl,
-                    token: widget.token,
-                    orderId: orderId.toString(),
-                    onSuccess: () {
-                      Navigator.pop(context);
-                      _showSuccessDialog();
-                    },
-                  ),
-                ),
-              );
-            } else {
-              _showErrorDialog("Erreur: URL de paiement 3DS manquante. Vérifiez la réponse du backend.");
-            }
-          } else {
-            _showErrorDialog(payData["message"] ?? "Échec de l'initialisation du paiement.");
-          }
+      // ═══ CMI : flow WebView (inchangé) ═══
+      if (paymentMethod != 'WALLET') {
+        if (orderData is Map<String, dynamic> &&
+            orderData.containsKey("order_number")) {
+          setState(() => _isProcessing = false);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CMIPaymentWebViewTicket(
+                amount: _totalPrice,
+                orderData: {
+                  "token": widget.token,
+                  "order": orderData,
+                  "order_number": orderData["order_number"],
+                  "eventId": widget.eventId,
+                  "organizationId": widget.currentOrganizationId,
+                  "name": name,
+                  "first_name": firstName,
+                },
+                selectedTickets: selectedTickets,
+              ),
+            ),
+          );
         } else {
-          _showErrorDialog("Erreur serveur lors de l'initialisation du paiement.");
+          _showErrorDialog(l10n.genericErrorMsg);
         }
         return;
       }
 
-      // === FLUX CMI (INCHANGÉ) ===
-      if (orderData is! Map<String, dynamic> ||
-          !orderData.containsKey("order_number")) {
-        _showErrorDialog(l10n.genericErrorMsg);
-        return;
-      }
-
-      setState(() => _isProcessing = false);
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => CMIPaymentWebViewTicket(
-            amount: _totalPrice,
-            orderData: {
-              "token": widget.token,
-              "order": orderData,
-              "order_number": orderData["order_number"],
-              "eventId": widget.eventId,
-              "organizationId": widget.currentOrganizationId,
-              "name": name,
-              "first_name": firstName,
-            },
-            selectedTickets: selectedTickets,
-          ),
-        ),
-      );
+      // ═══ WALLET : backend débite via /orders (PIN inline) ═══
+      await _fetchWalletBalance();
+      _showSuccessDialog();
     } catch (_) {
       _showErrorDialog(l10n.genericErrorMsg);
     } finally {
@@ -1532,6 +1327,9 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
     }
   }
 
+  // ═══════════════════════════════════════════════════════════
+  // DIALOG SUCCÈS
+  // ═══════════════════════════════════════════════════════════
   void _showSuccessDialog() {
     showDialog(
       context: context,
@@ -1615,6 +1413,9 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
     );
   }
 
+  // ═══════════════════════════════════════════════════════════
+  // DIALOG ERREUR
+  // ═══════════════════════════════════════════════════════════
   void _showErrorDialog(String message) {
     showDialog(
       context: context,
@@ -1723,136 +1524,5 @@ class CinTextFormatter extends TextInputFormatter {
     return TextEditingValue(
         text: result,
         selection: TextSelection.collapsed(offset: result.length));
-  }
-}
-
-// ─────────────────────────────────────────────────────────────
-// CHARI PAYMENT WEBVIEW (3DS)
-// ─────────────────────────────────────────────────────────────
-class ChariPaymentWebView extends StatefulWidget {
-  final String checkoutUrl;
-  final String token;
-  final String orderId;
-  final VoidCallback onSuccess;
-
-  const ChariPaymentWebView({
-    Key? key,
-    required this.checkoutUrl,
-    required this.token,
-    required this.orderId,
-    required this.onSuccess,
-  }) : super(key: key);
-
-  @override
-  State<ChariPaymentWebView> createState() => _ChariPaymentWebViewState();
-}
-
-class _ChariPaymentWebViewState extends State<ChariPaymentWebView> {
-  WebViewController? _controller;
-  bool _isLoading = true;
-  bool _paymentCompleted = false;
-
-  @override
-  void initState() {
-    super.initState();
-    Future.delayed(Duration.zero, _initWebView);
-  }
-
-  Future<void> _initWebView() async {
-    final controller = WebViewController();
-    await controller.setJavaScriptMode(JavaScriptMode.unrestricted);
-    await controller.setBackgroundColor(const Color(0x00000000));
-
-    controller.setNavigationDelegate(
-      NavigationDelegate(
-        onProgress: (progress) {
-          if (progress > 60 && mounted && _isLoading) {
-            setState(() => _isLoading = false);
-          }
-        },
-        onPageStarted: (url) => _checkUrl(url),
-        onPageFinished: (url) {
-          if (mounted && _isLoading) setState(() => _isLoading = false);
-          _checkUrl(url);
-        },
-        onWebResourceError: (error) {
-          if (error.isForMainFrame == false) return;
-          if (mounted) setState(() => _isLoading = false);
-        },
-        onUrlChange: (change) => _checkUrl(change.url ?? ''),
-      ),
-    );
-
-    if (mounted) setState(() => _controller = controller);
-    await controller.loadRequest(Uri.parse(widget.checkoutUrl));
-  }
-
-  void _checkUrl(String url) {
-    // Adapter ces patterns aux URLs de retour réelles configurées
-    // côté Chari / backend (success_url / cancel_url)
-    if (url.contains('success') || url.contains('payment.succeeded')) {
-      _handleSuccess();
-    } else if (url.contains('fail') ||
-        url.contains('decline') ||
-        url.contains('cancel')) {
-      _handleCancel();
-    }
-  }
-
-  void _handleSuccess() {
-    if (_paymentCompleted) return;
-    _paymentCompleted = true;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) widget.onSuccess();
-    });
-  }
-
-  void _handleCancel() {
-    if (_paymentCompleted) return;
-    _paymentCompleted = true;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) Navigator.of(context).pop();
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.cmiPayment),
-        backgroundColor: isDark ? Colors.black : Colors.white,
-        elevation: 0,
-        iconTheme: IconThemeData(color: isDark ? Colors.white : Colors.black),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: _handleCancel,
-        ),
-      ),
-      body: _controller == null
-          ? const Center(
-        child: CircularProgressIndicator(color: Color(0xFFA8161F)),
-      )
-          : Stack(
-        children: [
-          WebViewWidget(controller: _controller!),
-          if (_isLoading)
-            IgnorePointer(
-              child: Container(
-                color: isDark
-                    ? Colors.black.withOpacity(0.85)
-                    : Colors.white.withOpacity(0.85),
-                child: const Center(
-                  child: CircularProgressIndicator(
-                    color: Color(0xFFA8161F),
-                  ),
-                ),
-              ),
-            ),
-        ],
-      ),
-    );
   }
 }

@@ -1222,7 +1222,13 @@ class _BoutiquePageState extends State<BoutiquePage> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
+                  // ✅ 40px + safe area en bas du panier
+                  padding: EdgeInsets.fromLTRB(
+                    20,
+                    8,
+                    20,
+                    40 + MediaQuery.of(context).padding.bottom,
+                  ),
                   child: Column(
                     children: [
                       Container(
@@ -1442,7 +1448,13 @@ class _BoutiquePageState extends State<BoutiquePage> {
                       ),
                       Expanded(
                         child: SingleChildScrollView(
-                          padding: const EdgeInsets.fromLTRB(20, 18, 20, 20),
+                          // ✅ 40px + safe area dans le scroll
+                          padding: EdgeInsets.fromLTRB(
+                            20,
+                            18,
+                            20,
+                            40 + MediaQuery.of(context).padding.bottom,
+                          ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -2393,10 +2405,11 @@ class _ProductDetailsSheetState extends State<_ProductDetailsSheet> {
                               child: Text(
                                 p['name'] ?? '',
                                 style: const TextStyle(
-                                  fontSize: 22,
+                                  // ✅ Font size réduit de 22 → 18
+                                  fontSize: 18,
                                   fontWeight: FontWeight.w700,
                                   letterSpacing: -0.3,
-                                  height: 1.2,
+                                  height: 1.25,
                                   color: Colors.white,
                                   fontFamily: 'Inter',
                                 ),
@@ -2406,7 +2419,7 @@ class _ProductDetailsSheetState extends State<_ProductDetailsSheet> {
                             Text(
                               '${p['price']} MAD',
                               style: const TextStyle(
-                                fontSize: 20,
+                                fontSize: 18,
                                 fontWeight: FontWeight.w800,
                                 color: Colors.white,
                                 fontFamily: 'Inter',
@@ -2604,7 +2617,13 @@ class _ProductDetailsSheetState extends State<_ProductDetailsSheet> {
             ),
           ),
           Container(
-            padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
+            // ✅ 40px + safe area en bas du bouton "Ajouter au panier"
+            padding: EdgeInsets.fromLTRB(
+              20,
+              10,
+              20,
+              40 + MediaQuery.of(context).padding.bottom,
+            ),
             decoration: BoxDecoration(
               color: const Color(0xFF07060F),
               border: Border(

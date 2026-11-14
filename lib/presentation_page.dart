@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'login.dart';
 import 'inscription.dart';
 import 'acceuil.dart';
+import 'l10n/app_localizations.dart';
 
 class PresentationPage extends StatefulWidget {
   const PresentationPage({Key? key}) : super(key: key);
@@ -14,27 +15,15 @@ class _PresentationPageState extends State<PresentationPage> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
 
-  static const List<_SlideData> _slides = [
-    _SlideData(
-      title: 'Une seule appli,\npour tout faire',
-      text: 'Billetterie, Ticketplace et Fan Zone réunis au même endroit.',
-    ),
-    _SlideData(
-      title: 'Payez tout, partout',
-      text:
-      "Alimentez, transférez, retirez et rechargez votre mobile avec Wydad Pay. Votre carte d'abonnement vous suit partout.",
-    ),
-    _SlideData(
-      title: 'Vivez chaque match',
-      text:
-      'Votez pour votre joueur favori, jouez au quiz et gagnez des billets.',
-    ),
-  ];
+  /// l10n helper
+  AppLocalizations get l10n => AppLocalizations.of(context)!;
 
-  bool get _isLast => _currentPage == _slides.length - 1;
+  int get _slideCount => 3;
+
+  bool get _isLast => _currentPage == _slideCount - 1;
 
   void _next() {
-    if (_currentPage < _slides.length - 1) {
+    if (_currentPage < _slideCount - 1) {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
@@ -64,6 +53,21 @@ class _PresentationPageState extends State<PresentationPage> {
 
   @override
   Widget build(BuildContext context) {
+    final slides = [
+      {
+        'title': l10n.onboardingSlide1Title,
+        'text': l10n.onboardingSlide1Text,
+      },
+      {
+        'title': l10n.onboardingSlide2Title,
+        'text': l10n.onboardingSlide2Text,
+      },
+      {
+        'title': l10n.onboardingSlide3Title,
+        'text': l10n.onboardingSlide3Text,
+      },
+    ];
+
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -80,7 +84,6 @@ class _PresentationPageState extends State<PresentationPage> {
         ),
         child: Stack(
           children: [
-            // Top radial red glow
             Positioned(
               top: -140,
               left: 0,
@@ -102,7 +105,6 @@ class _PresentationPageState extends State<PresentationPage> {
                 ),
               ),
             ),
-
             SafeArea(
               child: Column(
                 children: [
@@ -130,9 +132,9 @@ class _PresentationPageState extends State<PresentationPage> {
                             padding:
                             const EdgeInsets.symmetric(horizontal: 4),
                           ),
-                          child: const Text(
-                            'Passer',
-                            style: TextStyle(
+                          child: Text(
+                            l10n.skip,
+                            style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
                               color: Color(0xC7FFFFFF),
@@ -142,16 +144,13 @@ class _PresentationPageState extends State<PresentationPage> {
                       ),
                     ),
                   ),
-
-                  // Slide area
                   Expanded(
                     child: PageView.builder(
                       controller: _pageController,
-                      itemCount: _slides.length,
+                      itemCount: slides.length,
                       onPageChanged: (i) =>
                           setState(() => _currentPage = i),
                       itemBuilder: (context, index) {
-                        // Slides 1 & 2 are larger, slide 3 is compact
                         final isLast = index == 2;
                         final illustrationHeight =
                         isLast ? 240.0 : 300.0;
@@ -162,7 +161,6 @@ class _PresentationPageState extends State<PresentationPage> {
                           physics: const ClampingScrollPhysics(),
                           child: Column(
                             children: [
-                              // Illustration
                               SizedBox(
                                 height: illustrationHeight,
                                 child: Center(
@@ -170,12 +168,11 @@ class _PresentationPageState extends State<PresentationPage> {
                                 ),
                               ),
                               const SizedBox(height: 6),
-                              // Title
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 24),
                                 child: Text(
-                                  _slides[index].title,
+                                  slides[index]['title'] as String,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     color: Colors.white,
@@ -187,7 +184,6 @@ class _PresentationPageState extends State<PresentationPage> {
                                 ),
                               ),
                               const SizedBox(height: 8),
-                              // Description
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 24),
@@ -195,10 +191,11 @@ class _PresentationPageState extends State<PresentationPage> {
                                   constraints:
                                   const BoxConstraints(maxWidth: 320),
                                   child: Text(
-                                    _slides[index].text,
+                                    slides[index]['text'] as String,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
-                                      color: Colors.white.withOpacity(0.72),
+                                      color:
+                                      Colors.white.withOpacity(0.72),
                                       fontSize: textFontSize,
                                       height: 1.45,
                                     ),
@@ -212,19 +209,17 @@ class _PresentationPageState extends State<PresentationPage> {
                       },
                     ),
                   ),
-
                   const SizedBox(height: 8),
-
-                  // Dots
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(_slides.length, (i) {
+                    children: List.generate(slides.length, (i) {
                       final selected = i == _currentPage;
                       return GestureDetector(
                         onTap: () => _goToSlide(i),
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 200),
-                          margin: const EdgeInsets.symmetric(horizontal: 4),
+                          margin:
+                          const EdgeInsets.symmetric(horizontal: 4),
                           height: 8,
                           width: selected ? 24 : 8,
                           decoration: BoxDecoration(
@@ -237,10 +232,7 @@ class _PresentationPageState extends State<PresentationPage> {
                       );
                     }),
                   ),
-
                   const SizedBox(height: 16),
-
-                  // Buttons
                   Padding(
                     padding: const EdgeInsets.fromLTRB(24, 0, 24, 20),
                     child: Column(
@@ -253,14 +245,15 @@ class _PresentationPageState extends State<PresentationPage> {
                               onPressed: _next,
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.white,
-                                foregroundColor: const Color(0xFFA8161F),
+                                foregroundColor:
+                                const Color(0xFFA8161F),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                               ),
-                              child: const Text(
-                                'Suivant',
-                                style: TextStyle(
+                              child: Text(
+                                l10n.next,
+                                style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w600,
                                 ),
@@ -282,14 +275,16 @@ class _PresentationPageState extends State<PresentationPage> {
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.white,
-                                    foregroundColor: const Color(0xFFA8161F),
+                                    foregroundColor:
+                                    const Color(0xFFA8161F),
                                     shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
+                                      borderRadius:
+                                      BorderRadius.circular(12),
                                     ),
                                   ),
-                                  child: const Text(
-                                    'Créer un compte',
-                                    style: TextStyle(
+                                  child: Text(
+                                    l10n.createAccountLink,
+                                    style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600,
                                     ),
@@ -312,15 +307,17 @@ class _PresentationPageState extends State<PresentationPage> {
                                     Colors.white.withOpacity(0.06),
                                     foregroundColor: Colors.white,
                                     side: BorderSide(
-                                      color: Colors.white.withOpacity(0.22),
+                                      color: Colors.white
+                                          .withOpacity(0.22),
                                     ),
                                     shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
+                                      borderRadius:
+                                      BorderRadius.circular(12),
                                     ),
                                   ),
-                                  child: const Text(
-                                    "J'ai déjà un compte",
-                                    style: TextStyle(
+                                  child: Text(
+                                    l10n.alreadyHaveAccount,
+                                    style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600,
                                     ),
@@ -344,9 +341,9 @@ class _PresentationPageState extends State<PresentationPage> {
                                       ),
                                     );
                                   },
-                                  child: const Text(
-                                    'Continuer sans compte',
-                                    style: TextStyle(
+                                  child: Text(
+                                    l10n.continueWithoutAccount,
+                                    style: const TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w500,
                                       color: Color(0xC7FFFFFF),
@@ -373,11 +370,11 @@ class _PresentationPageState extends State<PresentationPage> {
   Widget _buildIllustration(int index) {
     switch (index) {
       case 0:
-        return _TicketIllustration();
+        return _TicketIllustration(l10n: l10n);
       case 1:
-        return _WydadPayIllustration();
+        return _WydadPayIllustration(l10n: l10n);
       case 2:
-        return _FanZoneIllustration();
+        return _FanZoneIllustration(l10n: l10n);
       default:
         return const SizedBox();
     }
@@ -387,16 +384,14 @@ class _PresentationPageState extends State<PresentationPage> {
 void _noop() {}
 void _noopLang(String _) {}
 
-class _SlideData {
-  final String title;
-  final String text;
-  const _SlideData({required this.title, required this.text});
-}
-
 // ============================================================
-// ILLUSTRATION 1 : Tickets / Ticketplace  (enlarged)
+// ILLUSTRATION 1 : Tickets / Ticketplace
 // ============================================================
 class _TicketIllustration extends StatelessWidget {
+  final AppLocalizations l10n;
+
+  const _TicketIllustration({required this.l10n});
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -404,16 +399,15 @@ class _TicketIllustration extends StatelessWidget {
       height: 300,
       child: Stack(
         children: [
-          // Card left — Ticketplace
           Positioned(
             left: -6,
             top: 22,
             child: Transform.rotate(
               angle: -10 * 3.14159265 / 180,
               child: _TicketCard(
-                smallLabel: 'TICKETPLACE',
-                title: 'Revente',
-                priceLabel: 'dès',
+                smallLabel: l10n.mockTicketplace,
+                title: l10n.mockResale,
+                priceLabel: l10n.mockFrom,
                 priceValue: '70 MAD',
                 icon: Icons.swap_horiz,
                 gradientColors: const [
@@ -424,16 +418,15 @@ class _TicketIllustration extends StatelessWidget {
               ),
             ),
           ),
-          // Card right — Fan Zone (Homme du match)
           Positioned(
             right: -6,
             top: 12,
             child: Transform.rotate(
               angle: 9 * 3.14159265 / 180,
               child: _TicketCard(
-                smallLabel: 'FAN ZONE',
-                title: 'Homme du match',
-                badge: '● LIVE · VOTEZ',
+                smallLabel: l10n.mockFanZone,
+                title: l10n.mockManOfMatch,
+                badge: l10n.mockLiveVote,
                 icon: Icons.star_border,
                 gradientColors: const [
                   Color(0xFF8E1019),
@@ -446,11 +439,10 @@ class _TicketIllustration extends StatelessWidget {
               ),
             ),
           ),
-          // Central Premium ticket
           Positioned(
             left: 75,
             top: 110,
-            child: _PremiumTicket(),
+            child: _PremiumTicket(l10n: l10n),
           ),
         ],
       ),
@@ -516,7 +508,8 @@ class _TicketCard extends StatelessWidget {
                     end: Alignment.bottomCenter,
                     colors: iconBg,
                   ),
-                  border: Border.all(color: Colors.white.withOpacity(0.2)),
+                  border:
+                  Border.all(color: Colors.white.withOpacity(0.2)),
                 ),
                 child: Icon(icon, color: Colors.white, size: 16),
               ),
@@ -597,6 +590,10 @@ class _TicketCard extends StatelessWidget {
 }
 
 class _PremiumTicket extends StatelessWidget {
+  final AppLocalizations l10n;
+
+  const _PremiumTicket({required this.l10n});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -631,7 +628,7 @@ class _PremiumTicket extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'BILLET',
+                    l10n.mockTicket,
                     style: TextStyle(
                       fontSize: 9,
                       fontWeight: FontWeight.w800,
@@ -639,9 +636,9 @@ class _PremiumTicket extends StatelessWidget {
                       color: Colors.white.withOpacity(0.82),
                     ),
                   ),
-                  const Text(
-                    'Premium',
-                    style: TextStyle(
+                  Text(
+                    l10n.mockPremium,
+                    style: const TextStyle(
                       fontSize: 19,
                       fontWeight: FontWeight.w900,
                       color: Colors.white,
@@ -678,15 +675,15 @@ class _PremiumTicket extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Complexe Mohammed V',
+                    l10n.mockStadium,
                     style: TextStyle(
                       fontSize: 11,
                       color: Colors.white.withOpacity(0.8),
                     ),
                   ),
-                  const Text(
-                    'Porte 4 · Place 112',
-                    style: TextStyle(
+                  Text(
+                    l10n.mockGateSeat,
+                    style: const TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w800,
                       color: Colors.white,
@@ -704,7 +701,8 @@ class _PremiumTicket extends StatelessWidget {
                     end: Alignment.bottomCenter,
                     colors: [Color(0xFFB0141F), Color(0xFF860D16)],
                   ),
-                  border: Border.all(color: Colors.white.withOpacity(0.2)),
+                  border:
+                  Border.all(color: Colors.white.withOpacity(0.2)),
                 ),
                 child: const Icon(
                   Icons.qr_code_2,
@@ -721,9 +719,13 @@ class _PremiumTicket extends StatelessWidget {
 }
 
 // ============================================================
-// ILLUSTRATION 2 : Wydad Pay  (enlarged)
+// ILLUSTRATION 2 : Wydad Pay
 // ============================================================
 class _WydadPayIllustration extends StatelessWidget {
+  final AppLocalizations l10n;
+
+  const _WydadPayIllustration({required this.l10n});
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -736,7 +738,6 @@ class _WydadPayIllustration extends StatelessWidget {
             height: 195,
             child: Stack(
               children: [
-                // Back card
                 Positioned(
                   left: 14,
                   right: 14,
@@ -751,8 +752,8 @@ class _WydadPayIllustration extends StatelessWidget {
                         end: Alignment.bottomRight,
                         colors: [Color(0xFF5E0A13), Color(0xFF2E0409)],
                       ),
-                      border:
-                      Border.all(color: Colors.white.withOpacity(0.16)),
+                      border: Border.all(
+                          color: Colors.white.withOpacity(0.16)),
                     ),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.end,
@@ -763,7 +764,7 @@ class _WydadPayIllustration extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'ABONNEMENT',
+                              l10n.mockSubscription,
                               style: TextStyle(
                                 fontSize: 9,
                                 fontWeight: FontWeight.w800,
@@ -771,9 +772,9 @@ class _WydadPayIllustration extends StatelessWidget {
                                 color: Colors.white.withOpacity(0.7),
                               ),
                             ),
-                            const Text(
-                              'Saison 2026 / 27',
-                              style: TextStyle(
+                            Text(
+                              l10n.mockSeason,
+                              style: const TextStyle(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w800,
                                 color: Colors.white,
@@ -785,14 +786,14 @@ class _WydadPayIllustration extends StatelessWidget {
                           height: 26,
                           child: Image.asset(
                             'assets/739679bd3a8e68433f6bcda33167a31e.svg',
-                            errorBuilder: (_, __, ___) => const SizedBox(),
+                            errorBuilder: (_, __, ___) =>
+                            const SizedBox(),
                           ),
                         ),
                       ],
                     ),
                   ),
                 ),
-                // Front card
                 Positioned(
                   left: 0,
                   right: 0,
@@ -811,8 +812,8 @@ class _WydadPayIllustration extends StatelessWidget {
                           Color(0xFF6E0B12),
                         ],
                       ),
-                      border:
-                      Border.all(color: Colors.white.withOpacity(0.24)),
+                      border: Border.all(
+                          color: Colors.white.withOpacity(0.24)),
                       boxShadow: const [
                         BoxShadow(
                           color: Color(0x8C000000),
@@ -826,7 +827,7 @@ class _WydadPayIllustration extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'WYDAD PAY',
+                          l10n.mockWydadPay,
                           style: TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.w800,
@@ -838,7 +839,7 @@ class _WydadPayIllustration extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Solde disponible',
+                              l10n.mockAvailableBalance,
                               style: TextStyle(
                                 fontSize: 11,
                                 color: Colors.white.withOpacity(0.8),
@@ -876,30 +877,28 @@ class _WydadPayIllustration extends StatelessWidget {
               ],
             ),
           ),
-
           const SizedBox(height: 16),
-
           SizedBox(
             width: 280,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
+              children: [
                 _PayAction(
                   icon: Icons.add,
-                  label: 'Alimenter',
+                  label: l10n.mockTopUp,
                   highlighted: true,
                 ),
                 _PayAction(
                   icon: Icons.send_outlined,
-                  label: 'Transférer',
+                  label: l10n.mockTransfer,
                 ),
                 _PayAction(
                   icon: Icons.account_balance_outlined,
-                  label: 'Retirer',
+                  label: l10n.mockWithdraw,
                 ),
                 _PayAction(
                   icon: Icons.grid_view_rounded,
-                  label: 'Plus',
+                  label: l10n.mockMore,
                 ),
               ],
             ),
@@ -968,9 +967,13 @@ class _PayAction extends StatelessWidget {
 }
 
 // ============================================================
-// ILLUSTRATION 3 : Fan Zone  (kept compact so text fits)
+// ILLUSTRATION 3 : Fan Zone
 // ============================================================
 class _FanZoneIllustration extends StatelessWidget {
+  final AppLocalizations l10n;
+
+  const _FanZoneIllustration({required this.l10n});
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -979,7 +982,6 @@ class _FanZoneIllustration extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Vote card
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
@@ -999,9 +1001,9 @@ class _FanZoneIllustration extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      'Joueur du match',
-                      style: TextStyle(
+                    Text(
+                      l10n.mockMatchPlayer,
+                      style: const TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
                         color: Colors.white,
@@ -1009,15 +1011,16 @@ class _FanZoneIllustration extends StatelessWidget {
                     ),
                     Container(
                       height: 18,
-                      padding: const EdgeInsets.symmetric(horizontal: 7),
+                      padding:
+                      const EdgeInsets.symmetric(horizontal: 7),
                       decoration: BoxDecoration(
                         color: const Color(0xFFE5484D),
                         borderRadius: BorderRadius.circular(9),
                       ),
                       alignment: Alignment.center,
-                      child: const Text(
-                        'LIVE',
-                        style: TextStyle(
+                      child: Text(
+                        l10n.mockLive,
+                        style: const TextStyle(
                           fontSize: 9,
                           fontWeight: FontWeight.w700,
                           letterSpacing: 0.5,
@@ -1043,9 +1046,9 @@ class _FanZoneIllustration extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
-          // Quiz card
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            padding:
+            const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(18),
               color: Colors.white.withOpacity(0.06),
@@ -1079,9 +1082,9 @@ class _FanZoneIllustration extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Quiz du jour',
-                        style: TextStyle(
+                      Text(
+                        l10n.mockQuizOfDay,
+                        style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
                           color: Colors.white,
@@ -1089,7 +1092,7 @@ class _FanZoneIllustration extends StatelessWidget {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        '2 billets à gagner',
+                        l10n.mockWinTickets,
                         style: TextStyle(
                           fontSize: 10,
                           color: Colors.white.withOpacity(0.6),

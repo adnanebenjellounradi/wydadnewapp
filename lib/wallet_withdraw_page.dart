@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'l10n/app_localizations.dart';
 import 'wallet_service.dart';
 
 class WalletWithdrawPage extends StatefulWidget {
   final String token;
+
   const WalletWithdrawPage({Key? key, required this.token}) : super(key: key);
 
   @override
@@ -11,6 +13,9 @@ class WalletWithdrawPage extends StatefulWidget {
 
 class _WalletWithdrawPageState extends State<WalletWithdrawPage> {
   final Color primary = const Color(0xFFA8161F);
+
+  AppLocalizations get l10n => AppLocalizations.of(context)!;
+
   bool _isLoading = true;
   double _balance = 0;
 
@@ -22,8 +27,11 @@ class _WalletWithdrawPageState extends State<WalletWithdrawPage> {
 
   Future<void> _loadBalance() async {
     setState(() => _isLoading = true);
+
     final wallet = await WalletService.getWalletInfo(widget.token);
+
     if (!mounted) return;
+
     setState(() {
       _balance = (wallet?['balance'] as num?)?.toDouble() ?? 0;
       _isLoading = false;
@@ -39,7 +47,11 @@ class _WalletWithdrawPageState extends State<WalletWithdrawPage> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Color(0xFF4A0710), Color(0xFF23030A), Color(0xFF120104)],
+            colors: [
+              Color(0xFF4A0710),
+              Color(0xFF23030A),
+              Color(0xFF120104),
+            ],
             stops: [0.0, 0.3, 1.0],
           ),
         ),
@@ -69,20 +81,24 @@ class _WalletWithdrawPageState extends State<WalletWithdrawPage> {
                             colors: [
                               Color(0xFFD11A2A),
                               Color(0xFFA8161F),
-                              Color(0xFF6E0B12)
+                              Color(0xFF6E0B12),
                             ],
                           ),
                           border: Border.all(
-                              color: Colors.white.withOpacity(0.2)),
+                            color: Colors.white.withOpacity(0.2),
+                          ),
                         ),
-                        child: const Icon(Icons.account_balance_outlined,
-                            color: Colors.white, size: 26),
+                        child: const Icon(
+                          Icons.account_balance_outlined,
+                          color: Colors.white,
+                          size: 26,
+                        ),
                       ),
                       const SizedBox(height: 16),
-                      const Text(
-                        'Comment souhaitez-vous retirer votre argent ?',
+                      Text(
+                        l10n.walletWithdrawChooseMethod,
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'Inter',
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
@@ -92,7 +108,11 @@ class _WalletWithdrawPageState extends State<WalletWithdrawPage> {
                       ),
                       const SizedBox(height: 6),
                       Text(
-                        'Solde disponible : ${_balance.toStringAsFixed(2).replaceAll('.', ',')} MAD',
+                        l10n.walletWithdrawAvailableBalance(
+                          _balance
+                              .toStringAsFixed(2)
+                              .replaceAll('.', ','),
+                        ),
                         style: TextStyle(
                           fontFamily: 'Inter',
                           fontSize: 11,
@@ -102,24 +122,28 @@ class _WalletWithdrawPageState extends State<WalletWithdrawPage> {
                       const SizedBox(height: 20),
                       _methodCard(
                         icon: Icons.account_balance_outlined,
-                        title: 'Vers mon compte bancaire',
-                        subtitle: 'Virement sur un compte à votre nom',
+                        title: l10n.walletWithdrawBankAccount,
+                        subtitle: l10n.walletWithdrawBankSubtitle,
                         onTap: () async {
                           await Navigator.pushNamed(
-                              context, '/walletWithdrawBank',
-                              arguments: {'token': widget.token});
+                            context,
+                            '/walletWithdrawBank',
+                            arguments: {'token': widget.token},
+                          );
                           _loadBalance();
                         },
                       ),
                       const SizedBox(height: 10),
                       _methodCard(
                         icon: Icons.payments_outlined,
-                        title: 'En espèces chez un agent',
-                        subtitle: 'Chaabi Cash, Damane Cash, Tashilat',
+                        title: l10n.walletWithdrawCashAgency,
+                        subtitle: l10n.walletWithdrawCashSubtitle,
                         onTap: () async {
                           await Navigator.pushNamed(
-                              context, '/walletWithdrawCash',
-                              arguments: {'token': widget.token});
+                            context,
+                            '/walletWithdrawCash',
+                            arguments: {'token': widget.token},
+                          );
                           _loadBalance();
                         },
                       ),
@@ -147,16 +171,21 @@ class _WalletWithdrawPageState extends State<WalletWithdrawPage> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(11),
                 color: Colors.white.withOpacity(0.08),
-                border: Border.all(color: Colors.white.withOpacity(0.14)),
+                border: Border.all(
+                  color: Colors.white.withOpacity(0.14),
+                ),
               ),
-              child: const Icon(Icons.chevron_left,
-                  color: Colors.white, size: 18),
+              child: const Icon(
+                Icons.chevron_left,
+                color: Colors.white,
+                size: 18,
+              ),
             ),
           ),
           const Spacer(),
-          const Text(
-            'Retirer de l\'argent',
-            style: TextStyle(
+          Text(
+            l10n.walletWithdrawTitle,
+            style: const TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.w600,
               color: Colors.white,
@@ -184,7 +213,9 @@ class _WalletWithdrawPageState extends State<WalletWithdrawPage> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(14),
           color: Colors.white.withOpacity(0.07),
-          border: Border.all(color: Colors.white.withOpacity(0.12)),
+          border: Border.all(
+            color: Colors.white.withOpacity(0.12),
+          ),
         ),
         child: Row(
           children: [
@@ -195,7 +226,11 @@ class _WalletWithdrawPageState extends State<WalletWithdrawPage> {
                 borderRadius: BorderRadius.circular(10),
                 color: Colors.white.withOpacity(0.10),
               ),
-              child: Icon(icon, color: Colors.white, size: 19),
+              child: Icon(
+                icon,
+                color: Colors.white,
+                size: 19,
+              ),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -224,8 +259,11 @@ class _WalletWithdrawPageState extends State<WalletWithdrawPage> {
                 ],
               ),
             ),
-            Icon(Icons.chevron_right,
-                color: Colors.white.withOpacity(0.5), size: 14),
+            Icon(
+              Icons.chevron_right,
+              color: Colors.white.withOpacity(0.5),
+              size: 14,
+            ),
           ],
         ),
       ),

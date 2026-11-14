@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'wallet_service.dart';
+import 'l10n/app_localizations.dart';
 
 class WalletHistoryPage extends StatefulWidget {
   final String token;
@@ -15,6 +16,9 @@ class _WalletHistoryPageState extends State<WalletHistoryPage> {
   String _filter = 'all';
 
   final Color primary = const Color(0xFFA8161F);
+
+  /// l10n helper
+  AppLocalizations get l10n => AppLocalizations.of(context)!;
 
   @override
   void initState() {
@@ -36,10 +40,16 @@ class _WalletHistoryPageState extends State<WalletHistoryPage> {
     if (_filter == 'all') return _transactions;
     return _transactions.where((t) {
       final type = t['type']?.toString() ?? '';
-      if (_filter == 'recharge') return type == 'recharge' || type == 'deposit';
-      if (_filter == 'transfer') return type == 'transfer' || type == 'sent';
+      if (_filter == 'recharge') {
+        return type == 'recharge' || type == 'deposit';
+      }
+      if (_filter == 'transfer') {
+        return type == 'transfer' || type == 'sent';
+      }
       if (_filter == 'received') return type == 'received';
-      if (_filter == 'cashout') return type == 'cashout' || type == 'withdraw';
+      if (_filter == 'cashout') {
+        return type == 'cashout' || type == 'withdraw';
+      }
       return true;
     }).toList();
   }
@@ -48,7 +58,7 @@ class _WalletHistoryPageState extends State<WalletHistoryPage> {
     final map = <String, List<Map<String, dynamic>>>{};
     for (final tx in _filtered) {
       final raw = tx['created_at']?.toString() ?? '';
-      final day = raw.length > 10 ? raw.substring(0, 10) : 'Aujourd\'hui';
+      final day = raw.length > 10 ? raw.substring(0, 10) : l10n.today;
       map.putIfAbsent(day, () => []).add(tx);
     }
     return map;
@@ -119,9 +129,9 @@ class _WalletHistoryPageState extends State<WalletHistoryPage> {
             ),
           ),
           const Spacer(),
-          const Text(
-            'Historique',
-            style: TextStyle(
+          Text(
+            l10n.historyTitle,
+            style: const TextStyle(
               fontSize: 17,
               fontWeight: FontWeight.w600,
               color: Colors.white,
@@ -137,11 +147,11 @@ class _WalletHistoryPageState extends State<WalletHistoryPage> {
 
   Widget _buildFilters() {
     final types = [
-      {'id': 'all', 'label': 'Tout'},
-      {'id': 'recharge', 'label': 'Recharges'},
-      {'id': 'transfer', 'label': 'Envois'},
-      {'id': 'received', 'label': 'Reçus'},
-      {'id': 'cashout', 'label': 'Cash-out'},
+      {'id': 'all', 'label': l10n.all},
+      {'id': 'recharge', 'label': l10n.filterRecharges},
+      {'id': 'transfer', 'label': l10n.filterSent},
+      {'id': 'received', 'label': l10n.filterReceived},
+      {'id': 'cashout', 'label': l10n.filterCashOut},
     ];
 
     return Padding(
@@ -216,9 +226,8 @@ class _WalletHistoryPageState extends State<WalletHistoryPage> {
               tx['label']?.toString() ??
               type;
           final rawDate = tx['created_at']?.toString() ?? '';
-          final time = rawDate.length > 16
-              ? rawDate.substring(11, 16)
-              : '';
+          final time =
+          rawDate.length > 16 ? rawDate.substring(11, 16) : '';
 
           return GestureDetector(
             onTap: () => Navigator.pushNamed(context, '/walletTxDetail',
@@ -238,7 +247,8 @@ class _WalletHistoryPageState extends State<WalletHistoryPage> {
                     ),
                     child: Icon(
                       isIncome ? Icons.add : Icons.remove,
-                      color: isIncome ? const Color(0xFFF5CD52) : Colors.white,
+                      color:
+                      isIncome ? const Color(0xFFF5CD52) : Colors.white,
                       size: 18,
                     ),
                   ),
@@ -276,7 +286,8 @@ class _WalletHistoryPageState extends State<WalletHistoryPage> {
                       fontFamily: 'Inter',
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
-                      color: isIncome ? const Color(0xFFF5CD52) : Colors.white,
+                      color:
+                      isIncome ? const Color(0xFFF5CD52) : Colors.white,
                     ),
                   ),
                 ],
@@ -297,7 +308,7 @@ class _WalletHistoryPageState extends State<WalletHistoryPage> {
               color: Colors.white.withOpacity(0.3), size: 64),
           const SizedBox(height: 16),
           Text(
-            'Aucune transaction',
+            l10n.noTransactions,
             style: TextStyle(
               fontFamily: 'Inter',
               fontSize: 15,

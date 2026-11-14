@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'wallet_service.dart';
+import 'l10n/app_localizations.dart';
 
 class WalletAccountPage extends StatefulWidget {
   final String token;
@@ -16,6 +17,9 @@ class _WalletAccountPageState extends State<WalletAccountPage> {
   Map<String, dynamic>? _kyc;
 
   final Color primary = const Color(0xFFA8161F);
+
+  /// l10n helper
+  AppLocalizations get l10n => AppLocalizations.of(context)!;
 
   @override
   void initState() {
@@ -99,9 +103,9 @@ class _WalletAccountPageState extends State<WalletAccountPage> {
             ),
           ),
           const Spacer(),
-          const Text(
-            'Mon compte',
-            style: TextStyle(
+          Text(
+            l10n.myAccount,
+            style: const TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.w600,
               color: Colors.white,
@@ -120,12 +124,17 @@ class _WalletAccountPageState extends State<WalletAccountPage> {
     final phone = _wallet?['phone']?.toString() ?? '';
     final isVerified = (_wallet?['is_verified'] as bool?) ?? false;
     final level = (_wallet?['account_level'] as int?) ?? 1;
-    final accountType = _wallet?['account_type']?.toString() ?? 'Particulier';
+    final accountType =
+        _wallet?['account_type']?.toString() ?? l10n.defaultAccountType;
     final currentLimit =
         (_wallet?['limits']?['current_limit'] as num?)?.toDouble() ?? 1000;
 
     final initials = fullName.isNotEmpty
-        ? fullName.split(' ').take(2).map((s) => s.isNotEmpty ? s[0] : '').join()
+        ? fullName
+        .split(' ')
+        .take(2)
+        .map((s) => s.isNotEmpty ? s[0] : '')
+        .join()
         : 'AB';
 
     return Container(
@@ -171,7 +180,7 @@ class _WalletAccountPageState extends State<WalletAccountPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      fullName.isNotEmpty ? fullName : '[PRÉNOM NOM]',
+                      fullName.isNotEmpty ? fullName : l10n.namePlaceholder,
                       style: const TextStyle(
                         fontFamily: 'Inter',
                         fontSize: 14,
@@ -200,13 +209,13 @@ class _WalletAccountPageState extends State<WalletAccountPage> {
                     color: const Color(0xFFF5CD52).withOpacity(0.14),
                   ),
                   child: Row(
-                    children: const [
-                      Icon(Icons.check,
+                    children: [
+                      const Icon(Icons.check,
                           color: Color(0xFFF5CD52), size: 10),
-                      SizedBox(width: 3),
+                      const SizedBox(width: 3),
                       Text(
-                        'Vérifié',
-                        style: TextStyle(
+                        l10n.verified,
+                        style: const TextStyle(
                           fontFamily: 'Inter',
                           fontSize: 10,
                           fontWeight: FontWeight.w600,
@@ -223,10 +232,11 @@ class _WalletAccountPageState extends State<WalletAccountPage> {
           const SizedBox(height: 12),
           Row(
             children: [
-              _infoCell('Type', accountType),
-              _infoCell('Niveau', 'Niveau $level'),
-              _infoCell(
-                  'Plafond', '${currentLimit.toStringAsFixed(0)} MAD'),
+              _infoCell(l10n.accountType, accountType),
+              _infoCell(l10n.accountLevel,
+                  l10n.accountLevelWithValue('$level')),
+              _infoCell(l10n.accountLimit,
+                  '${currentLimit.toStringAsFixed(0)} MAD'),
             ],
           ),
         ],
@@ -280,9 +290,9 @@ class _WalletAccountPageState extends State<WalletAccountPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                'Vérification d\'identité',
-                style: TextStyle(
+              Text(
+                l10n.identityVerification,
+                style: const TextStyle(
                   fontFamily: 'Inter',
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
@@ -312,11 +322,11 @@ class _WalletAccountPageState extends State<WalletAccountPage> {
             ),
           ),
           const SizedBox(height: 10),
-          _checkRow('Numéro de téléphone vérifié', done: true),
-          _checkRow('Informations personnelles', done: true),
-          _checkRow('Adresse', done: true),
-          _checkRow('Pièce d\'identité (CIN)', done: false),
-          _checkRow('Selfie de vérification', done: false),
+          _checkRow(l10n.kycPhoneVerified, done: true),
+          _checkRow(l10n.kycPersonalInfo, done: true),
+          _checkRow(l10n.kycAddress, done: true),
+          _checkRow(l10n.kycCin, done: false),
+          _checkRow(l10n.kycSelfie, done: false),
         ],
       ),
     );
@@ -356,7 +366,8 @@ class _WalletAccountPageState extends State<WalletAccountPage> {
             style: TextStyle(
               fontFamily: 'Inter',
               fontSize: 12,
-              color: done ? Colors.white : Colors.white.withOpacity(0.72),
+              color:
+              done ? Colors.white : Colors.white.withOpacity(0.72),
             ),
           ),
         ],
@@ -369,7 +380,7 @@ class _WalletAccountPageState extends State<WalletAccountPage> {
       children: [
         _actionTile(
           icon: Icons.lock_outline,
-          label: 'Changer mon code PIN',
+          label: l10n.changePin,
           onTap: () {
             Navigator.pushNamed(context, '/walletChangePin', arguments: {
               'token': widget.token,
@@ -379,14 +390,14 @@ class _WalletAccountPageState extends State<WalletAccountPage> {
         const SizedBox(height: 8),
         _actionTile(
           icon: Icons.power_settings_new,
-          label: 'Fermer ma session wallet',
+          label: l10n.logoutWalletSession,
           onTap: () async {
             await WalletService.logout(widget.token);
             if (mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: const Text('Session wallet fermée',
-                      style: TextStyle(fontFamily: 'Inter')),
+                  content: Text(l10n.walletSessionClosed,
+                      style: const TextStyle(fontFamily: 'Inter')),
                   backgroundColor: primary,
                   behavior: SnackBarBehavior.floating,
                 ),

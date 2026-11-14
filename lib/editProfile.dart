@@ -44,6 +44,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
   bool _selectedThemeIsDark = false;
   final Color primary = const Color(0xFFA8161F);
 
+  /// l10n helper
+  AppLocalizations get l10n => AppLocalizations.of(context)!;
+
   @override
   void initState() {
     super.initState();
@@ -85,14 +88,18 @@ class _EditProfilePageState extends State<EditProfilePage> {
   // ───── VALIDATION ─────
   String? validateName(String? v, AppLocalizations l10n) {
     if (v == null || v.trim().isEmpty) return l10n.firstNameRequired;
-    if (!RegExp(r'^[a-zA-ZÀ-ÿ\s\-]+$').hasMatch(v)) return l10n.firstNameLettersOnly;
+    if (!RegExp(r'^[a-zA-ZÀ-ÿ\s\-]+$').hasMatch(v)) {
+      return l10n.firstNameLettersOnly;
+    }
     if (v.length < 2) return l10n.firstNameMinLength;
     return null;
   }
 
   String? validateLastName(String? v, AppLocalizations l10n) {
     if (v == null || v.trim().isEmpty) return l10n.lastNameRequired;
-    if (!RegExp(r'^[a-zA-ZÀ-ÿ\s\-]+$').hasMatch(v)) return l10n.lastNameLettersOnly;
+    if (!RegExp(r'^[a-zA-ZÀ-ÿ\s\-]+$').hasMatch(v)) {
+      return l10n.lastNameLettersOnly;
+    }
     if (v.length < 2) return l10n.lastNameMinLength;
     return null;
   }
@@ -100,7 +107,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
   String? validatePhone(String? v, AppLocalizations l10n) {
     if (v == null || v.isEmpty) return l10n.phoneRequired;
     final cleaned = v.replaceAll(' ', '');
-    if (!RegExp(r'^[6-7][0-9]{8}$').hasMatch(cleaned)) return l10n.phoneInvalid;
+    if (!RegExp(r'^[6-7][0-9]{8}$').hasMatch(cleaned)) {
+      return l10n.phoneInvalid;
+    }
     return null;
   }
 
@@ -179,7 +188,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
           nameController.text = profile['name'] ?? '';
           lastNameController.text = profile['last_name'] ?? '';
           emailController.text = profile['email'] ?? '';
-          phoneController.text = profile['phone']?.replaceAll('+212', '') ?? '';
+          phoneController.text =
+              profile['phone']?.replaceAll('+212', '') ?? '';
           cinController.text = profile['cin'] ?? '';
           isLoading = false;
         });
@@ -187,7 +197,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
         throw Exception('Failed to load profile');
       }
     } catch (e) {
-      final l10n = AppLocalizations.of(context)!;
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(l10n.errorLoadingProfile),
         backgroundColor: primary,
@@ -198,7 +207,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   Future<void> updateProfile() async {
     if (!_formKey.currentState!.validate()) return;
-    final l10n = AppLocalizations.of(context)!;
     setState(() => isUpdating = true);
 
     try {
@@ -228,7 +236,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
       if (response.statusCode == 200 && jsonResponse['success'] == true) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(jsonResponse['message'] ?? l10n.profileUpdatedSuccess),
+          content:
+          Text(jsonResponse['message'] ?? l10n.profileUpdatedSuccess),
           backgroundColor: Colors.green,
           behavior: SnackBarBehavior.floating,
         ));
@@ -249,7 +258,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   // ───── QR MODAL ─────
   void _showQRCodeModal() {
-    final l10n = AppLocalizations.of(context)!;
     final userEmail = emailController.text;
 
     showDialog(
@@ -257,7 +265,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
       barrierDismissible: true,
       builder: (_) => Dialog(
         backgroundColor: Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        shape:
+        RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(
@@ -277,7 +286,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   const Spacer(),
                   IconButton(
                     onPressed: () => Navigator.pop(context),
-                    icon: const Icon(Icons.close, color: Colors.grey, size: 18),
+                    icon:
+                    const Icon(Icons.close, color: Colors.grey, size: 18),
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
                   ),
@@ -369,15 +379,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   Future<void> _shareProfileViaWhatsApp() async {
-    final l10n = AppLocalizations.of(context)!;
     final userEmail = emailController.text;
-    final userName = "${nameController.text} ${lastNameController.text}".trim();
+    final userName =
+    "${nameController.text} ${lastNameController.text}".trim();
 
     String message = l10n.shareProfileMessage(
       userEmail.isNotEmpty ? userEmail : l10n.email,
     );
     if (userName.isNotEmpty) {
-      message += "\n ${l10n.user} :${userName.isNotEmpty ? " $userName" : ""} ";
+      message +=
+      "\n ${l10n.user} :${userName.isNotEmpty ? " $userName" : ""} ";
     }
     final encoded = Uri.encodeComponent(message);
 
@@ -420,7 +431,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
               leading: SizedBox(
                 width: 26,
                 height: 18,
-                child: CountryFlag.fromCountryCode(lang['countryCode'] as String),
+                child: CountryFlag.fromCountryCode(
+                    lang['countryCode'] as String),
               ),
               title: Text(
                 lang['label'] as String,
@@ -428,7 +440,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   color: Colors.white,
                   fontFamily: 'Inter',
                   fontSize: 13,
-                  fontWeight: selected ? FontWeight.bold : FontWeight.normal,
+                  fontWeight:
+                  selected ? FontWeight.bold : FontWeight.normal,
                 ),
               ),
               trailing: selected
@@ -453,7 +466,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
   // ═══════════════════════════════════════════════════════════
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     final displayName =
     "${nameController.text} ${lastNameController.text}".trim();
     final initials = displayName.isNotEmpty
@@ -500,7 +512,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 ),
               ),
             ),
-
             SafeArea(
               bottom: false,
               child: Column(
@@ -509,28 +520,29 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
                     child: _buildHeader(),
                   ),
-
                   Expanded(
                     child: isLoading
                         ? Center(
                       child: CircularProgressIndicator(color: primary),
                     )
                         : SingleChildScrollView(
-                      padding: const EdgeInsets.fromLTRB(20, 16, 20, 40),
+                      padding:
+                      const EdgeInsets.fromLTRB(20, 16, 20, 40),
                       child: Form(
                         key: _formKey,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            _buildIdentitySection(displayName, initials),
+                            _buildIdentitySection(
+                                displayName, initials),
                             const SizedBox(height: 14),
                             _buildShareProfileButton(),
                             const SizedBox(height: 18),
-                            _sectionTitle('MES INFORMATIONS'),
+                            _sectionTitle(l10n.myInfoSection),
                             const SizedBox(height: 8),
                             _buildFormSection(l10n),
                             const SizedBox(height: 18),
-                            _sectionTitle('MOT DE PASSE'),
+                            _sectionTitle(l10n.passwordSection),
                             const SizedBox(height: 8),
                             _buildPasswordSection(l10n),
                             const SizedBox(height: 20),
@@ -564,13 +576,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 color: Colors.white.withOpacity(0.08),
                 border: Border.all(color: Colors.white.withOpacity(0.14)),
               ),
-              child: const Icon(Icons.chevron_left, color: Colors.white, size: 18),
+              child: const Icon(Icons.chevron_left,
+                  color: Colors.white, size: 18),
             ),
           ),
           const Spacer(),
-          const Text(
-            'Modifier le profil',
-            style: TextStyle(
+          Text(
+            l10n.editProfileTitle,
+            style: const TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.w600,
               color: Colors.white,
@@ -641,7 +654,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               ),
               const SizedBox(height: 2),
               Text(
-                'Supporter · WAC',
+                l10n.supporterWac,
                 style: TextStyle(
                   fontFamily: 'Inter',
                   fontSize: 11,
@@ -699,12 +712,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            Icon(Icons.qr_code_2, color: Colors.white, size: 16),
-            SizedBox(width: 8),
+          children: [
+            const Icon(Icons.qr_code_2, color: Colors.white, size: 16),
+            const SizedBox(width: 8),
             Text(
-              'Partager mon profil',
-              style: TextStyle(
+              l10n.shareMyProfile,
+              style: const TextStyle(
                 fontFamily: 'Inter',
                 fontSize: 13,
                 fontWeight: FontWeight.w700,
@@ -788,7 +801,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             ),
             const SizedBox(height: 4),
             Text(
-              "L'e-mail ne peut pas être modifié.",
+              l10n.emailCannotBeChangedShort,
               style: TextStyle(
                 fontFamily: 'Inter',
                 fontSize: 10,
@@ -874,7 +887,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           label: l10n.cinLabel,
           controller: cinController,
           validator: (v) => validateCIN(v, l10n),
-          hint: "Numéro de carte d'identité",
+          hint: l10n.cinHintFull,
         ),
       ],
     );
@@ -896,7 +909,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           controller: passwordController,
           validator: (v) => validatePassword(v, l10n),
           obscure: true,
-          hint: '8 caractères minimum',
+          hint: l10n.newPasswordHintMin,
         ),
       ],
     );

@@ -1,24 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'l10n/app_localizations.dart';
 import 'wallet_service.dart';
 
 class WalletTransferPage extends StatefulWidget {
   final String token;
-  const WalletTransferPage({Key? key, required this.token}) : super(key: key);
+
+  const WalletTransferPage({
+    Key? key,
+    required this.token,
+  }) : super(key: key);
 
   @override
   State<WalletTransferPage> createState() => _WalletTransferPageState();
 }
 
 class _WalletTransferPageState extends State<WalletTransferPage> {
-  int _step = 0; // 0: destinataire, 1: montant, 2: PIN, 3: succès
+  int _step = 0;
   String _recipient = '';
   String _amount = '100';
   String _note = '';
   String _pin = '';
   bool _isLoading = false;
 
+  AppLocalizations get l10n => AppLocalizations.of(context)!;
+
   final Color primary = const Color(0xFFA8161F);
+
   final TextEditingController _phoneCtrl = TextEditingController();
   final TextEditingController _noteCtrl = TextEditingController();
   final TextEditingController _pinCtrl = TextEditingController();
@@ -34,39 +42,49 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
   double get _amountValue => double.tryParse(_amount) ?? 0;
 
   void _showError(String msg) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(msg, style: const TextStyle(fontFamily: 'Inter')),
-      backgroundColor: primary,
-      behavior: SnackBarBehavior.floating,
-    ));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          msg,
+          style: const TextStyle(fontFamily: 'Inter'),
+        ),
+        backgroundColor: primary,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
   }
 
   void _goNext() async {
     if (_step == 0) {
       final cleaned = _phoneCtrl.text.replaceAll(' ', '');
+
       if (!RegExp(r'^[6-7][0-9]{8}$').hasMatch(cleaned)) {
-        _showError('Numéro de téléphone invalide');
+        _showError(l10n.walletTransferInvalidPhone);
         return;
       }
+
       setState(() {
         _recipient = '+212$cleaned';
         _step = 1;
       });
     } else if (_step == 1) {
       if (_amountValue < 10) {
-        _showError('Montant minimum 10 MAD');
+        _showError(l10n.walletTransferMinimumAmount);
         return;
       }
+
       setState(() {
         _note = _noteCtrl.text;
         _step = 2;
       });
     } else if (_step == 2) {
       if (_pin.length < 4) {
-        _showError('Code PIN à 4 chiffres');
+        _showError(l10n.walletTransferPinFourDigits);
         return;
       }
+
       setState(() => _isLoading = true);
+
       final res = await WalletService.transfer(
         token: widget.token,
         recipientPhone: _recipient,
@@ -74,12 +92,17 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
         pin: _pin,
         note: _note,
       );
+
       if (!mounted) return;
+
       setState(() => _isLoading = false);
+
       if (res != null && res['success'] == true) {
         setState(() => _step = 3);
       } else {
-        _showError(res?['message']?.toString() ?? 'Transfert échoué');
+        _showError(
+          res?['message']?.toString() ?? l10n.walletTransferFailed,
+        );
       }
     }
   }
@@ -93,7 +116,11 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Color(0xFF4A0710), Color(0xFF23030A), Color(0xFF120104)],
+            colors: [
+              Color(0xFF4A0710),
+              Color(0xFF23030A),
+              Color(0xFF120104),
+            ],
             stops: [0.0, 0.3, 1.0],
           ),
         ),
@@ -143,15 +170,22 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(11),
                 color: Colors.white.withOpacity(0.08),
-                border: Border.all(color: Colors.white.withOpacity(0.14)),
+                border: Border.all(
+                  color: Colors.white.withOpacity(0.14),
+                ),
               ),
-              child: const Icon(Icons.chevron_left,
-                  color: Colors.white, size: 18),
+              child: const Icon(
+                Icons.chevron_left,
+                color: Colors.white,
+                size: 18,
+              ),
             ),
           ),
           const Spacer(),
           Text(
-            _step == 3 ? 'Succès' : 'Transférer',
+            _step == 3
+                ? l10n.walletTransferSuccess
+                : l10n.walletTransferTitle,
             style: const TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.w600,
@@ -167,13 +201,14 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
   }
 
   // ─── STEP 0 : DESTINATAIRE ───
+
   Widget _buildRecipientStep() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'À qui voulez-vous envoyer ?',
-          style: TextStyle(
+        Text(
+          l10n.walletTransferRecipientQuestion,
+          style: const TextStyle(
             fontFamily: 'Inter',
             fontSize: 18,
             fontWeight: FontWeight.w600,
@@ -183,7 +218,7 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
         ),
         const SizedBox(height: 6),
         Text(
-          'Le destinataire doit avoir un Wydad Pay actif.',
+          l10n.walletTransferRecipientWalletActive,
           style: TextStyle(
             fontFamily: 'Inter',
             fontSize: 12,
@@ -192,7 +227,7 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
         ),
         const SizedBox(height: 20),
         Text(
-          'Numéro de téléphone',
+          l10n.walletTransferPhoneNumber,
           style: TextStyle(
             fontFamily: 'Inter',
             fontSize: 10,
@@ -209,7 +244,9 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
                 color: Colors.white.withOpacity(0.06),
-                border: Border.all(color: Colors.white.withOpacity(0.14)),
+                border: Border.all(
+                  color: Colors.white.withOpacity(0.14),
+                ),
               ),
               alignment: Alignment.center,
               child: const Text(
@@ -246,22 +283,27 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
                   ),
                   filled: true,
                   fillColor: Colors.white.withOpacity(0.06),
-                  contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 12,
+                  ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide:
-                    BorderSide(color: Colors.white.withOpacity(0.14)),
+                    borderSide: BorderSide(
+                      color: Colors.white.withOpacity(0.14),
+                    ),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide:
-                    BorderSide(color: Colors.white.withOpacity(0.14)),
+                    borderSide: BorderSide(
+                      color: Colors.white.withOpacity(0.14),
+                    ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide:
-                    BorderSide(color: Colors.white.withOpacity(0.6)),
+                    borderSide: BorderSide(
+                      color: Colors.white.withOpacity(0.6),
+                    ),
                   ),
                 ),
               ),
@@ -282,9 +324,9 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
               ),
               elevation: 0,
             ),
-            child: const Text(
-              'Continuer',
-              style: TextStyle(
+            child: Text(
+              l10n.walletTransferContinue,
+              style: const TextStyle(
                 fontFamily: 'Inter',
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
@@ -297,6 +339,7 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
   }
 
   // ─── STEP 1 : MONTANT ───
+
   Widget _buildAmountStep() {
     return Column(
       children: [
@@ -309,9 +352,15 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
             gradient: const LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [Color(0xFFD11A2A), Color(0xFFA8161F), Color(0xFF6E0B12)],
+              colors: [
+                Color(0xFFD11A2A),
+                Color(0xFFA8161F),
+                Color(0xFF6E0B12),
+              ],
             ),
-            border: Border.all(color: Colors.white.withOpacity(0.18)),
+            border: Border.all(
+              color: Colors.white.withOpacity(0.18),
+            ),
           ),
           alignment: Alignment.center,
           child: const Text(
@@ -336,7 +385,7 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
         ),
         const SizedBox(height: 20),
         Text(
-          'Montant à envoyer',
+          l10n.walletTransferAmountToSend,
           style: TextStyle(
             fontFamily: 'Inter',
             fontSize: 11,
@@ -359,7 +408,9 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
                   LengthLimitingTextInputFormatter(5),
                 ],
                 controller: TextEditingController(text: _amount)
-                  ..selection = TextSelection.collapsed(offset: _amount.length),
+                  ..selection = TextSelection.collapsed(
+                    offset: _amount.length,
+                  ),
                 onChanged: (v) => setState(() => _amount = v),
                 cursorColor: Colors.white,
                 style: const TextStyle(
@@ -399,11 +450,16 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
         Row(
           children: [50, 100, 200, 500].map((v) {
             final on = _amount == v.toString();
+
             return Expanded(
               child: Padding(
-                padding: EdgeInsets.only(right: v == 500 ? 0 : 8),
+                padding: EdgeInsets.only(
+                  right: v == 500 ? 0 : 8,
+                ),
                 child: GestureDetector(
-                  onTap: () => setState(() => _amount = v.toString()),
+                  onTap: () => setState(
+                        () => _amount = v.toString(),
+                  ),
                   child: Container(
                     height: 40,
                     decoration: BoxDecoration(
@@ -435,7 +491,7 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
         ),
         const SizedBox(height: 18),
         Text(
-          'Message (facultatif)',
+          l10n.walletTransferOptionalMessage,
           style: TextStyle(
             fontFamily: 'Inter',
             fontSize: 10,
@@ -454,7 +510,7 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
             color: Colors.white,
           ),
           decoration: InputDecoration(
-            hintText: 'Ex. : ta place pour le match de samedi',
+            hintText: l10n.walletTransferNoteHint,
             hintStyle: TextStyle(
               fontFamily: 'Inter',
               fontSize: 13,
@@ -467,19 +523,27 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
             ),
             filled: true,
             fillColor: Colors.white.withOpacity(0.06),
-            contentPadding:
-            const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 12,
+              vertical: 12,
+            ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.white.withOpacity(0.14)),
+              borderSide: BorderSide(
+                color: Colors.white.withOpacity(0.14),
+              ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.white.withOpacity(0.14)),
+              borderSide: BorderSide(
+                color: Colors.white.withOpacity(0.14),
+              ),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.white.withOpacity(0.6)),
+              borderSide: BorderSide(
+                color: Colors.white.withOpacity(0.6),
+              ),
             ),
           ),
         ),
@@ -497,9 +561,9 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
               ),
               elevation: 0,
             ),
-            child: const Text(
-              'Continuer',
-              style: TextStyle(
+            child: Text(
+              l10n.walletTransferContinue,
+              style: const TextStyle(
                 fontFamily: 'Inter',
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
@@ -512,6 +576,7 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
   }
 
   // ─── STEP 2 : PIN ───
+
   Widget _buildPinStep() {
     return Column(
       children: [
@@ -520,12 +585,14 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
             color: Colors.white.withOpacity(0.05),
-            border: Border.all(color: Colors.white.withOpacity(0.10)),
+            border: Border.all(
+              color: Colors.white.withOpacity(0.10),
+            ),
           ),
           child: Column(
             children: [
               Text(
-                'Vous envoyez',
+                l10n.walletTransferYouSend,
                 style: TextStyle(
                   fontFamily: 'Inter',
                   fontSize: 11,
@@ -561,19 +628,22 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
                 ],
               ),
               const SizedBox(height: 12),
-              Container(height: 1, color: Colors.white.withOpacity(0.1)),
+              Container(
+                height: 1,
+                color: Colors.white.withOpacity(0.1),
+              ),
               const SizedBox(height: 12),
-              _kv('Bénéficiaire', _recipient),
+              _kv(l10n.walletTransferBeneficiary, _recipient),
               if (_note.isNotEmpty) ...[
                 const SizedBox(height: 8),
-                _kv('Message', _note),
+                _kv(l10n.walletTransferMessage, _note),
               ],
             ],
           ),
         ),
         const SizedBox(height: 22),
         Text(
-          'Saisissez votre code PIN',
+          l10n.walletTransferEnterPin,
           style: TextStyle(
             fontFamily: 'Inter',
             fontSize: 11,
@@ -610,19 +680,27 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
             ),
             filled: true,
             fillColor: Colors.white.withOpacity(0.06),
-            contentPadding:
-            const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 14,
+              vertical: 14,
+            ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
-              borderSide: BorderSide(color: Colors.white.withOpacity(0.18)),
+              borderSide: BorderSide(
+                color: Colors.white.withOpacity(0.18),
+              ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
-              borderSide: BorderSide(color: Colors.white.withOpacity(0.18)),
+              borderSide: BorderSide(
+                color: Colors.white.withOpacity(0.18),
+              ),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
-              borderSide: BorderSide(color: Colors.white.withOpacity(0.6)),
+              borderSide: BorderSide(
+                color: Colors.white.withOpacity(0.6),
+              ),
             ),
           ),
         ),
@@ -649,9 +727,9 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
                 valueColor: AlwaysStoppedAnimation(primary),
               ),
             )
-                : const Text(
-              'Confirmer l\'envoi',
-              style: TextStyle(
+                : Text(
+              l10n.walletTransferConfirm,
+              style: const TextStyle(
                 fontFamily: 'Inter',
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
@@ -664,6 +742,7 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
   }
 
   // ─── STEP 3 : SUCCÈS ───
+
   Widget _buildSuccessStep() {
     return Column(
       children: [
@@ -675,12 +754,16 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
             shape: BoxShape.circle,
             color: const Color(0xFFF5CD52).withOpacity(0.14),
           ),
-          child: const Icon(Icons.send, color: Color(0xFFF5CD52), size: 32),
+          child: const Icon(
+            Icons.send,
+            color: Color(0xFFF5CD52),
+            size: 32,
+          ),
         ),
         const SizedBox(height: 18),
-        const Text(
-          'Crédit envoyé',
-          style: TextStyle(
+        Text(
+          l10n.walletTransferCreditSent,
+          style: const TextStyle(
             fontFamily: 'Inter',
             fontSize: 18,
             fontWeight: FontWeight.w600,
@@ -717,7 +800,7 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
         ),
         const SizedBox(height: 8),
         Text(
-          'à $_recipient',
+          l10n.walletTransferToRecipient(_recipient),
           style: TextStyle(
             fontFamily: 'Inter',
             fontSize: 11,
@@ -730,15 +813,23 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(14),
             color: Colors.white.withOpacity(0.05),
-            border: Border.all(color: Colors.white.withOpacity(0.10)),
+            border: Border.all(
+              color: Colors.white.withOpacity(0.10),
+            ),
           ),
           child: Column(
             children: [
-              _kv('Date', DateTime.now().toString().substring(0, 16)),
+              _kv(
+                l10n.walletTransferDate,
+                DateTime.now().toString().substring(0, 16),
+              ),
               const SizedBox(height: 8),
-              _kv('Téléphone', _recipient),
+              _kv(l10n.walletTransferPhone, _recipient),
               const SizedBox(height: 8),
-              _kv('Référence', '[RÉFÉRENCE]'),
+              _kv(
+                l10n.walletTransferReference,
+                '[RÉFÉRENCE]',
+              ),
             ],
           ),
         ),
@@ -761,9 +852,9 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
               ),
               elevation: 0,
             ),
-            child: const Text(
-              'Retour au Wallet',
-              style: TextStyle(
+            child: Text(
+              l10n.walletTransferBackToWallet,
+              style: const TextStyle(
                 fontFamily: 'Inter',
                 fontSize: 14,
                 fontWeight: FontWeight.w600,

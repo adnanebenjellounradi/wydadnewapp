@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'l10n/app_localizations.dart';
 import 'wallet_service.dart';
 
 class WalletWithdrawCashPage extends StatefulWidget {
   final String token;
+
   const WalletWithdrawCashPage({Key? key, required this.token})
       : super(key: key);
 
@@ -15,13 +17,15 @@ class WalletWithdrawCashPage extends StatefulWidget {
 class _WalletWithdrawCashPageState extends State<WalletWithdrawCashPage> {
   final Color primary = const Color(0xFFA8161F);
 
-  int _step = 0; // 0: form, 1: code
+  AppLocalizations get l10n => AppLocalizations.of(context)!;
+
+  int _step = 0;
   bool _isLoading = true;
   double _balance = 0;
   bool _isSubmitting = false;
 
-  // ✅ Contrôleurs déclarés ici pour éviter les sauts de curseur
-  final TextEditingController _amountCtrl = TextEditingController(text: '300');
+  final TextEditingController _amountCtrl =
+  TextEditingController(text: '300');
   final TextEditingController _pinCtrl = TextEditingController();
 
   String _amount = '300';
@@ -30,11 +34,13 @@ class _WalletWithdrawCashPageState extends State<WalletWithdrawCashPage> {
   @override
   void initState() {
     super.initState();
+
     _amountCtrl.addListener(() {
       setState(() {
         _amount = _amountCtrl.text;
       });
     });
+
     _loadBalance();
   }
 
@@ -49,8 +55,11 @@ class _WalletWithdrawCashPageState extends State<WalletWithdrawCashPage> {
 
   Future<void> _loadBalance() async {
     setState(() => _isLoading = true);
+
     final wallet = await WalletService.getWalletInfo(widget.token);
+
     if (!mounted) return;
+
     setState(() {
       _balance = (wallet?['balance'] as num?)?.toDouble() ?? 0;
       _isLoading = false;
@@ -58,28 +67,36 @@ class _WalletWithdrawCashPageState extends State<WalletWithdrawCashPage> {
   }
 
   void _showError(String msg) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(msg, style: const TextStyle(fontFamily: 'Inter')),
-      backgroundColor: primary,
-      behavior: SnackBarBehavior.floating,
-    ));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          msg,
+          style: const TextStyle(fontFamily: 'Inter'),
+        ),
+        backgroundColor: primary,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
   }
 
   Future<void> _submit() async {
     final pin = _pinCtrl.text;
 
     if (pin.length < 4) {
-      _showError('Code PIN à 4 chiffres');
+      _showError(l10n.walletWithdrawPinFourDigits);
       return;
     }
+
     if (_amountValue < 50) {
-      _showError('Montant minimum 50 MAD');
+      _showError(l10n.walletWithdrawMinimumAmount);
       return;
     }
+
     if (_amountValue > _balance) {
-      _showError('Solde insuffisant');
+      _showError(l10n.walletWithdrawInsufficientBalance);
       return;
     }
+
     setState(() => _isSubmitting = true);
 
     try {
@@ -87,19 +104,18 @@ class _WalletWithdrawCashPageState extends State<WalletWithdrawCashPage> {
         token: widget.token,
         amount: _amountValue,
         pin: pin,
-        description: 'Retrait espèces en agence',
+        description: l10n.walletWithdrawCashDescription,
       );
 
       if (!mounted) return;
+
       setState(() => _isSubmitting = false);
 
-      // 🔍 LOGS POUR DEBUG
       print("🔍 [WITHDRAW CASH] Réponse API = $res");
 
       if (res != null && res['success'] == true) {
         final data = res['data'];
 
-        // ✅ Extraction robuste du code
         final code = data?['withdrawal_code']?.toString() ??
             data?['code']?.toString() ??
             data?['reference']?.toString() ??
@@ -110,13 +126,19 @@ class _WalletWithdrawCashPageState extends State<WalletWithdrawCashPage> {
           _step = 1;
         });
       } else {
-        _showError(res?['message']?.toString() ?? 'Retrait échoué. Veuillez réessayer.');
+        _showError(
+          res?['message']?.toString() ??
+              l10n.walletWithdrawFailed,
+        );
       }
     } catch (e) {
       if (!mounted) return;
+
       setState(() => _isSubmitting = false);
+
       print("🔍 [WITHDRAW CASH] Erreur = $e");
-      _showError('Erreur de connexion. Veuillez réessayer.');
+
+      _showError(l10n.walletWithdrawConnectionError);
     }
   }
 
@@ -129,14 +151,20 @@ class _WalletWithdrawCashPageState extends State<WalletWithdrawCashPage> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Color(0xFF4A0710), Color(0xFF23030A), Color(0xFF120104)],
+            colors: [
+              Color(0xFF4A0710),
+              Color(0xFF23030A),
+              Color(0xFF120104),
+            ],
             stops: [0.0, 0.3, 1.0],
           ),
         ),
         child: SafeArea(
           bottom: false,
           child: _isLoading
-              ? Center(child: CircularProgressIndicator(color: primary))
+              ? Center(
+            child: CircularProgressIndicator(color: primary),
+          )
               : Column(
             children: [
               Padding(
@@ -171,16 +199,21 @@ class _WalletWithdrawCashPageState extends State<WalletWithdrawCashPage> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(11),
                 color: Colors.white.withOpacity(0.08),
-                border: Border.all(color: Colors.white.withOpacity(0.14)),
+                border: Border.all(
+                  color: Colors.white.withOpacity(0.14),
+                ),
               ),
-              child: const Icon(Icons.chevron_left,
-                  color: Colors.white, size: 18),
+              child: const Icon(
+                Icons.chevron_left,
+                color: Colors.white,
+                size: 18,
+              ),
             ),
           ),
           const Spacer(),
-          const Text(
-            'Retrait en espèces',
-            style: TextStyle(
+          Text(
+            l10n.walletWithdrawCashTitle,
+            style: const TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.w600,
               color: Colors.white,
@@ -195,6 +228,7 @@ class _WalletWithdrawCashPageState extends State<WalletWithdrawCashPage> {
   }
 
   // ─── STEP 0 : FORMULAIRE ───
+
   Widget _buildFormStep() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -203,9 +237,9 @@ class _WalletWithdrawCashPageState extends State<WalletWithdrawCashPage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
-              'Montant à retirer',
-              style: TextStyle(
+            Text(
+              l10n.walletWithdrawAmountToWithdraw,
+              style: const TextStyle(
                 fontFamily: 'Inter',
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
@@ -213,7 +247,9 @@ class _WalletWithdrawCashPageState extends State<WalletWithdrawCashPage> {
               ),
             ),
             Text(
-              'Solde : ${_balance.toStringAsFixed(2).replaceAll('.', ',')} MAD',
+              l10n.walletWithdrawBalance(
+                _balance.toStringAsFixed(2).replaceAll('.', ','),
+              ),
               style: TextStyle(
                 fontFamily: 'Inter',
                 fontSize: 10,
@@ -229,7 +265,9 @@ class _WalletWithdrawCashPageState extends State<WalletWithdrawCashPage> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(14),
             color: Colors.white.withOpacity(0.06),
-            border: Border.all(color: Colors.white.withOpacity(0.18)),
+            border: Border.all(
+              color: Colors.white.withOpacity(0.18),
+            ),
           ),
           child: Row(
             children: [
@@ -281,6 +319,7 @@ class _WalletWithdrawCashPageState extends State<WalletWithdrawCashPage> {
         Row(
           children: [100, 200, 300, 500].map((v) {
             final on = _amount == v.toString();
+
             return Expanded(
               child: Padding(
                 padding: EdgeInsets.only(right: v == 500 ? 0 : 8),
@@ -324,12 +363,15 @@ class _WalletWithdrawCashPageState extends State<WalletWithdrawCashPage> {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(Icons.storefront_outlined,
-                color: Colors.white.withOpacity(0.6), size: 14),
+            Icon(
+              Icons.storefront_outlined,
+              color: Colors.white.withOpacity(0.6),
+              size: 14,
+            ),
             const SizedBox(width: 10),
             Expanded(
               child: Text(
-                'Retirez vos espèces dans n\'importe quelle agence Chaabi Cash, Damane Cash ou Tashilat.',
+                l10n.walletWithdrawAgencyInstructions,
                 style: TextStyle(
                   fontFamily: 'Inter',
                   fontSize: 11,
@@ -342,7 +384,7 @@ class _WalletWithdrawCashPageState extends State<WalletWithdrawCashPage> {
         ),
         const SizedBox(height: 20),
         Text(
-          'Saisissez votre code PIN',
+          l10n.walletWithdrawEnterPin,
           style: TextStyle(
             fontFamily: 'Inter',
             fontSize: 11,
@@ -378,19 +420,27 @@ class _WalletWithdrawCashPageState extends State<WalletWithdrawCashPage> {
             ),
             filled: true,
             fillColor: Colors.white.withOpacity(0.06),
-            contentPadding:
-            const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 14,
+              vertical: 14,
+            ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
-              borderSide: BorderSide(color: Colors.white.withOpacity(0.18)),
+              borderSide: BorderSide(
+                color: Colors.white.withOpacity(0.18),
+              ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
-              borderSide: BorderSide(color: Colors.white.withOpacity(0.18)),
+              borderSide: BorderSide(
+                color: Colors.white.withOpacity(0.18),
+              ),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
-              borderSide: BorderSide(color: Colors.white.withOpacity(0.6)),
+              borderSide: BorderSide(
+                color: Colors.white.withOpacity(0.6),
+              ),
             ),
           ),
         ),
@@ -417,9 +467,9 @@ class _WalletWithdrawCashPageState extends State<WalletWithdrawCashPage> {
                 valueColor: AlwaysStoppedAnimation(primary),
               ),
             )
-                : const Text(
-              'Obtenir mon code de retrait',
-              style: TextStyle(
+                : Text(
+              l10n.walletWithdrawGetCode,
+              style: const TextStyle(
                 fontFamily: 'Inter',
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
@@ -432,12 +482,13 @@ class _WalletWithdrawCashPageState extends State<WalletWithdrawCashPage> {
   }
 
   // ─── STEP 1 : CODE ───
+
   Widget _buildCodeStep() {
     return Column(
       children: [
         const SizedBox(height: 12),
         Text(
-          'Présentez ce code et votre CIN au guichet pour récupérer votre argent.',
+          l10n.walletWithdrawCodeInstructions,
           textAlign: TextAlign.center,
           style: TextStyle(
             fontFamily: 'Inter',
@@ -457,7 +508,7 @@ class _WalletWithdrawCashPageState extends State<WalletWithdrawCashPage> {
           child: Column(
             children: [
               Text(
-                'CODE DE RETRAIT',
+                l10n.walletWithdrawCodeLabel,
                 style: TextStyle(
                   fontFamily: 'Inter',
                   fontSize: 10,
@@ -478,10 +529,15 @@ class _WalletWithdrawCashPageState extends State<WalletWithdrawCashPage> {
                 ),
               ),
               const SizedBox(height: 10),
-              Container(height: 1, color: Colors.black.withOpacity(0.10)),
+              Container(
+                height: 1,
+                color: Colors.black.withOpacity(0.10),
+              ),
               const SizedBox(height: 10),
-              _kvWhite('Montant', '$_amount,00 MAD'),
-              // ✅ Ligne "Valable jusqu'au" retirée ici
+              _kvWhite(
+                l10n.walletWithdrawAmountLabel,
+                '$_amount,00 MAD',
+              ),
             ],
           ),
         ),
@@ -491,17 +547,22 @@ class _WalletWithdrawCashPageState extends State<WalletWithdrawCashPage> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(14),
             color: const Color(0xFFFFC97A).withOpacity(0.10),
-            border: Border.all(color: const Color(0xFFFFC97A).withOpacity(0.3)),
+            border: Border.all(
+              color: const Color(0xFFFFC97A).withOpacity(0.3),
+            ),
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Icon(Icons.info_outline,
-                  color: Color(0xFFFFC97A), size: 14),
+              const Icon(
+                Icons.info_outline,
+                color: Color(0xFFFFC97A),
+                size: 14,
+              ),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  'Le montant est bloqué sur votre solde. Sans retrait avant expiration, il vous est rendu.',
+                  l10n.walletWithdrawBlockedAmountInfo,
                   style: TextStyle(
                     fontFamily: 'Inter',
                     fontSize: 10,
@@ -518,12 +579,13 @@ class _WalletWithdrawCashPageState extends State<WalletWithdrawCashPage> {
           width: double.infinity,
           height: 50,
           child: ElevatedButton(
-            // ✅ Redirection vers l'Accueil
-            onPressed: () => Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
-              '/acceuil',
-                  (r) => false,
-              arguments: {'token': widget.token},
-            ),
+            onPressed: () =>
+                Navigator.of(context, rootNavigator: true)
+                    .pushNamedAndRemoveUntil(
+                  '/acceuil',
+                      (r) => false,
+                  arguments: {'token': widget.token},
+                ),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.white,
               foregroundColor: primary,
@@ -532,9 +594,9 @@ class _WalletWithdrawCashPageState extends State<WalletWithdrawCashPage> {
               ),
               elevation: 0,
             ),
-            child: const Text(
-              'Retour à l\'accueil', // ✅ Texte modifié
-              style: TextStyle(
+            child: Text(
+              l10n.walletWithdrawBackToHome,
+              style: const TextStyle(
                 fontFamily: 'Inter',
                 fontSize: 14,
                 fontWeight: FontWeight.w600,

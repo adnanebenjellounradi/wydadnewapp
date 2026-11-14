@@ -96,6 +96,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get emailCannotBeChanged => 'L\'email ne peut pas être modifié. Contactez le support pour toute modification de l\'adresse email.';
 
   @override
+  String get emailCannotBeChangedShort => 'L\'email ne peut pas être modifié';
+
+  @override
   String get lightMode => 'Mode clair';
 
   @override
@@ -106,6 +109,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get arabic => 'عربي';
+
+  @override
+  String get english => 'English';
 
   @override
   String get logout => 'Déconnexion';
@@ -126,6 +132,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get store => 'Boutique';
+
+  @override
+  String get storeTitle => 'BOUTIQUE';
 
   @override
   String get outOfStock => 'Épuisé';
@@ -153,6 +162,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get size => 'Taille';
+
+  @override
+  String get sizeLabel => 'Taille :';
 
   @override
   String get quantity => 'Quantité';
@@ -1184,31 +1196,31 @@ class AppLocalizationsFr extends AppLocalizations {
   String get winTickets => 'Gagner des tickets';
 
   @override
-  String get noQuizAvailableToday => 'Aucun quiz disponible pour aujourd\'hui';
+  String get noQuizAvailableToday => 'Aucun quiz disponible aujourd\'hui';
 
   @override
   String get unableToLoadQuizzes => 'Impossible de charger les quiz';
 
   @override
-  String get alreadyParticipated => 'Déjà participé';
+  String get alreadyParticipated => 'Vous avez déjà participé';
 
   @override
-  String get alreadyParticipatedMessage => 'Vous avez déjà participé à ce quiz. La participation est prise en compte une seule fois.';
+  String get alreadyParticipatedMessage => 'Vous avez déjà participé à ce quiz.';
 
   @override
-  String get missingInformation => 'Information manquante';
+  String get missingInformation => 'Informations manquantes';
 
   @override
-  String get loginToSaveScore => 'Veuillez vous connecter pour que votre score soit enregistré.';
+  String get loginToSaveScore => 'Connectez-vous pour enregistrer votre score';
 
   @override
-  String get yourScoreOf => 'Votre score de';
+  String get yourScoreOf => 'Votre score est de';
 
   @override
-  String get hasBeenSaved => 'a été enregistré !';
+  String get hasBeenSaved => 'a été enregistré';
 
   @override
-  String get scoreNotSaved => 'Votre score n\'a pas pu être enregistré. Veuillez réessayer.';
+  String get scoreNotSaved => 'Votre score n\'a pas été enregistré';
 
   @override
   String get easy => 'Facile';
@@ -1220,25 +1232,25 @@ class AppLocalizationsFr extends AppLocalizations {
   String get hard => 'Difficile';
 
   @override
-  String get expert => '🏆 Expert !';
+  String get expert => 'Expert';
 
   @override
-  String get veryGood => '🌟 Très bien !';
+  String get veryGood => 'Très bien';
 
   @override
-  String get notBad => '👍 Pas mal !';
+  String get notBad => 'Pas mal';
 
   @override
-  String get studyMore => '📚 Encore un peu';
+  String get studyMore => 'Révisez davantage';
 
   @override
-  String get keepGoing => '💪 Allez, on révise ?';
+  String get keepGoing => 'Continuez vos efforts';
 
   @override
-  String get winnersList => 'LISTE DES GAGNANTS';
+  String get winnersList => 'Liste des gagnants';
 
   @override
-  String get youParticipatedInQuiz => 'Vous avez participé à ce quiz';
+  String get youParticipatedInQuiz => 'Vous avez participé au quiz';
 
   @override
   String get ticketsWillBeTransferred => 'Nous transfererons automatiquement les tickets aux gagnants';
@@ -1265,37 +1277,37 @@ class AppLocalizationsFr extends AppLocalizations {
   String get thisQuizIsSponsoredBy => 'Ce quiz est sponsorisé par';
 
   @override
-  String get youHaveAlreadyParticipated => 'Vous avez déjà participé';
+  String get youHaveAlreadyParticipated => 'Vous avez déjà participé à ce quiz';
 
   @override
-  String get startQuiz => 'COMMENCER LE QUIZ';
+  String get startQuiz => 'Commencer le quiz';
 
   @override
-  String get first => '1ère';
+  String get first => '1er';
 
   @override
-  String get second => '2ème';
+  String get second => '2e';
 
   @override
-  String get third => '3ème';
+  String get third => '3e';
 
   @override
-  String get fourth => '4ème';
+  String get fourth => '4e';
 
   @override
-  String get fifth => '5ème';
+  String get fifth => '5e';
 
   @override
-  String get th => 'ème';
+  String get th => 'e';
 
   @override
   String get place => 'place';
 
   @override
-  String get correctAnswer => 'Bonne réponse !';
+  String get correctAnswer => 'Bonne réponse';
 
   @override
-  String get wrongAnswer => 'Mauvaise réponse...';
+  String get wrongAnswer => 'Mauvaise réponse';
 
   @override
   String get results => 'RÉSULTATS';
@@ -1637,4 +1649,1285 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get payOrder => 'Payer la commande';
+
+  @override
+  String get wydadAc => 'WYDAD AC';
+
+  @override
+  String get officialTicketing => 'BILLETTERIE OFFICIELLE';
+
+  @override
+  String get eventsTitle => 'ÉVÉNEMENTS';
+
+  @override
+  String get reserveSeats => 'Réservez vos places et votre abonnement';
+
+  @override
+  String get reserve => 'Réserver';
+
+  @override
+  String get wydadPay => 'WYDAD PAY';
+
+  @override
+  String get walletTagline => 'Alimentez, transférez, payez';
+
+  @override
+  String get activate => 'Activer';
+
+  @override
+  String get balanceLabel => 'Solde';
+
+  @override
+  String get ticketplace => 'TICKETPLACE';
+
+  @override
+  String get ticketplaceSub => 'Revente entre supporters';
+
+  @override
+  String get storeSub => 'Maillots et produits officiels';
+
+  @override
+  String get newsSub => 'Toute la vie du club';
+
+  @override
+  String get fanZone => 'FAN ZONE';
+
+  @override
+  String get fanZoneSub => 'Quiz, votes, homme du match';
+
+  @override
+  String get chooseStore => 'Choisir une boutique';
+
+  @override
+  String get chooseStoreSubtitle => 'Sélectionnez la boutique officielle Wydad AC';
+
+  @override
+  String get kappaSubtitle => 'Boutique officielle Kappa';
+
+  @override
+  String get wacBrand => 'WAC BRAND';
+
+  @override
+  String get wacBrandSubtitle => 'wacofficialbrand.com';
+
+  @override
+  String get ticketplaceLabel => 'Ticketplace';
+
+  @override
+  String get howToTopUpQuestion => 'Comment souhaitez-vous recharger votre compte ?';
+
+  @override
+  String currentBalanceFormat(String balance) {
+    return 'Solde actuel : $balance MAD';
+  }
+
+  @override
+  String get bankCardMethod => 'Carte bancaire';
+
+  @override
+  String get bankCardMethodSubtitle => 'Rechargez avec votre carte bancaire';
+
+  @override
+  String get bankTransferMethod => 'Virement bancaire';
+
+  @override
+  String get bankTransferMethodSubtitle => 'Rechargez par virement bancaire';
+
+  @override
+  String get cashAtAgency => 'Espèces en agence';
+
+  @override
+  String get cashAgencyMethodSubtitle => 'Rechargez dans une agence';
+
+  @override
+  String get topUpMyAccount => 'Recharger mon compte';
+
+  @override
+  String get bankTransferTitle => 'Virement bancaire';
+
+  @override
+  String get bankTransferDescription => 'Effectuez un virement vers votre compte Wydad Pay.';
+
+  @override
+  String get ribCopied => 'RIB copié';
+
+  @override
+  String get copyRib => 'Copier le RIB';
+
+  @override
+  String get share => 'Partager';
+
+  @override
+  String get shareComingSoon => 'Fonctionnalité de partage bientôt disponible';
+
+  @override
+  String get addBankAccount => 'Ajouter un compte bancaire';
+
+  @override
+  String get addBankAccountDescription => 'Ajoutez un compte bancaire à votre nom pour effectuer des opérations.';
+
+  @override
+  String get accountName => 'Nom du compte';
+
+  @override
+  String get accountNameHint => 'Ex. : Mon compte bancaire';
+
+  @override
+  String ribWithLength(String length) {
+    return 'RIB ($length chiffres)';
+  }
+
+  @override
+  String get ribHint => 'Saisissez votre RIB';
+
+  @override
+  String get associatedPhoneNumber => 'Numéro de téléphone associé';
+
+  @override
+  String get phoneNumberHint => 'Ex. : 0612345678';
+
+  @override
+  String get accountNameRequired => 'Nom du compte requis';
+
+  @override
+  String get ribMustContain24Digits => 'Le RIB doit contenir 24 chiffres';
+
+  @override
+  String get phoneNumberRequired => 'Numéro de téléphone requis';
+
+  @override
+  String get addFailed => 'Ajout échoué';
+
+  @override
+  String get saveBankAccount => 'Enregistrer ce compte';
+
+  @override
+  String get deleteAccountConfirmationTitle => 'Supprimer ce compte ?';
+
+  @override
+  String deleteAccountConfirmationMessage(String name) {
+    return 'Voulez-vous vraiment supprimer le compte « $name » ?';
+  }
+
+  @override
+  String get deleteFailed => 'Échec de la suppression';
+
+  @override
+  String get noBankAccount => 'Aucun compte bancaire enregistré';
+
+  @override
+  String get noBankAccountDescription => 'Ajoutez un compte à votre nom pour recevoir des virements et effectuer des retraits.';
+
+  @override
+  String get myBankAccounts => 'Mes comptes bancaires';
+
+  @override
+  String get defaultAccountName => 'Mon compte';
+
+  @override
+  String ribMaskedFormat(String rib) {
+    return '•••• $rib';
+  }
+
+  @override
+  String get myWalletRib => 'Mon RIB Wydad Pay';
+
+  @override
+  String get accountHolder => 'Titulaire du compte';
+
+  @override
+  String get defaultAccountHolder => 'Titulaire du compte';
+
+  @override
+  String get bank => 'Banque';
+
+  @override
+  String get defaultBank => 'Banque';
+
+  @override
+  String get transferInfo1 => 'Utilisez ce RIB pour effectuer un virement vers votre portefeuille Wydad Pay.';
+
+  @override
+  String get transferInfo2 => 'Vérifiez les informations bancaires avant de confirmer votre virement.';
+
+  @override
+  String get transferInfo3 => 'Le délai de réception dépend de votre établissement bancaire.';
+
+  @override
+  String get walletTransferInvalidPhone => 'Numéro de téléphone invalide';
+
+  @override
+  String get walletTransferMinimumAmount => 'Le montant minimum est de 10 MAD';
+
+  @override
+  String get walletTransferPinFourDigits => 'Le code PIN doit contenir 4 chiffres';
+
+  @override
+  String get walletTransferFailed => 'Le transfert a échoué. Veuillez réessayer.';
+
+  @override
+  String get walletTransferSuccess => 'Transfert effectué avec succès';
+
+  @override
+  String get walletTransferTitle => 'Transfert d\'argent';
+
+  @override
+  String get walletTransferRecipientQuestion => 'À qui souhaitez-vous envoyer de l\'argent ?';
+
+  @override
+  String get walletTransferRecipientWalletActive => 'Le bénéficiaire doit disposer d\'un compte Wydad Pay actif.';
+
+  @override
+  String get walletTransferPhoneNumber => 'Numéro de téléphone';
+
+  @override
+  String get walletTransferContinue => 'Continuer';
+
+  @override
+  String get walletTransferAmountToSend => 'Montant à envoyer';
+
+  @override
+  String get walletTransferOptionalMessage => 'Message facultatif';
+
+  @override
+  String get walletTransferNoteHint => 'Ajouter un message';
+
+  @override
+  String get walletTransferYouSend => 'Vous envoyez';
+
+  @override
+  String get walletTransferBeneficiary => 'Bénéficiaire';
+
+  @override
+  String get walletTransferMessage => 'Message';
+
+  @override
+  String get walletTransferEnterPin => 'Saisissez votre code PIN';
+
+  @override
+  String get walletTransferConfirm => 'Confirmer le transfert';
+
+  @override
+  String get walletTransferCreditSent => 'Votre transfert a bien été envoyé';
+
+  @override
+  String get walletTransferDate => 'Date';
+
+  @override
+  String get walletTransferPhone => 'Téléphone';
+
+  @override
+  String get walletTransferReference => 'Référence';
+
+  @override
+  String get walletTransferBackToWallet => 'Retour au portefeuille';
+
+  @override
+  String walletTransferToRecipient(String recipient) {
+    return 'Transfert vers $recipient';
+  }
+
+  @override
+  String get walletWithdrawMyWydadPayAccount => 'Mon compte Wydad Pay';
+
+  @override
+  String get walletWithdrawBankAccount => 'Compte bancaire';
+
+  @override
+  String get walletWithdrawNoBankAccount => 'Aucun compte bancaire enregistré';
+
+  @override
+  String get walletWithdrawPinFourDigits => 'Le code PIN doit contenir 4 chiffres';
+
+  @override
+  String get walletWithdrawMinimumAmount => 'Le montant minimum est de 50 MAD';
+
+  @override
+  String get walletWithdrawInsufficientBalance => 'Solde insuffisant';
+
+  @override
+  String get walletWithdrawTransferFailed => 'Le virement a échoué. Veuillez réessayer.';
+
+  @override
+  String get walletWithdrawDeleteAccountTitle => 'Supprimer ce compte bancaire ?';
+
+  @override
+  String walletWithdrawDeleteAccountMessage(String name) {
+    return 'Voulez-vous vraiment supprimer le compte « $name » ?';
+  }
+
+  @override
+  String get walletWithdrawCancel => 'Annuler';
+
+  @override
+  String get walletWithdrawDelete => 'Supprimer';
+
+  @override
+  String get walletWithdrawDeleteFailed => 'Échec de la suppression du compte';
+
+  @override
+  String get walletWithdrawBankTitle => 'Retrait vers un compte bancaire';
+
+  @override
+  String get walletWithdrawDestinationAccount => 'Compte de destination';
+
+  @override
+  String get walletWithdrawAddAnotherAccount => 'Ajouter un autre compte';
+
+  @override
+  String get walletWithdrawAmount => 'Montant à retirer';
+
+  @override
+  String walletWithdrawBalance(String amount) {
+    return 'Solde : $amount MAD';
+  }
+
+  @override
+  String get walletWithdrawEstimatedReception => 'Réception estimée';
+
+  @override
+  String get walletWithdrawEnterPin => 'Saisissez votre code PIN';
+
+  @override
+  String walletWithdrawButton(String amount) {
+    return 'Retirer $amount MAD';
+  }
+
+  @override
+  String get walletWithdrawInMyName => 'À mon nom';
+
+  @override
+  String walletWithdrawRib(String rib) {
+    return 'RIB : $rib';
+  }
+
+  @override
+  String get walletWithdrawDefault => 'Par défaut';
+
+  @override
+  String get walletWithdrawEmptyAccounts => 'Aucun compte bancaire disponible';
+
+  @override
+  String get walletWithdrawTransferSent => 'Votre demande de retrait a été envoyée';
+
+  @override
+  String walletWithdrawToAccount(String name) {
+    return 'Vers le compte $name';
+  }
+
+  @override
+  String get walletWithdrawStatus => 'Statut';
+
+  @override
+  String get walletWithdrawProcessing => 'En cours de traitement';
+
+  @override
+  String get walletWithdrawDate => 'Date';
+
+  @override
+  String get walletWithdrawEstimatedReceptionLabel => 'Délai de réception estimé';
+
+  @override
+  String get walletWithdrawEstimatedReceptionValue => 'Selon les délais de traitement bancaire';
+
+  @override
+  String get walletWithdrawBackToWallet => 'Retour au portefeuille';
+
+  @override
+  String get walletWithdrawCashTitle => 'Retrait en espèces';
+
+  @override
+  String get walletWithdrawAmountToWithdraw => 'Montant à retirer';
+
+  @override
+  String walletWithdrawCashBalance(String balance) {
+    return 'Solde : $balance MAD';
+  }
+
+  @override
+  String get walletWithdrawCashDescription => 'Retirez votre argent dans une agence Chaabi Cash, Damane Cash ou Tashilat.';
+
+  @override
+  String get walletWithdrawFailed => 'Le retrait a échoué. Veuillez réessayer.';
+
+  @override
+  String get walletWithdrawConnectionError => 'Erreur de connexion. Veuillez réessayer.';
+
+  @override
+  String get walletWithdrawAgencyInstructions => 'Présentez ce code et votre pièce d\'identité nationale au guichet pour récupérer votre argent.';
+
+  @override
+  String get walletWithdrawGetCode => 'Obtenir mon code de retrait';
+
+  @override
+  String get walletWithdrawCodeInstructions => 'Présentez ce code et votre pièce d\'identité nationale au guichet pour récupérer votre argent.';
+
+  @override
+  String get walletWithdrawCodeLabel => 'CODE DE RETRAIT';
+
+  @override
+  String get walletWithdrawAmountLabel => 'Montant';
+
+  @override
+  String get walletWithdrawBlockedAmountInfo => 'Le montant est réservé sur votre solde. Si vous ne le retirez pas avant son expiration, il sera recrédité sur votre portefeuille.';
+
+  @override
+  String get walletWithdrawBackToHome => 'Retour à l\'accueil';
+
+  @override
+  String get walletWithdrawChooseMethod => 'Choisissez votre méthode de retrait';
+
+  @override
+  String walletWithdrawAvailableBalance(String balance) {
+    return 'Solde disponible : $balance MAD';
+  }
+
+  @override
+  String get walletWithdrawBankSubtitle => 'Recevoir l\'argent sur votre compte bancaire';
+
+  @override
+  String get walletWithdrawCashAgency => 'Retrait en espèces';
+
+  @override
+  String get walletWithdrawCashSubtitle => 'Retirer l\'argent dans une agence partenaire';
+
+  @override
+  String get walletWithdrawTitle => 'Retirer de l\'argent';
+
+  @override
+  String get quizLoading => 'Chargement du quiz...';
+
+  @override
+  String quizQuestionProgress(String current, String total) {
+    return 'Question $current sur $total';
+  }
+
+  @override
+  String get quizOfTheDay => 'Quiz du jour';
+
+  @override
+  String quizQuestionsAboutClub(String count) {
+    return '$count questions sur le club';
+  }
+
+  @override
+  String quizQuestionsCount(String count) {
+    return '$count questions';
+  }
+
+  @override
+  String get quizRewards => 'Récompenses';
+
+  @override
+  String get quizQuestionsLabel => 'Questions';
+
+  @override
+  String get quizPerQuestion => 'Par question';
+
+  @override
+  String get quizDuration => 'Durée';
+
+  @override
+  String get quizSeconds => 'secondes';
+
+  @override
+  String quizMinutes(String count) {
+    return '$count minutes';
+  }
+
+  @override
+  String get quizCorrectAnswerLabel => 'Bonne réponse';
+
+  @override
+  String get quizYourAnswerLabel => 'Votre réponse';
+
+  @override
+  String get quizAnswerQuickly => 'Répondez rapidement !';
+
+  @override
+  String get quizGoodAnswers => 'Bonnes réponses';
+
+  @override
+  String quizPoints(String points) {
+    return '$points points';
+  }
+
+  @override
+  String get quizParticipatingInDraw => 'Vous participez au tirage au sort';
+
+  @override
+  String get quizDefaultReward => 'Récompense du quiz';
+
+  @override
+  String get quizBackHome => 'Retour à l\'accueil';
+
+  @override
+  String quizScoreSaved(String score, String total) {
+    return 'Votre score de $score/$total a été enregistré';
+  }
+
+  @override
+  String get quizTomorrowAt => 'Prochain quiz demain à';
+
+  @override
+  String quizCorrectAnswerExplanation(String answer) {
+    return 'La bonne réponse est : $answer';
+  }
+
+  @override
+  String get myAccount => 'Mon compte';
+
+  @override
+  String get defaultAccountType => 'Compte';
+
+  @override
+  String get namePlaceholder => 'Nom complet';
+
+  @override
+  String get verified => 'Vérifié';
+
+  @override
+  String get accountType => 'Type de compte';
+
+  @override
+  String get accountLevel => 'Niveau du compte';
+
+  @override
+  String accountLevelWithValue(String level) {
+    return 'Niveau $level';
+  }
+
+  @override
+  String get accountLimit => 'Plafond';
+
+  @override
+  String get identityVerification => 'Vérification d\'identité';
+
+  @override
+  String get kycPhoneVerified => 'Téléphone vérifié';
+
+  @override
+  String get kycPersonalInfo => 'Informations personnelles';
+
+  @override
+  String get kycAddress => 'Adresse';
+
+  @override
+  String get kycCin => 'CIN';
+
+  @override
+  String get kycSelfie => 'Selfie';
+
+  @override
+  String get changePin => 'Changer le code PIN';
+
+  @override
+  String get logoutWalletSession => 'Se déconnecter du portefeuille';
+
+  @override
+  String get walletSessionClosed => 'Session du portefeuille fermée';
+
+  @override
+  String get addAccountInMyName => 'Ajouter un compte à mon nom';
+
+  @override
+  String get addAccountSubtitle => 'Ajoutez un compte bancaire à votre nom pour effectuer vos opérations en toute simplicité.';
+
+  @override
+  String get accountNameLabel => 'Nom du compte';
+
+  @override
+  String get ribLabel => 'RIB (numéro de compte bancaire)';
+
+  @override
+  String get useWalletPhone => 'Utiliser le numéro de téléphone du portefeuille';
+
+  @override
+  String get associatedPhoneLabel => 'Numéro de téléphone associé';
+
+  @override
+  String get phoneHintShort => '6 12 34 56 78';
+
+  @override
+  String get ribWarning => 'Vérifiez bien votre RIB avant l\'enregistrement. Il ne pourra plus être modifié par la suite.';
+
+  @override
+  String get saveThisAccount => 'Enregistrer ce compte';
+
+  @override
+  String get newBankAccount => 'Nouveau compte bancaire';
+
+  @override
+  String get ribMustBe24Digits => 'Le RIB doit contenir 24 chiffres';
+
+  @override
+  String get addBeneficiaryFailed => 'Échec de l\'ajout du compte';
+
+  @override
+  String get receivePayment => 'Recevoir un paiement';
+
+  @override
+  String get accountManagement => 'Gestion du compte';
+
+  @override
+  String get payBill => 'Payer une facture';
+
+  @override
+  String get payMerchant => 'Payer un commerçant';
+
+  @override
+  String get giftCards => 'Cartes cadeaux';
+
+  @override
+  String get myCards => 'Mes cartes';
+
+  @override
+  String get availableSection => 'Disponibles';
+
+  @override
+  String get soonSection => 'Bientôt disponibles';
+
+  @override
+  String get soonLabel => 'BIENTÔT';
+
+  @override
+  String comingSoonMessage(String label) {
+    return '$label bientôt disponible';
+  }
+
+  @override
+  String get allServices => 'Tous les services';
+
+  @override
+  String get mobileRecharge => 'Recharge mobile';
+
+  @override
+  String get topUp => 'Recharger';
+
+  @override
+  String get transferAction => 'Transférer';
+
+  @override
+  String get withdraw => 'Retirer';
+
+  @override
+  String get history => 'Historique';
+
+  @override
+  String get myWalletAccounts => 'Mes comptes portefeuille';
+
+  @override
+  String get eachAccountLinkedToPhone => 'Chaque compte est lié à un numéro de téléphone.';
+
+  @override
+  String get phoneMaskPlaceholder => '•••• •••• ••';
+
+  @override
+  String accountHolderBalance(String holder, String balance) {
+    return '$holder · $balance MAD';
+  }
+
+  @override
+  String get holder => 'Titulaire';
+
+  @override
+  String get balancePlaceholder => '—';
+
+  @override
+  String get accountAddSoon => 'L\'ajout d\'un autre compte sera bientôt disponible';
+
+  @override
+  String get addWalletAccount => 'Ajouter un compte portefeuille';
+
+  @override
+  String get historyTitle => 'Historique';
+
+  @override
+  String get today => 'Aujourd\'hui';
+
+  @override
+  String get filterRecharges => 'Recharges';
+
+  @override
+  String get filterSent => 'Envoyés';
+
+  @override
+  String get filterReceived => 'Reçus';
+
+  @override
+  String get filterCashOut => 'Retraits';
+
+  @override
+  String get noTransactions => 'Aucune transaction';
+
+  @override
+  String get levelLabel => 'Niveau';
+
+  @override
+  String get subscriptionComingSoonMessage => 'L\'abonnement Wydad Pay sera bientôt disponible. Restez à l\'écoute !';
+
+  @override
+  String get digitalWallet => 'PORTEFEUILLE NUMÉRIQUE';
+
+  @override
+  String get verifiedBadge => 'VÉRIFIÉ';
+
+  @override
+  String get availableBalanceLabel => 'Solde disponible';
+
+  @override
+  String get moreAction => 'Plus';
+
+  @override
+  String get latestOperations => 'Dernières opérations';
+
+  @override
+  String get seeAll => 'Voir tout';
+
+  @override
+  String get noOperation => 'Aucune opération';
+
+  @override
+  String get subscriptionLabel => 'ABONNEMENT';
+
+  @override
+  String get season2026_27 => 'Saison 2026/27';
+
+  @override
+  String get supporterNamePlaceholder => 'Nom du supporter';
+
+  @override
+  String get tribuneInfoPlaceholder => 'Tribune • Place';
+
+  @override
+  String get showQRAccess => 'Afficher l\'accès QR';
+
+  @override
+  String get nextMatch => 'Prochain match';
+
+  @override
+  String get resellMatch => 'Revendre le match';
+
+  @override
+  String get subscriptionDetails => 'Détails de l\'abonnement';
+
+  @override
+  String get renewSubscription => 'Renouveler l\'abonnement';
+
+  @override
+  String get amountToDeposit => 'Montant à déposer';
+
+  @override
+  String get cashAgencyDescription => 'Dépôt en espèces en agence';
+
+  @override
+  String get minAmount50 => 'Le montant minimum est de 50 MAD';
+
+  @override
+  String get operationFailedContactSupport => 'Opération échouée. Veuillez contacter le support.';
+
+  @override
+  String get connectionErrorRetry => 'Erreur de connexion. Veuillez réessayer.';
+
+  @override
+  String get cashAgencyInfo => 'Présentez ce code et votre pièce d\'identité dans une agence partenaire (Chaabi Cash, Damane Cash, Tashilat) pour finaliser le dépôt.';
+
+  @override
+  String get getMyDepositCode => 'Obtenir mon code de dépôt';
+
+  @override
+  String get presentCodeAndCin => 'Présentez ce code et votre pièce d\'identité nationale au guichet.';
+
+  @override
+  String get depositCodeLabel => 'CODE DE DÉPÔT';
+
+  @override
+  String get amountLabel => 'Montant';
+
+  @override
+  String get balanceWillBeCredited => 'Le montant sera crédité sur votre solde dès que le dépôt sera vérifié.';
+
+  @override
+  String get cardsLoadFailed => 'Échec du chargement des cartes';
+
+  @override
+  String get amountBetween50And1000 => 'Le montant doit être compris entre 50 et 1000 MAD';
+
+  @override
+  String get loadingCardsInProgress => 'Chargement des cartes...';
+
+  @override
+  String get noSavedCard => 'Aucune carte enregistrée';
+
+  @override
+  String get pleaseSelectCard => 'Veuillez sélectionner une carte';
+
+  @override
+  String get invalidCvv => 'CVV invalide';
+
+  @override
+  String get genericErrorContactSupport => 'Une erreur s\'est produite. Veuillez contacter le support.';
+
+  @override
+  String get paymentCancelledOrFailed => 'Paiement annulé ou échoué';
+
+  @override
+  String get updatingBalance => 'Mise à jour du solde...';
+
+  @override
+  String get rechargeAction => 'Recharger';
+
+  @override
+  String get topUpYourWalletAmount => 'Rechargez votre portefeuille';
+
+  @override
+  String get transactionLimitLevel1 => 'Plafond de transaction : 1000 MAD (Niveau 1)';
+
+  @override
+  String get totalToPay => 'Total à payer';
+
+  @override
+  String get loadingCards => 'Chargement des cartes...';
+
+  @override
+  String get retryLoadCards => 'Réessayer le chargement des cartes';
+
+  @override
+  String get noCardRefresh => 'Aucune carte. Appuyez pour actualiser';
+
+  @override
+  String get paymentCard => 'Carte de paiement';
+
+  @override
+  String selectCardToPay(String amount) {
+    return 'Sélectionnez la carte pour payer $amount MAD';
+  }
+
+  @override
+  String get noSavedCards => 'Aucune carte enregistrée';
+
+  @override
+  String get addCardFromProfile => 'Ajoutez une carte depuis votre profil';
+
+  @override
+  String get refresh => 'Actualiser';
+
+  @override
+  String get cardDefault => 'Carte';
+
+  @override
+  String get maskedPanPlaceholder => '•••• •••• •••• ••••';
+
+  @override
+  String get confirmationTitle => 'Confirmation du paiement';
+
+  @override
+  String get enterCvvPrompt => 'Entrez le CVV de votre carte';
+
+  @override
+  String get cvvHint => 'CVV';
+
+  @override
+  String get rechargeDone => 'Recharge effectuée !';
+
+  @override
+  String get rechargeSuccessMessage => 'Votre portefeuille a été rechargé avec succès.';
+
+  @override
+  String get rechargedAmount => 'Montant rechargé';
+
+  @override
+  String get newBalance => 'Nouveau solde';
+
+  @override
+  String get later => 'Plus tard';
+
+  @override
+  String get createYourAccount => 'Créez votre compte';
+
+  @override
+  String get registerSubtitle => 'Rejoignez la communauté Wydad et accédez à toutes les fonctionnalités';
+
+  @override
+  String get emailHint => 'votre@email.com';
+
+  @override
+  String get phoneVerificationNote => 'Un code de vérification sera envoyé à ce numéro';
+
+  @override
+  String get passwordLabel => 'Mot de passe';
+
+  @override
+  String get passwordMinHint => 'Minimum 6 caractères';
+
+  @override
+  String get passwordStrengthHint => 'Utilisez lettres, chiffres et symboles pour un mot de passe fort';
+
+  @override
+  String get confirmPasswordLabel => 'Confirmer le mot de passe';
+
+  @override
+  String get confirmPasswordHint => 'Retapez votre mot de passe';
+
+  @override
+  String get acceptTermsText => 'J\'accepte les conditions générales';
+
+  @override
+  String get acceptTermsRequired => 'Vous devez accepter les conditions générales';
+
+  @override
+  String get createMyAccount => 'Créer mon compte';
+
+  @override
+  String get alreadyRegistered => 'Déjà inscrit ? ';
+
+  @override
+  String get loginLink => 'Se connecter';
+
+  @override
+  String get welcomeBack => 'Bon retour';
+
+  @override
+  String get loginSubtitle => 'Connectez-vous pour accéder à vos tickets et votre portefeuille';
+
+  @override
+  String get passwordHintLogin => 'Entrez votre mot de passe';
+
+  @override
+  String get noAccountYet => 'Pas encore de compte ? ';
+
+  @override
+  String get createAccountLink => 'S\'inscrire';
+
+  @override
+  String get onboardingSlide1Title => 'Tous vos tickets au même endroit';
+
+  @override
+  String get onboardingSlide1Text => 'Achetez, transférez et gérez vos tickets des matchs du Wydad directement depuis l\'application.';
+
+  @override
+  String get onboardingSlide2Title => 'Wydad Pay, votre portefeuille numérique';
+
+  @override
+  String get onboardingSlide2Text => 'Rechargez, transférez et payez facilement avec votre portefeuille Wydad Pay sécurisé.';
+
+  @override
+  String get onboardingSlide3Title => 'Vivez l\'expérience Wydad';
+
+  @override
+  String get onboardingSlide3Text => 'Votez pour votre homme du match, jouez aux quiz et gagnez des prix exclusifs.';
+
+  @override
+  String get alreadyHaveAccount => 'J\'ai déjà un compte';
+
+  @override
+  String get continueWithoutAccount => 'Continuer sans compte';
+
+  @override
+  String get mockTicketplace => 'TICKETPLACE';
+
+  @override
+  String get mockResale => 'Revente entre supporters';
+
+  @override
+  String get mockFrom => 'Dès';
+
+  @override
+  String get mockFanZone => 'FAN ZONE';
+
+  @override
+  String get mockManOfMatch => 'Homme du match';
+
+  @override
+  String get mockLiveVote => 'VOTE EN DIRECT';
+
+  @override
+  String get mockTicket => 'TICKET';
+
+  @override
+  String get mockPremium => 'PREMIUM';
+
+  @override
+  String get mockStadium => 'Stade';
+
+  @override
+  String get mockGateSeat => 'Porte A · Place 24';
+
+  @override
+  String get mockSubscription => 'ABONNEMENT';
+
+  @override
+  String get mockSeason => 'Saison 2026/27';
+
+  @override
+  String get mockWydadPay => 'WYDAD PAY';
+
+  @override
+  String get mockAvailableBalance => 'Solde disponible';
+
+  @override
+  String get mockTopUp => 'Recharger';
+
+  @override
+  String get mockTransfer => 'Transférer';
+
+  @override
+  String get mockWithdraw => 'Retirer';
+
+  @override
+  String get mockMore => 'Plus';
+
+  @override
+  String get mockMatchPlayer => 'Homme du match';
+
+  @override
+  String get mockLive => 'EN DIRECT';
+
+  @override
+  String get mockQuizOfDay => 'Quiz du jour';
+
+  @override
+  String get mockWinTickets => 'Gagnez des tickets';
+
+  @override
+  String get chooseCategory => 'Choisir une catégorie';
+
+  @override
+  String quantityRequestedExceedsStock(String requested, String available) {
+    return 'Demandé : $requested, disponible : $available';
+  }
+
+  @override
+  String get productUnavailable => 'Produit indisponible';
+
+  @override
+  String get maillotsOfficiel => 'MAILLOT OFFICIEL';
+
+  @override
+  String get visaMastercard3ds => 'Visa / Mastercard · 3D Secure';
+
+  @override
+  String get wydadPayLabel => 'Wydad Pay';
+
+  @override
+  String get stadiumName => 'Stade Mohammed V';
+
+  @override
+  String get transfersButton => 'Transferts';
+
+  @override
+  String get matchPlaceholder => 'Match';
+
+  @override
+  String pendingTransferLabel(String count) {
+    return 'Transferts en attente ($count)';
+  }
+
+  @override
+  String get senderPlaceholder => 'Supporter';
+
+  @override
+  String receivedTicketFrom(String name) {
+    return 'Ticket reçu de $name';
+  }
+
+  @override
+  String get inPendingLabel => 'En attente';
+
+  @override
+  String get transferAcceptInfo => 'Acceptez le transfert pour recevoir le ticket dans votre compte.';
+
+  @override
+  String get refuse => 'Refuser';
+
+  @override
+  String myOrdersSection(String count) {
+    return 'Mes commandes ($count)';
+  }
+
+  @override
+  String get paidLabel => 'Payé';
+
+  @override
+  String get receivedLabel => 'Reçu';
+
+  @override
+  String get transferredLabel => 'Transféré';
+
+  @override
+  String get walletLabel => 'Wydad Pay';
+
+  @override
+  String paidOnPayment(String date, String method) {
+    return 'Payé le $date · via $method';
+  }
+
+  @override
+  String get ticketFallback => 'Ticket';
+
+  @override
+  String get validLabel => 'Valide';
+
+  @override
+  String ticketNumberLabel(String number) {
+    return 'N°$number';
+  }
+
+  @override
+  String get billetterie => 'BILLETTERIE';
+
+  @override
+  String get maxPerAccount => 'max par compte';
+
+  @override
+  String get available => 'Disponible';
+
+  @override
+  String get soldOut => 'Épuisé';
+
+  @override
+  String get fewSeatsLeft => 'Peu de places restantes';
+
+  @override
+  String get paymentMethodLabel => 'Moyen de paiement';
+
+  @override
+  String get insufficientBalance => 'Solde insuffisant';
+
+  @override
+  String get pinCodeLabel => 'Code PIN';
+
+  @override
+  String get pinCodeHint => 'Code PIN à 4 chiffres';
+
+  @override
+  String get cardBankLabel => 'Carte bancaire';
+
+  @override
+  String get payByCard => 'Payer en toute sécurité par carte';
+
+  @override
+  String get pinRequired => 'Veuillez saisir votre code PIN à 4 chiffres';
+
+  @override
+  String get genericErrorMsg => 'Une erreur s\'est produite. Veuillez réessayer.';
+
+  @override
+  String get processingTitle => 'Traitement du paiement...';
+
+  @override
+  String get processingSubtitle => 'Veuillez patienter un instant';
+
+  @override
+  String get paymentSuccessTitle => 'Paiement réussi';
+
+  @override
+  String get paymentSuccessMessage => 'Votre paiement a été traité avec succès.';
+
+  @override
+  String get backToEvents => 'Retour aux événements';
+
+  @override
+  String get myInfoSection => 'MES INFORMATIONS';
+
+  @override
+  String get passwordSection => 'MOT DE PASSE';
+
+  @override
+  String get supporterWac => 'Supporter du WAC';
+
+  @override
+  String get cinHintFull => 'Ex : BK123456';
+
+  @override
+  String get newPasswordHintMin => 'Minimum 8 caractères, 1 majuscule, 1 minuscule, 1 chiffre';
+
+  @override
+  String get inProgressSection => 'EN COURS';
+
+  @override
+  String get previousSection => 'PRÉCÉDENTES';
+
+  @override
+  String get myOrdersTitle => 'Mes commandes';
+
+  @override
+  String get orderLabel => 'Commande';
+
+  @override
+  String itemsCount(String count) {
+    return '$count article(s)';
+  }
+
+  @override
+  String get passedOn => 'Passée le';
+
+  @override
+  String get deliveryExpected => 'Livraison estimée';
+
+  @override
+  String get carrier => 'Transporteur';
+
+  @override
+  String get carrierName => 'Wydad Express';
+
+  @override
+  String get deliveredStatus => 'Livré';
+
+  @override
+  String get stepConfirmed => 'Confirmée';
+
+  @override
+  String get stepPrepared => 'Préparée';
+
+  @override
+  String get stepShipped => 'Expédiée';
+
+  @override
+  String get stepDelivered => 'Livrée';
+
+  @override
+  String get statusLabel => 'Statut';
+
+  @override
+  String get paymentLabel => 'Paiement';
+
+  @override
+  String get deliveryInfoSection => 'INFOS LIVRAISON';
+
+  @override
+  String get daysShort => 'j';
+
+  @override
+  String get hoursShort => 'h';
+
+  @override
+  String get transferTicketTitle => 'Transférer le ticket';
+
+  @override
+  String get transferTicketPrompt => 'Saisissez l\'email du destinataire';
+
+  @override
+  String get errorCustomerId => 'Erreur : ID client manquant';
+
+  @override
+  String get transferDone => 'Transfert effectué';
+
+  @override
+  String get categoryLabel => 'Catégorie';
+
+  @override
+  String get ticketDetailTitle => 'Détails du ticket';
+
+  @override
+  String get ticketStatusLabel => 'Statut du ticket';
+
+  @override
+  String get transferTicket => 'Transférer';
+
+  @override
+  String get wallet => 'Portefeuille';
+
+  @override
+  String get referenceLabel => 'Référence';
 }

@@ -19,7 +19,8 @@ class CMIPaymentWebViewWallet extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<CMIPaymentWebViewWallet> createState() => _CMIPaymentWebViewWalletState();
+  State<CMIPaymentWebViewWallet> createState() =>
+      _CMIPaymentWebViewWalletState();
 }
 
 class _CMIPaymentWebViewWalletState extends State<CMIPaymentWebViewWallet> {
@@ -29,7 +30,8 @@ class _CMIPaymentWebViewWalletState extends State<CMIPaymentWebViewWallet> {
   String _errorMessage = '';
   bool _paymentCompleted = false;
 
-  static const String _returnUrlBase = 'https://ticketing.ma/api/customer/wallet/return';
+  static const String _returnUrlBase =
+      'https://ticketing.ma/api/customer/wallet/return';
 
   @override
   void initState() {
@@ -67,7 +69,8 @@ class _CMIPaymentWebViewWalletState extends State<CMIPaymentWebViewWallet> {
               setState(() {
                 _isLoading = false;
                 _hasError = true;
-                _errorMessage = "${l10n?.loadingError ?? 'Loading error'}: ${error.description}";
+                _errorMessage =
+                "${l10n?.loadingError ?? ''}: ${error.description}";
               });
             }
           },
@@ -81,7 +84,7 @@ class _CMIPaymentWebViewWalletState extends State<CMIPaymentWebViewWallet> {
       if (mounted) {
         setState(() {
           _hasError = true;
-          _errorMessage = "${l10n?.browserInitError ?? 'Browser init error'}: $e";
+          _errorMessage = "${l10n?.browserInitError ?? ''}: $e";
           _isLoading = false;
         });
       }
@@ -110,7 +113,7 @@ class _CMIPaymentWebViewWalletState extends State<CMIPaymentWebViewWallet> {
         })();
       ''');
     } catch (e) {
-      print("Erreur injection JS: $e");
+      print("JS injection error: $e");
     }
   }
 
@@ -128,12 +131,14 @@ class _CMIPaymentWebViewWalletState extends State<CMIPaymentWebViewWallet> {
     if (_controller == null || _paymentCompleted) return;
     try {
       await Future.delayed(const Duration(milliseconds: 600));
-      final result = await _controller!.runJavaScriptReturningResult('document.body.innerText');
+      final result = await _controller!
+          .runJavaScriptReturningResult('document.body.innerText');
       final content = result.toString();
 
       if (content.contains('"success":true')) {
         _handlePaymentSuccess();
-      } else if (content.contains('"success":false') || content.contains('Order not processed')) {
+      } else if (content.contains('"success":false') ||
+          content.contains('Order not processed')) {
         _handlePaymentCancelled();
       }
     } catch (_) {}
@@ -149,7 +154,7 @@ class _CMIPaymentWebViewWalletState extends State<CMIPaymentWebViewWallet> {
           builder: (_) => _WalletRechargeSuccess(
             amount: widget.amount,
             reference: widget.reference,
-            token: widget.token, // ✅ On passe le token ici
+            token: widget.token,
           ),
         ),
       );
@@ -250,16 +255,18 @@ class _CMIPaymentWebViewWalletState extends State<CMIPaymentWebViewWallet> {
 class _WalletRechargeSuccess extends StatelessWidget {
   final double amount;
   final String reference;
-  final String token; // ✅ Ajout du token
+  final String token;
 
   const _WalletRechargeSuccess({
     required this.amount,
     required this.reference,
-    required this.token, // ✅ Ajout du token
+    required this.token,
   });
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: const Color(0xFF170205),
       body: Container(
@@ -287,9 +294,9 @@ class _WalletRechargeSuccess extends StatelessWidget {
                       color: Color(0xFFF5CD52), size: 32),
                 ),
                 const SizedBox(height: 18),
-                const Text(
-                  'Recharge effectuée',
-                  style: TextStyle(
+                Text(
+                  l10n.rechargeDone,
+                  style: const TextStyle(
                     fontFamily: 'Inter',
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
@@ -330,9 +337,9 @@ class _WalletRechargeSuccess extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        'Référence',
-                        style: TextStyle(
+                      Text(
+                        l10n.referenceLabel,
+                        style: const TextStyle(
                           color: Colors.white60,
                           fontFamily: 'Inter',
                           fontSize: 11,
@@ -355,21 +362,22 @@ class _WalletRechargeSuccess extends StatelessWidget {
                   width: double.infinity,
                   height: 50,
                   child: ElevatedButton(
-                    // ✅ Redirection vers l'Accueil
-                    onPressed: () => Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
-                      '/acceuil',
-                          (r) => false,
-                      arguments: {'token': token}, // ✅ On passe le token
-                    ),
+                    onPressed: () =>
+                        Navigator.of(context, rootNavigator: true)
+                            .pushNamedAndRemoveUntil(
+                          '/acceuil',
+                              (r) => false,
+                          arguments: {'token': token},
+                        ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                       foregroundColor: const Color(0xFFA8161F),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12)),
                     ),
-                    child: const Text(
-                      'Retour à l\'accueil', // ✅ Texte modifié
-                      style: TextStyle(
+                    child: Text(
+                      l10n.backToHome,
+                      style: const TextStyle(
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w600,
                       ),

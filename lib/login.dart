@@ -24,6 +24,9 @@ class _LoginPageState extends State<LoginPage> {
 
   final Color primary = const Color(0xFFA8161F);
 
+  /// l10n helper
+  AppLocalizations get l10n => AppLocalizations.of(context)!;
+
   @override
   void initState() {
     super.initState();
@@ -78,7 +81,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _showErrorModal(String message) {
-    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       barrierDismissible: true,
@@ -144,7 +146,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _showAlreadyConnectedModal() {
-    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       barrierDismissible: true,
@@ -241,7 +242,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _login(BuildContext context) async {
-    final l10n = AppLocalizations.of(context)!;
     final String email = emailController.text.trim();
     final String password = passwordController.text.trim();
 
@@ -357,7 +357,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _openTicketingWebsite() async {
-    final l10n = AppLocalizations.of(context)!;
     const url = 'https://ticketing.ma';
     if (await canLaunchUrl(Uri.parse(url))) {
       await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
@@ -435,7 +434,6 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-
             SafeArea(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.fromLTRB(24, 14, 24, 28),
@@ -473,9 +471,9 @@ class _LoginPageState extends State<LoginPage> {
                               padding: EdgeInsets.zero,
                               minimumSize: const Size(0, 42),
                             ),
-                            child: const Text(
-                              'Plus tard',
-                              style: TextStyle(
+                            child: Text(
+                              l10n.later,
+                              style: const TextStyle(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w500,
                                 color: Color(0xC7FFFFFF),
@@ -509,9 +507,9 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(height: 20),
 
                     // Title
-                    const Text(
-                      'Bon retour',
-                      style: TextStyle(
+                    Text(
+                      l10n.welcomeBack,
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 24,
                         fontWeight: FontWeight.w600,
@@ -521,7 +519,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      'Connectez-vous pour retrouver vos billets et votre Wallet.',
+                      l10n.loginSubtitle,
                       style: TextStyle(
                         color: Colors.white.withOpacity(0.72),
                         fontSize: 13,
@@ -533,11 +531,11 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(height: 26),
 
                     // Email field
-                    _buildFieldLabel('E-mail'),
+                    _buildFieldLabel(l10n.emailLabel),
                     const SizedBox(height: 5),
                     _buildInput(
                       controller: emailController,
-                      hint: 'nom@exemple.com',
+                      hint: l10n.emailHint,
                       keyboardType: TextInputType.emailAddress,
                       autofill: const [AutofillHints.email],
                     ),
@@ -545,7 +543,7 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(height: 14),
 
                     // Password field
-                    _buildFieldLabel('Mot de passe'),
+                    _buildFieldLabel(l10n.passwordLabel),
                     const SizedBox(height: 5),
                     _buildPasswordInput(),
 
@@ -559,9 +557,9 @@ class _LoginPageState extends State<LoginPage> {
                         child: Container(
                           height: 40,
                           alignment: Alignment.center,
-                          child: const Text(
-                            'Mot de passe oublié ?',
-                            style: TextStyle(
+                          child: Text(
+                            l10n.forgotPassword,
+                            style: const TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w500,
                               color: Color(0xDBFFFFFF),
@@ -600,9 +598,9 @@ class _LoginPageState extends State<LoginPage> {
                             AlwaysStoppedAnimation(primary),
                           ),
                         )
-                            : const Text(
-                          'Se connecter',
-                          style: TextStyle(
+                            : Text(
+                          l10n.loginButton,
+                          style: const TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
                             fontFamily: 'Inter',
@@ -624,11 +622,11 @@ class _LoginPageState extends State<LoginPage> {
                               fontFamily: 'Inter',
                               color: Colors.white.withOpacity(0.72),
                             ),
-                            children: const [
-                              TextSpan(text: 'Pas encore de compte ? '),
+                            children: [
+                              TextSpan(text: l10n.noAccountYet),
                               TextSpan(
-                                text: 'Créer un compte',
-                                style: TextStyle(
+                                text: l10n.createAccountLink,
+                                style: const TextStyle(
                                   fontWeight: FontWeight.w600,
                                   color: Colors.white,
                                 ),
@@ -726,7 +724,7 @@ class _LoginPageState extends State<LoginPage> {
           fontFamily: 'Inter',
         ),
         decoration: InputDecoration(
-          hintText: 'Votre mot de passe',
+          hintText: l10n.passwordHintLogin,
           hintStyle: TextStyle(
             color: Colors.white.withOpacity(0.5),
             fontFamily: 'Inter',

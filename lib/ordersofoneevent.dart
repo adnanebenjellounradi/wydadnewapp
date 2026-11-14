@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'l10n/app_localizations.dart';
 import 'transfertHistory.dart';
+
 class OrdersOfOneEventPage extends StatefulWidget {
   final String token;
   final int eventId;
@@ -32,6 +33,9 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
 
   int _openOrderIndex = -1;
   final Color primary = const Color(0xFFA8161F);
+
+  /// l10n helper
+  AppLocalizations get l10n => AppLocalizations.of(context)!;
 
   @override
   void initState() {
@@ -104,7 +108,6 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
     setState(() => isLoading = false);
   }
 
-  // ✅ Helper : récupère le montant total d'une commande de manière tolérante
   double _getOrderTotal(dynamic order) {
     final candidates = [
       order["total"],
@@ -124,9 +127,8 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
     if (children.isNotEmpty) {
       double sum = 0;
       for (final child in children) {
-        final childPrice = child["price"] ??
-            child["amount"] ??
-            child["ticket"]?["price"];
+        final childPrice =
+            child["price"] ?? child["amount"] ?? child["ticket"]?["price"];
         if (childPrice == null) continue;
         if (childPrice is num) {
           sum += childPrice.toDouble();
@@ -151,7 +153,6 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
   }
 
   void _showUpdateRequiredDialog() {
-    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -265,8 +266,6 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-
     return Scaffold(
       backgroundColor: const Color(0xFF170205),
       body: Container(
@@ -369,7 +368,6 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
           const Spacer(),
           GestureDetector(
             onTap: () {
-              // ✅ Navigation directe comme dans events.dart
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -395,7 +393,7 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
                   const Icon(Icons.send, color: Colors.white, size: 14),
                   const SizedBox(width: 6),
                   Text(
-                    'Transferts',
+                    l10n.transfersButton,
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
@@ -411,8 +409,7 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
       ),
     );
   }
-  // ✅ Bannière avec bord carré et fond uni (sans le cercle lumineux)
-  // ✅ Bannière avec border radius (carte arrondie)
+
   Widget _buildEventBanner() {
     final totalTickets = orders.fold<int>(0, (sum, order) {
       final children = order["order_child"] as List<dynamic>? ?? [];
@@ -423,7 +420,6 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
       decoration: BoxDecoration(
-        // ✅ On remet le border radius
         borderRadius: BorderRadius.circular(16),
         gradient: const LinearGradient(
           begin: Alignment.topLeft,
@@ -442,7 +438,7 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  eventName.isNotEmpty ? eventName : '[MATCH]',
+                  eventName.isNotEmpty ? eventName : l10n.matchPlaceholder,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
@@ -455,7 +451,7 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
                 const SizedBox(height: 3),
                 Text(
                   eventDate.isNotEmpty
-                      ? '$eventDate · Complexe Mohammed V'
+                      ? '$eventDate · ${l10n.stadiumName}'
                       : '',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -481,7 +477,7 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
                 ),
               ),
               Text(
-                totalTickets > 1 ? 'billets' : 'billet',
+                totalTickets > 1 ? l10n.ticketPlural : l10n.ticket,
                 style: TextStyle(
                   fontSize: 11,
                   color: Colors.white.withOpacity(0.8),
@@ -494,6 +490,7 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
       ),
     );
   }
+
   List<Widget> _buildPendingTransfers(AppLocalizations l10n) {
     final pendingOrders = orders
         .where((o) =>
@@ -507,7 +504,7 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
     return [
       const SizedBox(height: 20),
       Text(
-        'TRANSFERT EN ATTENTE · ${pendingOrders.length}',
+        l10n.pendingTransferLabel('${pendingOrders.length}'),
         style: const TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.w600,
@@ -524,13 +521,12 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
   Widget _buildPendingTransferCard(dynamic order, AppLocalizations l10n) {
     final senderName = order["sender"]?["name"]?.toString() ??
         order["user"]?["name"]?.toString() ??
-        '[Expéditeur]';
+        l10n.senderPlaceholder;
     final ticket = order["ticket"];
     final ticketName = ticket?["name"]?.toString() ?? '';
     final orderId = order["id"];
-    final orderIdAsInt = orderId is int
-        ? orderId
-        : int.tryParse(orderId.toString()) ?? 0;
+    final orderIdAsInt =
+    orderId is int ? orderId : int.tryParse(orderId.toString()) ?? 0;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
@@ -561,7 +557,7 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Billet reçu de $senderName',
+                      l10n.receivedTicketFrom(senderName),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
@@ -593,9 +589,9 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
                   color: const Color(0xFFFFC97A).withOpacity(0.18),
                 ),
                 alignment: Alignment.center,
-                child: const Text(
-                  'EN ATTENTE',
-                  style: TextStyle(
+                child: Text(
+                  l10n.inPendingLabel.toUpperCase(),
+                  style: const TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.w700,
                     color: Color(0xFFFFC97A),
@@ -607,7 +603,7 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
           ),
           const SizedBox(height: 12),
           Text(
-            'Acceptez le transfert pour ajouter ce billet à vos billets du match. Il sera alors réémis à votre nom.',
+            l10n.transferAcceptInfo,
             style: TextStyle(
               fontSize: 12,
               height: 1.5,
@@ -625,12 +621,12 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
                     height: 44,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                          color: Colors.white.withOpacity(0.18)),
+                      border:
+                      Border.all(color: Colors.white.withOpacity(0.18)),
                     ),
                     child: Center(
                       child: Text(
-                        'Refuser',
+                        l10n.refuse,
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
@@ -658,10 +654,10 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
                       border:
                       Border.all(color: Colors.white.withOpacity(0.2)),
                     ),
-                    child: const Center(
+                    child: Center(
                       child: Text(
-                        'Accepter',
-                        style: TextStyle(
+                        l10n.accept,
+                        style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w700,
                           color: Colors.white,
@@ -737,7 +733,7 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'MES COMMANDES · ${normalOrders.length}',
+              l10n.myOrdersSection('${normalOrders.length}'),
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
@@ -762,9 +758,8 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
     final isOpen = _openOrderIndex == index;
     final orderChildren = order["order_child"] as List<dynamic>? ?? [];
     final orderId = order["id"];
-    final orderIdAsInt = orderId is int
-        ? orderId
-        : int.tryParse(orderId.toString()) ?? 0;
+    final orderIdAsInt =
+    orderId is int ? orderId : int.tryParse(orderId.toString()) ?? 0;
 
     final ticketCount = orderChildren.isNotEmpty
         ? orderChildren.length
@@ -778,18 +773,18 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
     final transferStatus = order["transfer_status"] as int?;
     final isReceived = isUserReceiver(order);
 
-    String badge = 'Payée';
+    String badge = l10n.paidLabel;
     Color badgeColor = const Color(0xFFF5CD52);
     Color badgeBg = const Color(0xFFF5CD52).withOpacity(0.14);
 
     if (isTransfer && isReceived) {
-      badge = transferStatus == 1 ? 'Reçu' : 'En attente';
+      badge = transferStatus == 1 ? l10n.receivedLabel : l10n.inPendingLabel;
       badgeColor = transferStatus == 1
           ? const Color(0xFFF5CD52)
           : const Color(0xFFFFC97A);
       badgeBg = badgeColor.withOpacity(0.14);
     } else if (isTransfer) {
-      badge = 'Transféré';
+      badge = l10n.transferredLabel;
       badgeColor = const Color(0xFFFFC97A);
       badgeBg = badgeColor.withOpacity(0.14);
     }
@@ -799,7 +794,7 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
         ? date.substring(0, 16).replaceAll('T', ' · ')
         : date;
     final paymentMethod =
-        order["payment_method"]?.toString() ?? 'Wallet';
+        order["payment_method"]?.toString() ?? l10n.walletLabel;
     final ticketName = order["ticket"]?["name"]?.toString() ?? '';
 
     return Container(
@@ -888,7 +883,7 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
                         ),
                       ),
                       Text(
-                        '$ticketCount ${ticketCount > 1 ? "billets" : "billet"}',
+                        '$ticketCount ${ticketCount > 1 ? l10n.ticketPlural : l10n.ticket}',
                         style: TextStyle(
                           fontSize: 11,
                           color: Colors.white.withOpacity(0.6),
@@ -936,7 +931,7 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
                     )),
                   const SizedBox(height: 10),
                   Text(
-                    'Payée le $dateFormatted · $paymentMethod',
+                    l10n.paidOnPayment(dateFormatted, paymentMethod),
                     style: TextStyle(
                       fontSize: 11,
                       color: Colors.white.withOpacity(0.5),
@@ -957,34 +952,35 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
     required int orderIdAsInt,
   }) {
     final ticketNumber = child?["ticket_number"] ?? '';
-    final ticketName = order["ticket"]?["name"]?.toString() ?? 'Billet';
+    final ticketName =
+        order["ticket"]?["name"]?.toString() ?? l10n.ticketFallback;
     final isTransfer = order["order_type"] == "Transfer";
     final transferStatus = order["transfer_status"] as int?;
     final isReceived = isUserReceiver(order);
 
-    String stateLabel = 'Valide';
+    String stateLabel = l10n.validLabel;
     Color stateColor = const Color(0xFFF5CD52);
     Color iconBg = const Color(0xFFF5CD52).withOpacity(0.12);
     Color iconColor = const Color(0xFFF5CD52);
 
     if (isTransfer && isReceived) {
       if (transferStatus == 0) {
-        stateLabel = 'En attente';
+        stateLabel = l10n.inPendingLabel;
         stateColor = const Color(0xFFFFC97A);
         iconBg = stateColor.withOpacity(0.12);
         iconColor = stateColor;
       } else if (transferStatus == 1) {
-        stateLabel = 'Valide';
+        stateLabel = l10n.validLabel;
       }
     } else if (isTransfer) {
-      stateLabel = 'Transféré';
+      stateLabel = l10n.transferredLabel;
       stateColor = const Color(0xFFFFC97A);
       iconBg = stateColor.withOpacity(0.12);
       iconColor = stateColor;
     }
 
     final label = ticketNumber.isNotEmpty
-        ? 'Billet #$ticketNumber · $ticketName'
+        ? '${l10n.ticketNumberLabel(ticketNumber)} · $ticketName'
         : ticketName;
 
     return InkWell(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'wallet_service.dart';
+import 'l10n/app_localizations.dart';
 
 class WalletRechargeMethodPage extends StatefulWidget {
   final String token;
@@ -15,6 +16,9 @@ class _WalletRechargeMethodPageState extends State<WalletRechargeMethodPage> {
   final Color primary = const Color(0xFFA8161F);
   bool _isLoading = true;
   double _balance = 0;
+
+  /// l10n helper
+  AppLocalizations get l10n => AppLocalizations.of(context)!;
 
   @override
   void initState() {
@@ -61,10 +65,10 @@ class _WalletRechargeMethodPageState extends State<WalletRechargeMethodPage> {
                     children: [
                       _buildIcon(),
                       const SizedBox(height: 16),
-                      const Text(
-                        'Comment souhaitez-vous alimenter votre compte ?',
+                      Text(
+                        l10n.howToTopUpQuestion,
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'Inter',
                           fontSize: 19,
                           fontWeight: FontWeight.w700,
@@ -74,7 +78,10 @@ class _WalletRechargeMethodPageState extends State<WalletRechargeMethodPage> {
                       ),
                       const SizedBox(height: 6),
                       Text(
-                        'Solde actuel : ${_balance.toStringAsFixed(2).replaceAll('.', ',')} MAD',
+                        l10n.currentBalanceFormat(
+                            _balance
+                                .toStringAsFixed(2)
+                                .replaceAll('.', ',')),
                         style: TextStyle(
                           fontFamily: 'Inter',
                           fontSize: 11,
@@ -84,8 +91,8 @@ class _WalletRechargeMethodPageState extends State<WalletRechargeMethodPage> {
                       const SizedBox(height: 24),
                       _methodCard(
                         icon: Icons.credit_card,
-                        title: 'Carte bancaire',
-                        subtitle: 'Immédiat · Visa, Mastercard',
+                        title: l10n.bankCardMethod,
+                        subtitle: l10n.bankCardMethodSubtitle,
                         onTap: () async {
                           await Navigator.pushNamed(
                               context, '/walletRecharge',
@@ -96,9 +103,8 @@ class _WalletRechargeMethodPageState extends State<WalletRechargeMethodPage> {
                       const SizedBox(height: 10),
                       _methodCard(
                         icon: Icons.account_balance_outlined,
-                        title: 'Virement bancaire',
-                        subtitle:
-                        'Depuis votre banque, avec le RIB du wallet',
+                        title: l10n.bankTransferMethod,
+                        subtitle: l10n.bankTransferMethodSubtitle,
                         onTap: () => Navigator.pushNamed(
                             context, '/walletRechargeRib',
                             arguments: {'token': widget.token}),
@@ -106,8 +112,8 @@ class _WalletRechargeMethodPageState extends State<WalletRechargeMethodPage> {
                       const SizedBox(height: 10),
                       _methodCard(
                         icon: Icons.payments_outlined,
-                        title: 'Espèces en agence',
-                        subtitle: 'Chaabi Cash, Damane Cash, Tashilat',
+                        title: l10n.cashAtAgency,
+                        subtitle: l10n.cashAgencyMethodSubtitle,
                         onTap: () => Navigator.pushNamed(
                             context, '/walletRechargeCash',
                             arguments: {'token': widget.token}),
@@ -143,9 +149,9 @@ class _WalletRechargeMethodPageState extends State<WalletRechargeMethodPage> {
             ),
           ),
           const Spacer(),
-          const Text(
-            'Alimenter mon compte',
-            style: TextStyle(
+          Text(
+            l10n.topUpMyAccount,
+            style: const TextStyle(
               fontSize: 17,
               fontWeight: FontWeight.w600,
               color: Colors.white,

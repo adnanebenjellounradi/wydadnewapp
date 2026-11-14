@@ -22,7 +22,8 @@ class CMIPaymentWebViewBoutique extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _CMIPaymentWebViewBoutiqueState createState() => _CMIPaymentWebViewBoutiqueState();
+  _CMIPaymentWebViewBoutiqueState createState() =>
+      _CMIPaymentWebViewBoutiqueState();
 }
 
 class _CMIPaymentWebViewBoutiqueState extends State<CMIPaymentWebViewBoutique> {
@@ -38,11 +39,6 @@ class _CMIPaymentWebViewBoutiqueState extends State<CMIPaymentWebViewBoutique> {
   @override
   void initState() {
     super.initState();
-
-    if (Platform.isAndroid) {
-      // AndroidWebViewController.enableDebugging(true);
-    }
-
     _initWebViewController();
   }
 
@@ -78,7 +74,8 @@ class _CMIPaymentWebViewBoutiqueState extends State<CMIPaymentWebViewBoutique> {
             setState(() {
               _isLoading = false;
               _hasError = true;
-              _errorMessage = "${l10n?.loadingError ?? 'Loading error'}: ${error.description}";
+              _errorMessage =
+              "${l10n?.loadingError ?? ''}: ${error.description}";
             });
           },
           onUrlChange: (change) {
@@ -108,8 +105,7 @@ class _CMIPaymentWebViewBoutiqueState extends State<CMIPaymentWebViewBoutique> {
 
     try {
       final pageContent = await _controller.runJavaScriptReturningResult(
-          'document.body.innerText'
-      );
+          'document.body.innerText');
 
       if (pageContent != null) {
         final content = pageContent.toString();
@@ -117,23 +113,19 @@ class _CMIPaymentWebViewBoutiqueState extends State<CMIPaymentWebViewBoutique> {
       }
 
       final htmlContent = await _controller.runJavaScriptReturningResult(
-          'document.documentElement.outerHTML'
-      );
+          'document.documentElement.outerHTML');
 
       if (htmlContent != null) {
         final html = htmlContent.toString();
         _processCMIHtml(html);
       }
-
     } catch (e) {
       print('Error analyzing page: $e');
     }
   }
 
+  /// ⚠️ NE PAS TRADUIRE ces chaînes : ce sont les textes retournés par CMI
   void _processCMIContent(String content) {
-    final l10n = AppLocalizations.of(context);
-
-    // Vérifier si c'est la page de succès CMI
     if ((content.contains('REÇU DE PAIEMENT') &&
         content.contains('Votre paiement a été accepté') &&
         content.contains('DÉTAIL DE PAIEMENT') &&
@@ -142,7 +134,6 @@ class _CMIPaymentWebViewBoutiqueState extends State<CMIPaymentWebViewBoutique> {
             content.contains('Paiement accepté') ||
             content.contains('Payment successful')) &&
             !_successPageDetected) {
-
       _successPageDetected = true;
 
       setState(() {
@@ -150,8 +141,8 @@ class _CMIPaymentWebViewBoutiqueState extends State<CMIPaymentWebViewBoutique> {
       });
     }
 
-    // Vérifier aussi le bouton "Retourner au site marchand"
-    if (content.contains('Cliquez ici pour retourner au site marchand') && !_successPageDetected) {
+    if (content.contains('Cliquez ici pour retourner au site marchand') &&
+        !_successPageDetected) {
       _successPageDetected = true;
 
       setState(() {
@@ -163,9 +154,6 @@ class _CMIPaymentWebViewBoutiqueState extends State<CMIPaymentWebViewBoutique> {
   }
 
   void _processCMIHtml(String html) {
-    final l10n = AppLocalizations.of(context);
-
-    // Rechercher des patterns spécifiques dans le HTML
     if (html.contains('name="Retourner"') ||
         html.contains('value="Retourner"') ||
         html.contains('id="Retourner"') ||
@@ -173,7 +161,6 @@ class _CMIPaymentWebViewBoutiqueState extends State<CMIPaymentWebViewBoutique> {
         html.contains('name="RETOURNER"') ||
         html.contains('value="RETOURNER"') ||
         html.contains('type="submit"') && html.contains('Retourner')) {
-
       if (!_successPageDetected) {
         _successPageDetected = true;
 
@@ -248,7 +235,6 @@ class _CMIPaymentWebViewBoutiqueState extends State<CMIPaymentWebViewBoutique> {
           return 'no_buttons';
         })();
       ''');
-
     } catch (e) {
       print('Error in click methods: $e');
     }
@@ -257,8 +243,10 @@ class _CMIPaymentWebViewBoutiqueState extends State<CMIPaymentWebViewBoutique> {
   Future<void> _tryAdvancedClickMethods(String html) async {
     try {
       if (html.contains('<form')) {
-        final formActionMatch = RegExp(r'<form[^>]*action="([^"]*)"').firstMatch(html);
-        final formMethodMatch = RegExp(r'<form[^>]*method="([^"]*)"').firstMatch(html);
+        final formActionMatch =
+        RegExp(r'<form[^>]*action="([^"]*)"').firstMatch(html);
+        final formMethodMatch =
+        RegExp(r'<form[^>]*method="([^"]*)"').firstMatch(html);
 
         if (formActionMatch != null) {
           await _controller.runJavaScript('''
@@ -295,7 +283,6 @@ class _CMIPaymentWebViewBoutiqueState extends State<CMIPaymentWebViewBoutique> {
           }
         })();
       ''');
-
     } catch (e) {
       print('Error in advanced click methods: $e');
     }
@@ -335,7 +322,6 @@ class _CMIPaymentWebViewBoutiqueState extends State<CMIPaymentWebViewBoutique> {
     for (var pattern in successPatterns) {
       if (url.contains(pattern) && !_paymentCompleted) {
         _showSuccessOverlayWithAutoRedirect();
-
         return;
       }
     }
@@ -375,6 +361,7 @@ class _CMIPaymentWebViewBoutiqueState extends State<CMIPaymentWebViewBoutique> {
       }
     }
   }
+
   Future<void> _clearSelectedProducts() async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -386,14 +373,13 @@ class _CMIPaymentWebViewBoutiqueState extends State<CMIPaymentWebViewBoutique> {
         print('⚠️ selectedProducts key not found or could not be removed');
       }
 
-      // Optional: Also clear any other shopping cart related data
-      await prefs.remove('cartItems'); // if you have this
-      await prefs.remove('cartTotal'); // if you have this
-
+      await prefs.remove('cartItems');
+      await prefs.remove('cartTotal');
     } catch (e) {
       print('❌ Error clearing selectedProducts: $e');
     }
   }
+
   void _showSuccessOverlayWithAutoRedirect() {
     if (_paymentCompleted) return;
 
@@ -403,10 +389,8 @@ class _CMIPaymentWebViewBoutiqueState extends State<CMIPaymentWebViewBoutique> {
       _showSuccessOverlay = true;
     });
 
-    // Remove selectedProducts from SharedPreferences
     _clearSelectedProducts();
   }
-
 
   Future<void> _startPaymentProcess() async {
     final l10n = AppLocalizations.of(context);
@@ -427,7 +411,8 @@ class _CMIPaymentWebViewBoutiqueState extends State<CMIPaymentWebViewBoutique> {
         headers: {
           "Authorization": "Bearer $token",
           "Accept": "text/html,application/xhtml+xml,application/xml",
-          "User-Agent": "Mozilla/5.0 (Linux; Android 10; Mobile) AppleWebKit/537.36"
+          "User-Agent":
+          "Mozilla/5.0 (Linux; Android 10; Mobile) AppleWebKit/537.36"
         },
       ).timeout(const Duration(seconds: 30));
 
@@ -447,7 +432,8 @@ class _CMIPaymentWebViewBoutiqueState extends State<CMIPaymentWebViewBoutique> {
                 Uri.parse(redirectUrl),
                 headers: {
                   'Accept': 'text/html,application/xhtml+xml,application/xml',
-                  'User-Agent': 'Mozilla/5.0 (Linux; Android 10; Mobile) AppleWebKit/537.36',
+                  'User-Agent':
+                  'Mozilla/5.0 (Linux; Android 10; Mobile) AppleWebKit/537.36',
                 },
               );
               return;
@@ -463,7 +449,7 @@ class _CMIPaymentWebViewBoutiqueState extends State<CMIPaymentWebViewBoutique> {
           <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>${l10n?.cmiPayment ?? 'Paiement CMI'}</title>
+            <title>${l10n?.cmiPayment ?? ''}</title>
             <style>
               body { 
                 font-family: Arial, sans-serif; 
@@ -500,17 +486,16 @@ class _CMIPaymentWebViewBoutiqueState extends State<CMIPaymentWebViewBoutique> {
           </body>
           </html>
         ''');
-
       } else {
-        throw Exception("${l10n?.serverError ?? 'Server error'}: ${response.statusCode}");
+        throw Exception(
+            "${l10n?.serverError ?? ''}: ${response.statusCode}");
       }
-
     } catch (e) {
       print('Payment Process Error: $e');
       setState(() {
         _isLoading = false;
         _hasError = true;
-        _errorMessage = "${l10n?.error ?? 'Error'}: ${e.toString()}";
+        _errorMessage = "${l10n?.error ?? ''}: ${e.toString()}";
       });
     } finally {
       setState(() => _isLoading = false);
@@ -532,7 +517,7 @@ class _CMIPaymentWebViewBoutiqueState extends State<CMIPaymentWebViewBoutique> {
           arguments: {
             'token': widget.orderData['token'],
             'organizationId': widget.orderData['organizationId'],
-            'refreshCart': true, // ← AJOUTEZ CETTE LIGNE
+            'refreshCart': true,
           },
         );
       }
@@ -562,7 +547,8 @@ class _CMIPaymentWebViewBoutiqueState extends State<CMIPaymentWebViewBoutique> {
         backgroundColor: isDarkMode ? Colors.black : Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: isDarkMode ? Colors.white : Colors.black),
+          icon: Icon(Icons.arrow_back,
+              color: isDarkMode ? Colors.white : Colors.black),
           onPressed: _handlePaymentCancelled,
         ),
         title: Text(
@@ -577,8 +563,7 @@ class _CMIPaymentWebViewBoutiqueState extends State<CMIPaymentWebViewBoutique> {
       ),
       body: Stack(
         children: [
-          if (_controller != null)
-            WebViewWidget(controller: _controller),
+          if (_controller != null) WebViewWidget(controller: _controller),
           if (_isLoading)
             Container(
               color: isDarkMode ? Colors.black : Colors.white,
@@ -590,7 +575,9 @@ class _CMIPaymentWebViewBoutiqueState extends State<CMIPaymentWebViewBoutique> {
                     SizedBox(height: 16),
                     Text(
                       l10n.connectingToPaymentGateway,
-                      style: TextStyle(color: isDarkMode ? Colors.white70 : Colors.grey),
+                      style: TextStyle(
+                          color:
+                          isDarkMode ? Colors.white70 : Colors.grey),
                     ),
                   ],
                 ),
@@ -663,7 +650,8 @@ class _CMIPaymentWebViewBoutiqueState extends State<CMIPaymentWebViewBoutique> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xFFE41E26),
                       foregroundColor: Colors.white,
-                      padding: EdgeInsets.symmetric(vertical: 14, horizontal: 24),
+                      padding:
+                      EdgeInsets.symmetric(vertical: 14, horizontal: 24),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -689,7 +677,9 @@ class _CMIPaymentWebViewBoutiqueState extends State<CMIPaymentWebViewBoutique> {
                   },
                   child: Text(
                     l10n.close,
-                    style: TextStyle(color: isDarkMode ? Colors.white70 : Colors.grey),
+                    style: TextStyle(
+                        color:
+                        isDarkMode ? Colors.white70 : Colors.grey),
                   ),
                 ),
               ],

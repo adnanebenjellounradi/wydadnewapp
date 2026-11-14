@@ -17,7 +17,8 @@ class CMIPaymentWebViewTicket extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<CMIPaymentWebViewTicket> createState() => _CMIPaymentWebViewTicketState();
+  State<CMIPaymentWebViewTicket> createState() =>
+      _CMIPaymentWebViewTicketState();
 }
 
 class _CMIPaymentWebViewTicketState extends State<CMIPaymentWebViewTicket> {
@@ -66,7 +67,8 @@ class _CMIPaymentWebViewTicketState extends State<CMIPaymentWebViewTicket> {
             setState(() {
               _isLoading = false;
               _hasError = true;
-              _errorMessage = "${l10n?.loadingError ?? 'Loading error'}: ${error.description}";
+              _errorMessage =
+              "${l10n?.loadingError ?? ''}: ${error.description}";
             });
           },
           onUrlChange: (change) {
@@ -81,12 +83,11 @@ class _CMIPaymentWebViewTicketState extends State<CMIPaymentWebViewTicket> {
       });
 
       _startPaymentProcess();
-
     } catch (e) {
       print('WebView initialization error: $e');
       setState(() {
         _hasError = true;
-        _errorMessage = "${l10n?.browserInitError ?? 'Browser initialization error'}: $e";
+        _errorMessage = "${l10n?.browserInitError ?? ''}: $e";
         _isLoading = false;
       });
     }
@@ -103,8 +104,7 @@ class _CMIPaymentWebViewTicketState extends State<CMIPaymentWebViewTicket> {
         url.contains('success=true') ||
         url.contains('payment=success')) {
       _handlePaymentSuccess();
-    }
-    else if (url.contains('fail') ||
+    } else if (url.contains('fail') ||
         url.contains('cancel') ||
         url.contains('error') ||
         url.contains('cmi/failed_page') ||
@@ -122,27 +122,27 @@ class _CMIPaymentWebViewTicketState extends State<CMIPaymentWebViewTicket> {
     try {
       await Future.delayed(Duration(milliseconds: 500));
 
-      final pageContent = await _controller!.runJavaScriptReturningResult('document.body.innerText');
+      final pageContent =
+      await _controller!.runJavaScriptReturningResult('document.body.innerText');
       if (pageContent != null) {
         final contentString = pageContent.toString();
         print('Page content: $contentString');
         _processPageContent(contentString);
       }
 
-      final htmlContent = await _controller!.runJavaScriptReturningResult('document.documentElement.outerHTML');
+      final htmlContent = await _controller!
+          .runJavaScriptReturningResult('document.documentElement.outerHTML');
       if (htmlContent != null) {
         final htmlString = htmlContent.toString();
         _processHtmlContent(htmlString);
       }
-
     } catch (e) {
       print('Error checking page content: $e');
     }
   }
 
+  /// ⚠️ NE PAS TRADUIRE : ce sont les textes retournés par CMI
   void _processPageContent(String content) {
-    final l10n = AppLocalizations.of(context);
-
     if (_isJsonContent(content)) {
       print('Detected JSON content in page');
       _handleJsonContent(content);
@@ -171,13 +171,16 @@ class _CMIPaymentWebViewTicketState extends State<CMIPaymentWebViewTicket> {
   bool _isJsonContent(String content) {
     final trimmed = content.trim();
     return (trimmed.startsWith('{') && trimmed.endsWith('}')) ||
-        (trimmed.startsWith('"') && trimmed.endsWith('"') && trimmed.contains('{')) ||
+        (trimmed.startsWith('"') &&
+            trimmed.endsWith('"') &&
+            trimmed.contains('{')) ||
         (trimmed.contains('"success":') && trimmed.contains('"message":'));
   }
 
   void _extractJsonFromHtml(String html) {
     try {
-      final jsonMatch = RegExp(r'\{[^{}]*(?:{[^{}]*}[^{}]*)*\}').firstMatch(html);
+      final jsonMatch =
+      RegExp(r'\{[^{}]*(?:{[^{}]*}[^{}]*)*\}').firstMatch(html);
       if (jsonMatch != null) {
         final jsonString = jsonMatch.group(0);
         if (jsonString != null) {
@@ -190,8 +193,6 @@ class _CMIPaymentWebViewTicketState extends State<CMIPaymentWebViewTicket> {
   }
 
   void _handleJsonContent(String content) {
-    final l10n = AppLocalizations.of(context);
-
     try {
       String jsonString = content.trim();
 
@@ -214,10 +215,10 @@ class _CMIPaymentWebViewTicketState extends State<CMIPaymentWebViewTicket> {
         print('Payment failed with message: ${jsonResponse['message']}');
         _handlePaymentCancelled();
       }
-
     } catch (e) {
       print('Error handling JSON content: $e');
-      if (content.contains('"success":false') || content.contains('Order not processed')) {
+      if (content.contains('"success":false') ||
+          content.contains('Order not processed')) {
         _handlePaymentCancelled();
       }
     }
@@ -229,7 +230,7 @@ class _CMIPaymentWebViewTicketState extends State<CMIPaymentWebViewTicket> {
     if (_controller == null) {
       setState(() {
         _hasError = true;
-        _errorMessage = l10n?.browserNotInitialized ?? "Browser not initialized";
+        _errorMessage = l10n?.browserNotInitialized ?? '';
         _isLoading = false;
       });
       return;
@@ -279,19 +280,18 @@ class _CMIPaymentWebViewTicketState extends State<CMIPaymentWebViewTicket> {
         if (body.startsWith("http")) {
           print('Redirecting to: $body');
           await _controller!.loadRequest(Uri.parse(body));
-        }
-        else if (body.contains("<html") || body.contains("<form")) {
+        } else if (body.contains("<html") || body.contains("<form")) {
           print('Loading HTML content');
           await _controller!.loadHtmlString(body);
-        }
-        else {
+        } else {
           try {
             final data = jsonDecode(body);
             if (data["redirect_url"] != null) {
               print('Redirecting via redirect_url: ${data["redirect_url"]}');
-              await _controller!.loadRequest(Uri.parse(data["redirect_url"].toString()));
+              await _controller!
+                  .loadRequest(Uri.parse(data["redirect_url"].toString()));
             } else {
-              throw Exception(l10n?.unexpectedCmiResponse ?? "Unexpected CMI response");
+              throw Exception(l10n?.unexpectedCmiResponse ?? '');
             }
           } catch (e) {
             print('Fallback: loading as HTML');
@@ -299,20 +299,19 @@ class _CMIPaymentWebViewTicketState extends State<CMIPaymentWebViewTicket> {
           }
         }
       } else {
-        throw Exception("${l10n?.serverError ?? 'Server error'}: ${response.statusCode}");
+        throw Exception("${l10n?.serverError ?? ''}: ${response.statusCode}");
       }
     } catch (e) {
       print('Payment Process Error: $e');
       setState(() {
         _isLoading = false;
         _hasError = true;
-        _errorMessage = "${l10n?.paymentLoadError ?? 'Error loading payment'}: $e";
+        _errorMessage = "${l10n?.paymentLoadError ?? ''}: $e";
       });
     }
   }
 
   void _handlePaymentSuccess() {
-    final l10n = AppLocalizations.of(context);
     if (_paymentCompleted) return;
     _paymentCompleted = true;
     print('Payment successful, navigating to success page');
@@ -355,7 +354,8 @@ class _CMIPaymentWebViewTicketState extends State<CMIPaymentWebViewTicket> {
         title: Text(l10n.cmiPayment),
         backgroundColor: isDarkMode ? Colors.black : Colors.white,
         elevation: 0,
-        iconTheme: IconThemeData(color: isDarkMode ? Colors.white : Colors.black),
+        iconTheme:
+        IconThemeData(color: isDarkMode ? Colors.white : Colors.black),
         titleTextStyle: TextStyle(
           color: isDarkMode ? Colors.white : Colors.black,
           fontWeight: FontWeight.w600,
@@ -403,7 +403,8 @@ class _CMIPaymentWebViewTicketState extends State<CMIPaymentWebViewTicket> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.red,
                   foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  padding:
+                  const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                 ),
                 child: Text(l10n.retry),
               ),
@@ -422,7 +423,8 @@ class _CMIPaymentWebViewTicketState extends State<CMIPaymentWebViewTicket> {
             const SizedBox(height: 16),
             Text(
               l10n.initializingBrowser,
-              style: TextStyle(color: isDarkMode ? Colors.white70 : Colors.grey),
+              style:
+              TextStyle(color: isDarkMode ? Colors.white70 : Colors.grey),
             ),
           ],
         ),
@@ -443,7 +445,8 @@ class _CMIPaymentWebViewTicketState extends State<CMIPaymentWebViewTicket> {
                   const SizedBox(height: 16),
                   Text(
                     l10n.connectingToPaymentGateway,
-                    style: TextStyle(color: isDarkMode ? Colors.white70 : Colors.grey),
+                    style: TextStyle(
+                        color: isDarkMode ? Colors.white70 : Colors.grey),
                   ),
                 ],
               ),
@@ -503,7 +506,9 @@ class SuccessPaymentScreen extends StatelessWidget {
               SizedBox(height: 16),
               Text(
                 l10n.paymentProcessedSuccess,
-                style: TextStyle(fontSize: 16, color: isDarkMode ? Colors.white70 : Colors.grey[700]),
+                style: TextStyle(
+                    fontSize: 16,
+                    color: isDarkMode ? Colors.white70 : Colors.grey[700]),
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 20),
@@ -516,7 +521,8 @@ class SuccessPaymentScreen extends StatelessWidget {
                       SizedBox(height: 8),
                       Text('${l10n.orderIdTitle}: $orderId'),
                       SizedBox(height: 8),
-                      Text('${l10n.amountTitle}: ${amount.toStringAsFixed(2)} MAD'),
+                      Text(
+                          '${l10n.amountTitle}: ${amount.toStringAsFixed(2)} MAD'),
                     ],
                   ),
                 ),
@@ -548,7 +554,8 @@ class SuccessPaymentScreen extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFFE41E26),
                     foregroundColor: Colors.white,
-                    padding: EdgeInsets.symmetric(vertical: 14, horizontal: 24),
+                    padding:
+                    EdgeInsets.symmetric(vertical: 14, horizontal: 24),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),

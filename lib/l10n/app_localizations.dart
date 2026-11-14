@@ -271,6 +271,12 @@ abstract class AppLocalizations {
   /// **'Email cannot be changed. Contact support for any email address modification.'**
   String get emailCannotBeChanged;
 
+  /// No description provided for @emailCannotBeChangedShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Email cannot be changed'**
+  String get emailCannotBeChangedShort;
+
   /// No description provided for @lightMode.
   ///
   /// In en, this message translates to:
@@ -294,6 +300,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'عربي'**
   String get arabic;
+
+  /// No description provided for @english.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get english;
 
   /// No description provided for @logout.
   ///
@@ -330,6 +342,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Store'**
   String get store;
+
+  /// No description provided for @storeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'STORE'**
+  String get storeTitle;
 
   /// No description provided for @outOfStock.
   ///
@@ -384,6 +402,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Size'**
   String get size;
+
+  /// No description provided for @sizeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Size:'**
+  String get sizeLabel;
 
   /// No description provided for @quantity.
   ///
@@ -850,7 +874,7 @@ abstract class AppLocalizations {
   /// No description provided for @retry.
   ///
   /// In en, this message translates to:
-  /// **'Retry'**
+  /// **'Try again'**
   String get retry;
 
   /// No description provided for @success.
@@ -2446,7 +2470,7 @@ abstract class AppLocalizations {
   /// No description provided for @noQuizAvailableToday.
   ///
   /// In en, this message translates to:
-  /// **'No quiz available for today'**
+  /// **'No quiz available today'**
   String get noQuizAvailableToday;
 
   /// No description provided for @unableToLoadQuizzes.
@@ -2458,13 +2482,13 @@ abstract class AppLocalizations {
   /// No description provided for @alreadyParticipated.
   ///
   /// In en, this message translates to:
-  /// **'Already participated'**
+  /// **'You have already participated'**
   String get alreadyParticipated;
 
   /// No description provided for @alreadyParticipatedMessage.
   ///
   /// In en, this message translates to:
-  /// **'You have already participated in this quiz. Participation is counted only once.'**
+  /// **'You have already participated in this quiz.'**
   String get alreadyParticipatedMessage;
 
   /// No description provided for @missingInformation.
@@ -2476,25 +2500,25 @@ abstract class AppLocalizations {
   /// No description provided for @loginToSaveScore.
   ///
   /// In en, this message translates to:
-  /// **'Please log in so your score can be saved.'**
+  /// **'Log in to save your score'**
   String get loginToSaveScore;
 
   /// No description provided for @yourScoreOf.
   ///
   /// In en, this message translates to:
-  /// **'Your score of'**
+  /// **'Your score is'**
   String get yourScoreOf;
 
   /// No description provided for @hasBeenSaved.
   ///
   /// In en, this message translates to:
-  /// **'has been saved!'**
+  /// **'has been saved'**
   String get hasBeenSaved;
 
   /// No description provided for @scoreNotSaved.
   ///
   /// In en, this message translates to:
-  /// **'Your score could not be saved. Please try again.'**
+  /// **'Your score could not be saved'**
   String get scoreNotSaved;
 
   /// No description provided for @easy.
@@ -2518,43 +2542,43 @@ abstract class AppLocalizations {
   /// No description provided for @expert.
   ///
   /// In en, this message translates to:
-  /// **'🏆 Expert!'**
+  /// **'Expert'**
   String get expert;
 
   /// No description provided for @veryGood.
   ///
   /// In en, this message translates to:
-  /// **'🌟 Very good!'**
+  /// **'Very good'**
   String get veryGood;
 
   /// No description provided for @notBad.
   ///
   /// In en, this message translates to:
-  /// **'👍 Not bad!'**
+  /// **'Not bad'**
   String get notBad;
 
   /// No description provided for @studyMore.
   ///
   /// In en, this message translates to:
-  /// **'📚 Study a bit more'**
+  /// **'Study more'**
   String get studyMore;
 
   /// No description provided for @keepGoing.
   ///
   /// In en, this message translates to:
-  /// **'💪 Keep going!'**
+  /// **'Keep it up'**
   String get keepGoing;
 
   /// No description provided for @winnersList.
   ///
   /// In en, this message translates to:
-  /// **'Rewarded participants'**
+  /// **'Winners list'**
   String get winnersList;
 
   /// No description provided for @youParticipatedInQuiz.
   ///
   /// In en, this message translates to:
-  /// **'You participated in this quiz'**
+  /// **'You participated in the quiz'**
   String get youParticipatedInQuiz;
 
   /// No description provided for @ticketsWillBeTransferred.
@@ -2608,13 +2632,13 @@ abstract class AppLocalizations {
   /// No description provided for @youHaveAlreadyParticipated.
   ///
   /// In en, this message translates to:
-  /// **'You have already participated'**
+  /// **'You have already participated in this quiz'**
   String get youHaveAlreadyParticipated;
 
   /// No description provided for @startQuiz.
   ///
   /// In en, this message translates to:
-  /// **'START THE QUIZ'**
+  /// **'Start quiz'**
   String get startQuiz;
 
   /// No description provided for @first.
@@ -2662,13 +2686,13 @@ abstract class AppLocalizations {
   /// No description provided for @correctAnswer.
   ///
   /// In en, this message translates to:
-  /// **'Correct answer!'**
+  /// **'Correct answer'**
   String get correctAnswer;
 
   /// No description provided for @wrongAnswer.
   ///
   /// In en, this message translates to:
-  /// **'Wrong answer...'**
+  /// **'Wrong answer'**
   String get wrongAnswer;
 
   /// No description provided for @results.
@@ -3348,6 +3372,2448 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Pay order'**
   String get payOrder;
+
+  /// No description provided for @wydadAc.
+  ///
+  /// In en, this message translates to:
+  /// **'WYDAD AC'**
+  String get wydadAc;
+
+  /// No description provided for @officialTicketing.
+  ///
+  /// In en, this message translates to:
+  /// **'OFFICIAL TICKETING'**
+  String get officialTicketing;
+
+  /// No description provided for @eventsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'EVENTS'**
+  String get eventsTitle;
+
+  /// No description provided for @reserveSeats.
+  ///
+  /// In en, this message translates to:
+  /// **'Book your seats and subscription'**
+  String get reserveSeats;
+
+  /// No description provided for @reserve.
+  ///
+  /// In en, this message translates to:
+  /// **'Book'**
+  String get reserve;
+
+  /// No description provided for @wydadPay.
+  ///
+  /// In en, this message translates to:
+  /// **'WYDAD PAY'**
+  String get wydadPay;
+
+  /// No description provided for @walletTagline.
+  ///
+  /// In en, this message translates to:
+  /// **'Top up, transfer, pay'**
+  String get walletTagline;
+
+  /// No description provided for @activate.
+  ///
+  /// In en, this message translates to:
+  /// **'Activate'**
+  String get activate;
+
+  /// No description provided for @balanceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Balance'**
+  String get balanceLabel;
+
+  /// No description provided for @ticketplace.
+  ///
+  /// In en, this message translates to:
+  /// **'TICKETPLACE'**
+  String get ticketplace;
+
+  /// No description provided for @ticketplaceSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Resale between fans'**
+  String get ticketplaceSub;
+
+  /// No description provided for @storeSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Jerseys and official products'**
+  String get storeSub;
+
+  /// No description provided for @newsSub.
+  ///
+  /// In en, this message translates to:
+  /// **'All the club\'s news'**
+  String get newsSub;
+
+  /// No description provided for @fanZone.
+  ///
+  /// In en, this message translates to:
+  /// **'FAN ZONE'**
+  String get fanZone;
+
+  /// No description provided for @fanZoneSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Quiz, votes, man of the match'**
+  String get fanZoneSub;
+
+  /// No description provided for @chooseStore.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a store'**
+  String get chooseStore;
+
+  /// No description provided for @chooseStoreSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select the official Wydad AC store'**
+  String get chooseStoreSubtitle;
+
+  /// No description provided for @kappaSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Official Kappa store'**
+  String get kappaSubtitle;
+
+  /// No description provided for @wacBrand.
+  ///
+  /// In en, this message translates to:
+  /// **'WAC BRAND'**
+  String get wacBrand;
+
+  /// No description provided for @wacBrandSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'wacofficialbrand.com'**
+  String get wacBrandSubtitle;
+
+  /// No description provided for @ticketplaceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Ticketplace'**
+  String get ticketplaceLabel;
+
+  /// No description provided for @howToTopUpQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'How would you like to top up your account?'**
+  String get howToTopUpQuestion;
+
+  /// No description provided for @currentBalanceFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'Current balance: {balance} MAD'**
+  String currentBalanceFormat(String balance);
+
+  /// No description provided for @bankCardMethod.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank card'**
+  String get bankCardMethod;
+
+  /// No description provided for @bankCardMethodSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Top up using your bank card'**
+  String get bankCardMethodSubtitle;
+
+  /// No description provided for @bankTransferMethod.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank transfer'**
+  String get bankTransferMethod;
+
+  /// No description provided for @bankTransferMethodSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Top up via bank transfer'**
+  String get bankTransferMethodSubtitle;
+
+  /// No description provided for @cashAtAgency.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash at an agency'**
+  String get cashAtAgency;
+
+  /// No description provided for @cashAgencyMethodSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Top up at an agency'**
+  String get cashAgencyMethodSubtitle;
+
+  /// No description provided for @topUpMyAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Top up my account'**
+  String get topUpMyAccount;
+
+  /// No description provided for @bankTransferTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank transfer'**
+  String get bankTransferTitle;
+
+  /// No description provided for @bankTransferDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Make a bank transfer to your Wydad Pay account.'**
+  String get bankTransferDescription;
+
+  /// No description provided for @ribCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank details copied'**
+  String get ribCopied;
+
+  /// No description provided for @copyRib.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy RIB'**
+  String get copyRib;
+
+  /// No description provided for @share.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get share;
+
+  /// No description provided for @shareComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Sharing feature coming soon'**
+  String get shareComingSoon;
+
+  /// No description provided for @addBankAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a bank account'**
+  String get addBankAccount;
+
+  /// No description provided for @addBankAccountDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a bank account in your name to perform transactions.'**
+  String get addBankAccountDescription;
+
+  /// No description provided for @accountName.
+  ///
+  /// In en, this message translates to:
+  /// **'Account name'**
+  String get accountName;
+
+  /// No description provided for @accountNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'E.g. My bank account'**
+  String get accountNameHint;
+
+  /// No description provided for @ribWithLength.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank account number ({length} digits)'**
+  String ribWithLength(String length);
+
+  /// No description provided for @ribHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your bank account number'**
+  String get ribHint;
+
+  /// No description provided for @associatedPhoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Associated phone number'**
+  String get associatedPhoneNumber;
+
+  /// No description provided for @phoneNumberHint.
+  ///
+  /// In en, this message translates to:
+  /// **'E.g. 0612345678'**
+  String get phoneNumberHint;
+
+  /// No description provided for @accountNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Account name is required'**
+  String get accountNameRequired;
+
+  /// No description provided for @ribMustContain24Digits.
+  ///
+  /// In en, this message translates to:
+  /// **'The bank account number must contain 24 digits'**
+  String get ribMustContain24Digits;
+
+  /// No description provided for @phoneNumberRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone number is required'**
+  String get phoneNumberRequired;
+
+  /// No description provided for @addFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to add account'**
+  String get addFailed;
+
+  /// No description provided for @saveBankAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Save this account'**
+  String get saveBankAccount;
+
+  /// No description provided for @deleteAccountConfirmationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this account?'**
+  String get deleteAccountConfirmationTitle;
+
+  /// No description provided for @deleteAccountConfirmationMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete the account \"{name}\"?'**
+  String deleteAccountConfirmationMessage(String name);
+
+  /// No description provided for @deleteFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to delete account'**
+  String get deleteFailed;
+
+  /// No description provided for @noBankAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'No bank account registered'**
+  String get noBankAccount;
+
+  /// No description provided for @noBankAccountDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Add an account in your name to receive transfers and make withdrawals.'**
+  String get noBankAccountDescription;
+
+  /// No description provided for @myBankAccounts.
+  ///
+  /// In en, this message translates to:
+  /// **'My bank accounts'**
+  String get myBankAccounts;
+
+  /// No description provided for @defaultAccountName.
+  ///
+  /// In en, this message translates to:
+  /// **'My account'**
+  String get defaultAccountName;
+
+  /// No description provided for @ribMaskedFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'•••• {rib}'**
+  String ribMaskedFormat(String rib);
+
+  /// No description provided for @myWalletRib.
+  ///
+  /// In en, this message translates to:
+  /// **'My Wydad Pay bank details'**
+  String get myWalletRib;
+
+  /// No description provided for @accountHolder.
+  ///
+  /// In en, this message translates to:
+  /// **'Account holder'**
+  String get accountHolder;
+
+  /// No description provided for @defaultAccountHolder.
+  ///
+  /// In en, this message translates to:
+  /// **'Account holder'**
+  String get defaultAccountHolder;
+
+  /// No description provided for @bank.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank'**
+  String get bank;
+
+  /// No description provided for @defaultBank.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank'**
+  String get defaultBank;
+
+  /// No description provided for @transferInfo1.
+  ///
+  /// In en, this message translates to:
+  /// **'Use these bank details to transfer money to your Wydad Pay wallet.'**
+  String get transferInfo1;
+
+  /// No description provided for @transferInfo2.
+  ///
+  /// In en, this message translates to:
+  /// **'Check the bank details before confirming your transfer.'**
+  String get transferInfo2;
+
+  /// No description provided for @transferInfo3.
+  ///
+  /// In en, this message translates to:
+  /// **'The time required to receive the transfer depends on your bank.'**
+  String get transferInfo3;
+
+  /// No description provided for @walletTransferInvalidPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid phone number'**
+  String get walletTransferInvalidPhone;
+
+  /// No description provided for @walletTransferMinimumAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'The minimum amount is 10 MAD'**
+  String get walletTransferMinimumAmount;
+
+  /// No description provided for @walletTransferPinFourDigits.
+  ///
+  /// In en, this message translates to:
+  /// **'The PIN must contain 4 digits'**
+  String get walletTransferPinFourDigits;
+
+  /// No description provided for @walletTransferFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer failed. Please try again.'**
+  String get walletTransferFailed;
+
+  /// No description provided for @walletTransferSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer completed successfully'**
+  String get walletTransferSuccess;
+
+  /// No description provided for @walletTransferTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Money transfer'**
+  String get walletTransferTitle;
+
+  /// No description provided for @walletTransferRecipientQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Who would you like to send money to?'**
+  String get walletTransferRecipientQuestion;
+
+  /// No description provided for @walletTransferRecipientWalletActive.
+  ///
+  /// In en, this message translates to:
+  /// **'The recipient must have an active Wydad Pay account.'**
+  String get walletTransferRecipientWalletActive;
+
+  /// No description provided for @walletTransferPhoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone number'**
+  String get walletTransferPhoneNumber;
+
+  /// No description provided for @walletTransferContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get walletTransferContinue;
+
+  /// No description provided for @walletTransferAmountToSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount to send'**
+  String get walletTransferAmountToSend;
+
+  /// No description provided for @walletTransferOptionalMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional message'**
+  String get walletTransferOptionalMessage;
+
+  /// No description provided for @walletTransferNoteHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a message'**
+  String get walletTransferNoteHint;
+
+  /// No description provided for @walletTransferYouSend.
+  ///
+  /// In en, this message translates to:
+  /// **'You send'**
+  String get walletTransferYouSend;
+
+  /// No description provided for @walletTransferBeneficiary.
+  ///
+  /// In en, this message translates to:
+  /// **'Recipient'**
+  String get walletTransferBeneficiary;
+
+  /// No description provided for @walletTransferMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Message'**
+  String get walletTransferMessage;
+
+  /// No description provided for @walletTransferEnterPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your PIN'**
+  String get walletTransferEnterPin;
+
+  /// No description provided for @walletTransferConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm transfer'**
+  String get walletTransferConfirm;
+
+  /// No description provided for @walletTransferCreditSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Your transfer has been sent successfully'**
+  String get walletTransferCreditSent;
+
+  /// No description provided for @walletTransferDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get walletTransferDate;
+
+  /// No description provided for @walletTransferPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone'**
+  String get walletTransferPhone;
+
+  /// No description provided for @walletTransferReference.
+  ///
+  /// In en, this message translates to:
+  /// **'Reference'**
+  String get walletTransferReference;
+
+  /// No description provided for @walletTransferBackToWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to wallet'**
+  String get walletTransferBackToWallet;
+
+  /// No description provided for @walletTransferToRecipient.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer to {recipient}'**
+  String walletTransferToRecipient(String recipient);
+
+  /// No description provided for @walletWithdrawMyWydadPayAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'My Wydad Pay account'**
+  String get walletWithdrawMyWydadPayAccount;
+
+  /// No description provided for @walletWithdrawBankAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank account'**
+  String get walletWithdrawBankAccount;
+
+  /// No description provided for @walletWithdrawNoBankAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'No bank account registered'**
+  String get walletWithdrawNoBankAccount;
+
+  /// No description provided for @walletWithdrawPinFourDigits.
+  ///
+  /// In en, this message translates to:
+  /// **'The PIN must contain 4 digits'**
+  String get walletWithdrawPinFourDigits;
+
+  /// No description provided for @walletWithdrawMinimumAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'The minimum amount is 50 MAD'**
+  String get walletWithdrawMinimumAmount;
+
+  /// No description provided for @walletWithdrawInsufficientBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Insufficient balance'**
+  String get walletWithdrawInsufficientBalance;
+
+  /// No description provided for @walletWithdrawTransferFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank transfer failed. Please try again.'**
+  String get walletWithdrawTransferFailed;
+
+  /// No description provided for @walletWithdrawDeleteAccountTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this bank account?'**
+  String get walletWithdrawDeleteAccountTitle;
+
+  /// No description provided for @walletWithdrawDeleteAccountMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete the account \"{name}\"?'**
+  String walletWithdrawDeleteAccountMessage(String name);
+
+  /// No description provided for @walletWithdrawCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get walletWithdrawCancel;
+
+  /// No description provided for @walletWithdrawDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get walletWithdrawDelete;
+
+  /// No description provided for @walletWithdrawDeleteFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to delete account'**
+  String get walletWithdrawDeleteFailed;
+
+  /// No description provided for @walletWithdrawBankTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdraw to a bank account'**
+  String get walletWithdrawBankTitle;
+
+  /// No description provided for @walletWithdrawDestinationAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Destination account'**
+  String get walletWithdrawDestinationAccount;
+
+  /// No description provided for @walletWithdrawAddAnotherAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Add another account'**
+  String get walletWithdrawAddAnotherAccount;
+
+  /// No description provided for @walletWithdrawAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdrawal amount'**
+  String get walletWithdrawAmount;
+
+  /// No description provided for @walletWithdrawBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Balance: {amount} MAD'**
+  String walletWithdrawBalance(String amount);
+
+  /// No description provided for @walletWithdrawEstimatedReception.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated arrival'**
+  String get walletWithdrawEstimatedReception;
+
+  /// No description provided for @walletWithdrawEnterPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your PIN'**
+  String get walletWithdrawEnterPin;
+
+  /// No description provided for @walletWithdrawButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdraw {amount} MAD'**
+  String walletWithdrawButton(String amount);
+
+  /// No description provided for @walletWithdrawInMyName.
+  ///
+  /// In en, this message translates to:
+  /// **'In my name'**
+  String get walletWithdrawInMyName;
+
+  /// No description provided for @walletWithdrawRib.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank details: {rib}'**
+  String walletWithdrawRib(String rib);
+
+  /// No description provided for @walletWithdrawDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'Default'**
+  String get walletWithdrawDefault;
+
+  /// No description provided for @walletWithdrawEmptyAccounts.
+  ///
+  /// In en, this message translates to:
+  /// **'No bank account available'**
+  String get walletWithdrawEmptyAccounts;
+
+  /// No description provided for @walletWithdrawTransferSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Your withdrawal request has been sent'**
+  String get walletWithdrawTransferSent;
+
+  /// No description provided for @walletWithdrawToAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'To account {name}'**
+  String walletWithdrawToAccount(String name);
+
+  /// No description provided for @walletWithdrawStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get walletWithdrawStatus;
+
+  /// No description provided for @walletWithdrawProcessing.
+  ///
+  /// In en, this message translates to:
+  /// **'Processing'**
+  String get walletWithdrawProcessing;
+
+  /// No description provided for @walletWithdrawDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get walletWithdrawDate;
+
+  /// No description provided for @walletWithdrawEstimatedReceptionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated processing time'**
+  String get walletWithdrawEstimatedReceptionLabel;
+
+  /// No description provided for @walletWithdrawEstimatedReceptionValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Depending on bank processing times'**
+  String get walletWithdrawEstimatedReceptionValue;
+
+  /// No description provided for @walletWithdrawBackToWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to wallet'**
+  String get walletWithdrawBackToWallet;
+
+  /// No description provided for @walletWithdrawCashTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash withdrawal'**
+  String get walletWithdrawCashTitle;
+
+  /// No description provided for @walletWithdrawAmountToWithdraw.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount to withdraw'**
+  String get walletWithdrawAmountToWithdraw;
+
+  /// No description provided for @walletWithdrawCashBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Balance: {balance} MAD'**
+  String walletWithdrawCashBalance(String balance);
+
+  /// No description provided for @walletWithdrawCashDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdraw your money at any Chaabi Cash, Damane Cash or Tashilat agency.'**
+  String get walletWithdrawCashDescription;
+
+  /// No description provided for @walletWithdrawFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdrawal failed. Please try again.'**
+  String get walletWithdrawFailed;
+
+  /// No description provided for @walletWithdrawConnectionError.
+  ///
+  /// In en, this message translates to:
+  /// **'Connection error. Please try again.'**
+  String get walletWithdrawConnectionError;
+
+  /// No description provided for @walletWithdrawAgencyInstructions.
+  ///
+  /// In en, this message translates to:
+  /// **'Show this code and your national ID at the counter to collect your money.'**
+  String get walletWithdrawAgencyInstructions;
+
+  /// No description provided for @walletWithdrawGetCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Get my withdrawal code'**
+  String get walletWithdrawGetCode;
+
+  /// No description provided for @walletWithdrawCodeInstructions.
+  ///
+  /// In en, this message translates to:
+  /// **'Show this code and your national ID at the counter to collect your money.'**
+  String get walletWithdrawCodeInstructions;
+
+  /// No description provided for @walletWithdrawCodeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'WITHDRAWAL CODE'**
+  String get walletWithdrawCodeLabel;
+
+  /// No description provided for @walletWithdrawAmountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount'**
+  String get walletWithdrawAmountLabel;
+
+  /// No description provided for @walletWithdrawBlockedAmountInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'The amount is reserved from your balance. If you do not withdraw it before it expires, it will be returned to your balance.'**
+  String get walletWithdrawBlockedAmountInfo;
+
+  /// No description provided for @walletWithdrawBackToHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to home'**
+  String get walletWithdrawBackToHome;
+
+  /// No description provided for @walletWithdrawChooseMethod.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your withdrawal method'**
+  String get walletWithdrawChooseMethod;
+
+  /// No description provided for @walletWithdrawAvailableBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Available balance: {balance} MAD'**
+  String walletWithdrawAvailableBalance(String balance);
+
+  /// No description provided for @walletWithdrawBankSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Receive the money in your bank account'**
+  String get walletWithdrawBankSubtitle;
+
+  /// No description provided for @walletWithdrawCashAgency.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash withdrawal'**
+  String get walletWithdrawCashAgency;
+
+  /// No description provided for @walletWithdrawCashSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdraw money at a partner agency'**
+  String get walletWithdrawCashSubtitle;
+
+  /// No description provided for @walletWithdrawTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdraw money'**
+  String get walletWithdrawTitle;
+
+  /// No description provided for @quizLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading quiz...'**
+  String get quizLoading;
+
+  /// No description provided for @quizQuestionProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Question {current} of {total}'**
+  String quizQuestionProgress(String current, String total);
+
+  /// No description provided for @quizOfTheDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Quiz of the day'**
+  String get quizOfTheDay;
+
+  /// No description provided for @quizQuestionsAboutClub.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} questions about the club'**
+  String quizQuestionsAboutClub(String count);
+
+  /// No description provided for @quizQuestionsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} questions'**
+  String quizQuestionsCount(String count);
+
+  /// No description provided for @quizRewards.
+  ///
+  /// In en, this message translates to:
+  /// **'Rewards'**
+  String get quizRewards;
+
+  /// No description provided for @quizQuestionsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Questions'**
+  String get quizQuestionsLabel;
+
+  /// No description provided for @quizPerQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Per question'**
+  String get quizPerQuestion;
+
+  /// No description provided for @quizDuration.
+  ///
+  /// In en, this message translates to:
+  /// **'Duration'**
+  String get quizDuration;
+
+  /// No description provided for @quizSeconds.
+  ///
+  /// In en, this message translates to:
+  /// **'seconds'**
+  String get quizSeconds;
+
+  /// No description provided for @quizMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} minutes'**
+  String quizMinutes(String count);
+
+  /// No description provided for @quizCorrectAnswerLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Correct answer'**
+  String get quizCorrectAnswerLabel;
+
+  /// No description provided for @quizYourAnswerLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Your answer'**
+  String get quizYourAnswerLabel;
+
+  /// No description provided for @quizAnswerQuickly.
+  ///
+  /// In en, this message translates to:
+  /// **'Answer quickly!'**
+  String get quizAnswerQuickly;
+
+  /// No description provided for @quizGoodAnswers.
+  ///
+  /// In en, this message translates to:
+  /// **'Correct answers'**
+  String get quizGoodAnswers;
+
+  /// No description provided for @quizPoints.
+  ///
+  /// In en, this message translates to:
+  /// **'{points} points'**
+  String quizPoints(String points);
+
+  /// No description provided for @quizParticipatingInDraw.
+  ///
+  /// In en, this message translates to:
+  /// **'You are entered into the prize draw'**
+  String get quizParticipatingInDraw;
+
+  /// No description provided for @quizDefaultReward.
+  ///
+  /// In en, this message translates to:
+  /// **'Quiz reward'**
+  String get quizDefaultReward;
+
+  /// No description provided for @quizBackHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to home'**
+  String get quizBackHome;
+
+  /// No description provided for @quizScoreSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Your score of {score}/{total} has been saved'**
+  String quizScoreSaved(String score, String total);
+
+  /// No description provided for @quizTomorrowAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Next quiz tomorrow at'**
+  String get quizTomorrowAt;
+
+  /// No description provided for @quizCorrectAnswerExplanation.
+  ///
+  /// In en, this message translates to:
+  /// **'The correct answer is: {answer}'**
+  String quizCorrectAnswerExplanation(String answer);
+
+  /// No description provided for @myAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'My account'**
+  String get myAccount;
+
+  /// No description provided for @defaultAccountType.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get defaultAccountType;
+
+  /// No description provided for @namePlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Full name'**
+  String get namePlaceholder;
+
+  /// No description provided for @verified.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified'**
+  String get verified;
+
+  /// No description provided for @accountType.
+  ///
+  /// In en, this message translates to:
+  /// **'Account type'**
+  String get accountType;
+
+  /// No description provided for @accountLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Account level'**
+  String get accountLevel;
+
+  /// No description provided for @accountLevelWithValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Level {level}'**
+  String accountLevelWithValue(String level);
+
+  /// No description provided for @accountLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'Limit'**
+  String get accountLimit;
+
+  /// No description provided for @identityVerification.
+  ///
+  /// In en, this message translates to:
+  /// **'Identity verification'**
+  String get identityVerification;
+
+  /// No description provided for @kycPhoneVerified.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone verified'**
+  String get kycPhoneVerified;
+
+  /// No description provided for @kycPersonalInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal information'**
+  String get kycPersonalInfo;
+
+  /// No description provided for @kycAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Address'**
+  String get kycAddress;
+
+  /// No description provided for @kycCin.
+  ///
+  /// In en, this message translates to:
+  /// **'National ID'**
+  String get kycCin;
+
+  /// No description provided for @kycSelfie.
+  ///
+  /// In en, this message translates to:
+  /// **'Selfie'**
+  String get kycSelfie;
+
+  /// No description provided for @changePin.
+  ///
+  /// In en, this message translates to:
+  /// **'Change PIN'**
+  String get changePin;
+
+  /// No description provided for @logoutWalletSession.
+  ///
+  /// In en, this message translates to:
+  /// **'Log out of wallet'**
+  String get logoutWalletSession;
+
+  /// No description provided for @walletSessionClosed.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallet session closed'**
+  String get walletSessionClosed;
+
+  /// No description provided for @addAccountInMyName.
+  ///
+  /// In en, this message translates to:
+  /// **'Add an account in my name'**
+  String get addAccountInMyName;
+
+  /// No description provided for @addAccountSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a bank account in your name to perform your transactions easily.'**
+  String get addAccountSubtitle;
+
+  /// No description provided for @accountNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Account name'**
+  String get accountNameLabel;
+
+  /// No description provided for @ribLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank account number (RIB)'**
+  String get ribLabel;
+
+  /// No description provided for @useWalletPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Use wallet phone number'**
+  String get useWalletPhone;
+
+  /// No description provided for @associatedPhoneLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Associated phone number'**
+  String get associatedPhoneLabel;
+
+  /// No description provided for @phoneHintShort.
+  ///
+  /// In en, this message translates to:
+  /// **'6 12 34 56 78'**
+  String get phoneHintShort;
+
+  /// No description provided for @ribWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Check your bank account number carefully before saving. It cannot be changed afterwards.'**
+  String get ribWarning;
+
+  /// No description provided for @saveThisAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Save this account'**
+  String get saveThisAccount;
+
+  /// No description provided for @newBankAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'New bank account'**
+  String get newBankAccount;
+
+  /// No description provided for @ribMustBe24Digits.
+  ///
+  /// In en, this message translates to:
+  /// **'The bank account number must contain 24 digits'**
+  String get ribMustBe24Digits;
+
+  /// No description provided for @addBeneficiaryFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to add account'**
+  String get addBeneficiaryFailed;
+
+  /// No description provided for @receivePayment.
+  ///
+  /// In en, this message translates to:
+  /// **'Receive payment'**
+  String get receivePayment;
+
+  /// No description provided for @accountManagement.
+  ///
+  /// In en, this message translates to:
+  /// **'Account management'**
+  String get accountManagement;
+
+  /// No description provided for @payBill.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay a bill'**
+  String get payBill;
+
+  /// No description provided for @payMerchant.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay a merchant'**
+  String get payMerchant;
+
+  /// No description provided for @giftCards.
+  ///
+  /// In en, this message translates to:
+  /// **'Gift cards'**
+  String get giftCards;
+
+  /// No description provided for @myCards.
+  ///
+  /// In en, this message translates to:
+  /// **'My cards'**
+  String get myCards;
+
+  /// No description provided for @availableSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Available'**
+  String get availableSection;
+
+  /// No description provided for @soonSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming soon'**
+  String get soonSection;
+
+  /// No description provided for @soonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'SOON'**
+  String get soonLabel;
+
+  /// No description provided for @comingSoonMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'{label} coming soon'**
+  String comingSoonMessage(String label);
+
+  /// No description provided for @allServices.
+  ///
+  /// In en, this message translates to:
+  /// **'All services'**
+  String get allServices;
+
+  /// No description provided for @mobileRecharge.
+  ///
+  /// In en, this message translates to:
+  /// **'Mobile top-up'**
+  String get mobileRecharge;
+
+  /// No description provided for @topUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Top up'**
+  String get topUp;
+
+  /// No description provided for @transferAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer'**
+  String get transferAction;
+
+  /// No description provided for @withdraw.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdraw'**
+  String get withdraw;
+
+  /// No description provided for @history.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get history;
+
+  /// No description provided for @myWalletAccounts.
+  ///
+  /// In en, this message translates to:
+  /// **'My wallet accounts'**
+  String get myWalletAccounts;
+
+  /// No description provided for @eachAccountLinkedToPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Each account is linked to a phone number.'**
+  String get eachAccountLinkedToPhone;
+
+  /// No description provided for @phoneMaskPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'•••• •••• ••'**
+  String get phoneMaskPlaceholder;
+
+  /// No description provided for @accountHolderBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'{holder} · {balance} MAD'**
+  String accountHolderBalance(String holder, String balance);
+
+  /// No description provided for @holder.
+  ///
+  /// In en, this message translates to:
+  /// **'Account holder'**
+  String get holder;
+
+  /// No description provided for @balancePlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'—'**
+  String get balancePlaceholder;
+
+  /// No description provided for @accountAddSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Adding another account will be available soon'**
+  String get accountAddSoon;
+
+  /// No description provided for @addWalletAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Add wallet account'**
+  String get addWalletAccount;
+
+  /// No description provided for @historyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get historyTitle;
+
+  /// No description provided for @today.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get today;
+
+  /// No description provided for @filterRecharges.
+  ///
+  /// In en, this message translates to:
+  /// **'Top-ups'**
+  String get filterRecharges;
+
+  /// No description provided for @filterSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent'**
+  String get filterSent;
+
+  /// No description provided for @filterReceived.
+  ///
+  /// In en, this message translates to:
+  /// **'Received'**
+  String get filterReceived;
+
+  /// No description provided for @filterCashOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash out'**
+  String get filterCashOut;
+
+  /// No description provided for @noTransactions.
+  ///
+  /// In en, this message translates to:
+  /// **'No transactions'**
+  String get noTransactions;
+
+  /// No description provided for @levelLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Level'**
+  String get levelLabel;
+
+  /// No description provided for @subscriptionComingSoonMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Wydad Pay subscription will be available soon. Stay tuned!'**
+  String get subscriptionComingSoonMessage;
+
+  /// No description provided for @digitalWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'DIGITAL WALLET'**
+  String get digitalWallet;
+
+  /// No description provided for @verifiedBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'VERIFIED'**
+  String get verifiedBadge;
+
+  /// No description provided for @availableBalanceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Available balance'**
+  String get availableBalanceLabel;
+
+  /// No description provided for @moreAction.
+  ///
+  /// In en, this message translates to:
+  /// **'More'**
+  String get moreAction;
+
+  /// No description provided for @latestOperations.
+  ///
+  /// In en, this message translates to:
+  /// **'Latest operations'**
+  String get latestOperations;
+
+  /// No description provided for @seeAll.
+  ///
+  /// In en, this message translates to:
+  /// **'See all'**
+  String get seeAll;
+
+  /// No description provided for @noOperation.
+  ///
+  /// In en, this message translates to:
+  /// **'No operation'**
+  String get noOperation;
+
+  /// No description provided for @subscriptionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'SUBSCRIPTION'**
+  String get subscriptionLabel;
+
+  /// No description provided for @season2026_27.
+  ///
+  /// In en, this message translates to:
+  /// **'Season 2026/27'**
+  String get season2026_27;
+
+  /// No description provided for @supporterNamePlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Supporter name'**
+  String get supporterNamePlaceholder;
+
+  /// No description provided for @tribuneInfoPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Tribune • Seat'**
+  String get tribuneInfoPlaceholder;
+
+  /// No description provided for @showQRAccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Show QR access'**
+  String get showQRAccess;
+
+  /// No description provided for @nextMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Next match'**
+  String get nextMatch;
+
+  /// No description provided for @resellMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Resell match'**
+  String get resellMatch;
+
+  /// No description provided for @subscriptionDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscription details'**
+  String get subscriptionDetails;
+
+  /// No description provided for @renewSubscription.
+  ///
+  /// In en, this message translates to:
+  /// **'Renew subscription'**
+  String get renewSubscription;
+
+  /// No description provided for @amountToDeposit.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount to deposit'**
+  String get amountToDeposit;
+
+  /// No description provided for @cashAgencyDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash deposit at an agency'**
+  String get cashAgencyDescription;
+
+  /// No description provided for @minAmount50.
+  ///
+  /// In en, this message translates to:
+  /// **'The minimum amount is 50 MAD'**
+  String get minAmount50;
+
+  /// No description provided for @operationFailedContactSupport.
+  ///
+  /// In en, this message translates to:
+  /// **'Operation failed. Please contact support.'**
+  String get operationFailedContactSupport;
+
+  /// No description provided for @connectionErrorRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Connection error. Please try again.'**
+  String get connectionErrorRetry;
+
+  /// No description provided for @cashAgencyInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Show the code and your ID at any partner agency (Chaabi Cash, Damane Cash, Tashilat) to complete the deposit.'**
+  String get cashAgencyInfo;
+
+  /// No description provided for @getMyDepositCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Get my deposit code'**
+  String get getMyDepositCode;
+
+  /// No description provided for @presentCodeAndCin.
+  ///
+  /// In en, this message translates to:
+  /// **'Show this code and your national ID at the counter.'**
+  String get presentCodeAndCin;
+
+  /// No description provided for @depositCodeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'DEPOSIT CODE'**
+  String get depositCodeLabel;
+
+  /// No description provided for @amountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount'**
+  String get amountLabel;
+
+  /// No description provided for @balanceWillBeCredited.
+  ///
+  /// In en, this message translates to:
+  /// **'The amount will be credited to your balance once the deposit is verified.'**
+  String get balanceWillBeCredited;
+
+  /// No description provided for @cardsLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load cards'**
+  String get cardsLoadFailed;
+
+  /// No description provided for @amountBetween50And1000.
+  ///
+  /// In en, this message translates to:
+  /// **'The amount must be between 50 and 1000 MAD'**
+  String get amountBetween50And1000;
+
+  /// No description provided for @loadingCardsInProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading cards...'**
+  String get loadingCardsInProgress;
+
+  /// No description provided for @noSavedCard.
+  ///
+  /// In en, this message translates to:
+  /// **'No saved card'**
+  String get noSavedCard;
+
+  /// No description provided for @pleaseSelectCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a card'**
+  String get pleaseSelectCard;
+
+  /// No description provided for @invalidCvv.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid CVV'**
+  String get invalidCvv;
+
+  /// No description provided for @genericErrorContactSupport.
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred. Please contact support.'**
+  String get genericErrorContactSupport;
+
+  /// No description provided for @paymentCancelledOrFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment cancelled or failed'**
+  String get paymentCancelledOrFailed;
+
+  /// No description provided for @updatingBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Updating balance...'**
+  String get updatingBalance;
+
+  /// No description provided for @rechargeAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Top up'**
+  String get rechargeAction;
+
+  /// No description provided for @topUpYourWalletAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Top up your wallet'**
+  String get topUpYourWalletAmount;
+
+  /// No description provided for @transactionLimitLevel1.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction limit: 1000 MAD (Level 1)'**
+  String get transactionLimitLevel1;
+
+  /// No description provided for @totalToPay.
+  ///
+  /// In en, this message translates to:
+  /// **'Total to pay'**
+  String get totalToPay;
+
+  /// No description provided for @loadingCards.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading cards...'**
+  String get loadingCards;
+
+  /// No description provided for @retryLoadCards.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry loading cards'**
+  String get retryLoadCards;
+
+  /// No description provided for @noCardRefresh.
+  ///
+  /// In en, this message translates to:
+  /// **'No card. Tap to refresh'**
+  String get noCardRefresh;
+
+  /// No description provided for @paymentCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment card'**
+  String get paymentCard;
+
+  /// No description provided for @selectCardToPay.
+  ///
+  /// In en, this message translates to:
+  /// **'Select the card to pay {amount} MAD'**
+  String selectCardToPay(String amount);
+
+  /// No description provided for @noSavedCards.
+  ///
+  /// In en, this message translates to:
+  /// **'No saved cards'**
+  String get noSavedCards;
+
+  /// No description provided for @addCardFromProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a card from your profile'**
+  String get addCardFromProfile;
+
+  /// No description provided for @refresh.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh'**
+  String get refresh;
+
+  /// No description provided for @cardDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'Card'**
+  String get cardDefault;
+
+  /// No description provided for @maskedPanPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'•••• •••• •••• ••••'**
+  String get maskedPanPlaceholder;
+
+  /// No description provided for @confirmationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment confirmation'**
+  String get confirmationTitle;
+
+  /// No description provided for @enterCvvPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your card\'s CVV'**
+  String get enterCvvPrompt;
+
+  /// No description provided for @cvvHint.
+  ///
+  /// In en, this message translates to:
+  /// **'CVV'**
+  String get cvvHint;
+
+  /// No description provided for @rechargeDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Top-up complete!'**
+  String get rechargeDone;
+
+  /// No description provided for @rechargeSuccessMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your wallet has been topped up successfully.'**
+  String get rechargeSuccessMessage;
+
+  /// No description provided for @rechargedAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Recharged amount'**
+  String get rechargedAmount;
+
+  /// No description provided for @newBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'New balance'**
+  String get newBalance;
+
+  /// No description provided for @later.
+  ///
+  /// In en, this message translates to:
+  /// **'Later'**
+  String get later;
+
+  /// No description provided for @createYourAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Create your account'**
+  String get createYourAccount;
+
+  /// No description provided for @registerSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Join the Wydad community and access all features'**
+  String get registerSubtitle;
+
+  /// No description provided for @emailHint.
+  ///
+  /// In en, this message translates to:
+  /// **'your@email.com'**
+  String get emailHint;
+
+  /// No description provided for @phoneVerificationNote.
+  ///
+  /// In en, this message translates to:
+  /// **'A verification code will be sent to this number'**
+  String get phoneVerificationNote;
+
+  /// No description provided for @passwordLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get passwordLabel;
+
+  /// No description provided for @passwordMinHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum 6 characters'**
+  String get passwordMinHint;
+
+  /// No description provided for @passwordStrengthHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Use letters, numbers and symbols for a strong password'**
+  String get passwordStrengthHint;
+
+  /// No description provided for @confirmPasswordLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm password'**
+  String get confirmPasswordLabel;
+
+  /// No description provided for @confirmPasswordHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Re-enter your password'**
+  String get confirmPasswordHint;
+
+  /// No description provided for @acceptTermsText.
+  ///
+  /// In en, this message translates to:
+  /// **'I accept the terms and conditions'**
+  String get acceptTermsText;
+
+  /// No description provided for @acceptTermsRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'You must accept the terms and conditions'**
+  String get acceptTermsRequired;
+
+  /// No description provided for @createMyAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Create my account'**
+  String get createMyAccount;
+
+  /// No description provided for @alreadyRegistered.
+  ///
+  /// In en, this message translates to:
+  /// **'Already registered? '**
+  String get alreadyRegistered;
+
+  /// No description provided for @loginLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Log in'**
+  String get loginLink;
+
+  /// No description provided for @welcomeBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome back'**
+  String get welcomeBack;
+
+  /// No description provided for @loginSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Log in to access your tickets and wallet'**
+  String get loginSubtitle;
+
+  /// No description provided for @passwordHintLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your password'**
+  String get passwordHintLogin;
+
+  /// No description provided for @noAccountYet.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t have an account? '**
+  String get noAccountYet;
+
+  /// No description provided for @createAccountLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign up'**
+  String get createAccountLink;
+
+  /// No description provided for @onboardingSlide1Title.
+  ///
+  /// In en, this message translates to:
+  /// **'All your tickets in one place'**
+  String get onboardingSlide1Title;
+
+  /// No description provided for @onboardingSlide1Text.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy, transfer and manage your Wydad match tickets directly from the app.'**
+  String get onboardingSlide1Text;
+
+  /// No description provided for @onboardingSlide2Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Wydad Pay, your digital wallet'**
+  String get onboardingSlide2Title;
+
+  /// No description provided for @onboardingSlide2Text.
+  ///
+  /// In en, this message translates to:
+  /// **'Top up, transfer and pay easily with your secure Wydad Pay wallet.'**
+  String get onboardingSlide2Text;
+
+  /// No description provided for @onboardingSlide3Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Live the Wydad experience'**
+  String get onboardingSlide3Title;
+
+  /// No description provided for @onboardingSlide3Text.
+  ///
+  /// In en, this message translates to:
+  /// **'Vote for your man of the match, play quizzes and win exclusive prizes.'**
+  String get onboardingSlide3Text;
+
+  /// No description provided for @alreadyHaveAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'I already have an account'**
+  String get alreadyHaveAccount;
+
+  /// No description provided for @continueWithoutAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue without account'**
+  String get continueWithoutAccount;
+
+  /// No description provided for @mockTicketplace.
+  ///
+  /// In en, this message translates to:
+  /// **'TICKETPLACE'**
+  String get mockTicketplace;
+
+  /// No description provided for @mockResale.
+  ///
+  /// In en, this message translates to:
+  /// **'Resale between fans'**
+  String get mockResale;
+
+  /// No description provided for @mockFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'From'**
+  String get mockFrom;
+
+  /// No description provided for @mockFanZone.
+  ///
+  /// In en, this message translates to:
+  /// **'FAN ZONE'**
+  String get mockFanZone;
+
+  /// No description provided for @mockManOfMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Man of the match'**
+  String get mockManOfMatch;
+
+  /// No description provided for @mockLiveVote.
+  ///
+  /// In en, this message translates to:
+  /// **'LIVE VOTE'**
+  String get mockLiveVote;
+
+  /// No description provided for @mockTicket.
+  ///
+  /// In en, this message translates to:
+  /// **'TICKET'**
+  String get mockTicket;
+
+  /// No description provided for @mockPremium.
+  ///
+  /// In en, this message translates to:
+  /// **'PREMIUM'**
+  String get mockPremium;
+
+  /// No description provided for @mockStadium.
+  ///
+  /// In en, this message translates to:
+  /// **'Stadium'**
+  String get mockStadium;
+
+  /// No description provided for @mockGateSeat.
+  ///
+  /// In en, this message translates to:
+  /// **'Gate A · Seat 24'**
+  String get mockGateSeat;
+
+  /// No description provided for @mockSubscription.
+  ///
+  /// In en, this message translates to:
+  /// **'SUBSCRIPTION'**
+  String get mockSubscription;
+
+  /// No description provided for @mockSeason.
+  ///
+  /// In en, this message translates to:
+  /// **'Season 2026/27'**
+  String get mockSeason;
+
+  /// No description provided for @mockWydadPay.
+  ///
+  /// In en, this message translates to:
+  /// **'WYDAD PAY'**
+  String get mockWydadPay;
+
+  /// No description provided for @mockAvailableBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Available balance'**
+  String get mockAvailableBalance;
+
+  /// No description provided for @mockTopUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Top up'**
+  String get mockTopUp;
+
+  /// No description provided for @mockTransfer.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer'**
+  String get mockTransfer;
+
+  /// No description provided for @mockWithdraw.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdraw'**
+  String get mockWithdraw;
+
+  /// No description provided for @mockMore.
+  ///
+  /// In en, this message translates to:
+  /// **'More'**
+  String get mockMore;
+
+  /// No description provided for @mockMatchPlayer.
+  ///
+  /// In en, this message translates to:
+  /// **'Man of the match'**
+  String get mockMatchPlayer;
+
+  /// No description provided for @mockLive.
+  ///
+  /// In en, this message translates to:
+  /// **'LIVE'**
+  String get mockLive;
+
+  /// No description provided for @mockQuizOfDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Quiz of the day'**
+  String get mockQuizOfDay;
+
+  /// No description provided for @mockWinTickets.
+  ///
+  /// In en, this message translates to:
+  /// **'Win tickets'**
+  String get mockWinTickets;
+
+  /// No description provided for @chooseCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a category'**
+  String get chooseCategory;
+
+  /// No description provided for @quantityRequestedExceedsStock.
+  ///
+  /// In en, this message translates to:
+  /// **'Requested: {requested}, available: {available}'**
+  String quantityRequestedExceedsStock(String requested, String available);
+
+  /// No description provided for @productUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Product unavailable'**
+  String get productUnavailable;
+
+  /// No description provided for @maillotsOfficiel.
+  ///
+  /// In en, this message translates to:
+  /// **'OFFICIAL JERSEY'**
+  String get maillotsOfficiel;
+
+  /// No description provided for @visaMastercard3ds.
+  ///
+  /// In en, this message translates to:
+  /// **'Visa / Mastercard · 3D Secure'**
+  String get visaMastercard3ds;
+
+  /// No description provided for @wydadPayLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Wydad Pay'**
+  String get wydadPayLabel;
+
+  /// No description provided for @stadiumName.
+  ///
+  /// In en, this message translates to:
+  /// **'Stade Mohammed V'**
+  String get stadiumName;
+
+  /// No description provided for @transfersButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfers'**
+  String get transfersButton;
+
+  /// No description provided for @matchPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Match'**
+  String get matchPlaceholder;
+
+  /// No description provided for @pendingTransferLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending transfers ({count})'**
+  String pendingTransferLabel(String count);
+
+  /// No description provided for @senderPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Supporter'**
+  String get senderPlaceholder;
+
+  /// No description provided for @receivedTicketFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'Ticket received from {name}'**
+  String receivedTicketFrom(String name);
+
+  /// No description provided for @inPendingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get inPendingLabel;
+
+  /// No description provided for @transferAcceptInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept the transfer to receive the ticket in your account.'**
+  String get transferAcceptInfo;
+
+  /// No description provided for @refuse.
+  ///
+  /// In en, this message translates to:
+  /// **'Decline'**
+  String get refuse;
+
+  /// No description provided for @myOrdersSection.
+  ///
+  /// In en, this message translates to:
+  /// **'My orders ({count})'**
+  String myOrdersSection(String count);
+
+  /// No description provided for @paidLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid'**
+  String get paidLabel;
+
+  /// No description provided for @receivedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Received'**
+  String get receivedLabel;
+
+  /// No description provided for @transferredLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Transferred'**
+  String get transferredLabel;
+
+  /// No description provided for @walletLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Wydad Pay'**
+  String get walletLabel;
+
+  /// No description provided for @paidOnPayment.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid on {date} · via {method}'**
+  String paidOnPayment(String date, String method);
+
+  /// No description provided for @ticketFallback.
+  ///
+  /// In en, this message translates to:
+  /// **'Ticket'**
+  String get ticketFallback;
+
+  /// No description provided for @validLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Valid'**
+  String get validLabel;
+
+  /// No description provided for @ticketNumberLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'N°{number}'**
+  String ticketNumberLabel(String number);
+
+  /// No description provided for @billetterie.
+  ///
+  /// In en, this message translates to:
+  /// **'TICKETING'**
+  String get billetterie;
+
+  /// No description provided for @maxPerAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'max per account'**
+  String get maxPerAccount;
+
+  /// No description provided for @available.
+  ///
+  /// In en, this message translates to:
+  /// **'Available'**
+  String get available;
+
+  /// No description provided for @soldOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Sold out'**
+  String get soldOut;
+
+  /// No description provided for @fewSeatsLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'Few seats left'**
+  String get fewSeatsLeft;
+
+  /// No description provided for @paymentMethodLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment method'**
+  String get paymentMethodLabel;
+
+  /// No description provided for @insufficientBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Insufficient balance'**
+  String get insufficientBalance;
+
+  /// No description provided for @pinCodeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'PIN code'**
+  String get pinCodeLabel;
+
+  /// No description provided for @pinCodeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'4-digit PIN'**
+  String get pinCodeHint;
+
+  /// No description provided for @cardBankLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank card'**
+  String get cardBankLabel;
+
+  /// No description provided for @payByCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay securely by card'**
+  String get payByCard;
+
+  /// No description provided for @pinRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your 4-digit PIN'**
+  String get pinRequired;
+
+  /// No description provided for @genericErrorMsg.
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred. Please try again.'**
+  String get genericErrorMsg;
+
+  /// No description provided for @processingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Processing payment...'**
+  String get processingTitle;
+
+  /// No description provided for @processingSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Please wait a moment'**
+  String get processingSubtitle;
+
+  /// No description provided for @paymentSuccessTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment successful'**
+  String get paymentSuccessTitle;
+
+  /// No description provided for @paymentSuccessMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your payment has been processed successfully.'**
+  String get paymentSuccessMessage;
+
+  /// No description provided for @backToEvents.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to events'**
+  String get backToEvents;
+
+  /// No description provided for @myInfoSection.
+  ///
+  /// In en, this message translates to:
+  /// **'MY INFORMATION'**
+  String get myInfoSection;
+
+  /// No description provided for @passwordSection.
+  ///
+  /// In en, this message translates to:
+  /// **'PASSWORD'**
+  String get passwordSection;
+
+  /// No description provided for @supporterWac.
+  ///
+  /// In en, this message translates to:
+  /// **'WAC Supporter'**
+  String get supporterWac;
+
+  /// No description provided for @cinHintFull.
+  ///
+  /// In en, this message translates to:
+  /// **'Ex: BK123456'**
+  String get cinHintFull;
+
+  /// No description provided for @newPasswordHintMin.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum 8 characters, 1 uppercase, 1 lowercase, 1 number'**
+  String get newPasswordHintMin;
+
+  /// No description provided for @inProgressSection.
+  ///
+  /// In en, this message translates to:
+  /// **'IN PROGRESS'**
+  String get inProgressSection;
+
+  /// No description provided for @previousSection.
+  ///
+  /// In en, this message translates to:
+  /// **'PREVIOUS'**
+  String get previousSection;
+
+  /// No description provided for @myOrdersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'My Orders'**
+  String get myOrdersTitle;
+
+  /// No description provided for @orderLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Order'**
+  String get orderLabel;
+
+  /// No description provided for @itemsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} item(s)'**
+  String itemsCount(String count);
+
+  /// No description provided for @passedOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Placed on'**
+  String get passedOn;
+
+  /// No description provided for @deliveryExpected.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated delivery'**
+  String get deliveryExpected;
+
+  /// No description provided for @carrier.
+  ///
+  /// In en, this message translates to:
+  /// **'Carrier'**
+  String get carrier;
+
+  /// No description provided for @carrierName.
+  ///
+  /// In en, this message translates to:
+  /// **'Wydad Express'**
+  String get carrierName;
+
+  /// No description provided for @deliveredStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivered'**
+  String get deliveredStatus;
+
+  /// No description provided for @stepConfirmed.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirmed'**
+  String get stepConfirmed;
+
+  /// No description provided for @stepPrepared.
+  ///
+  /// In en, this message translates to:
+  /// **'Prepared'**
+  String get stepPrepared;
+
+  /// No description provided for @stepShipped.
+  ///
+  /// In en, this message translates to:
+  /// **'Shipped'**
+  String get stepShipped;
+
+  /// No description provided for @stepDelivered.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivered'**
+  String get stepDelivered;
+
+  /// No description provided for @statusLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get statusLabel;
+
+  /// No description provided for @paymentLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment'**
+  String get paymentLabel;
+
+  /// No description provided for @deliveryInfoSection.
+  ///
+  /// In en, this message translates to:
+  /// **'DELIVERY INFO'**
+  String get deliveryInfoSection;
+
+  /// No description provided for @daysShort.
+  ///
+  /// In en, this message translates to:
+  /// **'d'**
+  String get daysShort;
+
+  /// No description provided for @hoursShort.
+  ///
+  /// In en, this message translates to:
+  /// **'h'**
+  String get hoursShort;
+
+  /// No description provided for @transferTicketTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer ticket'**
+  String get transferTicketTitle;
+
+  /// No description provided for @transferTicketPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the recipient\'s email address'**
+  String get transferTicketPrompt;
+
+  /// No description provided for @errorCustomerId.
+  ///
+  /// In en, this message translates to:
+  /// **'Error: customer ID missing'**
+  String get errorCustomerId;
+
+  /// No description provided for @transferDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer completed'**
+  String get transferDone;
+
+  /// No description provided for @categoryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get categoryLabel;
+
+  /// No description provided for @ticketDetailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Ticket details'**
+  String get ticketDetailTitle;
+
+  /// No description provided for @ticketStatusLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Ticket status'**
+  String get ticketStatusLabel;
+
+  /// No description provided for @transferTicket.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer'**
+  String get transferTicket;
+
+  /// No description provided for @wallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallet'**
+  String get wallet;
+
+  /// No description provided for @referenceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Reference'**
+  String get referenceLabel;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

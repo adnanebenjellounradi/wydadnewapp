@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'l10n/app_localizations.dart';
 import 'wallet_service.dart';
 import 'wallet_add_beneficiary_page.dart';
 
 class WalletWithdrawBankPage extends StatefulWidget {
   final String token;
-  const WalletWithdrawBankPage({Key? key, required this.token})
-      : super(key: key);
+
+  const WalletWithdrawBankPage({
+    Key? key,
+    required this.token,
+  }) : super(key: key);
 
   @override
   State<WalletWithdrawBankPage> createState() =>
@@ -16,14 +20,16 @@ class WalletWithdrawBankPage extends StatefulWidget {
 class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
   final Color primary = const Color(0xFFA8161F);
 
-  int _step = 0; // 0: form, 1: succès
+  AppLocalizations get l10n => AppLocalizations.of(context)!;
+
+  int _step = 0;
   bool _isLoading = true;
   double _balance = 0;
+
   String _walletPhone = '';
   String _walletFullName = '';
   String _walletRib = '';
 
-  // Liste combinée : compte principal (wallet) + bénéficiaires
   List<Map<String, dynamic>> _accounts = [];
   int _selectedAccountIndex = 0;
 
@@ -51,7 +57,9 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
     setState(() => _isLoading = true);
 
     final wallet = await WalletService.getWalletInfo(widget.token);
-    final beneficiaries = await WalletService.getBeneficiaries(widget.token);
+    final beneficiaries =
+    await WalletService.getBeneficiaries(widget.token);
+
     if (!mounted) return;
 
     _walletPhone = wallet?['phone']?.toString() ?? '';
@@ -60,11 +68,11 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
 
     final accounts = <Map<String, dynamic>>[];
 
-    // 1) Compte principal du wallet (si RIB disponible)
+    // 1) Compte principal du wallet
     if (_walletRib.isNotEmpty) {
       accounts.add({
         'id': null,
-        'name': 'Mon compte Wydad Pay',
+        'name': l10n.walletWithdrawMyWydadPayAccount,
         'bank_name': 'Wydad Pay',
         'rib': _walletRib,
         'beneficiary_name': _walletFullName,
@@ -77,7 +85,8 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
     for (final b in beneficiaries) {
       accounts.add({
         'id': b['id'],
-        'name': b['name']?.toString() ?? 'Compte bancaire',
+        'name': b['name']?.toString() ??
+            l10n.walletWithdrawBankAccount,
         'bank_name': b['bank_name']?.toString() ?? '',
         'rib': b['rib']?.toString() ?? '',
         'beneficiary_name': b['name']?.toString() ?? '',
@@ -95,35 +104,48 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
   }
 
   void _showError(String msg) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(msg, style: const TextStyle(fontFamily: 'Inter')),
-      backgroundColor: primary,
-      behavior: SnackBarBehavior.floating,
-    ));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          msg,
+          style: const TextStyle(fontFamily: 'Inter'),
+        ),
+        backgroundColor: primary,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
   }
 
   Map<String, dynamic>? get _selectedAccount {
     if (_accounts.isEmpty) return null;
-    if (_selectedAccountIndex >= _accounts.length) return _accounts.first;
+
+    if (_selectedAccountIndex >= _accounts.length) {
+      return _accounts.first;
+    }
+
     return _accounts[_selectedAccountIndex];
   }
 
   Future<void> _submit() async {
     final account = _selectedAccount;
+
     if (account == null) {
-      _showError('Aucun compte bancaire enregistré');
+      _showError(l10n.walletWithdrawNoBankAccount);
       return;
     }
+
     if (_pin.length < 4) {
-      _showError('Code PIN à 4 chiffres');
+      _showError(l10n.walletWithdrawPinFourDigits);
       return;
     }
+
     if (_amountValue < 50) {
-      _showError('Montant minimum 50 MAD');
+      _showError(l10n.walletWithdrawMinimumAmount);
       return;
     }
+
     if (_amountValue > _balance) {
-      _showError('Solde insuffisant');
+      _showError(l10n.walletWithdrawInsufficientBalance);
       return;
     }
 
@@ -133,17 +155,22 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
       token: widget.token,
       amount: _amountValue,
       rib: account['rib']?.toString().replaceAll(' ', '') ?? '',
-      beneficiaryName: account['beneficiary_name']?.toString() ?? '',
+      beneficiaryName:
+      account['beneficiary_name']?.toString() ?? '',
       pin: _pin,
     );
 
     if (!mounted) return;
+
     setState(() => _isSubmitting = false);
 
     if (res != null && res['success'] == true) {
       setState(() => _step = 1);
     } else {
-      _showError(res?['message']?.toString() ?? 'Virement échoué');
+      _showError(
+        res?['message']?.toString() ??
+            l10n.walletWithdrawTransferFailed,
+      );
     }
   }
 
@@ -157,53 +184,81 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
         ),
       ),
     );
+
     if (added == true) {
-      _loadData(); // recharge la liste
+      _loadData();
     }
   }
 
-  Future<void> _onDeleteAccount(Map<String, dynamic> acc) async {
+  Future<void> _onDeleteAccount(
+      Map<String, dynamic> acc,
+      ) async {
     final id = acc['id'];
-    if (id == null) return; // compte wallet principal → pas supprimable
+
+    // Le compte principal du wallet ne peut pas être supprimé.
+    if (id == null) return;
+
     final confirm = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: const Color(0xFF23030A),
-        title: const Text('Supprimer ce compte ?',
-            style: TextStyle(fontFamily: 'Inter', color: Colors.white)),
+        title: Text(
+          l10n.walletWithdrawDeleteAccountTitle,
+          style: const TextStyle(
+            fontFamily: 'Inter',
+            color: Colors.white,
+          ),
+        ),
         content: Text(
-          'Le compte « ${acc['name']} » sera retiré de votre liste.',
+          l10n.walletWithdrawDeleteAccountMessage(
+            acc['name']?.toString() ?? '',
+          ),
           style: TextStyle(
-              fontFamily: 'Inter', color: Colors.white.withOpacity(0.8)),
+            fontFamily: 'Inter',
+            color: Colors.white.withOpacity(0.8),
+          ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: Text('Annuler',
-                style: TextStyle(
-                    fontFamily: 'Inter',
-                    color: Colors.white.withOpacity(0.7))),
+            child: Text(
+              l10n.walletWithdrawCancel,
+              style: TextStyle(
+                fontFamily: 'Inter',
+                color: Colors.white.withOpacity(0.7),
+              ),
+            ),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Supprimer',
-                style:
-                TextStyle(fontFamily: 'Inter', color: Color(0xFFD11A2A))),
+            child: Text(
+              l10n.walletWithdrawDelete,
+              style: const TextStyle(
+                fontFamily: 'Inter',
+                color: Color(0xFFD11A2A),
+              ),
+            ),
           ),
         ],
       ),
     );
+
     if (confirm != true) return;
 
     final res = await WalletService.deleteBeneficiary(
       token: widget.token,
       id: id as int,
     );
+
     if (!mounted) return;
+
     if (res != null && res['success'] == true) {
       _loadData();
     } else {
-      _showError(res?['message']?.toString() ?? 'Suppression échouée');
+      _showError(
+        res?['message']?.toString() ??
+            l10n.walletWithdrawDeleteFailed,
+      );
     }
   }
 
@@ -216,23 +271,33 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Color(0xFF4A0710), Color(0xFF23030A), Color(0xFF120104)],
+            colors: [
+              Color(0xFF4A0710),
+              Color(0xFF23030A),
+              Color(0xFF120104),
+            ],
             stops: [0.0, 0.3, 1.0],
           ),
         ),
         child: SafeArea(
           bottom: false,
           child: _isLoading
-              ? Center(child: CircularProgressIndicator(color: primary))
+              ? Center(
+            child: CircularProgressIndicator(color: primary),
+          )
               : Column(
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+                padding: const EdgeInsets.fromLTRB(
+                  16, 12, 16, 0,
+                ),
                 child: _buildHeader(),
               ),
               Expanded(
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 20),
+                  padding: const EdgeInsets.fromLTRB(
+                    16, 16, 16, 20,
+                  ),
                   child: _step == 0
                       ? _buildFormStep()
                       : _buildSuccessStep(),
@@ -258,16 +323,21 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
                 color: Colors.white.withOpacity(0.08),
-                border: Border.all(color: Colors.white.withOpacity(0.14)),
+                border: Border.all(
+                  color: Colors.white.withOpacity(0.14),
+                ),
               ),
-              child: const Icon(Icons.chevron_left,
-                  color: Colors.white, size: 20),
+              child: const Icon(
+                Icons.chevron_left,
+                color: Colors.white,
+                size: 20,
+              ),
             ),
           ),
           const Spacer(),
-          const Text(
-            'Vers mon compte bancaire',
-            style: TextStyle(
+          Text(
+            l10n.walletWithdrawBankTitle,
+            style: const TextStyle(
               fontSize: 17,
               fontWeight: FontWeight.w600,
               color: Colors.white,
@@ -282,13 +352,14 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
   }
 
   // ─── STEP 0 : FORMULAIRE ───
+
   Widget _buildFormStep() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Compte de destination',
-          style: TextStyle(
+        Text(
+          l10n.walletWithdrawDestinationAccount,
+          style: const TextStyle(
             fontFamily: 'Inter',
             fontSize: 14,
             fontWeight: FontWeight.w600,
@@ -296,6 +367,7 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
           ),
         ),
         const SizedBox(height: 10),
+
         if (_accounts.isEmpty)
           _emptyAccountCard()
         else
@@ -303,12 +375,19 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
             final i = entry.key;
             final acc = entry.value;
             final selected = i == _selectedAccountIndex;
+
             return Padding(
               padding: EdgeInsets.only(top: i == 0 ? 0 : 8),
-              child: _accountCard(acc, selected: selected, index: i),
+              child: _accountCard(
+                acc,
+                selected: selected,
+                index: i,
+              ),
             );
           }),
+
         const SizedBox(height: 8),
+
         GestureDetector(
           onTap: _onAddAccount,
           child: Container(
@@ -321,7 +400,7 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
             ),
             alignment: Alignment.center,
             child: Text(
-              '+ Ajouter un autre compte à mon nom',
+              l10n.walletWithdrawAddAnotherAccount,
               style: TextStyle(
                 fontFamily: 'Inter',
                 fontSize: 13,
@@ -331,15 +410,17 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
             ),
           ),
         ),
+
         const SizedBox(height: 20),
+
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.baseline,
           textBaseline: TextBaseline.alphabetic,
           children: [
-            const Text(
-              'Montant',
-              style: TextStyle(
+            Text(
+              l10n.walletWithdrawAmount,
+              style: const TextStyle(
                 fontFamily: 'Inter',
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
@@ -347,7 +428,9 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
               ),
             ),
             Text(
-              'Solde : ${_balance.toStringAsFixed(2).replaceAll('.', ',')} MAD',
+              l10n.walletWithdrawBalance(
+                _balance.toStringAsFixed(2).replaceAll('.', ','),
+              ),
               style: TextStyle(
                 fontFamily: 'Inter',
                 fontSize: 12,
@@ -356,14 +439,18 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
             ),
           ],
         ),
+
         const SizedBox(height: 10),
+
         Container(
           height: 68,
           padding: const EdgeInsets.symmetric(horizontal: 18),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
             color: Colors.white.withOpacity(0.06),
-            border: Border.all(color: Colors.white.withOpacity(0.18)),
+            border: Border.all(
+              color: Colors.white.withOpacity(0.18),
+            ),
           ),
           child: Row(
             children: [
@@ -375,8 +462,9 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
                     LengthLimitingTextInputFormatter(5),
                   ],
                   controller: TextEditingController(text: _amount)
-                    ..selection =
-                    TextSelection.collapsed(offset: _amount.length),
+                    ..selection = TextSelection.collapsed(
+                      offset: _amount.length,
+                    ),
                   onChanged: (v) => setState(() => _amount = v),
                   cursorColor: Colors.white,
                   style: const TextStyle(
@@ -411,19 +499,23 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
             ],
           ),
         ),
+
         const SizedBox(height: 10),
+
         Text(
-          'Réception estimée : 1 à 2 jours ouvrés',
+          l10n.walletWithdrawEstimatedReception,
           style: TextStyle(
             fontFamily: 'Inter',
             fontSize: 12,
             color: Colors.white.withOpacity(0.6),
           ),
         ),
+
         const SizedBox(height: 20),
+
         Center(
           child: Text(
-            'Saisissez votre code PIN',
+            l10n.walletWithdrawEnterPin,
             style: TextStyle(
               fontFamily: 'Inter',
               fontSize: 13,
@@ -432,7 +524,9 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
             ),
           ),
         ),
+
         const SizedBox(height: 8),
+
         TextField(
           controller: _pinCtrl,
           obscureText: true,
@@ -461,23 +555,33 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
             ),
             filled: true,
             fillColor: Colors.white.withOpacity(0.06),
-            contentPadding:
-            const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 18,
+              vertical: 16,
+            ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16),
-              borderSide: BorderSide(color: Colors.white.withOpacity(0.18)),
+              borderSide: BorderSide(
+                color: Colors.white.withOpacity(0.18),
+              ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16),
-              borderSide: BorderSide(color: Colors.white.withOpacity(0.18)),
+              borderSide: BorderSide(
+                color: Colors.white.withOpacity(0.18),
+              ),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16),
-              borderSide: BorderSide(color: Colors.white.withOpacity(0.6)),
+              borderSide: BorderSide(
+                color: Colors.white.withOpacity(0.6),
+              ),
             ),
           ),
         ),
+
         const SizedBox(height: 24),
+
         SizedBox(
           width: double.infinity,
           height: 54,
@@ -501,7 +605,7 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
               ),
             )
                 : Text(
-              'Retirer $_amount MAD',
+              l10n.walletWithdrawButton(_amount),
               style: const TextStyle(
                 fontFamily: 'Inter',
                 fontSize: 16,
@@ -514,13 +618,20 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
     );
   }
 
-  Widget _accountCard(Map<String, dynamic> acc,
-      {required bool selected, required int index}) {
+  // ─── CARTE COMPTE BANCAIRE ───
+
+  Widget _accountCard(
+      Map<String, dynamic> acc, {
+        required bool selected,
+        required int index,
+      }) {
     final bank = acc['bank_name']?.toString() ?? '';
     final name = acc['name']?.toString() ?? '[BANQUE]';
     final isDefault = acc['is_default'] == true;
     final isWallet = acc['is_wallet'] == true;
+
     final rib = acc['rib']?.toString().replaceAll(' ', '') ?? '';
+
     final maskedRib = rib.length >= 2
         ? '•••• •••• ${rib.substring(rib.length - 2)}'
         : '•••• •••• [XX]';
@@ -535,7 +646,9 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
           borderRadius: BorderRadius.circular(16),
           color: Colors.white.withOpacity(0.07),
           border: Border.all(
-            color: selected ? Colors.white : Colors.white.withOpacity(0.14),
+            color: selected
+                ? Colors.white
+                : Colors.white.withOpacity(0.14),
             width: selected ? 1.5 : 1,
           ),
         ),
@@ -549,24 +662,35 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
                 gradient: const LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [Color(0xFFB0141F), Color(0xFF860D16)],
+                  colors: [
+                    Color(0xFFB0141F),
+                    Color(0xFF860D16),
+                  ],
                 ),
-                border: Border.all(color: Colors.white.withOpacity(0.2)),
+                border: Border.all(
+                  color: Colors.white.withOpacity(0.2),
+                ),
               ),
               child: Icon(
-                isWallet ? Icons.account_balance_wallet : Icons.account_balance,
+                isWallet
+                    ? Icons.account_balance_wallet
+                    : Icons.account_balance,
                 color: Colors.white,
                 size: 20,
               ),
             ),
+
             const SizedBox(width: 12),
+
             Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    bank.isNotEmpty ? '$bank · à mon nom' : name,
+                    bank.isNotEmpty
+                        ? '$bank · ${l10n.walletWithdrawInMyName}'
+                        : name,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
@@ -576,15 +700,18 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
                       color: Colors.white,
                     ),
                   ),
+
                   const SizedBox(height: 2),
+
                   Text(
-                    'RIB $maskedRib',
+                    l10n.walletWithdrawRib(maskedRib),
                     style: TextStyle(
                       fontFamily: 'Inter',
                       fontSize: 12,
                       color: Colors.white.withOpacity(0.6),
                     ),
                   ),
+
                   if (bank.isNotEmpty && !isWallet)
                     Text(
                       name,
@@ -599,6 +726,7 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
                 ],
               ),
             ),
+
             if (isDefault)
               Container(
                 height: 22,
@@ -608,9 +736,9 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
                   color: const Color(0xFFF5CD52).withOpacity(0.14),
                 ),
                 alignment: Alignment.center,
-                child: const Text(
-                  'PAR DÉFAUT',
-                  style: TextStyle(
+                child: Text(
+                  l10n.walletWithdrawDefault,
+                  style: const TextStyle(
                     fontFamily: 'Inter',
                     fontSize: 10,
                     fontWeight: FontWeight.w700,
@@ -628,10 +756,16 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
                   border: selected
                       ? null
                       : Border.all(
-                      color: Colors.white.withOpacity(0.3), width: 2),
+                    color: Colors.white.withOpacity(0.3),
+                    width: 2,
+                  ),
                 ),
                 child: selected
-                    ? Icon(Icons.check, color: primary, size: 12)
+                    ? Icon(
+                  Icons.check,
+                  color: primary,
+                  size: 12,
+                )
                     : null,
               ),
           ],
@@ -640,22 +774,29 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
     );
   }
 
+  // ─── AUCUN COMPTE ───
+
   Widget _emptyAccountCard() {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         color: Colors.white.withOpacity(0.05),
-        border: Border.all(color: Colors.white.withOpacity(0.14)),
+        border: Border.all(
+          color: Colors.white.withOpacity(0.14),
+        ),
       ),
       child: Row(
         children: [
-          Icon(Icons.info_outline,
-              color: Colors.white.withOpacity(0.6), size: 16),
+          Icon(
+            Icons.info_outline,
+            color: Colors.white.withOpacity(0.6),
+            size: 16,
+          ),
           const SizedBox(width: 10),
           Expanded(
             child: Text(
-              'Aucun compte bancaire enregistré. Ajoutez-en un pour retirer.',
+              l10n.walletWithdrawEmptyAccounts,
               style: TextStyle(
                 fontFamily: 'Inter',
                 fontSize: 12,
@@ -669,13 +810,16 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
   }
 
   // ─── STEP 1 : SUCCÈS ───
+
   Widget _buildSuccessStep() {
     final account = _selectedAccount;
-    final name = account?['name']?.toString() ?? '[BANQUE]';
+    final name = account?['name']?.toString() ??
+        l10n.walletWithdrawBankAccount;
 
     return Column(
       children: [
         const SizedBox(height: 40),
+
         Container(
           width: 72,
           height: 72,
@@ -683,19 +827,27 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
             shape: BoxShape.circle,
             color: const Color(0xFFF5CD52).withOpacity(0.14),
           ),
-          child: const Icon(Icons.check, color: Color(0xFFF5CD52), size: 32),
+          child: const Icon(
+            Icons.check,
+            color: Color(0xFFF5CD52),
+            size: 32,
+          ),
         ),
+
         const SizedBox(height: 18),
-        const Text(
-          'Virement envoyé',
-          style: TextStyle(
+
+        Text(
+          l10n.walletWithdrawTransferSent,
+          style: const TextStyle(
             fontFamily: 'Inter',
             fontSize: 18,
             fontWeight: FontWeight.w600,
             color: Colors.white,
           ),
         ),
+
         const SizedBox(height: 10),
+
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -723,34 +875,51 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
             ),
           ],
         ),
+
         const SizedBox(height: 8),
+
         Text(
-          'vers $name',
+          l10n.walletWithdrawToAccount(name),
           style: TextStyle(
             fontFamily: 'Inter',
             fontSize: 11,
             color: Colors.white.withOpacity(0.72),
           ),
         ),
+
         const SizedBox(height: 22),
+
         Container(
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(14),
             color: Colors.white.withOpacity(0.05),
-            border: Border.all(color: Colors.white.withOpacity(0.10)),
+            border: Border.all(
+              color: Colors.white.withOpacity(0.10),
+            ),
           ),
           child: Column(
             children: [
-              _kv('Statut', 'En cours de traitement'),
+              _kv(
+                l10n.walletWithdrawStatus,
+                l10n.walletWithdrawProcessing,
+              ),
               const SizedBox(height: 8),
-              _kv('Date', DateTime.now().toString().substring(0, 16)),
+              _kv(
+                l10n.walletWithdrawDate,
+                DateTime.now().toString().substring(0, 16),
+              ),
               const SizedBox(height: 8),
-              _kv('Réception estimée', '1 à 2 jours ouvrés'),
+              _kv(
+                l10n.walletWithdrawEstimatedReceptionLabel,
+                l10n.walletWithdrawEstimatedReceptionValue,
+              ),
             ],
           ),
         ),
+
         const SizedBox(height: 22),
+
         SizedBox(
           width: double.infinity,
           height: 50,
@@ -769,9 +938,9 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
               ),
               elevation: 0,
             ),
-            child: const Text(
-              'Retour au Wallet',
-              style: TextStyle(
+            child: Text(
+              l10n.walletWithdrawBackToWallet,
+              style: const TextStyle(
                 fontFamily: 'Inter',
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
@@ -782,6 +951,8 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
       ],
     );
   }
+
+  // ─── LIGNE CLÉ / VALEUR ───
 
   Widget _kv(String k, String v) {
     return Row(

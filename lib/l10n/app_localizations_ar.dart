@@ -96,6 +96,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get emailCannotBeChanged => 'لا يمكن تغيير البريد الإلكتروني. اتصل بالدعم لتعديل عنوان البريد الإلكتروني.';
 
   @override
+  String get emailCannotBeChangedShort => 'لا يمكن تغيير البريد الإلكتروني';
+
+  @override
   String get lightMode => 'الوضع الفاتح';
 
   @override
@@ -106,6 +109,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get arabic => 'عربي';
+
+  @override
+  String get english => 'English';
 
   @override
   String get logout => 'تسجيل الخروج';
@@ -126,6 +132,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get store => 'المتجر';
+
+  @override
+  String get storeTitle => 'المتجر';
 
   @override
   String get outOfStock => 'نفد من المخزون';
@@ -153,6 +162,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get size => 'المقاس';
+
+  @override
+  String get sizeLabel => 'المقاس:';
 
   @override
   String get quantity => 'الكمية';
@@ -224,7 +236,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get error => 'خطأ';
 
   @override
-  String get ok => 'موافق';
+  String get ok => 'حسناً';
 
   @override
   String get unavailableProducts => 'منتجات غير متوفرة';
@@ -1190,25 +1202,25 @@ class AppLocalizationsAr extends AppLocalizations {
   String get unableToLoadQuizzes => 'تعذر تحميل الاختبارات';
 
   @override
-  String get alreadyParticipated => 'تمت المشاركة مسبقاً';
+  String get alreadyParticipated => 'لقد شاركت بالفعل';
 
   @override
-  String get alreadyParticipatedMessage => 'لقد شاركت بالفعل في هذا الاختبار. المشاركة تحسب مرة واحدة فقط.';
+  String get alreadyParticipatedMessage => 'لقد شاركت بالفعل في هذا الاختبار.';
 
   @override
-  String get missingInformation => 'معلومات مفقودة';
+  String get missingInformation => 'معلومات ناقصة';
 
   @override
-  String get loginToSaveScore => 'يرجى تسجيل الدخول لحفظ درجتك.';
+  String get loginToSaveScore => 'سجل الدخول لحفظ نتيجتك';
 
   @override
-  String get yourScoreOf => 'درجتك';
+  String get yourScoreOf => 'نتيجتك هي';
 
   @override
-  String get hasBeenSaved => 'تم حفظها!';
+  String get hasBeenSaved => 'تم حفظها';
 
   @override
-  String get scoreNotSaved => 'تعذر حفظ درجتك. يرجى المحاولة مرة أخرى.';
+  String get scoreNotSaved => 'لم يتم حفظ نتيجتك';
 
   @override
   String get easy => 'سهل';
@@ -1220,25 +1232,25 @@ class AppLocalizationsAr extends AppLocalizations {
   String get hard => 'صعب';
 
   @override
-  String get expert => '🏆 خبير!';
+  String get expert => 'خبير';
 
   @override
-  String get veryGood => '🌟 جيد جداً!';
+  String get veryGood => 'جيد جداً';
 
   @override
-  String get notBad => '👍 ليس سيئاً!';
+  String get notBad => 'ليس سيئاً';
 
   @override
-  String get studyMore => '📚 تحتاج إلى مزيد من المراجعة';
+  String get studyMore => 'تحتاج إلى مزيد من المراجعة';
 
   @override
-  String get keepGoing => '💪 واصل المحاولة!';
+  String get keepGoing => 'واصل التقدم';
 
   @override
   String get winnersList => 'قائمة الفائزين';
 
   @override
-  String get youParticipatedInQuiz => 'لقد شاركت في هذا الاختبار';
+  String get youParticipatedInQuiz => 'لقد شاركت في الاختبار';
 
   @override
   String get ticketsWillBeTransferred => 'سنقوم بتحويل التذاكر تلقائياً للفائزين';
@@ -1265,7 +1277,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get thisQuizIsSponsoredBy => 'هذا الاختبار برعاية';
 
   @override
-  String get youHaveAlreadyParticipated => 'لقد شاركت بالفعل';
+  String get youHaveAlreadyParticipated => 'لقد شاركت بالفعل في هذا الاختبار';
 
   @override
   String get startQuiz => 'ابدأ الاختبار';
@@ -1292,10 +1304,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get place => 'المركز';
 
   @override
-  String get correctAnswer => 'إجابة صحيحة!';
+  String get correctAnswer => 'إجابة صحيحة';
 
   @override
-  String get wrongAnswer => 'إجابة خاطئة...';
+  String get wrongAnswer => 'إجابة خاطئة';
 
   @override
   String get results => 'النتائج';
@@ -1637,4 +1649,1285 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get payOrder => 'ادفع الطلب';
+
+  @override
+  String get wydadAc => 'WYDAD AC';
+
+  @override
+  String get officialTicketing => 'التذاكر الرسمية';
+
+  @override
+  String get eventsTitle => 'المبارايات';
+
+  @override
+  String get reserveSeats => 'احجز مقعدك واشتراكك';
+
+  @override
+  String get reserve => 'احجز';
+
+  @override
+  String get wydadPay => 'WYDAD PAY';
+
+  @override
+  String get walletTagline => 'اشحن، حوّل، وادفع';
+
+  @override
+  String get activate => 'تفعيل';
+
+  @override
+  String get balanceLabel => 'الرصيد';
+
+  @override
+  String get ticketplace => 'TICKETPLACE';
+
+  @override
+  String get ticketplaceSub => 'إعادة البيع بين المشجعين';
+
+  @override
+  String get storeSub => 'القمصان والمنتجات الرسمية';
+
+  @override
+  String get newsSub => 'كل أخبار النادي وأحداثه';
+
+  @override
+  String get fanZone => 'منطقة المشجعين';
+
+  @override
+  String get fanZoneSub => 'مسابقات، تصويت، لاعب المباراة';
+
+  @override
+  String get chooseStore => 'اختر متجراً';
+
+  @override
+  String get chooseStoreSubtitle => 'اختر المتجر الرسمي لنادي الوداد الرياضي';
+
+  @override
+  String get kappaSubtitle => 'متجر Kappa الرسمي';
+
+  @override
+  String get wacBrand => 'WAC BRAND';
+
+  @override
+  String get wacBrandSubtitle => 'wacofficialbrand.com';
+
+  @override
+  String get ticketplaceLabel => 'Ticketplace';
+
+  @override
+  String get howToTopUpQuestion => 'كيف تريد تعبئة حسابك؟';
+
+  @override
+  String currentBalanceFormat(String balance) {
+    return 'الرصيد الحالي: $balance درهم';
+  }
+
+  @override
+  String get bankCardMethod => 'بطاقة بنكية';
+
+  @override
+  String get bankCardMethodSubtitle => 'اشحن رصيدك باستخدام بطاقتك البنكية';
+
+  @override
+  String get bankTransferMethod => 'تحويل بنكي';
+
+  @override
+  String get bankTransferMethodSubtitle => 'اشحن رصيدك عن طريق تحويل بنكي';
+
+  @override
+  String get cashAtAgency => 'نقداً في الوكالة';
+
+  @override
+  String get cashAgencyMethodSubtitle => 'اشحن رصيدك في إحدى الوكالات';
+
+  @override
+  String get topUpMyAccount => 'إعادة شحن حسابي';
+
+  @override
+  String get bankTransferTitle => 'تحويل بنكي';
+
+  @override
+  String get bankTransferDescription => 'قم بتحويل بنكي إلى حسابك في Wydad Pay.';
+
+  @override
+  String get ribCopied => 'تم نسخ المعلومات البنكية';
+
+  @override
+  String get copyRib => 'نسخ المعلومات';
+
+  @override
+  String get share => 'مشاركة';
+
+  @override
+  String get shareComingSoon => 'ميزة المشاركة ستكون متاحة قريباً';
+
+  @override
+  String get addBankAccount => 'إضافة حساب بنكي';
+
+  @override
+  String get addBankAccountDescription => 'أضف حساباً بنكياً باسمك لإجراء العمليات.';
+
+  @override
+  String get accountName => 'اسم الحساب';
+
+  @override
+  String get accountNameHint => 'مثال: حسابي البنكي';
+
+  @override
+  String ribWithLength(String length) {
+    return 'رقم الحساب البنكي ($length رقماً)';
+  }
+
+  @override
+  String get ribHint => 'أدخل رقم حسابك البنكي';
+
+  @override
+  String get associatedPhoneNumber => 'رقم الهاتف المرتبط';
+
+  @override
+  String get phoneNumberHint => 'مثال: 0612345678';
+
+  @override
+  String get accountNameRequired => 'اسم الحساب مطلوب';
+
+  @override
+  String get ribMustContain24Digits => 'يجب أن يتكون رقم الحساب البنكي من 24 رقماً';
+
+  @override
+  String get phoneNumberRequired => 'رقم الهاتف مطلوب';
+
+  @override
+  String get addFailed => 'تعذرت إضافة الحساب';
+
+  @override
+  String get saveBankAccount => 'حفظ هذا الحساب';
+
+  @override
+  String get deleteAccountConfirmationTitle => 'حذف هذا الحساب؟';
+
+  @override
+  String deleteAccountConfirmationMessage(String name) {
+    return 'هل أنت متأكد أنك تريد حذف الحساب \"$name\"؟';
+  }
+
+  @override
+  String get deleteFailed => 'تعذر حذف الحساب';
+
+  @override
+  String get noBankAccount => 'لا يوجد حساب بنكي مسجل';
+
+  @override
+  String get noBankAccountDescription => 'أضف حساباً بنكياً باسمك لاستقبال التحويلات وإجراء عمليات السحب.';
+
+  @override
+  String get myBankAccounts => 'حساباتي البنكية';
+
+  @override
+  String get defaultAccountName => 'حسابي';
+
+  @override
+  String ribMaskedFormat(String rib) {
+    return '•••• $rib';
+  }
+
+  @override
+  String get myWalletRib => 'معلومات حسابي البنكي في Wydad Pay';
+
+  @override
+  String get accountHolder => 'صاحب الحساب';
+
+  @override
+  String get defaultAccountHolder => 'صاحب الحساب';
+
+  @override
+  String get bank => 'البنك';
+
+  @override
+  String get defaultBank => 'البنك';
+
+  @override
+  String get transferInfo1 => 'استخدم هذه المعلومات البنكية لتحويل الأموال إلى محفظتك في Wydad Pay.';
+
+  @override
+  String get transferInfo2 => 'تحقق من المعلومات البنكية قبل تأكيد التحويل.';
+
+  @override
+  String get transferInfo3 => 'تعتمد مدة استلام التحويل على البنك الذي تتعامل معه.';
+
+  @override
+  String get walletTransferInvalidPhone => 'رقم الهاتف غير صالح';
+
+  @override
+  String get walletTransferMinimumAmount => 'الحد الأدنى للمبلغ هو 10 دراهم';
+
+  @override
+  String get walletTransferPinFourDigits => 'يجب أن يتكون رمز PIN من 4 أرقام';
+
+  @override
+  String get walletTransferFailed => 'فشل التحويل. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get walletTransferSuccess => 'تم التحويل بنجاح';
+
+  @override
+  String get walletTransferTitle => 'تحويل الأموال';
+
+  @override
+  String get walletTransferRecipientQuestion => 'إلى من تريد إرسال الأموال؟';
+
+  @override
+  String get walletTransferRecipientWalletActive => 'يجب أن يكون لدى المستفيد حساب Wydad Pay نشط.';
+
+  @override
+  String get walletTransferPhoneNumber => 'رقم الهاتف';
+
+  @override
+  String get walletTransferContinue => 'متابعة';
+
+  @override
+  String get walletTransferAmountToSend => 'المبلغ المراد إرساله';
+
+  @override
+  String get walletTransferOptionalMessage => 'رسالة اختيارية';
+
+  @override
+  String get walletTransferNoteHint => 'أضف رسالة';
+
+  @override
+  String get walletTransferYouSend => 'أنت ترسل';
+
+  @override
+  String get walletTransferBeneficiary => 'المستفيد';
+
+  @override
+  String get walletTransferMessage => 'الرسالة';
+
+  @override
+  String get walletTransferEnterPin => 'أدخل رمز PIN الخاص بك';
+
+  @override
+  String get walletTransferConfirm => 'تأكيد التحويل';
+
+  @override
+  String get walletTransferCreditSent => 'تم إرسال تحويلك بنجاح';
+
+  @override
+  String get walletTransferDate => 'التاريخ';
+
+  @override
+  String get walletTransferPhone => 'الهاتف';
+
+  @override
+  String get walletTransferReference => 'المرجع';
+
+  @override
+  String get walletTransferBackToWallet => 'العودة إلى المحفظة';
+
+  @override
+  String walletTransferToRecipient(String recipient) {
+    return 'تحويل إلى $recipient';
+  }
+
+  @override
+  String get walletWithdrawMyWydadPayAccount => 'حسابي في Wydad Pay';
+
+  @override
+  String get walletWithdrawBankAccount => 'حساب بنكي';
+
+  @override
+  String get walletWithdrawNoBankAccount => 'لا يوجد حساب بنكي مسجل';
+
+  @override
+  String get walletWithdrawPinFourDigits => 'يجب أن يتكون رمز PIN من 4 أرقام';
+
+  @override
+  String get walletWithdrawMinimumAmount => 'الحد الأدنى للمبلغ هو 50 درهماً';
+
+  @override
+  String get walletWithdrawInsufficientBalance => 'الرصيد غير كافٍ';
+
+  @override
+  String get walletWithdrawTransferFailed => 'فشل التحويل البنكي. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get walletWithdrawDeleteAccountTitle => 'حذف هذا الحساب البنكي؟';
+
+  @override
+  String walletWithdrawDeleteAccountMessage(String name) {
+    return 'هل أنت متأكد أنك تريد حذف الحساب \"$name\"؟';
+  }
+
+  @override
+  String get walletWithdrawCancel => 'إلغاء';
+
+  @override
+  String get walletWithdrawDelete => 'حذف';
+
+  @override
+  String get walletWithdrawDeleteFailed => 'تعذر حذف الحساب';
+
+  @override
+  String get walletWithdrawBankTitle => 'السحب إلى حساب بنكي';
+
+  @override
+  String get walletWithdrawDestinationAccount => 'الحساب المستلم';
+
+  @override
+  String get walletWithdrawAddAnotherAccount => 'إضافة حساب آخر';
+
+  @override
+  String get walletWithdrawAmount => 'المبلغ المراد سحبه';
+
+  @override
+  String walletWithdrawBalance(String amount) {
+    return 'الرصيد: $amount درهم';
+  }
+
+  @override
+  String get walletWithdrawEstimatedReception => 'موعد الاستلام المتوقع';
+
+  @override
+  String get walletWithdrawEnterPin => 'أدخل رمز PIN الخاص بك';
+
+  @override
+  String walletWithdrawButton(String amount) {
+    return 'سحب $amount درهم';
+  }
+
+  @override
+  String get walletWithdrawInMyName => 'باسمي';
+
+  @override
+  String walletWithdrawRib(String rib) {
+    return 'رقم الحساب البنكي: $rib';
+  }
+
+  @override
+  String get walletWithdrawDefault => 'افتراضي';
+
+  @override
+  String get walletWithdrawEmptyAccounts => 'لا توجد حسابات بنكية متاحة';
+
+  @override
+  String get walletWithdrawTransferSent => 'تم إرسال طلب السحب الخاص بك';
+
+  @override
+  String walletWithdrawToAccount(String name) {
+    return 'إلى الحساب $name';
+  }
+
+  @override
+  String get walletWithdrawStatus => 'الحالة';
+
+  @override
+  String get walletWithdrawProcessing => 'قيد المعالجة';
+
+  @override
+  String get walletWithdrawDate => 'التاريخ';
+
+  @override
+  String get walletWithdrawEstimatedReceptionLabel => 'مدة المعالجة المتوقعة';
+
+  @override
+  String get walletWithdrawEstimatedReceptionValue => 'حسب مدة المعالجة لدى البنك';
+
+  @override
+  String get walletWithdrawBackToWallet => 'العودة إلى المحفظة';
+
+  @override
+  String get walletWithdrawCashTitle => 'السحب نقداً';
+
+  @override
+  String get walletWithdrawAmountToWithdraw => 'المبلغ المراد سحبه';
+
+  @override
+  String walletWithdrawCashBalance(String balance) {
+    return 'الرصيد: $balance درهم';
+  }
+
+  @override
+  String get walletWithdrawCashDescription => 'اسحب أموالك من أي وكالة Chaabi Cash أو Damane Cash أو Tashilat.';
+
+  @override
+  String get walletWithdrawFailed => 'فشلت عملية السحب. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get walletWithdrawConnectionError => 'خطأ في الاتصال. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get walletWithdrawAgencyInstructions => 'قدم هذا الرمز وبطاقة هويتك الوطنية عند الشباك لاستلام أموالك.';
+
+  @override
+  String get walletWithdrawGetCode => 'الحصول على رمز السحب';
+
+  @override
+  String get walletWithdrawCodeInstructions => 'قدم هذا الرمز وبطاقة هويتك الوطنية عند الشباك لاستلام أموالك.';
+
+  @override
+  String get walletWithdrawCodeLabel => 'رمز السحب';
+
+  @override
+  String get walletWithdrawAmountLabel => 'المبلغ';
+
+  @override
+  String get walletWithdrawBlockedAmountInfo => 'تم حجز المبلغ من رصيدك. إذا لم تسحبه قبل انتهاء صلاحيته، فسيتم إرجاعه إلى رصيدك.';
+
+  @override
+  String get walletWithdrawBackToHome => 'العودة إلى الصفحة الرئيسية';
+
+  @override
+  String get walletWithdrawChooseMethod => 'اختر طريقة السحب';
+
+  @override
+  String walletWithdrawAvailableBalance(String balance) {
+    return 'الرصيد المتاح: $balance درهم';
+  }
+
+  @override
+  String get walletWithdrawBankSubtitle => 'استلام الأموال في حسابك البنكي';
+
+  @override
+  String get walletWithdrawCashAgency => 'السحب نقداً';
+
+  @override
+  String get walletWithdrawCashSubtitle => 'اسحب أموالك من وكالة شريكة';
+
+  @override
+  String get walletWithdrawTitle => 'سحب الأموال';
+
+  @override
+  String get quizLoading => 'جارٍ تحميل الاختبار...';
+
+  @override
+  String quizQuestionProgress(String current, String total) {
+    return 'السؤال $current من $total';
+  }
+
+  @override
+  String get quizOfTheDay => 'اختبار اليوم';
+
+  @override
+  String quizQuestionsAboutClub(String count) {
+    return '$count أسئلة حول النادي';
+  }
+
+  @override
+  String quizQuestionsCount(String count) {
+    return '$count أسئلة';
+  }
+
+  @override
+  String get quizRewards => 'المكافآت';
+
+  @override
+  String get quizQuestionsLabel => 'الأسئلة';
+
+  @override
+  String get quizPerQuestion => 'لكل سؤال';
+
+  @override
+  String get quizDuration => 'المدة';
+
+  @override
+  String get quizSeconds => 'ثوانٍ';
+
+  @override
+  String quizMinutes(String count) {
+    return '$count دقائق';
+  }
+
+  @override
+  String get quizCorrectAnswerLabel => 'الإجابة الصحيحة';
+
+  @override
+  String get quizYourAnswerLabel => 'إجابتك';
+
+  @override
+  String get quizAnswerQuickly => 'أجب بسرعة!';
+
+  @override
+  String get quizGoodAnswers => 'الإجابات الصحيحة';
+
+  @override
+  String quizPoints(String points) {
+    return '$points نقطة';
+  }
+
+  @override
+  String get quizParticipatingInDraw => 'أنت الآن مشارك في السحب على الجوائز';
+
+  @override
+  String get quizDefaultReward => 'جائزة الاختبار';
+
+  @override
+  String get quizBackHome => 'العودة إلى الصفحة الرئيسية';
+
+  @override
+  String quizScoreSaved(String score, String total) {
+    return 'تم حفظ نتيجتك: $score/$total';
+  }
+
+  @override
+  String get quizTomorrowAt => 'الاختبار القادم غداً على الساعة';
+
+  @override
+  String quizCorrectAnswerExplanation(String answer) {
+    return 'الإجابة الصحيحة هي: $answer';
+  }
+
+  @override
+  String get myAccount => 'حسابي';
+
+  @override
+  String get defaultAccountType => 'حساب';
+
+  @override
+  String get namePlaceholder => 'الاسم الكامل';
+
+  @override
+  String get verified => 'موثق';
+
+  @override
+  String get accountType => 'نوع الحساب';
+
+  @override
+  String get accountLevel => 'مستوى الحساب';
+
+  @override
+  String accountLevelWithValue(String level) {
+    return 'المستوى $level';
+  }
+
+  @override
+  String get accountLimit => 'الحد الأقصى';
+
+  @override
+  String get identityVerification => 'التحقق من الهوية';
+
+  @override
+  String get kycPhoneVerified => 'الهاتف موثق';
+
+  @override
+  String get kycPersonalInfo => 'المعلومات الشخصية';
+
+  @override
+  String get kycAddress => 'العنوان';
+
+  @override
+  String get kycCin => 'البطاقة الوطنية';
+
+  @override
+  String get kycSelfie => 'صورة شخصية';
+
+  @override
+  String get changePin => 'تغيير رمز PIN';
+
+  @override
+  String get logoutWalletSession => 'تسجيل الخروج من المحفظة';
+
+  @override
+  String get walletSessionClosed => 'تم إغلاق جلسة المحفظة';
+
+  @override
+  String get addAccountInMyName => 'إضافة حساب باسمي';
+
+  @override
+  String get addAccountSubtitle => 'أضف حساباً بنكياً باسمك لإجراء عملياتك بسهولة.';
+
+  @override
+  String get accountNameLabel => 'اسم الحساب';
+
+  @override
+  String get ribLabel => 'رقم الحساب البنكي (RIB)';
+
+  @override
+  String get useWalletPhone => 'استخدام رقم هاتف المحفظة';
+
+  @override
+  String get associatedPhoneLabel => 'رقم الهاتف المرتبط';
+
+  @override
+  String get phoneHintShort => '6 12 34 56 78';
+
+  @override
+  String get ribWarning => 'تحقق جيداً من رقم الحساب البنكي قبل الحفظ. لا يمكن تعديله بعد ذلك.';
+
+  @override
+  String get saveThisAccount => 'حفظ هذا الحساب';
+
+  @override
+  String get newBankAccount => 'حساب بنكي جديد';
+
+  @override
+  String get ribMustBe24Digits => 'يجب أن يتكون رقم الحساب البنكي من 24 رقماً';
+
+  @override
+  String get addBeneficiaryFailed => 'تعذرت إضافة الحساب';
+
+  @override
+  String get receivePayment => 'استلام دفعة';
+
+  @override
+  String get accountManagement => 'إدارة الحساب';
+
+  @override
+  String get payBill => 'دفع فاتورة';
+
+  @override
+  String get payMerchant => 'الدفع لدى تاجر';
+
+  @override
+  String get giftCards => 'بطاقات الهدايا';
+
+  @override
+  String get myCards => 'بطاقاتي';
+
+  @override
+  String get availableSection => 'متاحة';
+
+  @override
+  String get soonSection => 'قريباً';
+
+  @override
+  String get soonLabel => 'قريباً';
+
+  @override
+  String comingSoonMessage(String label) {
+    return '$label قادم قريباً';
+  }
+
+  @override
+  String get allServices => 'جميع الخدمات';
+
+  @override
+  String get mobileRecharge => 'شحن الهاتف';
+
+  @override
+  String get topUp => 'إعادة الشحن';
+
+  @override
+  String get transferAction => 'تحويل';
+
+  @override
+  String get withdraw => 'سحب';
+
+  @override
+  String get history => 'السجل';
+
+  @override
+  String get myWalletAccounts => 'حسابات محفظتي';
+
+  @override
+  String get eachAccountLinkedToPhone => 'كل حساب مرتبط برقم هاتف.';
+
+  @override
+  String get phoneMaskPlaceholder => '•••• •••• ••';
+
+  @override
+  String accountHolderBalance(String holder, String balance) {
+    return '$holder · $balance درهم';
+  }
+
+  @override
+  String get holder => 'صاحب الحساب';
+
+  @override
+  String get balancePlaceholder => '—';
+
+  @override
+  String get accountAddSoon => 'إضافة حساب آخر ستكون متاحة قريباً';
+
+  @override
+  String get addWalletAccount => 'إضافة حساب محفظة';
+
+  @override
+  String get historyTitle => 'السجل';
+
+  @override
+  String get today => 'اليوم';
+
+  @override
+  String get filterRecharges => 'إعادة الشحن';
+
+  @override
+  String get filterSent => 'المرسلة';
+
+  @override
+  String get filterReceived => 'المستلمة';
+
+  @override
+  String get filterCashOut => 'السحب';
+
+  @override
+  String get noTransactions => 'لا توجد عمليات';
+
+  @override
+  String get levelLabel => 'المستوى';
+
+  @override
+  String get subscriptionComingSoonMessage => 'الاشتراك في Wydad Pay سيصبح متاحاً قريباً. ابقَ على اطلاع!';
+
+  @override
+  String get digitalWallet => 'المحفظة الرقمية';
+
+  @override
+  String get verifiedBadge => 'موثق';
+
+  @override
+  String get availableBalanceLabel => 'الرصيد المتاح';
+
+  @override
+  String get moreAction => 'المزيد';
+
+  @override
+  String get latestOperations => 'آخر العمليات';
+
+  @override
+  String get seeAll => 'عرض الكل';
+
+  @override
+  String get noOperation => 'لا توجد عمليات';
+
+  @override
+  String get subscriptionLabel => 'الاشتراك';
+
+  @override
+  String get season2026_27 => 'موسم 2026/27';
+
+  @override
+  String get supporterNamePlaceholder => 'اسم المشجع';
+
+  @override
+  String get tribuneInfoPlaceholder => 'المدرج • المقعد';
+
+  @override
+  String get showQRAccess => 'عرض رمز QR';
+
+  @override
+  String get nextMatch => 'المباراة القادمة';
+
+  @override
+  String get resellMatch => 'إعادة بيع المباراة';
+
+  @override
+  String get subscriptionDetails => 'تفاصيل الاشتراك';
+
+  @override
+  String get renewSubscription => 'تجديد الاشتراك';
+
+  @override
+  String get amountToDeposit => 'المبلغ المراد إيداعه';
+
+  @override
+  String get cashAgencyDescription => 'إيداع نقدي في الوكالة';
+
+  @override
+  String get minAmount50 => 'الحد الأدنى للمبلغ هو 50 درهماً';
+
+  @override
+  String get operationFailedContactSupport => 'فشلت العملية. يرجى الاتصال بالدعم.';
+
+  @override
+  String get connectionErrorRetry => 'خطأ في الاتصال. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get cashAgencyInfo => 'قدم الرمز وبطاقة الهوية في أي وكالة شريكة (Chaabi Cash, Damane Cash, Tashilat) لإتمام الإيداع.';
+
+  @override
+  String get getMyDepositCode => 'الحصول على رمز الإيداع';
+
+  @override
+  String get presentCodeAndCin => 'قدم هذا الرمز وبطاقة هويتك الوطنية عند الشباك.';
+
+  @override
+  String get depositCodeLabel => 'رمز الإيداع';
+
+  @override
+  String get amountLabel => 'المبلغ';
+
+  @override
+  String get balanceWillBeCredited => 'سيتم إضافة المبلغ إلى رصيدك بعد التحقق من الإيداع.';
+
+  @override
+  String get cardsLoadFailed => 'تعذر تحميل البطاقات';
+
+  @override
+  String get amountBetween50And1000 => 'يجب أن يكون المبلغ بين 50 و 1000 درهم';
+
+  @override
+  String get loadingCardsInProgress => 'جاري تحميل البطاقات...';
+
+  @override
+  String get noSavedCard => 'لا توجد بطاقة محفوظة';
+
+  @override
+  String get pleaseSelectCard => 'يرجى اختيار بطاقة';
+
+  @override
+  String get invalidCvv => 'رمز CVV غير صالح';
+
+  @override
+  String get genericErrorContactSupport => 'حدث خطأ. يرجى الاتصال بالدعم.';
+
+  @override
+  String get paymentCancelledOrFailed => 'تم إلغاء الدفع أو فشل';
+
+  @override
+  String get updatingBalance => 'جاري تحديث الرصيد...';
+
+  @override
+  String get rechargeAction => 'إعادة الشحن';
+
+  @override
+  String get topUpYourWalletAmount => 'اشحن محفظتك';
+
+  @override
+  String get transactionLimitLevel1 => 'الحد الأقصى للمعاملة: 1000 درهم (المستوى 1)';
+
+  @override
+  String get totalToPay => 'الإجمالي المستحق';
+
+  @override
+  String get loadingCards => 'جاري تحميل البطاقات...';
+
+  @override
+  String get retryLoadCards => 'إعادة محاولة تحميل البطاقات';
+
+  @override
+  String get noCardRefresh => 'لا توجد بطاقة. اضغط للتحديث';
+
+  @override
+  String get paymentCard => 'بطاقة الدفع';
+
+  @override
+  String selectCardToPay(String amount) {
+    return 'اختر البطاقة لدفع $amount درهم';
+  }
+
+  @override
+  String get noSavedCards => 'لا توجد بطاقات محفوظة';
+
+  @override
+  String get addCardFromProfile => 'أضف بطاقة من ملفك الشخصي';
+
+  @override
+  String get refresh => 'تحديث';
+
+  @override
+  String get cardDefault => 'بطاقة';
+
+  @override
+  String get maskedPanPlaceholder => '•••• •••• •••• ••••';
+
+  @override
+  String get confirmationTitle => 'تأكيد الدفع';
+
+  @override
+  String get enterCvvPrompt => 'أدخل رمز CVV الخاص ببطاقتك';
+
+  @override
+  String get cvvHint => 'CVV';
+
+  @override
+  String get rechargeDone => 'تمت إعادة الشحن!';
+
+  @override
+  String get rechargeSuccessMessage => 'تمت إعادة شحن محفظتك بنجاح.';
+
+  @override
+  String get rechargedAmount => 'المبلغ المشحون';
+
+  @override
+  String get newBalance => 'الرصيد الجديد';
+
+  @override
+  String get later => 'لاحقاً';
+
+  @override
+  String get createYourAccount => 'أنشئ حسابك';
+
+  @override
+  String get registerSubtitle => 'انضم إلى مجتمع الوداد واستفد من جميع الميزات';
+
+  @override
+  String get emailHint => 'your@email.com';
+
+  @override
+  String get phoneVerificationNote => 'سيتم إرسال رمز التحقق إلى هذا الرقم';
+
+  @override
+  String get passwordLabel => 'كلمة المرور';
+
+  @override
+  String get passwordMinHint => '6 أحرف على الأقل';
+
+  @override
+  String get passwordStrengthHint => 'استخدم الحروف والأرقام والرموز لكلمة مرور قوية';
+
+  @override
+  String get confirmPasswordLabel => 'تأكيد كلمة المرور';
+
+  @override
+  String get confirmPasswordHint => 'أعد إدخال كلمة المرور';
+
+  @override
+  String get acceptTermsText => 'أوافق على الشروط والأحكام';
+
+  @override
+  String get acceptTermsRequired => 'يجب الموافقة على الشروط والأحكام';
+
+  @override
+  String get createMyAccount => 'إنشاء حسابي';
+
+  @override
+  String get alreadyRegistered => 'مسجل بالفعل؟ ';
+
+  @override
+  String get loginLink => 'تسجيل الدخول';
+
+  @override
+  String get welcomeBack => 'مرحبًا بعودتك';
+
+  @override
+  String get loginSubtitle => 'سجّل الدخول للوصول إلى تذاكرك ومحفظتك';
+
+  @override
+  String get passwordHintLogin => 'أدخل كلمة المرور';
+
+  @override
+  String get noAccountYet => 'ليس لديك حساب؟ ';
+
+  @override
+  String get createAccountLink => 'سجل الآن';
+
+  @override
+  String get onboardingSlide1Title => 'جميع تذاكرك في مكان واحد';
+
+  @override
+  String get onboardingSlide1Text => 'اشترِ، حوّل، وأدر تذاكر مباريات الوداد مباشرة من التطبيق.';
+
+  @override
+  String get onboardingSlide2Title => 'Wydad Pay، محفظتك الرقمية';
+
+  @override
+  String get onboardingSlide2Text => 'اشحن، حوّل، وادفع بسهولة مع محفظة Wydad Pay الآمنة.';
+
+  @override
+  String get onboardingSlide3Title => 'عِش تجربة الوداد';
+
+  @override
+  String get onboardingSlide3Text => 'صوّت لرجل المباراة، شارك في الاختبارات، واربح جوائز حصرية.';
+
+  @override
+  String get alreadyHaveAccount => 'لدي حساب بالفعل';
+
+  @override
+  String get continueWithoutAccount => 'المتابعة بدون حساب';
+
+  @override
+  String get mockTicketplace => 'TICKETPLACE';
+
+  @override
+  String get mockResale => 'إعادة البيع بين المشجعين';
+
+  @override
+  String get mockFrom => 'ابتداءً من';
+
+  @override
+  String get mockFanZone => 'منطقة المشجعين';
+
+  @override
+  String get mockManOfMatch => 'رجل المباراة';
+
+  @override
+  String get mockLiveVote => 'تصويت مباشر';
+
+  @override
+  String get mockTicket => 'تذكرة';
+
+  @override
+  String get mockPremium => 'بريميوم';
+
+  @override
+  String get mockStadium => 'الملعب';
+
+  @override
+  String get mockGateSeat => 'البوابة A · المقعد 24';
+
+  @override
+  String get mockSubscription => 'اشتراك';
+
+  @override
+  String get mockSeason => 'موسم 2026/27';
+
+  @override
+  String get mockWydadPay => 'WYDAD PAY';
+
+  @override
+  String get mockAvailableBalance => 'الرصيد المتاح';
+
+  @override
+  String get mockTopUp => 'إعادة الشحن';
+
+  @override
+  String get mockTransfer => 'تحويل';
+
+  @override
+  String get mockWithdraw => 'سحب';
+
+  @override
+  String get mockMore => 'المزيد';
+
+  @override
+  String get mockMatchPlayer => 'رجل المباراة';
+
+  @override
+  String get mockLive => 'مباشر';
+
+  @override
+  String get mockQuizOfDay => 'اختبار اليوم';
+
+  @override
+  String get mockWinTickets => 'اربح تذاكر';
+
+  @override
+  String get chooseCategory => 'اختر فئة';
+
+  @override
+  String quantityRequestedExceedsStock(String requested, String available) {
+    return 'المطلوب: $requested، المتاح: $available';
+  }
+
+  @override
+  String get productUnavailable => 'المنتج غير متاح';
+
+  @override
+  String get maillotsOfficiel => 'القميص الرسمي';
+
+  @override
+  String get visaMastercard3ds => 'Visa / Mastercard · 3D Secure';
+
+  @override
+  String get wydadPayLabel => 'Wydad Pay';
+
+  @override
+  String get stadiumName => 'ملعب محمد الخامس';
+
+  @override
+  String get transfersButton => 'التحويلات';
+
+  @override
+  String get matchPlaceholder => 'مباراة';
+
+  @override
+  String pendingTransferLabel(String count) {
+    return 'التحويلات المعلقة ($count)';
+  }
+
+  @override
+  String get senderPlaceholder => 'مشجع';
+
+  @override
+  String receivedTicketFrom(String name) {
+    return 'تذكرة مستلمة من $name';
+  }
+
+  @override
+  String get inPendingLabel => 'قيد الانتظار';
+
+  @override
+  String get transferAcceptInfo => 'اقبل التحويل لاستلام التذكرة في حسابك.';
+
+  @override
+  String get refuse => 'رفض';
+
+  @override
+  String myOrdersSection(String count) {
+    return 'طلباتي ($count)';
+  }
+
+  @override
+  String get paidLabel => 'مدفوع';
+
+  @override
+  String get receivedLabel => 'مستلم';
+
+  @override
+  String get transferredLabel => 'محوّل';
+
+  @override
+  String get walletLabel => 'Wydad Pay';
+
+  @override
+  String paidOnPayment(String date, String method) {
+    return 'تم الدفع في $date · عبر $method';
+  }
+
+  @override
+  String get ticketFallback => 'تذكرة';
+
+  @override
+  String get validLabel => 'صالح';
+
+  @override
+  String ticketNumberLabel(String number) {
+    return 'رقم $number';
+  }
+
+  @override
+  String get billetterie => 'التذاكر';
+
+  @override
+  String get maxPerAccount => 'الأقصى لكل حساب';
+
+  @override
+  String get available => 'متاح';
+
+  @override
+  String get soldOut => 'نفد';
+
+  @override
+  String get fewSeatsLeft => 'بقي عدد قليل من المقاعد';
+
+  @override
+  String get paymentMethodLabel => 'طريقة الدفع';
+
+  @override
+  String get insufficientBalance => 'الرصيد غير كافٍ';
+
+  @override
+  String get pinCodeLabel => 'رمز PIN';
+
+  @override
+  String get pinCodeHint => 'رمز PIN مكون من 4 أرقام';
+
+  @override
+  String get cardBankLabel => 'بطاقة بنكية';
+
+  @override
+  String get payByCard => 'الدفع بأمان بالبطاقة';
+
+  @override
+  String get pinRequired => 'يرجى إدخال رمز PIN المكون من 4 أرقام';
+
+  @override
+  String get genericErrorMsg => 'حدث خطأ. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get processingTitle => 'جاري معالجة الدفع...';
+
+  @override
+  String get processingSubtitle => 'يرجى الانتظار لحظة';
+
+  @override
+  String get paymentSuccessTitle => 'تم الدفع بنجاح';
+
+  @override
+  String get paymentSuccessMessage => 'تمت معالجة دفعتك بنجاح.';
+
+  @override
+  String get backToEvents => 'العودة إلى المبارايات';
+
+  @override
+  String get myInfoSection => 'معلوماتي';
+
+  @override
+  String get passwordSection => 'كلمة المرور';
+
+  @override
+  String get supporterWac => 'مشجع الوداد';
+
+  @override
+  String get cinHintFull => 'مثال: BK123456';
+
+  @override
+  String get newPasswordHintMin => '8 أحرف على الأقل، حرف كبير، حرف صغير، ورقم';
+
+  @override
+  String get inProgressSection => 'قيد المعالجة';
+
+  @override
+  String get previousSection => 'السابقة';
+
+  @override
+  String get myOrdersTitle => 'طلباتي';
+
+  @override
+  String get orderLabel => 'طلب';
+
+  @override
+  String itemsCount(String count) {
+    return '$count عنصر';
+  }
+
+  @override
+  String get passedOn => 'تم في';
+
+  @override
+  String get deliveryExpected => 'التوصيل المتوقع';
+
+  @override
+  String get carrier => 'الناقل';
+
+  @override
+  String get carrierName => 'Wydad Express';
+
+  @override
+  String get deliveredStatus => 'تم التوصيل';
+
+  @override
+  String get stepConfirmed => 'مؤكد';
+
+  @override
+  String get stepPrepared => 'تم التجهيز';
+
+  @override
+  String get stepShipped => 'تم الإرسال';
+
+  @override
+  String get stepDelivered => 'تم التوصيل';
+
+  @override
+  String get statusLabel => 'الحالة';
+
+  @override
+  String get paymentLabel => 'الدفع';
+
+  @override
+  String get deliveryInfoSection => 'معلومات التوصيل';
+
+  @override
+  String get daysShort => 'ي';
+
+  @override
+  String get hoursShort => 'س';
+
+  @override
+  String get transferTicketTitle => 'تحويل التذكرة';
+
+  @override
+  String get transferTicketPrompt => 'أدخل بريد المستلم';
+
+  @override
+  String get errorCustomerId => 'خطأ: معرف العميل مفقود';
+
+  @override
+  String get transferDone => 'تم التحويل';
+
+  @override
+  String get categoryLabel => 'الفئة';
+
+  @override
+  String get ticketDetailTitle => 'تفاصيل التذكرة';
+
+  @override
+  String get ticketStatusLabel => 'حالة التذكرة';
+
+  @override
+  String get transferTicket => 'تحويل';
+
+  @override
+  String get wallet => 'المحفظة';
+
+  @override
+  String get referenceLabel => 'المرجع';
 }

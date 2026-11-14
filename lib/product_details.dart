@@ -28,7 +28,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
     final l10n = AppLocalizations.of(context);
     try {
       final response = await http.get(
-        Uri.parse('https://ticketing.ma/api/customer/store/products/${widget.productId}'),
+        Uri.parse(
+            'https://ticketing.ma/api/customer/store/products/${widget.productId}'),
         headers: {
           'Authorization': 'Bearer ${widget.token}',
           'Content-Type': 'application/json',
@@ -43,13 +44,13 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
         });
       } else {
         setState(() {
-          errorMessage = l10n?.failedToLoadProductDetails ?? 'Failed to load product details';
+          errorMessage = l10n?.failedToLoadProductDetails ?? '';
           isLoading = false;
         });
       }
     } catch (e) {
       setState(() {
-        errorMessage = '${l10n?.error}: $e';
+        errorMessage = '${l10n?.error ?? ''}: $e';
         isLoading = false;
       });
     }
@@ -78,7 +79,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
       body: isLoading
           ? Center(
         child: CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFE41E26)),
+          valueColor:
+          AlwaysStoppedAnimation<Color>(Color(0xFFE41E26)),
         ),
       )
           : errorMessage != null
@@ -97,7 +99,9 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
           l10n.productNotFound,
           style: TextStyle(
             fontFamily: "Urbanist",
-            color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
+            color: isDarkMode
+                ? Colors.grey[400]
+                : Colors.grey[600],
           ),
         ),
       )
@@ -120,9 +124,11 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                   child: Image.network(
                     productDetails!['image'],
                     fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) =>
+                    errorBuilder:
+                        (context, error, stackTrace) =>
                         Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment:
+                          MainAxisAlignment.center,
                           children: [
                             Icon(
                               Icons.shopping_bag,
@@ -152,14 +158,16 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                 fontFamily: "Urbanist",
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: isDarkMode ? Colors.white : Color(0xFF030836),
+                color: isDarkMode
+                    ? Colors.white
+                    : Color(0xFF030836),
               ),
             ),
             SizedBox(height: 8),
 
             // Product Price
             Text(
-              '${productDetails!['price']} DH',
+              '${productDetails!['price']} MAD',
               style: TextStyle(
                 fontFamily: "Urbanist",
                 fontSize: 28,
@@ -181,17 +189,21 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
             ),
             SizedBox(height: 8),
             Text(
-              productDetails!['description'] ?? l10n.noDescriptionAvailable,
+              productDetails!['description'] ??
+                  l10n.noDescriptionAvailable,
               style: TextStyle(
                 fontFamily: "Urbanist",
                 fontSize: 16,
-                color: isDarkMode ? Colors.grey[400] : Colors.grey[700],
+                color: isDarkMode
+                    ? Colors.grey[400]
+                    : Colors.grey[700],
               ),
             ),
             SizedBox(height: 16),
 
             // Sizes
-            if (productDetails!['sizes'] != null && (productDetails!['sizes'] as List).isNotEmpty)
+            if (productDetails!['sizes'] != null &&
+                (productDetails!['sizes'] as List).isNotEmpty)
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -208,15 +220,23 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
-                    children: (productDetails!['sizes'] as List).map<Widget>((sizeMap) {
-                      final sizeData = sizeMap as Map<String, dynamic>;
+                    children: (productDetails!['sizes'] as List)
+                        .map<Widget>((sizeMap) {
+                      final sizeData =
+                      sizeMap as Map<String, dynamic>;
                       return Container(
-                        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
-                          color: isDarkMode ? Colors.grey[800] : Color(0xFFF5F6FA),
-                          borderRadius: BorderRadius.circular(20),
+                          color: isDarkMode
+                              ? Colors.grey[800]
+                              : Color(0xFFF5F6FA),
+                          borderRadius:
+                          BorderRadius.circular(20),
                           border: Border.all(
-                            color: isDarkMode ? Colors.grey[600]! : Colors.grey[300]!,
+                            color: isDarkMode
+                                ? Colors.grey[600]!
+                                : Colors.grey[300]!,
                             width: 1,
                           ),
                         ),
@@ -226,7 +246,9 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                             fontFamily: "Urbanist",
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
-                            color: isDarkMode ? Colors.white : Colors.black87,
+                            color: isDarkMode
+                                ? Colors.white
+                                : Colors.black87,
                           ),
                         ),
                       );
@@ -236,7 +258,9 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
               ),
 
             // Categories
-            if (productDetails!['categories'] != null && (productDetails!['categories'] as List).isNotEmpty)
+            if (productDetails!['categories'] != null &&
+                (productDetails!['categories'] as List)
+                    .isNotEmpty)
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -254,15 +278,22 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
-                    children: (productDetails!['categories'] as List).map<Widget>((categoryMap) {
-                      final categoryData = categoryMap as Map<String, dynamic>;
+                    children:
+                    (productDetails!['categories'] as List)
+                        .map<Widget>((categoryMap) {
+                      final categoryData =
+                      categoryMap as Map<String, dynamic>;
                       return Container(
-                        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
-                          color: Color(0xFFE41E26).withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(20),
+                          color: Color(0xFFE41E26)
+                              .withOpacity(0.1),
+                          borderRadius:
+                          BorderRadius.circular(20),
                           border: Border.all(
-                            color: Color(0xFFE41E26).withOpacity(0.3),
+                            color: Color(0xFFE41E26)
+                                .withOpacity(0.3),
                             width: 1,
                           ),
                         ),

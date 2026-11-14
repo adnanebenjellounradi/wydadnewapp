@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'wallet_service.dart';
+import 'l10n/app_localizations.dart';
 
 class WalletRechargeRibPage extends StatefulWidget {
   final String token;
@@ -13,6 +14,8 @@ class WalletRechargeRibPage extends StatefulWidget {
 
 class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
   final Color primary = const Color(0xFFA8161F);
+
+  AppLocalizations get l10n => AppLocalizations.of(context)!;
 
   bool _isLoading = true;
   String _walletRib = '';
@@ -53,7 +56,7 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
     if (!mounted) return;
     setState(() => _copied = true);
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: const Text('RIB copié', style: TextStyle(fontFamily: 'Inter')),
+      content: Text(l10n.ribCopied, style: const TextStyle(fontFamily: 'Inter')),
       backgroundColor: primary,
       behavior: SnackBarBehavior.floating,
     ));
@@ -100,8 +103,8 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  const Text(
-                    'Ajouter un compte bancaire',
+                  Text(
+                    l10n.addBankAccount,
                     style: TextStyle(
                       fontFamily: 'Inter',
                       fontSize: 18,
@@ -111,7 +114,7 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Le compte doit être à votre nom. Le RIB servira pour vos virements entrants et sortants.',
+                    l10n.addBankAccountDescription,
                     style: TextStyle(
                       fontFamily: 'Inter',
                       fontSize: 12,
@@ -121,14 +124,14 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
                   ),
                   const SizedBox(height: 18),
                   _sheetField(
-                    label: 'Nom du compte',
-                    hint: 'Ex. Mon Compte Attijari',
+                    label: l10n.accountName,
+                    hint: l10n.accountNameHint,
                     controller: nameCtrl,
                   ),
                   const SizedBox(height: 12),
                   _sheetField(
-                    label: 'RIB (24 chiffres)',
-                    hint: '000 000 0000000000000000 00',
+                    label: l10n.ribWithLength('24'),
+                    hint: l10n.ribHint,
                     controller: ribCtrl,
                     keyboardType: TextInputType.number,
                     inputFormatters: [
@@ -138,8 +141,8 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
                   ),
                   const SizedBox(height: 12),
                   _sheetField(
-                    label: 'Numéro de téléphone associé',
-                    hint: '6 00 00 00 00',
+                    label: l10n.associatedPhoneNumber,
+                    hint: l10n.phoneNumberHint,
                     controller: phoneCtrl,
                     keyboardType: TextInputType.phone,
                     inputFormatters: [
@@ -160,17 +163,17 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
                         final phone = phoneCtrl.text.trim();
 
                         if (name.isEmpty) {
-                          _sheetError(ctx, 'Nom du compte requis');
+                          _sheetError(ctx, l10n.accountNameRequired);
                           return;
                         }
                         if (rib.length != 24) {
                           _sheetError(
-                              ctx, 'Le RIB doit contenir 24 chiffres');
+                              ctx, l10n.ribMustContain24Digits);
                           return;
                         }
                         if (phone.length < 9) {
                           _sheetError(
-                              ctx, 'Numéro de téléphone requis');
+                              ctx, l10n.phoneNumberRequired);
                           return;
                         }
 
@@ -194,7 +197,7 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
                           _sheetError(
                             ctx,
                             res?['message']?.toString() ??
-                                'Ajout échoué',
+                                l10n.addFailed,
                           );
                         }
                       },
@@ -216,8 +219,8 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
                           AlwaysStoppedAnimation(primary),
                         ),
                       )
-                          : const Text(
-                        'Enregistrer ce compte',
+                          : Text(
+                        l10n.saveBankAccount,
                         style: TextStyle(
                           fontFamily: 'Inter',
                           fontSize: 15,
@@ -312,12 +315,12 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: const Color(0xFF23030A),
-        title: const Text(
-          'Supprimer ce compte ?',
+        title: Text(
+          l10n.deleteAccountConfirmationTitle,
           style: TextStyle(fontFamily: 'Inter', color: Colors.white),
         ),
         content: Text(
-          '« $name » sera retiré de vos comptes.',
+          l10n.deleteAccountConfirmationMessage(name),
           style: TextStyle(
             fontFamily: 'Inter',
             color: Colors.white.withOpacity(0.8),
@@ -327,7 +330,7 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
             child: Text(
-              'Annuler',
+              l10n.cancel,
               style: TextStyle(
                 fontFamily: 'Inter',
                 color: Colors.white.withOpacity(0.7),
@@ -336,8 +339,8 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text(
-              'Supprimer',
+            child: Text(
+              l10n.delete,
               style: TextStyle(
                 fontFamily: 'Inter',
                 color: Color(0xFFD11A2A),
@@ -359,7 +362,7 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
-          res?['message']?.toString() ?? 'Suppression échouée',
+          res?['message']?.toString() ?? l10n.deleteFailed,
           style: const TextStyle(fontFamily: 'Inter'),
         ),
         backgroundColor: primary,
@@ -398,7 +401,7 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Faites un virement depuis votre banque vers le RIB de votre wallet. Votre solde sera crédité dès réception.',
+                        l10n.bankTransferDescription,
                         style: TextStyle(
                           fontFamily: 'Inter',
                           fontSize: 13,
@@ -443,8 +446,8 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
             ),
           ),
           const Spacer(),
-          const Text(
-            'Par virement bancaire',
+          Text(
+            l10n.bankTransferTitle,
             style: TextStyle(
               fontSize: 17,
               fontWeight: FontWeight.w600,
@@ -471,7 +474,7 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
             children: [
               Expanded(
                 child: _button(
-                  label: _copied ? 'RIB copié' : 'Copier le RIB',
+                  label: _copied ? l10n.ribCopied : l10n.copyRib,
                   icon: Icons.copy,
                   primaryStyle: true,
                   onTap: _copyRib,
@@ -480,13 +483,13 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
               const SizedBox(width: 10),
               Expanded(
                 child: _button(
-                  label: 'Partager',
+                  label: l10n.share,
                   icon: Icons.ios_share,
                   primaryStyle: false,
                   onTap: () {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: const Text(
-                        'Partage bientôt disponible',
+                      content: Text(
+                        l10n.shareComingSoon,
                         style: TextStyle(fontFamily: 'Inter'),
                       ),
                       backgroundColor: primary,
@@ -533,9 +536,9 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
                     color: Colors.white, size: 22),
               ),
               const SizedBox(width: 12),
-              const Expanded(
+              Expanded(
                 child: Text(
-                  'Aucun compte bancaire enregistré',
+                  l10n.noBankAccount,
                   style: TextStyle(
                     fontFamily: 'Inter',
                     fontSize: 14,
@@ -548,7 +551,7 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
           ),
           const SizedBox(height: 12),
           Text(
-            'Ajoutez un compte à votre nom pour recevoir des virements et effectuer des retraits.',
+            l10n.noBankAccountDescription,
             style: TextStyle(
               fontFamily: 'Inter',
               fontSize: 12,
@@ -570,8 +573,8 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
                 ),
                 elevation: 0,
               ),
-              child: const Text(
-                'Ajouter un compte bancaire',
+              child: Text(
+                l10n.addBankAccount,
                 style: TextStyle(
                   fontFamily: 'Inter',
                   fontSize: 14,
@@ -595,8 +598,8 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
-              'Mes comptes bancaires',
+            Text(
+              l10n.myBankAccounts,
               style: TextStyle(
                 fontFamily: 'Inter',
                 fontSize: 13,
@@ -607,7 +610,7 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
             GestureDetector(
               onTap: _showAddBankAccountSheet,
               child: Text(
-                '+ Ajouter',
+                l10n.add,
                 style: TextStyle(
                   fontFamily: 'Inter',
                   fontSize: 12,
@@ -621,7 +624,7 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
         const SizedBox(height: 10),
         ..._beneficiaries.map((b) {
           final id = b['id'] as int?;
-          final name = b['name']?.toString() ?? 'Compte';
+          final name = b['name']?.toString() ?? l10n.defaultAccountName;
           final rib = b['rib']?.toString().replaceAll(' ', '') ?? '';
           final masked = rib.length >= 4
               ? '•••• ${rib.substring(rib.length - 4)}'
@@ -668,7 +671,7 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
                         ),
                         const SizedBox(height: 2),
                         Text(
-                          'RIB $masked',
+                          l10n.ribMaskedFormat(masked),
                           style: TextStyle(
                             fontFamily: 'Inter',
                             fontSize: 11,
@@ -718,7 +721,7 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'RIB DE MON WALLET',
+            l10n.myWalletRib,
             style: TextStyle(
               fontFamily: 'Inter',
               fontSize: 11,
@@ -747,7 +750,7 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Titulaire',
+                      l10n.accountHolder,
                       style: TextStyle(
                         fontFamily: 'Inter',
                         fontSize: 11,
@@ -755,7 +758,7 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
                       ),
                     ),
                     Text(
-                      _holder.isNotEmpty ? _holder : '[PRÉNOM NOM]',
+                      _holder.isNotEmpty ? _holder : l10n.defaultAccountHolder,
                       style: const TextStyle(
                         fontFamily: 'Inter',
                         fontSize: 14,
@@ -771,7 +774,7 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Banque',
+                      l10n.bank,
                       style: TextStyle(
                         fontFamily: 'Inter',
                         fontSize: 11,
@@ -779,7 +782,7 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
                       ),
                     ),
                     Text(
-                      _bank.isNotEmpty ? _bank : 'Wydad Pay',
+                      _bank.isNotEmpty ? _bank : l10n.defaultBank,
                       style: const TextStyle(
                         fontFamily: 'Inter',
                         fontSize: 14,
@@ -837,9 +840,9 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
 
   Widget _buildInfoList() {
     final items = [
-      'Délai de réception : 1 à 2 jours ouvrés, selon votre banque.',
-      'Le virement doit venir d\'un compte à votre nom.',
-      'Vous recevez une notification dès que le montant est crédité.',
+      l10n.transferInfo1,
+      l10n.transferInfo2,
+      l10n.transferInfo3,
     ];
     return Container(
       padding: const EdgeInsets.all(16),

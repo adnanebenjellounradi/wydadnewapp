@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'wallet_service.dart';
+import 'l10n/app_localizations.dart';
 
 class WalletChangeAccountPage extends StatefulWidget {
   final String token;
@@ -15,6 +16,9 @@ class WalletChangeAccountPage extends StatefulWidget {
 class _WalletChangeAccountPageState extends State<WalletChangeAccountPage> {
   Map<String, dynamic>? _wallet;
   final Color primary = const Color(0xFFA8161F);
+
+  /// l10n helper
+  AppLocalizations get l10n => AppLocalizations.of(context)!;
 
   @override
   void initState() {
@@ -69,9 +73,9 @@ class _WalletChangeAccountPageState extends State<WalletChangeAccountPage> {
                   const SizedBox(height: 16),
                   Row(
                     children: [
-                      const Text(
-                        'Mes comptes wallet',
-                        style: TextStyle(
+                      Text(
+                        l10n.myWalletAccounts,
+                        style: const TextStyle(
                           fontFamily: 'Inter',
                           fontSize: 19,
                           fontWeight: FontWeight.w600,
@@ -96,7 +100,7 @@ class _WalletChangeAccountPageState extends State<WalletChangeAccountPage> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Chaque compte est lié à un numéro de téléphone.',
+                    l10n.eachAccountLinkedToPhone,
                     style: TextStyle(
                       fontFamily: 'Inter',
                       fontSize: 13,
@@ -139,7 +143,9 @@ class _WalletChangeAccountPageState extends State<WalletChangeAccountPage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                phone.isNotEmpty ? phone : '+212 6•• ••• •••',
+                                phone.isNotEmpty
+                                    ? phone
+                                    : l10n.phoneMaskPlaceholder,
                                 style: const TextStyle(
                                   fontFamily: 'Inter',
                                   fontSize: 15,
@@ -149,7 +155,10 @@ class _WalletChangeAccountPageState extends State<WalletChangeAccountPage> {
                               ),
                               const SizedBox(height: 2),
                               Text(
-                                '${fullName.isNotEmpty ? fullName : 'Titulaire'} · ${balance.toStringAsFixed(2).replaceAll('.', ',')} MAD',
+                                l10n.accountHolderBalance(
+                                  l10n.holder,
+                                  l10n.balancePlaceholder,
+                                ),
                                 style: TextStyle(
                                   fontFamily: 'Inter',
                                   fontSize: 12,
@@ -199,9 +208,9 @@ class _WalletChangeAccountPageState extends State<WalletChangeAccountPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Text(
-                                '+212 6•• ••• •••',
-                                style: TextStyle(
+                              Text(
+                                l10n.phoneMaskPlaceholder,
+                                style: const TextStyle(
                                   fontFamily: 'Inter',
                                   fontSize: 15,
                                   fontWeight: FontWeight.w600,
@@ -209,7 +218,10 @@ class _WalletChangeAccountPageState extends State<WalletChangeAccountPage> {
                                 ),
                               ),
                               Text(
-                                'Titulaire · [SOLDE] MAD',
+                                l10n.accountHolderBalance(
+                                  l10n.holder,
+                                  l10n.balancePlaceholder,
+                                ),
                                 style: TextStyle(
                                   fontFamily: 'Inter',
                                   fontSize: 12,
@@ -237,9 +249,9 @@ class _WalletChangeAccountPageState extends State<WalletChangeAccountPage> {
                     onTap: () {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: const Text(
-                            'Ajout de compte bientôt disponible',
-                            style: TextStyle(fontFamily: 'Inter'),
+                          content: Text(
+                            l10n.accountAddSoon,
+                            style: const TextStyle(fontFamily: 'Inter'),
                           ),
                           backgroundColor: primary,
                           behavior: SnackBarBehavior.floating,
@@ -261,8 +273,8 @@ class _WalletChangeAccountPageState extends State<WalletChangeAccountPage> {
                           const Icon(Icons.add, color: Colors.white, size: 18),
                           const SizedBox(width: 8),
                           Text(
-                            'Ajouter un compte wallet',
-                            style: TextStyle(
+                            l10n.addWalletAccount,
+                            style: const TextStyle(
                               fontFamily: 'Inter',
                               fontSize: 15,
                               fontWeight: FontWeight.w500,

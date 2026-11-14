@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'l10n/app_localizations.dart';
 
 class WalletAllServicesPage extends StatelessWidget {
   final String token;
@@ -10,49 +11,51 @@ class WalletAllServicesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     final available = [
       {
-        'label': 'Alimenter',
+        'label': l10n.topUp,
         'icon': Icons.add,
         'route': '/walletRecharge',
       },
       {
-        'label': 'Transférer',
+        'label': l10n.transferAction,
         'icon': Icons.send_outlined,
         'route': '/walletTransfer',
       },
       {
-        'label': 'Retirer',
+        'label': l10n.withdraw,
         'icon': Icons.account_balance_outlined,
         'route': '/walletWithdraw',
       },
       {
-        'label': 'Recharge mobile',
+        'label': l10n.mobileRecharge,
         'icon': Icons.smartphone,
         'route': null,
       },
       {
-        'label': 'Recevoir paiement',
+        'label': l10n.receivePayment,
         'icon': Icons.qr_code_2,
         'route': null,
       },
       {
-        'label': 'Historique',
+        'label': l10n.history,
         'icon': Icons.history,
         'route': '/walletHistory',
       },
       {
-        'label': 'Gestion compte',
+        'label': l10n.accountManagement,
         'icon': Icons.tune,
         'route': '/walletAccount',
       },
     ];
 
     final soon = [
-      {'label': 'Payer facture', 'icon': Icons.receipt_long},
-      {'label': 'Payer commerçant', 'icon': Icons.storefront},
-      {'label': 'Cartes-cadeaux', 'icon': Icons.card_giftcard},
-      {'label': 'Mes cartes', 'icon': Icons.credit_card},
+      {'label': l10n.payBill, 'icon': Icons.receipt_long},
+      {'label': l10n.payMerchant, 'icon': Icons.storefront},
+      {'label': l10n.giftCards, 'icon': Icons.card_giftcard},
+      {'label': l10n.myCards, 'icon': Icons.credit_card},
     ];
 
     return Scaffold(
@@ -72,7 +75,7 @@ class WalletAllServicesPage extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
-                child: _buildHeader(context),
+                child: _buildHeader(context, l10n),
               ),
               Expanded(
                 child: SingleChildScrollView(
@@ -80,13 +83,13 @@ class WalletAllServicesPage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _sectionTitle('DISPONIBLES'),
+                      _sectionTitle(l10n.availableSection),
                       const SizedBox(height: 12),
-                      _buildGrid(context, available, disabled: false),
+                      _buildGrid(context, l10n, available, disabled: false),
                       const SizedBox(height: 24),
-                      _sectionTitle('BIENTÔT'),
+                      _sectionTitle(l10n.soonSection),
                       const SizedBox(height: 12),
-                      _buildGrid(context, soon, disabled: true),
+                      _buildGrid(context, l10n, soon, disabled: true),
                     ],
                   ),
                 ),
@@ -98,7 +101,7 @@ class WalletAllServicesPage extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
+  Widget _buildHeader(BuildContext context, AppLocalizations l10n) {
     return SizedBox(
       height: 44,
       child: Row(
@@ -118,9 +121,9 @@ class WalletAllServicesPage extends StatelessWidget {
             ),
           ),
           const Spacer(),
-          const Text(
-            'Tous les services',
-            style: TextStyle(
+          Text(
+            l10n.allServices,
+            style: const TextStyle(
               fontSize: 17,
               fontWeight: FontWeight.w600,
               color: Colors.white,
@@ -147,8 +150,12 @@ class WalletAllServicesPage extends StatelessWidget {
     );
   }
 
-  Widget _buildGrid(BuildContext context, List<Map<String, dynamic>> items,
-      {required bool disabled}) {
+  Widget _buildGrid(
+      BuildContext context,
+      AppLocalizations l10n,
+      List<Map<String, dynamic>> items, {
+        required bool disabled,
+      }) {
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -167,7 +174,7 @@ class WalletAllServicesPage extends StatelessWidget {
               ? () {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(
-                '${item['label']} — Bientôt disponible',
+                l10n.comingSoonMessage(item['label'] as String),
                 style: const TextStyle(fontFamily: 'Inter'),
               ),
               backgroundColor: primary,
@@ -207,13 +214,14 @@ class WalletAllServicesPage extends StatelessWidget {
                     color: disabled
                         ? Colors.white.withOpacity(0.06)
                         : Colors.white.withOpacity(0.10),
-                    border: Border.all(
-                        color: Colors.white.withOpacity(0.14)),
+                    border:
+                    Border.all(color: Colors.white.withOpacity(0.14)),
                   ),
                   child: Icon(
                     item['icon'] as IconData,
-                    color:
-                    disabled ? Colors.white.withOpacity(0.45) : Colors.white,
+                    color: disabled
+                        ? Colors.white.withOpacity(0.45)
+                        : Colors.white,
                     size: 20,
                   ),
                 ),
@@ -234,7 +242,7 @@ class WalletAllServicesPage extends StatelessWidget {
                 if (disabled) ...[
                   const SizedBox(height: 3),
                   Text(
-                    'BIENTÔT',
+                    l10n.soonLabel,
                     style: TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.w700,

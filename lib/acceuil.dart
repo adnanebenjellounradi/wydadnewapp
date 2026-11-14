@@ -45,6 +45,9 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
 
   final Color primary = const Color(0xFFA8161F);
 
+  /// l10n helper
+  AppLocalizations get l10n => AppLocalizations.of(context)!;
+
   @override
   void initState() {
     super.initState();
@@ -133,8 +136,6 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
     }
   }
 
-  /// Sauvegarde les 3 toggles d'organisation dans SharedPreferences
-  /// pour pouvoir les consulter rapidement sans re-fetch.
   Future<void> _saveOrgSettingsToPrefs(Map<String, dynamic> orgData) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('activatedcmi', orgData['activatedcmi'] == true);
@@ -155,7 +156,6 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
   }
 
   Future<void> _handleNewsTap(BuildContext context) async {
-    final l10n = AppLocalizations.of(context)!;
     setState(() => isLoading = true);
     try {
       final data = await _fetchOrganizationData();
@@ -187,7 +187,6 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
   }
 
   Future<void> _handleQuizTap(BuildContext context) async {
-    final l10n = AppLocalizations.of(context)!;
     bool logged = await _isUserLoggedIn();
     if (!logged) {
       _showLoginDialog();
@@ -215,7 +214,6 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
     }
   }
 
-  // ✅ MODIFICATION ICI : Ajout de la vérification enable_shop
   Future<void> _handleStoreTap(BuildContext context) async {
     if (!isLoggedIn) {
       Navigator.pushNamed(context, '/login');
@@ -224,10 +222,10 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
 
     setState(() => isLoading = true);
     try {
-      // On recharge les paramètres pour être sûr d'avoir la dernière valeur
       await _fetchOrganizationSettings();
 
-      if (organizationSettings != null && organizationSettings!["enable_shop"] == 1) {
+      if (organizationSettings != null &&
+          organizationSettings!["enable_shop"] == 1) {
         _showStoreChoiceModal(context);
       } else {
         _showShopMaintenanceModal(context);
@@ -239,16 +237,6 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
     }
   }
 
-  // ═══════════════════════════════════════════════════════════
-  // TICKETPLACE HANDLER
-  // ═══════════════════════════════════════════════════════════
-
-  /// Lit `ticketplaceactivated` depuis SharedPreferences.
-  /// - Si `true` → modal maintenance (feature pas encore prête)
-  /// - Sinon → redirection vers /events (fallback temporaire)
-  /// Lit `ticketplaceactivated` depuis SharedPreferences.
-  /// - Si `false` (inactif) → modal maintenance
-  /// - Si `true` (actif)   → redirection vers /events (en attendant la vraie page TicketPlace)
   Future<void> _handleTicketplaceTap(BuildContext context) async {
     if (!isLoggedIn) {
       Navigator.pushNamed(context, '/login');
@@ -257,29 +245,26 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
 
     setState(() => isLoading = true);
     try {
-      // S'assurer d'avoir les données les plus récentes
       await _fetchOrganizationData();
 
       final prefs = await SharedPreferences.getInstance();
       final activated = prefs.getBool('ticketplaceactivated') ?? false;
 
       if (activated) {
-        // ✅ Actif → rediriger vers /events pour l'instant
         Navigator.pushNamed(context, '/events', arguments: {
           'token': widget.token,
           'organizationId': widget.organizationId,
         });
       } else {
-        // ❌ Inactif → modal maintenance
-        _showComingSoonModal(context, 'Ticketplace');
+        _showComingSoonModal(context, l10n.ticketplaceLabel);
       }
     } catch (e) {
-      // En cas d'erreur de récupération, on considère la feature indisponible
-      _showComingSoonModal(context, 'Ticketplace');
+      _showComingSoonModal(context, l10n.ticketplaceLabel);
     } finally {
       if (mounted) setState(() => isLoading = false);
     }
   }
+
   // ═══════════════════════════════════════════════════════════
   // MODAL CHOIX BOUTIQUE
   // ═══════════════════════════════════════════════════════════
@@ -300,10 +285,10 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
               children: [
                 _dialogIcon(Icons.storefront_outlined),
                 const SizedBox(height: 20),
-                const Text(
-                  'Choisir une boutique',
+                Text(
+                  l10n.chooseStore,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Inter',
                     fontSize: 20,
                     fontWeight: FontWeight.w900,
@@ -312,7 +297,7 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  'Sélectionnez la boutique officielle Wydad AC',
+                  l10n.chooseStoreSubtitle,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: 'Inter',
@@ -324,7 +309,7 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
                 const SizedBox(height: 24),
                 _storeButton(
                   label: 'KAPPA',
-                  subtitle: 'Boutique officielle Kappa',
+                  subtitle: l10n.kappaSubtitle,
                   icon: Icons.checkroom,
                   onTap: () {
                     Navigator.of(dialogContext).pop();
@@ -340,8 +325,8 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
                 ),
                 const SizedBox(height: 10),
                 _storeButton(
-                  label: 'WAC BRAND',
-                  subtitle: 'wacofficialbrand.com',
+                  label: l10n.wacBrand,
+                  subtitle: l10n.wacBrandSubtitle,
                   icon: Icons.public,
                   onTap: () {
                     Navigator.of(dialogContext).pop();
@@ -358,7 +343,7 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
                   width: double.infinity,
                   child: GestureDetector(
                     onTap: () => Navigator.of(dialogContext).pop(),
-                    child: _glassButton(label: 'Annuler'),
+                    child: _glassButton(label: l10n.cancel),
                   ),
                 ),
               ],
@@ -445,7 +430,6 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
   // ═══════════════════════════════════════════════════════════
 
   void _showComingSoonModal(BuildContext context, String title) {
-    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       barrierDismissible: true,
@@ -500,7 +484,6 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
   }
 
   void _showShopMaintenanceModal(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       barrierDismissible: true,
@@ -555,7 +538,6 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
   }
 
   void _showLoginDialog() {
-    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       barrierDismissible: true,
@@ -646,7 +628,6 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
   }
 
   void _showLogoutConfirmation(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       barrierDismissible: true,
@@ -705,12 +686,10 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
                               "Content-Type": "application/json",
                             },
                           );
-                          final prefs =
-                          await SharedPreferences.getInstance();
+                          final prefs = await SharedPreferences.getInstance();
                           await prefs.clear();
                           if (mounted) {
-                            Navigator.pushReplacementNamed(
-                                context, '/login');
+                            Navigator.pushReplacementNamed(context, '/login');
                           }
                         },
                         child: _gradientButton(label: l10n.logout),
@@ -814,9 +793,9 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
   // ═══════════════════════════════════════════════════════════
   void _showLanguageMenu(BuildContext context) {
     final languages = [
-      {'code': 'fr', 'countryCode': 'FR', 'label': 'FR'},
-      {'code': 'ar', 'countryCode': 'MA', 'label': 'AR'},
-      {'code': 'en', 'countryCode': 'GB', 'label': 'EN'},
+      {'code': 'fr', 'countryCode': 'FR', 'label': 'FR', 'name': l10n.french},
+      {'code': 'ar', 'countryCode': 'MA', 'label': 'AR', 'name': l10n.arabic},
+      {'code': 'en', 'countryCode': 'GB', 'label': 'EN', 'name': l10n.english},
     ];
 
     showModalBottomSheet(
@@ -839,7 +818,7 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
                 ),
               ),
               title: Text(
-                lang['label'] as String,
+                lang['name'] as String,
                 style: TextStyle(
                   color: Colors.white,
                   fontFamily: 'Inter',
@@ -866,8 +845,6 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-
     return Scaffold(
       backgroundColor: const Color(0xFF170205),
       body: Stack(
@@ -909,7 +886,6 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
               ),
             ),
           ),
-
           SafeArea(
             bottom: false,
             child: SingleChildScrollView(
@@ -932,7 +908,6 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
               ),
             ),
           ),
-
           Positioned(
             left: 16,
             right: 16,
@@ -972,7 +947,6 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
               organizationId: widget.organizationId,
             ),
           ),
-
           if (isLoading)
             Container(
               color: Colors.black.withOpacity(0.3),
@@ -1028,13 +1002,13 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
                   ),
                 ),
                 const SizedBox(width: 10),
-                const Column(
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'WYDAD AC',
-                      style: TextStyle(
+                      l10n.wydadAc,
+                      style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w900,
                         letterSpacing: 0.4,
@@ -1181,7 +1155,7 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'BILLETTERIE OFFICIELLE',
+                      l10n.officialTicketing,
                       style: TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.w700,
@@ -1193,9 +1167,9 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'ÉVÉNEMENTS',
-                          style: TextStyle(
+                        Text(
+                          l10n.eventsTitle,
+                          style: const TextStyle(
                             fontSize: 28,
                             fontWeight: FontWeight.w900,
                             letterSpacing: -0.6,
@@ -1206,7 +1180,7 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
                         ),
                         const SizedBox(height: 6),
                         Text(
-                          'Réservez vos places et votre abonnement',
+                          l10n.reserveSeats,
                           style: TextStyle(
                             fontSize: 13,
                             color: Colors.white.withOpacity(0.88),
@@ -1224,28 +1198,25 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
                               gradient: const LinearGradient(
                                 begin: Alignment.topCenter,
                                 end: Alignment.bottomCenter,
-                                colors: [
-                                  Color(0xFFB0141F),
-                                  Color(0xFF860D16)
-                                ],
+                                colors: [Color(0xFFB0141F), Color(0xFF860D16)],
                               ),
                               border: Border.all(
                                   color: Colors.white.withOpacity(0.2)),
                             ),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
-                              children: const [
+                              children: [
                                 Text(
-                                  'Réserver',
-                                  style: TextStyle(
+                                  l10n.reserve,
+                                  style: const TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w800,
                                     color: Colors.white,
                                     fontFamily: 'Inter',
                                   ),
                                 ),
-                                SizedBox(width: 8),
-                                Icon(Icons.arrow_forward,
+                                const SizedBox(width: 8),
+                                const Icon(Icons.arrow_forward,
                                     color: Colors.white, size: 16),
                               ],
                             ),
@@ -1308,9 +1279,9 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text(
-                            'WYDAD PAY',
-                            style: TextStyle(
+                          Text(
+                            l10n.wydadPay,
+                            style: const TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w900,
                               letterSpacing: 0.3,
@@ -1320,7 +1291,7 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
                           ),
                           const SizedBox(height: 3),
                           Text(
-                            'Alimentez, transférez, payez',
+                            l10n.walletTagline,
                             style: TextStyle(
                               fontSize: 10,
                               color: Colors.white.withOpacity(0.75),
@@ -1346,12 +1317,13 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
-                          children: const [
-                            Icon(Icons.add, color: Colors.white, size: 14),
-                            SizedBox(width: 6),
+                          children: [
+                            const Icon(Icons.add,
+                                color: Colors.white, size: 14),
+                            const SizedBox(width: 6),
                             Text(
-                              'Activer',
-                              style: TextStyle(
+                              l10n.activate,
+                              style: const TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w800,
                                 color: Colors.white,
@@ -1367,7 +1339,7 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Solde',
+                            l10n.balanceLabel,
                             style: TextStyle(
                               fontSize: 10,
                               color: Colors.white.withOpacity(0.7),
@@ -1382,8 +1354,7 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
                             child: LinearProgressIndicator(
                               minHeight: 2,
                               backgroundColor: Colors.white24,
-                              valueColor:
-                              AlwaysStoppedAnimation<Color>(
+                              valueColor: AlwaysStoppedAnimation<Color>(
                                   Colors.white),
                             ),
                           )
@@ -1445,26 +1416,26 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
   Widget _buildTilesGrid(BuildContext context) {
     final tiles = [
       {
-        'title': 'TICKETPLACE',
-        'sub': 'Revente entre supporters',
+        'title': l10n.ticketplace,
+        'sub': l10n.ticketplaceSub,
         'icon': Icons.swap_horiz,
         'onTap': () => _handleTicketplaceTap(context),
       },
       {
-        'title': 'STORE',
-        'sub': 'Maillots et produits officiels',
+        'title': l10n.store,
+        'sub': l10n.storeSub,
         'icon': Icons.storefront_outlined,
         'onTap': () => _handleStoreTap(context),
       },
       {
-        'title': 'ACTUALITÉS',
-        'sub': 'Toute la vie du club',
+        'title': l10n.news,
+        'sub': l10n.newsSub,
         'icon': Icons.article_outlined,
         'onTap': () => _handleNewsTap(context),
       },
       {
-        'title': 'FAN ZONE',
-        'sub': 'Quiz, votes, homme du match',
+        'title': l10n.fanZone,
+        'sub': l10n.fanZoneSub,
         'icon': Icons.star_border,
         'onTap': () => _handleQuizTap(context),
       },
@@ -1611,6 +1582,8 @@ class _WacBrandWebViewPageState extends State<_WacBrandWebViewPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: const Color(0xFF170205),
       body: SafeArea(
@@ -1636,9 +1609,9 @@ class _WacBrandWebViewPageState extends State<_WacBrandWebViewPage> {
                     ),
                   ),
                   const Spacer(),
-                  const Text(
-                    'WAC BRAND',
-                    style: TextStyle(
+                  Text(
+                    l10n.wacBrand,
+                    style: const TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,

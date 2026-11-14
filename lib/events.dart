@@ -31,6 +31,9 @@ class _EventsPageState extends State<EventsPage> {
 
   final Color primary = const Color(0xFFA8161F);
 
+  /// l10n helper
+  AppLocalizations get l10n => AppLocalizations.of(context)!;
+
   @override
   void initState() {
     super.initState();
@@ -97,7 +100,6 @@ class _EventsPageState extends State<EventsPage> {
   }
 
   void _showLoginDialog() {
-    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -203,14 +205,12 @@ class _EventsPageState extends State<EventsPage> {
     );
   }
 
-  // ✅ NOUVEAU : Vérification API avant d'afficher le modal
   Future<void> _handleBoutiqueTap(BuildContext context) async {
     if (widget.token == null || widget.token!.isEmpty) {
       _showLoginDialog();
       return;
     }
 
-    // On affiche un petit loader pendant la vérification
     setState(() => isLoading = true);
     try {
       final enabled = await _isShopEnabled();
@@ -248,10 +248,10 @@ class _EventsPageState extends State<EventsPage> {
               children: [
                 _dialogIcon(Icons.storefront_outlined),
                 const SizedBox(height: 20),
-                const Text(
-                  'Choisir une boutique',
+                Text(
+                  l10n.chooseStore,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Inter',
                     fontSize: 20,
                     fontWeight: FontWeight.w900,
@@ -260,7 +260,7 @@ class _EventsPageState extends State<EventsPage> {
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  'Sélectionnez la boutique officielle Wydad AC',
+                  l10n.chooseStoreSubtitle,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: 'Inter',
@@ -272,11 +272,10 @@ class _EventsPageState extends State<EventsPage> {
                 const SizedBox(height: 24),
                 _storeButton(
                   label: 'KAPPA',
-                  subtitle: 'Boutique officielle Kappa',
+                  subtitle: l10n.kappaSubtitle,
                   icon: Icons.checkroom,
                   onTap: () {
                     Navigator.of(dialogContext).pop();
-                    // ✅ La vérification a déjà été faite dans _handleBoutiqueTap
                     Navigator.pushNamed(
                       context,
                       '/boutique',
@@ -289,8 +288,8 @@ class _EventsPageState extends State<EventsPage> {
                 ),
                 const SizedBox(height: 10),
                 _storeButton(
-                  label: 'WAC BRAND',
-                  subtitle: 'wacofficialbrand.com',
+                  label: l10n.wacBrand,
+                  subtitle: l10n.wacBrandSubtitle,
                   icon: Icons.public,
                   onTap: () {
                     Navigator.of(dialogContext).pop();
@@ -307,7 +306,7 @@ class _EventsPageState extends State<EventsPage> {
                   width: double.infinity,
                   child: GestureDetector(
                     onTap: () => Navigator.of(dialogContext).pop(),
-                    child: _glassButton(label: 'Annuler'),
+                    child: _glassButton(label: l10n.cancel),
                   ),
                 ),
               ],
@@ -496,7 +495,6 @@ class _EventsPageState extends State<EventsPage> {
   }
 
   void _showShopMaintenanceModal(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       barrierDismissible: true,
@@ -554,8 +552,6 @@ class _EventsPageState extends State<EventsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-
     final totalPages = (events.length / cardsPerPage).ceil();
     final startIndex = currentPage * cardsPerPage;
     final endIndex = (startIndex + cardsPerPage).clamp(0, events.length);
@@ -567,7 +563,6 @@ class _EventsPageState extends State<EventsPage> {
       backgroundColor: const Color(0xFF170205),
       body: Stack(
         children: [
-          // Fond
           Container(
             width: double.infinity,
             height: double.infinity,
@@ -605,12 +600,10 @@ class _EventsPageState extends State<EventsPage> {
               ),
             ),
           ),
-
           SafeArea(
             bottom: false,
             child: Column(
               children: [
-                // Header + filtres
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
                   child: Column(
@@ -634,8 +627,8 @@ class _EventsPageState extends State<EventsPage> {
                     padding:
                     const EdgeInsets.fromLTRB(20, 14, 20, 120),
                     children: [
-                      ...pageEvents.map((e) =>
-                          _buildEventCard(e as Map<String, dynamic>)),
+                      ...pageEvents.map((e) => _buildEventCard(
+                          e as Map<String, dynamic>)),
                       if (events.length > cardsPerPage)
                         _buildPagination(totalPages),
                     ],
@@ -644,7 +637,6 @@ class _EventsPageState extends State<EventsPage> {
               ],
             ),
           ),
-
           Positioned(
             left: 16,
             right: 16,
@@ -654,14 +646,11 @@ class _EventsPageState extends State<EventsPage> {
               onTap: (index) {
                 switch (index) {
                   case 0:
-                  // Déjà sur Événements
                     break;
                   case 1:
-                  // ✅ Boutique : Vérification via _handleBoutiqueTap
                     _handleBoutiqueTap(context);
                     break;
                   case 2:
-                  // Accueil
                     Navigator.pushReplacementNamed(context, '/acceuil',
                         arguments: {
                           'token': widget.token ?? '',
@@ -669,7 +658,6 @@ class _EventsPageState extends State<EventsPage> {
                         });
                     break;
                   case 3:
-                  // Profil
                     if (widget.token != null && widget.token!.isNotEmpty) {
                       Navigator.pushNamed(context, '/editProfile', arguments: {
                         'token': widget.token,
@@ -699,9 +687,9 @@ class _EventsPageState extends State<EventsPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          const Text(
-            'Événements',
-            style: TextStyle(
+          Text(
+            l10n.eventsTitle,
+            style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w900,
               color: Colors.white,
@@ -715,9 +703,9 @@ class _EventsPageState extends State<EventsPage> {
 
   Widget _buildFilters() {
     final filters = [
-      {'id': 'upcoming', 'label': 'À venir'},
-      {'id': 'past', 'label': 'Passés'},
-      {'id': 'all', 'label': 'Tous'},
+      {'id': 'upcoming', 'label': l10n.upcoming},
+      {'id': 'past', 'label': l10n.past},
+      {'id': 'all', 'label': l10n.all},
     ];
     return Row(
       children: filters.map((f) {
@@ -792,7 +780,6 @@ class _EventsPageState extends State<EventsPage> {
   }
 
   Widget _buildEventCard(Map<String, dynamic> event) {
-    final l10n = AppLocalizations.of(context)!;
     final eventName = event["name"] as String? ?? '';
     final eventDate =
     DateFormat("dd-MM-yyyy").format(DateTime.parse(event["date"]));
@@ -814,7 +801,6 @@ class _EventsPageState extends State<EventsPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Image + overlay + titre + date
               SizedBox(
                 height: 176,
                 child: Stack(
@@ -846,7 +832,6 @@ class _EventsPageState extends State<EventsPage> {
                           ),
                         ),
                       ),
-                    // Overlay
                     Container(
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
@@ -861,7 +846,6 @@ class _EventsPageState extends State<EventsPage> {
                         ),
                       ),
                     ),
-                    // Badge
                     Positioned(
                       left: 12,
                       top: 12,
@@ -892,7 +876,6 @@ class _EventsPageState extends State<EventsPage> {
                         ),
                       ),
                     ),
-                    // Titre
                     Positioned(
                       left: 16,
                       right: 16,
@@ -913,7 +896,7 @@ class _EventsPageState extends State<EventsPage> {
                           ),
                           const SizedBox(height: 2),
                           Text(
-                            'Complexe Mohammed V',
+                            l10n.stadiumName,
                             style: TextStyle(
                               fontSize: 12,
                               color: Colors.white.withOpacity(0.78),
@@ -926,13 +909,10 @@ class _EventsPageState extends State<EventsPage> {
                   ],
                 ),
               ),
-
-              // Actions
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 12, 16, 14),
                 child: Row(
                   children: [
-                    // Acheter / Vote / (désactivé)
                     if (!isClosed &&
                         !eventPast &&
                         event["disable_ticket"] != 1)
@@ -988,7 +968,6 @@ class _EventsPageState extends State<EventsPage> {
                         ),
                       ),
                     const SizedBox(width: 8),
-                    // Mes billets
                     Expanded(
                       child: _buildOutlineButton(
                         label: l10n.myTickets,
@@ -1014,7 +993,6 @@ class _EventsPageState extends State<EventsPage> {
                       ),
                     ),
                     const SizedBox(width: 8),
-                    // Transfert
                     GestureDetector(
                       onTap: () {
                         if (widget.token != null &&
@@ -1232,6 +1210,8 @@ class _WacBrandWebViewPageState extends State<_WacBrandWebViewPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: const Color(0xFF170205),
       body: SafeArea(
@@ -1257,9 +1237,9 @@ class _WacBrandWebViewPageState extends State<_WacBrandWebViewPage> {
                     ),
                   ),
                   const Spacer(),
-                  const Text(
-                    'WAC BRAND',
-                    style: TextStyle(
+                  Text(
+                    l10n.wacBrand,
+                    style: const TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,

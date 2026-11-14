@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'wallet_service.dart';
+import 'l10n/app_localizations.dart';
 
 class WalletAddBeneficiaryPage extends StatefulWidget {
   final String token;
-  final String? defaultPhone; // téléphone du wallet (obligatoire côté API)
+  final String? defaultPhone;
+
   const WalletAddBeneficiaryPage({
     Key? key,
     required this.token,
@@ -25,6 +27,9 @@ class _WalletAddBeneficiaryPageState extends State<WalletAddBeneficiaryPage> {
 
   bool _isSubmitting = false;
   bool _useWalletPhone = true;
+
+  /// l10n helper
+  AppLocalizations get l10n => AppLocalizations.of(context)!;
 
   @override
   void initState() {
@@ -55,15 +60,15 @@ class _WalletAddBeneficiaryPageState extends State<WalletAddBeneficiaryPage> {
     final phone = _phoneCtrl.text.trim();
 
     if (name.isEmpty) {
-      _showError('Nom du compte requis');
+      _showError(l10n.accountNameRequired);
       return;
     }
     if (rib.length != 24) {
-      _showError('Le RIB doit contenir 24 chiffres');
+      _showError(l10n.ribMustBe24Digits);
       return;
     }
     if (phone.length < 9) {
-      _showError('Numéro de téléphone requis');
+      _showError(l10n.phoneRequired);
       return;
     }
 
@@ -81,9 +86,9 @@ class _WalletAddBeneficiaryPageState extends State<WalletAddBeneficiaryPage> {
     setState(() => _isSubmitting = false);
 
     if (res != null && res['success'] == true) {
-      Navigator.pop(context, true); // true = succès, la page R2 rechargera
+      Navigator.pop(context, true);
     } else {
-      _showError(res?['message']?.toString() ?? 'Ajout échoué');
+      _showError(res?['message']?.toString() ?? l10n.addBeneficiaryFailed);
     }
   }
 
@@ -114,9 +119,9 @@ class _WalletAddBeneficiaryPageState extends State<WalletAddBeneficiaryPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Ajouter un compte à mon nom',
-                        style: TextStyle(
+                      Text(
+                        l10n.addAccountInMyName,
+                        style: const TextStyle(
                           fontFamily: 'Inter',
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
@@ -125,7 +130,7 @@ class _WalletAddBeneficiaryPageState extends State<WalletAddBeneficiaryPage> {
                       ),
                       const SizedBox(height: 6),
                       Text(
-                        'Le compte doit être à votre nom. Les retraits seront envoyés sur ce RIB.',
+                        l10n.addAccountSubtitle,
                         style: TextStyle(
                           fontFamily: 'Inter',
                           fontSize: 12,
@@ -135,14 +140,14 @@ class _WalletAddBeneficiaryPageState extends State<WalletAddBeneficiaryPage> {
                       ),
                       const SizedBox(height: 22),
                       _darkField(
-                        label: 'Nom du compte',
-                        hint: 'Ex. Mon Compte Attijari',
+                        label: l10n.accountNameLabel,
+                        hint: l10n.accountNameHint,
                         controller: _nameCtrl,
                       ),
                       const SizedBox(height: 12),
                       _darkField(
-                        label: 'RIB (24 chiffres)',
-                        hint: '000 000 0000000000000000 00',
+                        label: l10n.ribLabel,
+                        hint: l10n.ribHint,
                         controller: _ribCtrl,
                         keyboardType: TextInputType.number,
                         inputFormatters: [
@@ -169,7 +174,7 @@ class _WalletAddBeneficiaryPageState extends State<WalletAddBeneficiaryPage> {
                           ),
                           Expanded(
                             child: Text(
-                              'Utiliser le numéro du wallet',
+                              l10n.useWalletPhone,
                               style: TextStyle(
                                 fontFamily: 'Inter',
                                 fontSize: 12,
@@ -180,8 +185,8 @@ class _WalletAddBeneficiaryPageState extends State<WalletAddBeneficiaryPage> {
                         ],
                       ),
                       _darkField(
-                        label: 'Numéro de téléphone associé',
-                        hint: '6 00 00 00 00',
+                        label: l10n.associatedPhoneLabel,
+                        hint: l10n.phoneHintShort,
                         controller: _phoneCtrl,
                         keyboardType: TextInputType.phone,
                         inputFormatters: [
@@ -197,7 +202,8 @@ class _WalletAddBeneficiaryPageState extends State<WalletAddBeneficiaryPage> {
                           borderRadius: BorderRadius.circular(14),
                           color: const Color(0xFFFFC97A).withOpacity(0.10),
                           border: Border.all(
-                              color: const Color(0xFFFFC97A).withOpacity(0.3)),
+                              color:
+                              const Color(0xFFFFC97A).withOpacity(0.3)),
                         ),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -207,7 +213,7 @@ class _WalletAddBeneficiaryPageState extends State<WalletAddBeneficiaryPage> {
                             const SizedBox(width: 8),
                             Expanded(
                               child: Text(
-                                'Vérifiez bien le RIB : les retraits sont irréversibles une fois traités.',
+                                l10n.ribWarning,
                                 style: TextStyle(
                                   fontFamily: 'Inter',
                                   fontSize: 10,
@@ -239,12 +245,13 @@ class _WalletAddBeneficiaryPageState extends State<WalletAddBeneficiaryPage> {
                             height: 20,
                             child: CircularProgressIndicator(
                               strokeWidth: 2,
-                              valueColor: AlwaysStoppedAnimation(primary),
+                              valueColor:
+                              AlwaysStoppedAnimation(primary),
                             ),
                           )
-                              : const Text(
-                            'Enregistrer ce compte',
-                            style: TextStyle(
+                              : Text(
+                            l10n.saveThisAccount,
+                            style: const TextStyle(
                               fontFamily: 'Inter',
                               fontSize: 15,
                               fontWeight: FontWeight.w700,
@@ -283,9 +290,9 @@ class _WalletAddBeneficiaryPageState extends State<WalletAddBeneficiaryPage> {
             ),
           ),
           const Spacer(),
-          const Text(
-            'Nouveau compte bancaire',
-            style: TextStyle(
+          Text(
+            l10n.newBankAccount,
+            style: const TextStyle(
               fontSize: 17,
               fontWeight: FontWeight.w600,
               color: Colors.white,

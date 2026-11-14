@@ -51,7 +51,8 @@ class SwipeTicketsPage extends StatefulWidget {
   _SwipeTicketsPageState createState() => _SwipeTicketsPageState();
 }
 
-class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerProviderStateMixin {
+class _SwipeTicketsPageState extends State<SwipeTicketsPage>
+    with SingleTickerProviderStateMixin {
   late PageController _pageController;
   late Timer _timer;
   late AnimationController _controller;
@@ -72,6 +73,9 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
   final Color primary = const Color(0xFFA8161F);
   final Color gold = const Color(0xFFF5CD52);
   final Color amber = const Color(0xFFFFC97A);
+
+  /// l10n helper
+  AppLocalizations get l10n => AppLocalizations.of(context)!;
 
   @override
   void initState() {
@@ -137,8 +141,10 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
       DateTime eventLocal = DateTime.parse(localDateString);
       DateTime nowLocal = DateTime.now();
 
-      if (widget.event["date_qr_code"] != null && widget.event["date_qr_code"].toString().isNotEmpty) {
-        DateTime qrCodeDateTime = DateTime.parse(widget.event["date_qr_code"].toString());
+      if (widget.event["date_qr_code"] != null &&
+          widget.event["date_qr_code"].toString().isNotEmpty) {
+        DateTime qrCodeDateTime =
+        DateTime.parse(widget.event["date_qr_code"].toString());
         return nowLocal.isBefore(qrCodeDateTime);
       }
 
@@ -149,21 +155,23 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
     }
   }
 
-  void _toggleTicketSelection(int ticketId, String eventDate, int ticketStatus, int isTransferable, int transferStatus, int orderTransferStatus) {
-    if (isTransferAllowed(eventDate, ticketStatus, isTransferable, transferStatus, orderTransferStatus) && canStillTransfer(eventDate)) {
+  void _toggleTicketSelection(int ticketId, String eventDate, int ticketStatus,
+      int isTransferable, int transferStatus, int orderTransferStatus) {
+    if (isTransferAllowed(eventDate, ticketStatus, isTransferable,
+        transferStatus, orderTransferStatus) &&
+        canStillTransfer(eventDate)) {
       setState(() {
         if (_selectedTickets.contains(ticketId)) {
           _selectedTickets.remove(ticketId);
         } else {
           _selectedTickets.add(ticketId);
         }
-        // ✅ Correction : isNotEmpty au lieu de isSelected
         _showTransferButton = _selectedTickets.isNotEmpty;
       });
     }
   }
+
   Future<String?> _scanQRCodeForEmail() async {
-    final l10n = AppLocalizations.of(context)!;
     return await showDialog<String>(
       context: context,
       barrierDismissible: true,
@@ -203,7 +211,8 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
                           borderRadius: BorderRadius.circular(10),
                           color: Colors.white.withOpacity(0.08),
                         ),
-                        child: const Icon(Icons.close, color: Colors.white, size: 18),
+                        child: const Icon(Icons.close,
+                            color: Colors.white, size: 18),
                       ),
                     ),
                   ],
@@ -247,9 +256,8 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
     );
   }
 
-  Future<Map<String, dynamic>?> _verifyAndGetCustomerId(String scannedEmail) async {
-    final l10n = AppLocalizations.of(context)!;
-
+  Future<Map<String, dynamic>?> _verifyAndGetCustomerId(
+      String scannedEmail) async {
     if (!scannedEmail.contains("@")) {
       _snack(l10n.invalidEmailFormat, error: true);
       return null;
@@ -271,7 +279,8 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
       final data = jsonDecode(response.body);
       if (data["success"] == true && data["data"] != null) {
         final customer = data["data"];
-        if (customer["organization_id"].toString() == widget.currentOrganizationId.toString()) {
+        if (customer["organization_id"].toString() ==
+            widget.currentOrganizationId.toString()) {
           return {
             'customerId': customer["id"],
             'email': scannedEmail,
@@ -283,10 +292,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
       } else {
         final shouldInvite = await _showInviteDialog(scannedEmail);
         if (shouldInvite == true) {
-          _snack(
-            l10n.invitationSentSuccess + " - L'utilisateur doit s'inscrire d'abord",
-            warn: true,
-          );
+          _snack(l10n.invitationSentSuccess, warn: true);
         }
         return null;
       }
@@ -297,7 +303,6 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
   }
 
   Future<bool?> _showInviteDialog(String scannedEmail) async {
-    final l10n = AppLocalizations.of(context)!;
     return showDialog<bool>(
       context: context,
       barrierDismissible: false,
@@ -358,7 +363,8 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
                       onTap: () async {
                         try {
                           await http.post(
-                            Uri.parse("https://ticketing.ma/api/customer/send-invitation"),
+                            Uri.parse(
+                                "https://ticketing.ma/api/customer/send-invitation"),
                             headers: {
                               "Authorization": "Bearer ${widget.token}",
                               "Content-Type": "application/json",
@@ -391,16 +397,18 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
       final email = result['email'];
       final customerId = result['customerId'];
       if (email != null && customerId != null) {
-        final confirmed = await _showFinalConfirmationModal(email, _selectedTickets.length);
+        final confirmed =
+        await _showFinalConfirmationModal(email, _selectedTickets.length);
         if (confirmed == true) {
-          await _performBulkTransfer(_selectedTickets.toList(), customerId, email);
+          await _performBulkTransfer(
+              _selectedTickets.toList(), customerId, email);
         }
       }
     }
   }
 
-  Future<void> _performBulkTransfer(List<int> ticketIds, int customerId, String email) async {
-    final l10n = AppLocalizations.of(context)!;
+  Future<void> _performBulkTransfer(
+      List<int> ticketIds, int customerId, String email) async {
     _showLoader(l10n.transferInProgress);
 
     try {
@@ -423,7 +431,8 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         if (data["success"] == true) {
-          _snack("🎉 ${ticketIds.length} ${l10n.ticketPlural} ${l10n.transferredSuccessfullyTo} $email");
+          _snack(
+              "🎉 ${ticketIds.length} ${l10n.ticketPlural} ${l10n.transferredSuccessfullyTo} $email");
           Navigator.pop(context, true);
         } else {
           _snack("${data["message"] ?? l10n.transferError}", error: true);
@@ -438,7 +447,6 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
   }
 
   Future<Map<String, dynamic>?> showTransferTicketsModal() async {
-    final l10n = AppLocalizations.of(context)!;
     final TextEditingController emailController = TextEditingController();
     String email = "";
     int? customerId;
@@ -491,7 +499,8 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
                         color: Colors.white,
                       ),
                       decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.email, color: Colors.white.withOpacity(0.6), size: 18),
+                        prefixIcon: Icon(Icons.email,
+                            color: Colors.white.withOpacity(0.6), size: 18),
                         hintText: l10n.emailExample,
                         hintStyle: TextStyle(
                           fontFamily: 'Inter',
@@ -502,17 +511,21 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
                         fillColor: Colors.white.withOpacity(0.06),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(14),
-                          borderSide: BorderSide(color: Colors.white.withOpacity(0.14)),
+                          borderSide: BorderSide(
+                              color: Colors.white.withOpacity(0.14)),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(14),
-                          borderSide: BorderSide(color: Colors.white.withOpacity(0.14)),
+                          borderSide: BorderSide(
+                              color: Colors.white.withOpacity(0.14)),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(14),
-                          borderSide: BorderSide(color: Colors.white.withOpacity(0.6)),
+                          borderSide: BorderSide(
+                              color: Colors.white.withOpacity(0.6)),
                         ),
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 14),
                       ),
                       onChanged: (value) {
                         email = value.trim();
@@ -528,12 +541,15 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
                             context: context,
                             barrierDismissible: false,
                             builder: (_) => Center(
-                              child: CircularProgressIndicator(color: gold),
+                              child:
+                              CircularProgressIndicator(color: gold),
                             ),
                           );
-                          final result = await _verifyAndGetCustomerId(scannedEmail);
+                          final result =
+                          await _verifyAndGetCustomerId(scannedEmail);
                           Navigator.pop(context);
-                          if (result != null && result['customerId'] != null) {
+                          if (result != null &&
+                              result['customerId'] != null) {
                             emailController.text = scannedEmail;
                             email = scannedEmail.trim();
                             customerId = result['customerId'];
@@ -547,12 +563,14 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(14),
                           color: Colors.white.withOpacity(0.06),
-                          border: Border.all(color: Colors.white.withOpacity(0.18)),
+                          border: Border.all(
+                              color: Colors.white.withOpacity(0.18)),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.qr_code_scanner, size: 16, color: gold),
+                            Icon(Icons.qr_code_scanner,
+                                size: 16, color: gold),
                             const SizedBox(width: 8),
                             Text(
                               l10n.scanQRCode,
@@ -585,8 +603,10 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
                                 return;
                               }
                               if (customerId == null) {
-                                final result = await _verifyAndGetCustomerId(email);
-                                if (result != null && result['customerId'] != null) {
+                                final result =
+                                await _verifyAndGetCustomerId(email);
+                                if (result != null &&
+                                    result['customerId'] != null) {
                                   customerId = result['customerId'];
                                 } else {
                                   _snack(l10n.userNotFound, error: true);
@@ -704,7 +724,8 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message, style: const TextStyle(fontFamily: 'Inter')),
-        backgroundColor: error ? const Color(0xFFE5484D) : (warn ? amber : primary),
+        backgroundColor:
+        error ? const Color(0xFFE5484D) : (warn ? amber : primary),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
@@ -747,8 +768,6 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-
     if (_cachedTicketIndex != _currentIndex) {
       _cachedWarningWidget = null;
       _cachedScanHistory = null;
@@ -771,7 +790,11 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [Color(0xFF4A0710), Color(0xFF23030A), Color(0xFF120104)],
+              colors: [
+                Color(0xFF4A0710),
+                Color(0xFF23030A),
+                Color(0xFF120104)
+              ],
               stops: [0.0, 0.3, 1.0],
             ),
           ),
@@ -780,7 +803,8 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
               children: [
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
-                  child: _buildHeader(l10n, '${l10n.myTickets}', showLogout: false),
+                  child: _buildHeader(l10n, l10n.myTickets,
+                      showLogout: false),
                 ),
                 Expanded(
                   child: Center(
@@ -820,7 +844,8 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
         widget.isTransferable,
         ticket["transfer_status"] ?? 20,
         widget.orderData["transfer_status"] ?? 20,
-      ) && canStillTransfer(widget.event["date"]);
+      ) &&
+          canStillTransfer(widget.event["date"]);
     }).toList();
 
     final hasTransferableTickets = transferableTickets.contains(true);
@@ -861,11 +886,14 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
                       },
                       itemBuilder: (context, index) {
                         final ticket = _filteredTickets[index];
-                        final isCurrentTicketTransferable = transferableTickets[index];
-                        final isSelected = _selectedTickets.contains(ticket["id"]);
+                        final isCurrentTicketTransferable =
+                        transferableTickets[index];
+                        final isSelected =
+                        _selectedTickets.contains(ticket["id"]);
 
                         return SingleChildScrollView(
-                          padding: const EdgeInsets.fromLTRB(20, 0, 20, 120),
+                          padding:
+                          const EdgeInsets.fromLTRB(20, 0, 20, 120),
                           child: Column(
                             children: [
                               if (isCurrentTicketTransferable)
@@ -881,31 +909,45 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
                                           ticket["status"],
                                           widget.isTransferable,
                                           ticket["transfer_status"] ?? 20,
-                                          widget.orderData["transfer_status"] ?? 20,
+                                          widget.orderData["transfer_status"] ??
+                                              20,
                                         ),
                                         child: Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 12, vertical: 6),
                                           decoration: BoxDecoration(
-                                            color: isSelected ? primary : Colors.transparent,
-                                            borderRadius: BorderRadius.circular(20),
-                                            border: Border.all(color: primary),
+                                            color: isSelected
+                                                ? primary
+                                                : Colors.transparent,
+                                            borderRadius:
+                                            BorderRadius.circular(20),
+                                            border:
+                                            Border.all(color: primary),
                                           ),
                                           child: Row(
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
                                               Icon(
-                                                isSelected ? Icons.check : Icons.add,
-                                                color: isSelected ? Colors.white : primary,
+                                                isSelected
+                                                    ? Icons.check
+                                                    : Icons.add,
+                                                color: isSelected
+                                                    ? Colors.white
+                                                    : primary,
                                                 size: 16,
                                               ),
                                               const SizedBox(width: 4),
                                               Text(
-                                                isSelected ? l10n.selected : l10n.selectForTransfer,
+                                                isSelected
+                                                    ? l10n.selected
+                                                    : l10n.selectForTransfer,
                                                 style: TextStyle(
                                                   fontFamily: 'Inter',
                                                   fontWeight: FontWeight.w600,
                                                   fontSize: 12,
-                                                  color: isSelected ? Colors.white : primary,
+                                                  color: isSelected
+                                                      ? Colors.white
+                                                      : primary,
                                                 ),
                                               ),
                                             ],
@@ -921,7 +963,6 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
                         );
                       },
                     ),
-
                     if (_filteredTickets.length > 1) ...[
                       Positioned(
                         left: 8,
@@ -932,7 +973,8 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
                             onTap: () {
                               if (_currentIndex > 0) {
                                 _pageController.previousPage(
-                                  duration: const Duration(milliseconds: 300),
+                                  duration:
+                                  const Duration(milliseconds: 300),
                                   curve: Curves.easeInOut,
                                 );
                               }
@@ -943,11 +985,15 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
                               decoration: BoxDecoration(
                                 color: Colors.black.withOpacity(0.5),
                                 shape: BoxShape.circle,
-                                border: Border.all(color: Colors.white.withOpacity(0.14)),
+                                border: Border.all(
+                                    color:
+                                    Colors.white.withOpacity(0.14)),
                               ),
                               child: Icon(
                                 Icons.arrow_back_ios_new_rounded,
-                                color: _currentIndex > 0 ? gold : Colors.white24,
+                                color: _currentIndex > 0
+                                    ? gold
+                                    : Colors.white24,
                                 size: 18,
                               ),
                             ),
@@ -961,9 +1007,11 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
                         child: Center(
                           child: GestureDetector(
                             onTap: () {
-                              if (_currentIndex < _filteredTickets.length - 1) {
+                              if (_currentIndex <
+                                  _filteredTickets.length - 1) {
                                 _pageController.nextPage(
-                                  duration: const Duration(milliseconds: 300),
+                                  duration:
+                                  const Duration(milliseconds: 300),
                                   curve: Curves.easeInOut,
                                 );
                               }
@@ -974,11 +1022,16 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
                               decoration: BoxDecoration(
                                 color: Colors.black.withOpacity(0.5),
                                 shape: BoxShape.circle,
-                                border: Border.all(color: Colors.white.withOpacity(0.14)),
+                                border: Border.all(
+                                    color:
+                                    Colors.white.withOpacity(0.14)),
                               ),
                               child: Icon(
                                 Icons.arrow_forward_ios_rounded,
-                                color: _currentIndex < _filteredTickets.length - 1 ? gold : Colors.white24,
+                                color: _currentIndex <
+                                    _filteredTickets.length - 1
+                                    ? gold
+                                    : Colors.white24,
                                 size: 18,
                               ),
                             ),
@@ -986,7 +1039,6 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
                         ),
                       ),
                     ],
-
                     if (hasTransferableTickets && _showTransferButton)
                       Positioned(
                         bottom: 24,
@@ -999,9 +1051,13 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(14),
                               gradient: const LinearGradient(
-                                colors: [Color(0xFFD11A2A), Color(0xFFA8161F)],
+                                colors: [
+                                  Color(0xFFD11A2A),
+                                  Color(0xFFA8161F)
+                                ],
                               ),
-                              border: Border.all(color: Colors.white.withOpacity(0.2)),
+                              border: Border.all(
+                                  color: Colors.white.withOpacity(0.2)),
                               boxShadow: [
                                 BoxShadow(
                                   color: primary.withOpacity(0.4),
@@ -1042,7 +1098,8 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
     );
   }
 
-  Widget _buildHeader(AppLocalizations l10n, String title, {bool showLogout = true}) {
+  Widget _buildHeader(AppLocalizations l10n, String title,
+      {bool showLogout = true}) {
     return SizedBox(
       height: 44,
       child: Row(
@@ -1057,7 +1114,8 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
                 color: Colors.white.withOpacity(0.08),
                 border: Border.all(color: Colors.white.withOpacity(0.14)),
               ),
-              child: const Icon(Icons.chevron_left, color: Colors.white, size: 20),
+              child: const Icon(Icons.chevron_left,
+                  color: Colors.white, size: 20),
             ),
           ),
           const Spacer(),
@@ -1088,7 +1146,8 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
                   color: Colors.white.withOpacity(0.08),
                   border: Border.all(color: Colors.white.withOpacity(0.14)),
                 ),
-                child: const Icon(Icons.power_settings_new, color: Colors.white, size: 18),
+                child: const Icon(Icons.power_settings_new,
+                    color: Colors.white, size: 18),
               ),
             )
           else
@@ -1099,8 +1158,6 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
   }
 
   Widget _buildTicketContent(Map<String, dynamic> ticket, int index) {
-    final l10n = AppLocalizations.of(context)!;
-
     final ticketData = ticket["ticket_data"];
     final ticketNumber = ticket["ticket_number"];
     final ticketStatus = ticket["status"];
@@ -1138,16 +1195,21 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
     } else if (isTransferable == 0) {
       mainContent = _buildInfoMessage(Icons.block, l10n.qrCodeNotAuthorized);
     } else if (ticketStatus == 2) {
-      mainContent = _buildInfoMessage(Icons.confirmation_number, l10n.ticketAlreadyTransferred);
+      mainContent =
+          _buildInfoMessage(Icons.confirmation_number, l10n.ticketAlreadyTransferred);
     } else if (ticketStatus == 1) {
-      mainContent = _buildInfoMessage(Icons.confirmation_number, l10n.usePhysicalTicket);
+      mainContent =
+          _buildInfoMessage(Icons.confirmation_number, l10n.usePhysicalTicket);
     } else if (!shouldShowQRCode(event["date"])) {
       mainContent = _buildInfoMessage(
         Icons.schedule,
-        widget.isQrCode == 0 ? l10n.usePhysicalTicket : l10n.qrCodeWillAppearBeforeMatch,
+        widget.isQrCode == 0
+            ? l10n.usePhysicalTicket
+            : l10n.qrCodeWillAppearBeforeMatch,
       );
     } else if (widget.isQrCode == 0) {
-      mainContent = _buildInfoMessage(Icons.qr_code, l10n.qrCodeNotAvailableForCategory);
+      mainContent =
+          _buildInfoMessage(Icons.qr_code, l10n.qrCodeNotAvailableForCategory);
     } else {
       mainContent = _buildQRCodeContent(ticketNumber, ticketStatus, event["date"]);
     }
@@ -1181,7 +1243,6 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
               ],
             ),
           ),
-
         if (isTransferable == 0)
           Container(
             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 14),
@@ -1208,10 +1269,10 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
               ],
             ),
           ),
-
-        if (shouldShowCountdown(event["date"]) && isTransferable != 0 && !isEventStarted(event["date"]))
+        if (shouldShowCountdown(event["date"]) &&
+            isTransferable != 0 &&
+            !isEventStarted(event["date"]))
           _buildCountdown(event["date"], ticketStatus),
-
         if (ticketStatus != 0)
           Container(
             padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
@@ -1245,9 +1306,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
               ],
             ),
           ),
-
         const SizedBox(height: 8),
-
         Text(
           event["name"],
           style: const TextStyle(
@@ -1281,16 +1340,10 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 20),
-
         mainContent,
-
         const SizedBox(height: 24),
-
-        if (_hasTicketData(ticketData))
-          _buildSeatingInfo(ticketData),
-
+        if (_hasTicketData(ticketData)) _buildSeatingInfo(ticketData),
         const SizedBox(height: 16),
-
         Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
@@ -1316,7 +1369,6 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
             ],
           ),
         ),
-
         if (!widget.isSender && transferStatus == 0) ...[
           const SizedBox(height: 16),
           GestureDetector(
@@ -1414,11 +1466,12 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
     return prefs.getString('deviceIdPrefrences');
   }
 
-  Widget _buildQRCodeContent(String ticketNumber, int ticketStatus, String eventDate) {
-    final l10n = AppLocalizations.of(context)!;
+  Widget _buildQRCodeContent(
+      String ticketNumber, int ticketStatus, String eventDate) {
     final ticket = widget.tickets[_currentIndex];
     final scanHistory = ticket["scan_history"];
-    final hasBeenScanned = scanHistory != null && scanHistory["device_id"] != null;
+    final hasBeenScanned =
+        scanHistory != null && scanHistory["device_id"] != null;
     final scanStatus = scanHistory != null ? scanHistory["status"] : null;
 
     if (_cachedQRCodeWidget != null &&
@@ -1469,11 +1522,13 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
               return _buildScannedFromOtherDeviceMessage(scanHistory);
             }
           }
-          return _buildNormalQRCode(ticketNumber, ticketStatus, eventDate, showUsedBanner: true);
+          return _buildNormalQRCode(ticketNumber, ticketStatus, eventDate,
+              showUsedBanner: true);
         },
       );
     } else {
-      result = _buildNormalQRCode(ticketNumber, ticketStatus, eventDate, showUsedBanner: true);
+      result = _buildNormalQRCode(ticketNumber, ticketStatus, eventDate,
+          showUsedBanner: true);
     }
 
     _cachedQRCodeWidget = result;
@@ -1492,8 +1547,6 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
         Color borderColor = const Color(0xFFA8161F),
         String? scanMessage,
       }) {
-    final l10n = AppLocalizations.of(context)!;
-
     return CustomPaint(
       painter: _FourNDottedBorderPainter(
         animation: _controller,
@@ -1553,7 +1606,8 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
               Padding(
                 padding: const EdgeInsets.only(top: 12),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding:
+                  const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
                     color: borderColor.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(20),
@@ -1577,8 +1631,8 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
     );
   }
 
-  Widget _buildScannedFromOtherDeviceMessage(Map<String, dynamic> scanHistory) {
-    final l10n = AppLocalizations.of(context)!;
+  Widget _buildScannedFromOtherDeviceMessage(
+      Map<String, dynamic> scanHistory) {
     final scanDate = scanHistory["enter_at"] != null
         ? _formatDateTime(scanHistory["enter_at"])
         : l10n.unknownDate;
@@ -1588,11 +1642,13 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
       decoration: BoxDecoration(
         color: const Color(0xFFE5484D).withOpacity(0.08),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFE5484D).withOpacity(0.4), width: 1.5),
+        border: Border.all(
+            color: const Color(0xFFE5484D).withOpacity(0.4), width: 1.5),
       ),
       child: Column(
         children: [
-          const Icon(Icons.warning_amber_rounded, size: 56, color: Color(0xFFE5484D)),
+          const Icon(Icons.warning_amber_rounded,
+              size: 56, color: Color(0xFFE5484D)),
           const SizedBox(height: 16),
           Text(
             l10n.ticketAlreadyScanned,
@@ -1670,7 +1726,6 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
       final dateTime = DateTime.parse(dateTimeString);
       final now = DateTime.now();
       final difference = now.difference(dateTime);
-      final l10n = AppLocalizations.of(context)!;
 
       if (difference.inDays > 0) {
         return "${difference.inDays} ${l10n.day}${difference.inDays > 1 ? 's' : ''}";
@@ -1687,15 +1742,18 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
   }
 
   Widget _buildCountdown(String eventDate, int ticketStatus) {
-    final l10n = AppLocalizations.of(context)!;
     String timeRemaining = getTimeRemaining(eventDate);
-    if (timeRemaining != l10n.eventOngoing && ticketStatus != 2 && ticketStatus != 3) {
+    if (timeRemaining != l10n.eventOngoing &&
+        ticketStatus != 2 &&
+        ticketStatus != 3) {
       return Column(
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Text(
-              (!isEventPast(eventDate) || !isEventStarted(eventDate)) ? "" : l10n.eventStartsIn,
+              (!isEventPast(eventDate) || !isEventStarted(eventDate))
+                  ? ""
+                  : l10n.eventStartsIn,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontFamily: 'Inter',
@@ -1716,7 +1774,8 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.access_time, color: Color(0xFFE5484D), size: 18),
+                const Icon(Icons.access_time,
+                    color: Color(0xFFE5484D), size: 18),
                 const SizedBox(width: 6),
                 Text(
                   timeRemaining,
@@ -1738,7 +1797,6 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
   }
 
   Widget _buildSeatingInfo(Map<String, dynamic> ticketData) {
-    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -1749,10 +1807,14 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildInfoItem(l10n.gate, ticketData["porte"]?.toString() ?? "-", Icons.door_front_door_rounded),
-          _buildInfoItem(l10n.access, ticketData["access"]?.toString() ?? "-", Icons.directions_rounded),
-          _buildInfoItem(l10n.block, ticketData["secteur"]?.toString() ?? "-", Icons.grid_view_rounded),
-          _buildInfoItem(l10n.seat, ticketData["place"]?.toString() ?? "-", Icons.chair_rounded),
+          _buildInfoItem(l10n.gate, ticketData["porte"]?.toString() ?? "-",
+              Icons.door_front_door_rounded),
+          _buildInfoItem(l10n.access, ticketData["access"]?.toString() ?? "-",
+              Icons.directions_rounded),
+          _buildInfoItem(l10n.block, ticketData["secteur"]?.toString() ?? "-",
+              Icons.grid_view_rounded),
+          _buildInfoItem(l10n.seat, ticketData["place"]?.toString() ?? "-",
+              Icons.chair_rounded),
         ],
       ),
     );
@@ -1788,7 +1850,6 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
   }
 
   String _formatDate(String rawDate) {
-    final l10n = AppLocalizations.of(context)!;
     try {
       DateTime parsed = DateTime.parse(rawDate);
       String datePart = DateFormat("dd-MM-yyyy").format(parsed);
@@ -1806,14 +1867,19 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
       DateTime now = DateTime.now().toUtc().add(const Duration(hours: 1));
       DateTime eventDateTime = DateTime.parse(eventDate).toUtc();
 
-      if (widget.event["date_qr_code"] != null && widget.event["date_qr_code"].toString().isNotEmpty) {
-        DateTime qrCodeDateTime = DateTime.parse(widget.event["date_qr_code"].toString()).toUtc();
-        DateTime oneHourAfterMatch = eventDateTime.add(const Duration(hours: 1));
-        bool isAfterOrAtStartTime = now.isAfter(qrCodeDateTime) || now.isAtSameMomentAs(qrCodeDateTime);
+      if (widget.event["date_qr_code"] != null &&
+          widget.event["date_qr_code"].toString().isNotEmpty) {
+        DateTime qrCodeDateTime =
+        DateTime.parse(widget.event["date_qr_code"].toString()).toUtc();
+        DateTime oneHourAfterMatch =
+        eventDateTime.add(const Duration(hours: 1));
+        bool isAfterOrAtStartTime =
+            now.isAfter(qrCodeDateTime) || now.isAtSameMomentAs(qrCodeDateTime);
         bool isBeforeEndTime = now.isBefore(oneHourAfterMatch);
         return isAfterOrAtStartTime && isBeforeEndTime;
       } else {
-        DateTime sixHoursBefore = eventDateTime.subtract(const Duration(hours: 5));
+        DateTime sixHoursBefore =
+        eventDateTime.subtract(const Duration(hours: 5));
         return now.isAfter(sixHoursBefore);
       }
     } catch (e) {
@@ -1824,23 +1890,30 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
 
   bool shouldShowCountdown(String eventDate) {
     try {
-      if (widget.event["date_qr_code"] != null && widget.event["date_qr_code"].toString().isNotEmpty) {
-        DateTime qrCodeDateTime = DateTime.parse(widget.event["date_qr_code"].toString());
+      if (widget.event["date_qr_code"] != null &&
+          widget.event["date_qr_code"].toString().isNotEmpty) {
+        DateTime qrCodeDateTime =
+        DateTime.parse(widget.event["date_qr_code"].toString());
         DateTime now = DateTime.now();
-        DateTime nowLocal = DateTime(now.year, now.month, now.day, now.hour, now.minute, now.second);
+        DateTime nowLocal = DateTime(now.year, now.month, now.day, now.hour,
+            now.minute, now.second);
 
         DateTime eventDateTime = DateTime.parse(eventDate);
         DateTime oneHourAfterMatch = eventDateTime.add(const Duration(hours: 1));
 
-        return nowLocal.isAfter(qrCodeDateTime) && nowLocal.isBefore(oneHourAfterMatch);
+        return nowLocal.isAfter(qrCodeDateTime) &&
+            nowLocal.isBefore(oneHourAfterMatch);
       }
 
       DateTime eventDateTime = DateTime.parse(eventDate);
       DateTime now = DateTime.now();
-      DateTime nowLocal = DateTime(now.year, now.month, now.day, now.hour, now.minute, now.second);
+      DateTime nowLocal = DateTime(
+          now.year, now.month, now.day, now.hour, now.minute, now.second);
       DateTime fiveHoursBefore = eventDateTime.subtract(const Duration(hours: 5));
-      DateTime endOfEventDay = DateTime(eventDateTime.year, eventDateTime.month, eventDateTime.day + 1);
-      return nowLocal.isAfter(fiveHoursBefore) && nowLocal.isBefore(endOfEventDay);
+      DateTime endOfEventDay =
+      DateTime(eventDateTime.year, eventDateTime.month, eventDateTime.day + 1);
+      return nowLocal.isAfter(fiveHoursBefore) &&
+          nowLocal.isBefore(endOfEventDay);
     } catch (e) {
       print("Error in shouldShowCountdown: $e");
       return false;
@@ -1848,21 +1921,25 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
   }
 
   String getTimeRemaining(String eventDate) {
-    final l10n = AppLocalizations.of(context)!;
     try {
-      if (widget.event["date_qr_code"] != null && widget.event["date_qr_code"].toString().isNotEmpty) {
-        DateTime qrCodeDateTime = DateTime.parse(widget.event["date_qr_code"].toString());
+      if (widget.event["date_qr_code"] != null &&
+          widget.event["date_qr_code"].toString().isNotEmpty) {
+        DateTime qrCodeDateTime =
+        DateTime.parse(widget.event["date_qr_code"].toString());
         DateTime eventDateTime = DateTime.parse(eventDate);
         DateTime oneHourAfterMatch = eventDateTime.add(const Duration(hours: 1));
         DateTime now = DateTime.now();
 
-        if (now.millisecondsSinceEpoch < qrCodeDateTime.millisecondsSinceEpoch) {
+        if (now.millisecondsSinceEpoch <
+            qrCodeDateTime.millisecondsSinceEpoch) {
           Duration remaining = qrCodeDateTime.difference(now);
           return _formatDuration(remaining);
-        } else if (now.millisecondsSinceEpoch < eventDateTime.millisecondsSinceEpoch) {
+        } else if (now.millisecondsSinceEpoch <
+            eventDateTime.millisecondsSinceEpoch) {
           Duration remaining = eventDateTime.difference(now);
           return _formatDuration(remaining);
-        } else if (now.millisecondsSinceEpoch < oneHourAfterMatch.millisecondsSinceEpoch) {
+        } else if (now.millisecondsSinceEpoch <
+            oneHourAfterMatch.millisecondsSinceEpoch) {
           Duration remaining = oneHourAfterMatch.difference(now);
           int minutes = remaining.inMinutes.remainder(60);
           int seconds = remaining.inSeconds.remainder(60);
@@ -1884,8 +1961,10 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
         Duration remaining = eventDateTime.difference(now);
         return _formatDuration(remaining);
       } else {
-        DateTime oneHourAfterStart = eventDateTime.add(const Duration(hours: 1));
-        if (now.millisecondsSinceEpoch < oneHourAfterStart.millisecondsSinceEpoch) {
+        DateTime oneHourAfterStart =
+        eventDateTime.add(const Duration(hours: 1));
+        if (now.millisecondsSinceEpoch <
+            oneHourAfterStart.millisecondsSinceEpoch) {
           Duration remaining = oneHourAfterStart.difference(now);
           int minutes = remaining.inMinutes.remainder(60);
           int seconds = remaining.inSeconds.remainder(60);
@@ -1905,7 +1984,6 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
   }
 
   String _formatDuration(Duration duration) {
-    final l10n = AppLocalizations.of(context)!;
     int days = duration.inDays;
     int hours = duration.inHours.remainder(24);
     int minutes = duration.inMinutes.remainder(60);
@@ -1941,7 +2019,8 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
     try {
       String localDateString = rawDate.replaceAll('Z', '');
       DateTime eventLocal = DateTime.parse(localDateString);
-      DateTime oneHourAfterEventEnd = eventLocal.add(const Duration(hours: 1));
+      DateTime oneHourAfterEventEnd =
+      eventLocal.add(const Duration(hours: 1));
       DateTime nowLocal = DateTime.now();
       return nowLocal.isAfter(oneHourAfterEventEnd);
     } catch (e) {
@@ -1954,7 +2033,8 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
       String localDateString = rawDate.replaceAll('Z', '');
       DateTime eventLocal = DateTime.parse(localDateString);
       DateTime nowLocal = DateTime.now();
-      return nowLocal.millisecondsSinceEpoch > eventLocal.millisecondsSinceEpoch;
+      return nowLocal.millisecondsSinceEpoch >
+          eventLocal.millisecondsSinceEpoch;
     } catch (e) {
       return false;
     }
@@ -1964,7 +2044,8 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
     try {
       DateTime eventDateTime = DateTime.parse(eventDate);
       DateTime now = DateTime.now();
-      DateTime twoHoursAfterStart = eventDateTime.add(const Duration(hours: 1));
+      DateTime twoHoursAfterStart =
+      eventDateTime.add(const Duration(hours: 1));
       return now.isAfter(twoHoursAfterStart);
     } catch (e) {
       return false;
@@ -1980,7 +2061,6 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
   }
 
   Future<bool?> _showFinalConfirmationModal(String email, int ticketCount) async {
-    final l10n = AppLocalizations.of(context)!;
     return showDialog<bool>(
       context: context,
       barrierDismissible: false,
@@ -2028,7 +2108,8 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
               ),
               const SizedBox(height: 8),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                padding:
+                const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                 decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.06),
                   borderRadius: BorderRadius.circular(14),
@@ -2047,7 +2128,8 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
               ),
               const SizedBox(height: 16),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                padding:
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                 decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.06),
                   borderRadius: BorderRadius.circular(30),
@@ -2055,7 +2137,8 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.confirmation_number_outlined, size: 18, color: gold),
+                    Icon(Icons.confirmation_number_outlined,
+                        size: 18, color: gold),
                     const SizedBox(width: 8),
                     Text(
                       "$ticketCount ${l10n.ticketPlural}",
@@ -2132,7 +2215,6 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
   }
 
   Future<void> _acceptTransfer(int ticketId) async {
-    final l10n = AppLocalizations.of(context)!;
     _showLoader(l10n.transferInProgress);
     try {
       final response = await http.post(
@@ -2151,7 +2233,8 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
           _snack(l10n.transferAcceptedSuccess);
           Navigator.pop(context, true);
         } else {
-          _snack("${data["message"] ?? l10n.acceptTransferError}", error: true);
+          _snack("${data["message"] ?? l10n.acceptTransferError}",
+              error: true);
         }
       } else {
         _snack("${l10n.serverError}: ${response.statusCode}", error: true);
@@ -2163,7 +2246,6 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
   }
 
   Future<void> _rejectTransfer(int ticketId) async {
-    final l10n = AppLocalizations.of(context)!;
     _showLoader(l10n.transferInProgress);
     try {
       final response = await http.post(
@@ -2182,7 +2264,8 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage> with SingleTickerPr
           _snack(l10n.transferRejected, warn: true);
           Navigator.pop(context, true);
         } else {
-          _snack("${data["message"] ?? l10n.rejectTransferError}", error: true);
+          _snack("${data["message"] ?? l10n.rejectTransferError}",
+              error: true);
         }
       } else {
         _snack("${l10n.serverError}: ${response.statusCode}", error: true);
@@ -2226,7 +2309,8 @@ class _FourNDottedBorderPainter extends CustomPainter {
 
     for (int i = 0; i < 4; i++) {
       double startPosition = (i * segmentLength + offset) % totalLength;
-      final extract = metric.extractPath(startPosition, startPosition + dashLength);
+      final extract =
+      metric.extractPath(startPosition, startPosition + dashLength);
       dashPath.addPath(extract, Offset.zero);
     }
 
@@ -2283,19 +2367,23 @@ class _ThreeNDottedBorderPainter extends CustomPainter {
     final totalLength = metric.length;
 
     final double t = (math.sin(animation.value * 2 * math.pi) * 0.3) + 0.5;
-    final offset = (animation.value * totalLength * 0.15 + t * 20) % totalLength;
+    final offset =
+        (animation.value * totalLength * 0.15 + t * 20) % totalLength;
     final segmentLength = totalLength / 3;
     final dashLength = segmentLength * 0.7;
     final dynamicOffset = offset + (t * 10);
     final dashPath = Path();
 
     for (int i = 0; i < 3; i++) {
-      double startPosition = (i * segmentLength + dynamicOffset + (i * 5)) % totalLength;
-      final extract = metric.extractPath(startPosition, startPosition + dashLength);
+      double startPosition =
+          (i * segmentLength + dynamicOffset + (i * 5)) % totalLength;
+      final extract =
+      metric.extractPath(startPosition, startPosition + dashLength);
       dashPath.addPath(extract, Offset.zero);
 
       if (i == 1) {
-        final midPoint = metric.extractPath(startPosition + dashLength / 2, startPosition + dashLength / 2 + 1);
+        final midPoint = metric.extractPath(
+            startPosition + dashLength / 2, startPosition + dashLength / 2 + 1);
         dashPath.addPath(midPoint, Offset.zero);
       }
     }

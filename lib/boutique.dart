@@ -36,6 +36,9 @@ class _BoutiquePageState extends State<BoutiquePage> {
   int? selectedCategoryId;
   Map<String, Map<String, dynamic>> selectedProducts = {};
 
+  /// l10n helper
+  AppLocalizations get l10n => AppLocalizations.of(context)!;
+
   String _truncateName(String? name, {int max = 20}) {
     if (name == null) return '';
     final trimmed = name.trim();
@@ -78,11 +81,10 @@ class _BoutiquePageState extends State<BoutiquePage> {
     super.initState();
     isLoggedIn = widget.token.isNotEmpty;
     _loadCartFromStorage();
-    _checkShopStatus(); // ✅ Vérification de sécurité
+    _checkShopStatus();
     fetchData();
   }
 
-  // ✅ Vérifie si la boutique n'a pas été désactivée entre temps
   Future<void> _checkShopStatus() async {
     try {
       final response = await http.get(
@@ -101,10 +103,11 @@ class _BoutiquePageState extends State<BoutiquePage> {
           bool isEnabled = false;
           if (enabled is bool) isEnabled = enabled;
           if (enabled is int) isEnabled = enabled == 1;
-          if (enabled is String) isEnabled = enabled == "1" || enabled.toLowerCase() == "true";
+          if (enabled is String) {
+            isEnabled = enabled == "1" || enabled.toLowerCase() == "true";
+          }
 
           if (!isEnabled && mounted) {
-            // Bloque l'accès si c'est désactivé
             _showShopMaintenanceModal(context);
           }
         }
@@ -279,7 +282,6 @@ class _BoutiquePageState extends State<BoutiquePage> {
     );
     if (res.statusCode == 200) {
       final data = json.decode(res.body);
-      final l10n = AppLocalizations.of(context)!;
       setState(() {
         categoryObjects = List<Map<String, dynamic>>.from(data['data'] ?? []);
         categories = [l10n.allCategories] +
@@ -299,7 +301,6 @@ class _BoutiquePageState extends State<BoutiquePage> {
     );
     if (res.statusCode == 200) {
       final data = json.decode(res.body);
-      final l10n = AppLocalizations.of(context)!;
       setState(() {
         sizeObjects = List<Map<String, dynamic>>.from(data['data'] ?? []);
         sizes = [l10n.allSizes] +
@@ -363,7 +364,6 @@ class _BoutiquePageState extends State<BoutiquePage> {
       };
     });
     _saveCartToStorage();
-    final l10n = AppLocalizations.of(context)!;
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(l10n.productAddedToCart,
           style: const TextStyle(color: Colors.white, fontFamily: 'Inter')),
@@ -452,17 +452,15 @@ class _BoutiquePageState extends State<BoutiquePage> {
               onTap: (index) {
                 switch (index) {
                   case 0:
-                  // Événements
-                    Navigator.pushReplacementNamed(context, '/events', arguments: {
-                      'token': widget.token,
-                      'organizationId': widget.organizationId,
-                    });
+                    Navigator.pushReplacementNamed(context, '/events',
+                        arguments: {
+                          'token': widget.token,
+                          'organizationId': widget.organizationId,
+                        });
                     break;
                   case 1:
-                  // Déjà sur Boutique
                     break;
                   case 2:
-                  // Accueil
                     Navigator.pushReplacementNamed(context, '/acceuil',
                         arguments: {
                           'token': widget.token,
@@ -470,7 +468,6 @@ class _BoutiquePageState extends State<BoutiquePage> {
                         });
                     break;
                   case 3:
-                  // Profil
                     if (widget.token.isNotEmpty) {
                       Navigator.pushNamed(context, '/editProfile', arguments: {
                         'token': widget.token,
@@ -555,9 +552,9 @@ class _BoutiquePageState extends State<BoutiquePage> {
             ),
           ),
           const SizedBox(width: 10),
-          const Text(
-            'Store',
-            style: TextStyle(
+          Text(
+            l10n.storeTitle,
+            style: const TextStyle(
               fontSize: 17,
               fontWeight: FontWeight.w700,
               color: Colors.white,
@@ -635,8 +632,6 @@ class _BoutiquePageState extends State<BoutiquePage> {
   }
 
   Widget _buildCategoriesRow() {
-    final l10n = AppLocalizations.of(context)!;
-
     final chips = <Map<String, dynamic>>[
       {'id': 'tout', 'label': l10n.allCategories},
       ...categoryObjects.map((c) => {
@@ -727,9 +722,9 @@ class _BoutiquePageState extends State<BoutiquePage> {
                 padding: const EdgeInsets.fromLTRB(20, 8, 20, 12),
                 child: Row(
                   children: [
-                    const Text(
-                      'Choisir une catégorie',
-                      style: TextStyle(
+                    Text(
+                      l10n.chooseCategory,
+                      style: const TextStyle(
                         fontFamily: 'Inter',
                         fontSize: 17,
                         fontWeight: FontWeight.w700,
@@ -821,7 +816,6 @@ class _BoutiquePageState extends State<BoutiquePage> {
   }
 
   Widget _buildProductCard(Map<String, dynamic> product) {
-    final l10n = AppLocalizations.of(context)!;
     final sizesData = List<Map<String, dynamic>>.from(product['sizes'] ?? []);
     final isOut = sizesData.isNotEmpty &&
         sizesData.every((s) => (s['available_qty'] ?? 0) == 0);
@@ -852,10 +846,13 @@ class _BoutiquePageState extends State<BoutiquePage> {
                             ? Image.network(
                           imageUrl,
                           fit: BoxFit.cover,
-                          loadingBuilder: (context, child, loadingProgress) {
+                          loadingBuilder:
+                              (context, child, loadingProgress) {
                             if (loadingProgress == null) return child;
-                            final total = loadingProgress.expectedTotalBytes;
-                            final loaded = loadingProgress.cumulativeBytesLoaded;
+                            final total =
+                                loadingProgress.expectedTotalBytes;
+                            final loaded =
+                                loadingProgress.cumulativeBytesLoaded;
                             final progress = (total != null && total > 0)
                                 ? loaded / total
                                 : null;
@@ -986,7 +983,6 @@ class _BoutiquePageState extends State<BoutiquePage> {
   }
 
   Widget _buildEmpty() {
-    final l10n = AppLocalizations.of(context)!;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -1007,7 +1003,6 @@ class _BoutiquePageState extends State<BoutiquePage> {
   }
 
   void _showProductDetails(int productId) async {
-    final l10n = AppLocalizations.of(context)!;
     try {
       final details = await fetchProductDetails(productId);
       if (!mounted) return;
@@ -1039,11 +1034,11 @@ class _BoutiquePageState extends State<BoutiquePage> {
   }
 
   void _showCartSheet() {
-    final l10n = AppLocalizations.of(context)!;
     if (selectedProducts.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(l10n.cartIsEmpty,
-            style: const TextStyle(fontFamily: 'Inter', color: Colors.white)),
+            style:
+            const TextStyle(fontFamily: 'Inter', color: Colors.white)),
         backgroundColor: primary,
       ));
       return;
@@ -1160,7 +1155,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
                                             ),
                                             const SizedBox(height: 3),
                                             Text(
-                                              'Taille ${data['size']}',
+                                              '${l10n.sizeLabel} ${data['size']}',
                                               style: TextStyle(
                                                 fontSize: 12,
                                                 color: Colors.white
@@ -1396,7 +1391,6 @@ class _BoutiquePageState extends State<BoutiquePage> {
   }
 
   void _showDeliveryForm() {
-    final l10n = AppLocalizations.of(context)!;
     _loadUserInfoFromPrefs(_fullNameController, phoneController);
     String paymentMethod = 'wallet';
 
@@ -1538,8 +1532,9 @@ class _BoutiquePageState extends State<BoutiquePage> {
                               const SizedBox(height: 10),
                               _paymentTile(
                                 icon: Icons.account_balance_wallet,
-                                title: 'Wydad Pay',
-                                subtitle: '${l10n.balance}: 1 250,00 MAD',
+                                title: l10n.wydadPayLabel,
+                                subtitle:
+                                '${l10n.balanceLabel}: 1 250,00 MAD',
                                 selected: paymentMethod == 'wallet',
                                 highlightSub: true,
                                 onTap: () => setModal(
@@ -1549,7 +1544,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
                               _paymentTile(
                                 icon: Icons.credit_card,
                                 title: l10n.bankCard,
-                                subtitle: 'Visa, Mastercard · 3D Secure',
+                                subtitle: l10n.visaMastercard3ds,
                                 selected: paymentMethod == 'card',
                                 onTap: () =>
                                     setModal(() => paymentMethod = 'card'),
@@ -1730,9 +1725,8 @@ class _BoutiquePageState extends State<BoutiquePage> {
               ? Colors.white.withOpacity(0.10)
               : Colors.white.withOpacity(0.04),
           border: Border.all(
-            color: selected
-                ? Colors.white
-                : Colors.white.withOpacity(0.12),
+            color:
+            selected ? Colors.white : Colors.white.withOpacity(0.12),
             width: selected ? 1.5 : 1,
           ),
         ),
@@ -1817,17 +1811,19 @@ class _BoutiquePageState extends State<BoutiquePage> {
           final availQty = (item['available_quantity'] as int?) ?? 0;
           if (selQty > availQty) {
             outOfStock.add({
-              'product_name': item['product_name'] ?? 'Inconnu',
-              'size_name': item['size_name'] ?? 'Inconnu',
-              'message':
-              'Quantité demandée ($selQty) > stock ($availQty)',
+              'product_name': item['product_name'] ?? l10n.unknown,
+              'size_name': item['size_name'] ?? l10n.unknown,
+              'message': l10n.quantityRequestedExceedsStock(
+                '$selQty',
+                '$availQty',
+              ),
             });
           }
         } else {
           outOfStock.add({
-            'product_name': data['product']?['name'] ?? 'Inconnu',
-            'size_name': data['size'] ?? 'Inconnu',
-            'message': 'Produit non disponible',
+            'product_name': data['product']?['name'] ?? l10n.unknown,
+            'size_name': data['size'] ?? l10n.unknown,
+            'message': l10n.productUnavailable,
           });
         }
       });
@@ -1852,7 +1848,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
         }
       });
 
-      if (items.isEmpty) throw Exception('Panier invalide');
+      if (items.isEmpty) throw Exception('invalid_cart');
 
       final body = {
         'items': items,
@@ -1879,10 +1875,10 @@ class _BoutiquePageState extends State<BoutiquePage> {
           _navigateToCMIPayment(orderId);
         }
       } else {
-        throw Exception('Failed to create order');
+        throw Exception('create_order_failed');
       }
     } catch (e) {
-      _showErrorDialog('Erreur: $e');
+      _showErrorDialog('${l10n.error}: $e');
     } finally {
       if (mounted) setState(() => isCreatingOrder = false);
     }
@@ -1936,11 +1932,10 @@ class _BoutiquePageState extends State<BoutiquePage> {
       final data = json.decode(res.body);
       return data is Map<String, dynamic> ? data : {'out_of_stock': []};
     }
-    throw Exception('Failed check availability');
+    throw Exception('availability_check_failed');
   }
 
   void _showOutOfStockModal(List<Map<String, dynamic>> list) {
-    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (_) => Dialog(
@@ -2018,9 +2013,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
     );
   }
 
-  // ✅ Modal de maintenance
   void _showShopMaintenanceModal(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -2056,9 +2049,11 @@ class _BoutiquePageState extends State<BoutiquePage> {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: Colors.white.withOpacity(0.12),
-                    border: Border.all(color: Colors.white.withOpacity(0.25)),
+                    border:
+                    Border.all(color: Colors.white.withOpacity(0.25)),
                   ),
-                  child: const Icon(Icons.build_rounded, color: Colors.white, size: 34),
+                  child: const Icon(Icons.build_rounded,
+                      color: Colors.white, size: 34),
                 ),
                 const SizedBox(height: 20),
                 Text(
@@ -2087,8 +2082,8 @@ class _BoutiquePageState extends State<BoutiquePage> {
                   width: double.infinity,
                   child: GestureDetector(
                     onTap: () {
-                      Navigator.of(context).pop(); // Ferme le modal
-                      Navigator.of(context).pop(); // Quitte la page boutique
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pop();
                     },
                     child: Container(
                       height: 48,
@@ -2121,16 +2116,17 @@ class _BoutiquePageState extends State<BoutiquePage> {
   }
 
   void _showErrorDialog(String msg) {
-    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: Text(l10n.error, style: const TextStyle(fontFamily: 'Inter')),
+        title: Text(l10n.error,
+            style: const TextStyle(fontFamily: 'Inter')),
         content: Text(msg, style: const TextStyle(fontFamily: 'Inter')),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text(l10n.ok, style: const TextStyle(fontFamily: 'Inter')),
+            child:
+            Text(l10n.ok, style: const TextStyle(fontFamily: 'Inter')),
           ),
         ],
       ),
@@ -2138,7 +2134,6 @@ class _BoutiquePageState extends State<BoutiquePage> {
   }
 
   void _showLoginDialog() {
-    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (_) => Dialog(
@@ -2253,6 +2248,9 @@ class _ProductDetailsSheetState extends State<_ProductDetailsSheet> {
   int _imgIdx = 0;
   late PageController _pageCtrl;
 
+  /// l10n helper
+  AppLocalizations get l10n => AppLocalizations.of(context)!;
+
   @override
   void initState() {
     super.initState();
@@ -2270,7 +2268,6 @@ class _ProductDetailsSheetState extends State<_ProductDetailsSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     final p = widget.productDetails;
     final images = List<Map<String, dynamic>>.from(p['images'] ?? []);
     final sizes = List<Map<String, dynamic>>.from(p['sizes'] ?? []);
@@ -2324,8 +2321,11 @@ class _ProductDetailsSheetState extends State<_ProductDetailsSheet> {
                                   child: Image.network(
                                     allImages[i],
                                     fit: BoxFit.contain,
-                                    loadingBuilder: (context, child, loadingProgress) {
-                                      if (loadingProgress == null) return child;
+                                    loadingBuilder: (context, child,
+                                        loadingProgress) {
+                                      if (loadingProgress == null) {
+                                        return child;
+                                      }
                                       return const Center(
                                         child: SizedBox(
                                           width: 32,
@@ -2337,11 +2337,10 @@ class _ProductDetailsSheetState extends State<_ProductDetailsSheet> {
                                         ),
                                       );
                                     },
-                                    errorBuilder: (_, __, ___) =>
-                                        Image.asset(
-                                          'assets/default_logo.png',
-                                          fit: BoxFit.contain,
-                                        ),
+                                    errorBuilder: (_, __, ___) => Image.asset(
+                                      'assets/default_logo.png',
+                                      fit: BoxFit.contain,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -2376,7 +2375,7 @@ class _ProductDetailsSheetState extends State<_ProductDetailsSheet> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'MAILLOTS · OFFICIEL',
+                          l10n.maillotsOfficiel,
                           style: TextStyle(
                             fontSize: 11,
                             fontWeight: FontWeight.w600,
@@ -2454,7 +2453,8 @@ class _ProductDetailsSheetState extends State<_ProductDetailsSheet> {
                                     setState(() => _selectedSize = name)
                                     : null,
                                 child: Container(
-                                  width: (MediaQuery.of(context).size.width -
+                                  width:
+                                  (MediaQuery.of(context).size.width -
                                       40 -
                                       5 * 8) /
                                       6,
@@ -2516,8 +2516,8 @@ class _ProductDetailsSheetState extends State<_ProductDetailsSheet> {
                               child: Row(
                                 children: [
                                   GestureDetector(
-                                    onTap: () => setState(
-                                            () => _qty = (_qty - 1).clamp(1, 5)),
+                                    onTap: () => setState(() =>
+                                    _qty = (_qty - 1).clamp(1, 5)),
                                     child: Container(
                                       width: 36,
                                       height: 36,
@@ -2545,8 +2545,8 @@ class _ProductDetailsSheetState extends State<_ProductDetailsSheet> {
                                     ),
                                   ),
                                   GestureDetector(
-                                    onTap: () => setState(
-                                            () => _qty = (_qty + 1).clamp(1, 5)),
+                                    onTap: () => setState(() =>
+                                    _qty = (_qty + 1).clamp(1, 5)),
                                     child: Container(
                                       width: 36,
                                       height: 36,

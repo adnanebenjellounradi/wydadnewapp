@@ -23,6 +23,9 @@ class _WalletPageState extends State<WalletPage> {
 
   final Color primary = const Color(0xFFA8161F);
 
+  /// l10n helper
+  AppLocalizations get l10n => AppLocalizations.of(context)!;
+
   @override
   void initState() {
     super.initState();
@@ -57,7 +60,6 @@ class _WalletPageState extends State<WalletPage> {
   String get _phone => _wallet?['phone']?.toString() ?? '';
   String get _fullName => _wallet?['full_name']?.toString() ?? _userName;
 
-  // ─── MODAL COMING SOON ───
   Future<void> _showComingSoonModal() async {
     await showDialog(
       context: context,
@@ -105,9 +107,9 @@ class _WalletPageState extends State<WalletPage> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                const Text(
-                  'Bientôt disponible',
-                  style: TextStyle(
+                Text(
+                  l10n.comingSoon,
+                  style: const TextStyle(
                     fontFamily: 'Inter',
                     fontSize: 20,
                     fontWeight: FontWeight.w900,
@@ -116,7 +118,7 @@ class _WalletPageState extends State<WalletPage> {
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  'L\'abonnement Saison 2026 / 27 sera disponible prochainement. Restez connectés !',
+                  l10n.subscriptionComingSoonMessage,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: 'Inter',
@@ -138,10 +140,10 @@ class _WalletPageState extends State<WalletPage> {
                           colors: [Color(0xFFD11A2A), Color(0xFFA8161F)],
                         ),
                       ),
-                      child: const Center(
+                      child: Center(
                         child: Text(
-                          'Compris',
-                          style: TextStyle(
+                          l10n.gotIt,
+                          style: const TextStyle(
                             fontFamily: 'Inter',
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
@@ -166,7 +168,6 @@ class _WalletPageState extends State<WalletPage> {
       backgroundColor: const Color(0xFF170205),
       body: Stack(
         children: [
-          // Fond gradient
           Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
@@ -202,7 +203,6 @@ class _WalletPageState extends State<WalletPage> {
               ),
             ),
           ),
-
           SafeArea(
             bottom: false,
             child: _isLoading
@@ -225,8 +225,6 @@ class _WalletPageState extends State<WalletPage> {
               ],
             ),
           ),
-
-          // Bottom pill Abonnement / Wallet — collé en bas
           if (!_isLoading)
             Positioned(
               left: 16,
@@ -244,7 +242,6 @@ class _WalletPageState extends State<WalletPage> {
       height: 44,
       child: Row(
         children: [
-          // ✅ Bouton back (comme dans les autres pages)
           GestureDetector(
             onTap: () => Navigator.maybePop(context),
             child: Container(
@@ -272,9 +269,9 @@ class _WalletPageState extends State<WalletPage> {
             ),
           ),
           const SizedBox(width: 8),
-          const Text(
-            'Wydad Pay',
-            style: TextStyle(
+          Text(
+            l10n.wydadPay,
+            style: const TextStyle(
               fontSize: 17,
               fontWeight: FontWeight.w900,
               color: Colors.white,
@@ -299,9 +296,9 @@ class _WalletPageState extends State<WalletPage> {
               ),
               child: Row(
                 children: [
-                  const Text(
-                    'Niveau ',
-                    style: TextStyle(
+                  Text(
+                    '${l10n.levelLabel} ',
+                    style: const TextStyle(
                       fontFamily: 'Inter',
                       fontSize: 10,
                       fontWeight: FontWeight.w700,
@@ -325,7 +322,7 @@ class _WalletPageState extends State<WalletPage> {
       ),
     );
   }
-  // ─── WALLET ───
+
   Widget _buildWalletContent() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -384,7 +381,7 @@ class _WalletPageState extends State<WalletPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'DIGITAL WALLET',
+                        l10n.digitalWallet,
                         style: TextStyle(
                           fontFamily: 'Inter',
                           fontSize: 10,
@@ -401,9 +398,9 @@ class _WalletPageState extends State<WalletPage> {
                             borderRadius: BorderRadius.circular(5),
                             color: Colors.white.withOpacity(0.15),
                           ),
-                          child: const Text(
-                            'VÉRIFIÉ',
-                            style: TextStyle(
+                          child: Text(
+                            l10n.verifiedBadge,
+                            style: const TextStyle(
                               fontFamily: 'Inter',
                               fontSize: 8,
                               fontWeight: FontWeight.w800,
@@ -418,7 +415,7 @@ class _WalletPageState extends State<WalletPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Solde disponible',
+                        l10n.availableBalanceLabel,
                         style: TextStyle(
                           fontFamily: 'Inter',
                           fontSize: 11,
@@ -466,14 +463,16 @@ class _WalletPageState extends State<WalletPage> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
                         color: Colors.black.withOpacity(0.22),
-                        border:
-                        Border.all(color: Colors.white.withOpacity(0.2)),
+                        border: Border.all(
+                            color: Colors.white.withOpacity(0.2)),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            _phone.isNotEmpty ? _phone : '+212 6•• ••• •••',
+                            _phone.isNotEmpty
+                                ? _phone
+                                : l10n.phoneMaskPlaceholder,
                             style: const TextStyle(
                               fontFamily: 'Inter',
                               fontSize: 10,
@@ -500,33 +499,31 @@ class _WalletPageState extends State<WalletPage> {
   Widget _buildQuickActions() {
     final actions = [
       {
-        'label': 'Alimenter',
+        'label': l10n.topUp,
         'icon': Icons.add,
         'onTap': () async {
-          // ✅ NOUVEAU : écran de choix du mode d'alimentation
           await Navigator.pushNamed(
             context,
             '/walletRechargeMethod',
             arguments: {'token': widget.token},
           );
-          // rafraîchit le solde au retour
           _loadWallet();
         },
       },
       {
-        'label': 'Transférer',
+        'label': l10n.transferAction,
         'icon': Icons.send_outlined,
         'onTap': () => Navigator.pushNamed(context, '/walletTransfer',
             arguments: {'token': widget.token}),
       },
       {
-        'label': 'Retirer',
+        'label': l10n.withdraw,
         'icon': Icons.account_balance_outlined,
         'onTap': () => Navigator.pushNamed(context, '/walletWithdraw',
             arguments: {'token': widget.token}),
       },
       {
-        'label': 'Plus',
+        'label': l10n.moreAction,
         'icon': Icons.grid_view_rounded,
         'onTap': () => Navigator.pushNamed(context, '/walletAllServices',
             arguments: {'token': widget.token}),
@@ -536,7 +533,7 @@ class _WalletPageState extends State<WalletPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: actions.map((a) {
-        final isPrimary = a['label'] == 'Alimenter';
+        final isPrimary = a['label'] == l10n.topUp;
         return GestureDetector(
           onTap: a['onTap'] as VoidCallback,
           child: SizedBox(
@@ -586,9 +583,9 @@ class _WalletPageState extends State<WalletPage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
-              'Dernières opérations',
-              style: TextStyle(
+            Text(
+              l10n.latestOperations,
+              style: const TextStyle(
                 fontFamily: 'Inter',
                 fontSize: 13,
                 fontWeight: FontWeight.w700,
@@ -599,7 +596,7 @@ class _WalletPageState extends State<WalletPage> {
               onTap: () => Navigator.pushNamed(context, '/walletHistory',
                   arguments: {'token': widget.token}),
               child: Text(
-                'Tout voir',
+                l10n.seeAll,
                 style: TextStyle(
                   fontFamily: 'Inter',
                   fontSize: 11,
@@ -623,7 +620,7 @@ class _WalletPageState extends State<WalletPage> {
             padding: const EdgeInsets.all(16),
             child: Center(
               child: Text(
-                'Aucune opération',
+                l10n.noOperation,
                 style: TextStyle(
                   fontFamily: 'Inter',
                   fontSize: 11,
@@ -637,7 +634,8 @@ class _WalletPageState extends State<WalletPage> {
               _transactions.take(3).length,
                   (i) {
                 final tx = _transactions[i];
-                final isLast = i == _transactions.take(3).length - 1;
+                final isLast =
+                    i == _transactions.take(3).length - 1;
                 return _buildTxRow(tx, isLast: isLast);
               },
             ),
@@ -725,7 +723,6 @@ class _WalletPageState extends State<WalletPage> {
     );
   }
 
-  // ─── ABONNEMENT ───
   Widget _buildAboCard() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -764,7 +761,8 @@ class _WalletPageState extends State<WalletPage> {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(
-                            color: Colors.white.withOpacity(0.05), width: 28),
+                            color: Colors.white.withOpacity(0.05),
+                            width: 28),
                       ),
                     ),
                   ),
@@ -780,10 +778,10 @@ class _WalletPageState extends State<WalletPage> {
                           children: [
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
+                              children: [
                                 Text(
-                                  'ABONNEMENT',
-                                  style: TextStyle(
+                                  l10n.subscriptionLabel,
+                                  style: const TextStyle(
                                     fontFamily: 'Inter',
                                     fontSize: 9,
                                     fontWeight: FontWeight.w800,
@@ -791,10 +789,10 @@ class _WalletPageState extends State<WalletPage> {
                                     color: Color(0xBFFFFFFF),
                                   ),
                                 ),
-                                SizedBox(height: 2),
+                                const SizedBox(height: 2),
                                 Text(
-                                  'Saison 2026 / 27',
-                                  style: TextStyle(
+                                  l10n.season2026_27,
+                                  style: const TextStyle(
                                     fontFamily: 'Inter',
                                     fontSize: 16,
                                     fontWeight: FontWeight.w900,
@@ -823,7 +821,7 @@ class _WalletPageState extends State<WalletPage> {
                                 Text(
                                   _fullName.isNotEmpty
                                       ? _fullName
-                                      : '[NOM DU SUPPORTER]',
+                                      : l10n.supporterNamePlaceholder,
                                   style: const TextStyle(
                                     fontFamily: 'Inter',
                                     fontSize: 12,
@@ -833,7 +831,7 @@ class _WalletPageState extends State<WalletPage> {
                                 ),
                                 const SizedBox(height: 3),
                                 Text(
-                                  'Virage Nord · Porte [N°] · Place [N°]',
+                                  l10n.tribuneInfoPlaceholder,
                                   style: TextStyle(
                                     fontFamily: 'Inter',
                                     fontSize: 10,
@@ -872,12 +870,12 @@ class _WalletPageState extends State<WalletPage> {
     final options = [
       {
         'icon': Icons.qr_code_2,
-        'label': 'Afficher le QR code d\'accès',
+        'label': l10n.showQRAccess,
         'onTap': _showComingSoonModal,
       },
       {
         'icon': Icons.event,
-        'label': 'Prochain match',
+        'label': l10n.nextMatch,
         'onTap': () {
           Navigator.pushNamed(context, '/events', arguments: {
             'token': widget.token,
@@ -887,17 +885,17 @@ class _WalletPageState extends State<WalletPage> {
       },
       {
         'icon': Icons.swap_horiz,
-        'label': 'Revendre un match',
+        'label': l10n.resellMatch,
         'onTap': _showComingSoonModal,
       },
       {
         'icon': Icons.info_outline,
-        'label': 'Détails de l\'abonnement',
+        'label': l10n.subscriptionDetails,
         'onTap': _showComingSoonModal,
       },
       {
         'icon': Icons.refresh,
-        'label': 'Renouveler l\'abonnement',
+        'label': l10n.renewSubscription,
         'onTap': _showComingSoonModal,
       },
     ];
@@ -961,13 +959,8 @@ class _WalletPageState extends State<WalletPage> {
     );
   }
 
-  // ─── Pill switch Wallet/Abonnement ───
   Widget _buildSwitchPill() {
     return GestureDetector(
-      // 👉 Quand on est côté Wallet, la pill affiche "ABONNEMENT · Saison 2026/27"
-      //    → au clic, on affiche le modal "Coming Soon".
-      // 👉 Quand on est côté Abonnement (ne devrait plus arriver puisqu'on bloque la bascule),
-      //    on revient au Wallet.
       onTap: () {
         if (_showAbo) {
           setState(() => _showAbo = false);
@@ -1005,7 +998,7 @@ class _WalletPageState extends State<WalletPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  _showAbo ? 'WYDAD PAY' : 'ABONNEMENT',
+                  _showAbo ? l10n.wydadPay : l10n.subscriptionLabel,
                   style: TextStyle(
                     fontFamily: 'Inter',
                     fontSize: 9,
@@ -1018,7 +1011,7 @@ class _WalletPageState extends State<WalletPage> {
                 Text(
                   _showAbo
                       ? '${_balance.toStringAsFixed(2).replaceAll('.', ',')} MAD'
-                      : 'Saison 2026 / 27',
+                      : l10n.season2026_27,
                   style: const TextStyle(
                     fontFamily: 'Inter',
                     fontSize: 13,

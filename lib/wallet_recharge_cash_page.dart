@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'wallet_service.dart';
+import 'l10n/app_localizations.dart';
 
 class WalletRechargeCashPage extends StatefulWidget {
   final String token;
@@ -14,19 +15,20 @@ class WalletRechargeCashPage extends StatefulWidget {
 class _WalletRechargeCashPageState extends State<WalletRechargeCashPage> {
   final Color primary = const Color(0xFFA8161F);
 
-  int _step = 0; // 0: form, 1: code
+  int _step = 0;
   bool _isSubmitting = false;
 
-  // ✅ Contrôleurs déclarés au niveau du State pour éviter le bug de focus
   final TextEditingController _amountCtrl = TextEditingController(text: '300');
 
   String _amount = '300';
   String? _depositCode;
 
+  /// l10n helper
+  AppLocalizations get l10n => AppLocalizations.of(context)!;
+
   @override
   void initState() {
     super.initState();
-    // Écouteur pour mettre à jour _amount quand le texte change
     _amountCtrl.addListener(() {
       setState(() {
         _amount = _amountCtrl.text;
@@ -52,7 +54,7 @@ class _WalletRechargeCashPageState extends State<WalletRechargeCashPage> {
 
   Future<void> _submit() async {
     if (_amountValue < 50) {
-      _showError('Montant minimum 50 MAD');
+      _showError(l10n.minAmount50);
       return;
     }
     setState(() => _isSubmitting = true);
@@ -61,19 +63,17 @@ class _WalletRechargeCashPageState extends State<WalletRechargeCashPage> {
       final res = await WalletService.rechargeAgency(
         token: widget.token,
         amount: _amountValue,
-        description: 'Alimentation espèces en agence',
+        description: l10n.cashAgencyDescription,
       );
 
       if (!mounted) return;
       setState(() => _isSubmitting = false);
 
-      // 🔍 LOGS POUR DEBUG (à retirer une fois validé)
-      print("🔍 [RECHARGE AGENCY] Réponse API = $res");
+      print("🔍 [RECHARGE AGENCY] API response = $res");
 
       if (res != null && res['success'] == true) {
         final data = res['data'];
 
-        // ✅ Extraction robuste du code
         final code = data?['deposit_code']?.toString() ??
             data?['code']?.toString() ??
             data?['reference']?.toString() ??
@@ -84,13 +84,14 @@ class _WalletRechargeCashPageState extends State<WalletRechargeCashPage> {
           _step = 1;
         });
       } else {
-        _showError(res?['message']?.toString() ?? 'Opération échouée. Contactez le support.');
+        _showError(res?['message']?.toString() ??
+            l10n.operationFailedContactSupport);
       }
     } catch (e) {
       if (!mounted) return;
       setState(() => _isSubmitting = false);
-      print("🔍 [RECHARGE AGENCY] Erreur = $e");
-      _showError('Erreur de connexion. Veuillez réessayer.');
+      print("🔍 [RECHARGE AGENCY] Error = $e");
+      _showError(l10n.connectionErrorRetry);
     }
   }
 
@@ -148,9 +149,9 @@ class _WalletRechargeCashPageState extends State<WalletRechargeCashPage> {
             ),
           ),
           const Spacer(),
-          const Text(
-            'Espèces en agence',
-            style: TextStyle(
+          Text(
+            l10n.cashAtAgency,
+            style: const TextStyle(
               fontSize: 17,
               fontWeight: FontWeight.w600,
               color: Colors.white,
@@ -169,9 +170,9 @@ class _WalletRechargeCashPageState extends State<WalletRechargeCashPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 8),
-        const Text(
-          'Montant à déposer',
-          style: TextStyle(
+        Text(
+          l10n.amountToDeposit,
+          style: const TextStyle(
             fontFamily: 'Inter',
             fontSize: 13,
             fontWeight: FontWeight.w600,
@@ -285,7 +286,7 @@ class _WalletRechargeCashPageState extends State<WalletRechargeCashPage> {
             const SizedBox(width: 10),
             Expanded(
               child: Text(
-                'Déposez vos espèces dans n\'importe quelle agence Chaabi Cash, Damane Cash ou Tashilat en présentant le code qui vous sera généré.',
+                l10n.cashAgencyInfo,
                 style: TextStyle(
                   fontFamily: 'Inter',
                   fontSize: 11,
@@ -319,9 +320,9 @@ class _WalletRechargeCashPageState extends State<WalletRechargeCashPage> {
                 valueColor: AlwaysStoppedAnimation(primary),
               ),
             )
-                : const Text(
-              'Obtenir mon code de dépôt',
-              style: TextStyle(
+                : Text(
+              l10n.getMyDepositCode,
+              style: const TextStyle(
                 fontFamily: 'Inter',
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
@@ -338,7 +339,7 @@ class _WalletRechargeCashPageState extends State<WalletRechargeCashPage> {
       children: [
         const SizedBox(height: 12),
         Text(
-          'Présentez ce code et votre CIN au guichet pour déposer votre argent.',
+          l10n.presentCodeAndCin,
           textAlign: TextAlign.center,
           style: TextStyle(
             fontFamily: 'Inter',
@@ -358,7 +359,7 @@ class _WalletRechargeCashPageState extends State<WalletRechargeCashPage> {
           child: Column(
             children: [
               Text(
-                'CODE DE DÉPÔT',
+                l10n.depositCodeLabel,
                 style: TextStyle(
                   fontFamily: 'Inter',
                   fontSize: 10,
@@ -381,8 +382,7 @@ class _WalletRechargeCashPageState extends State<WalletRechargeCashPage> {
               const SizedBox(height: 10),
               Container(height: 1, color: Colors.black.withOpacity(0.10)),
               const SizedBox(height: 10),
-              _kvWhite('Montant', '$_amount,00 MAD'),
-              // ✅ LIGNE "Valable jusqu'au" SUPPRIMÉE ICI
+              _kvWhite(l10n.amountLabel, '$_amount,00 MAD'),
             ],
           ),
         ),
@@ -403,7 +403,7 @@ class _WalletRechargeCashPageState extends State<WalletRechargeCashPage> {
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  'Votre solde sera crédité dès réception des espèces en agence.',
+                  l10n.balanceWillBeCredited,
                   style: TextStyle(
                     fontFamily: 'Inter',
                     fontSize: 10,
@@ -420,7 +420,8 @@ class _WalletRechargeCashPageState extends State<WalletRechargeCashPage> {
           width: double.infinity,
           height: 50,
           child: ElevatedButton(
-            onPressed: () => Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
+            onPressed: () => Navigator.of(context, rootNavigator: true)
+                .pushNamedAndRemoveUntil(
               '/acceuil',
                   (r) => false,
               arguments: {'token': widget.token},
@@ -433,9 +434,9 @@ class _WalletRechargeCashPageState extends State<WalletRechargeCashPage> {
               ),
               elevation: 0,
             ),
-            child: const Text(
-              'Retour à l\'accueil',
-              style: TextStyle(
+            child: Text(
+              l10n.backToHome,
+              style: const TextStyle(
                 fontFamily: 'Inter',
                 fontSize: 14,
                 fontWeight: FontWeight.w600,

@@ -26,12 +26,9 @@ class AcheterTicketInEventPage extends StatefulWidget {
 }
 
 class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
-  static const String _GENERIC_ERROR_MSG =
-      "Nous rencontrons actuellement des problèmes, veuillez contacter le support.";
-
   Map<String, dynamic>? event;
   bool isLoading = false;
-  bool _isProcessing = false; // ✅ Loader overlay pendant les requêtes
+  bool _isProcessing = false;
   Map<int, int> ticketQuantities = {};
   bool _hasTicketsSelected = false;
   final TextEditingController _cinController = TextEditingController();
@@ -46,6 +43,9 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
   String? _walletPhone;
 
   final Color primary = const Color(0xFFA8161F);
+
+  /// l10n helper
+  AppLocalizations get l10n => AppLocalizations.of(context)!;
 
   @override
   void initState() {
@@ -177,9 +177,6 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
     return total;
   }
 
-  // ═══════════════════════════════════════════════════════════
-  // BUILD
-  // ═══════════════════════════════════════════════════════════
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -201,8 +198,6 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
             ),
             child: SafeArea(bottom: false, child: _buildBody()),
           ),
-
-          // ✅ Loader overlay
           if (_isProcessing) _buildProcessingOverlay(),
         ],
       ),
@@ -216,19 +211,18 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
     if (event == null) {
       return _buildErrorState(
         icon: Icons.error_outline,
-        title: AppLocalizations.of(context)!.eventNotFound,
-        subtitle: AppLocalizations.of(context)!.pleaseTryAgainLater,
+        title: l10n.eventNotFound,
+        subtitle: l10n.pleaseTryAgainLater,
       );
     }
     if (event!["is_closed"] == true) {
       return _buildErrorState(
         icon: Icons.event_busy,
-        title: AppLocalizations.of(context)!.eventClosed,
-        subtitle: AppLocalizations.of(context)!.eventClosedMessage,
+        title: l10n.eventClosed,
+        subtitle: l10n.eventClosedMessage,
       );
     }
 
-    final l10n = AppLocalizations.of(context)!;
     final tickets = _getAvailableTickets();
 
     return Column(
@@ -346,7 +340,7 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('BILLETTERIE',
+                  Text(l10n.billetterie,
                       style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w800,
@@ -380,7 +374,6 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
   }
 
   Widget _buildTicketRow(Map<String, dynamic> ticket) {
-    final l10n = AppLocalizations.of(context)!;
     final ticketId = ticket["id"] is int
         ? ticket["id"] as int
         : int.tryParse(ticket["id"].toString()) ?? 0;
@@ -489,14 +482,14 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('Nombre de billets',
-                          style: TextStyle(
+                      Text(l10n.numberOfTickets,
+                          style: const TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w700,
                               color: Colors.white,
                               fontFamily: 'Inter')),
                       const SizedBox(height: 2),
-                      Text('$maxPerOrder maximum par compte',
+                      Text('$maxPerOrder ${l10n.maxPerAccount}',
                           style: TextStyle(
                               fontSize: 11,
                               color: Colors.white.withOpacity(0.6),
@@ -579,13 +572,13 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
 
   String _availabilityLabel(Map<String, dynamic> ticket) {
     final availQty = ticket["available_quantity"];
-    if (availQty == null) return "Disponible";
+    if (availQty == null) return l10n.available;
     final qty = availQty is int
         ? availQty
         : int.tryParse(availQty.toString()) ?? 0;
-    if (qty == 0) return "Complet";
-    if (qty <= 10) return "Quelques places";
-    return "Disponible";
+    if (qty == 0) return l10n.soldOut;
+    if (qty <= 10) return l10n.fewSeatsLeft;
+    return l10n.available;
   }
 
   Color _availabilityColor(Map<String, dynamic> ticket) {
@@ -622,7 +615,7 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                   const Icon(Icons.account_balance_wallet_outlined,
                       color: Color(0xFFF5CD52), size: 16),
                   const SizedBox(width: 6),
-                  Text('Solde: ',
+                  Text('${l10n.balanceLabel}: ',
                       style: TextStyle(
                           fontSize: 12,
                           color: Colors.white.withOpacity(0.6),
@@ -656,7 +649,8 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
             crossAxisAlignment: CrossAxisAlignment.baseline,
             textBaseline: TextBaseline.alphabetic,
             children: [
-              Text('$qty ${qty > 1 ? "billets" : "billet"} · $name',
+              Text(
+                  '$qty ${qty > 1 ? l10n.ticketPlural : l10n.ticket} · $name',
                   style: TextStyle(
                       fontSize: 13,
                       color: Colors.white.withOpacity(0.72),
@@ -676,7 +670,7 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                     borderRadius: BorderRadius.circular(12)),
                 elevation: 0,
               ),
-              child: Text(AppLocalizations.of(context)!.continueText,
+              child: Text(l10n.continueText,
                   style: const TextStyle(
                       fontFamily: 'Inter',
                       fontSize: 16,
@@ -757,9 +751,9 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                     ),
                   ),
                   const SizedBox(height: 22),
-                  const Text(
-                    'Traitement en cours...',
-                    style: TextStyle(
+                  Text(
+                    l10n.processingTitle,
+                    style: const TextStyle(
                       fontFamily: 'Inter',
                       fontSize: 15,
                       fontWeight: FontWeight.w700,
@@ -768,7 +762,7 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    'Veuillez patienter quelques instants',
+                    l10n.processingSubtitle,
                     style: TextStyle(
                       fontFamily: 'Inter',
                       fontSize: 12,
@@ -788,7 +782,6 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
   // DIALOG CIN / NOM / PAIEMENT
   // ═══════════════════════════════════════════════════════════
   void _showCinInputDialog() {
-    final l10n = AppLocalizations.of(context)!;
     _cinController.clear();
     _fullNameController.clear();
     _walletPinController.clear();
@@ -928,8 +921,8 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                       const SizedBox(height: 20),
                       const Divider(color: Colors.white12),
                       const SizedBox(height: 12),
-                      const Text('Mode de paiement',
-                          style: TextStyle(
+                      Text(l10n.paymentMethodLabel,
+                          style: const TextStyle(
                               fontFamily: 'Inter',
                               fontSize: 13,
                               fontWeight: FontWeight.w700,
@@ -968,16 +961,16 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                                   crossAxisAlignment:
                                   CrossAxisAlignment.start,
                                   children: [
-                                    const Text('Wydad Pay',
-                                        style: TextStyle(
+                                    Text(l10n.wydadPayLabel,
+                                        style: const TextStyle(
                                             color: Colors.white,
                                             fontFamily: 'Inter',
                                             fontWeight: FontWeight.w600,
                                             fontSize: 13)),
                                     Text(
                                       hasEnoughWallet
-                                          ? 'Solde: ${_walletBalance.toStringAsFixed(2)} MAD'
-                                          : 'Solde insuffisant',
+                                          ? '${l10n.balanceLabel}: ${_walletBalance.toStringAsFixed(2)} MAD'
+                                          : l10n.insufficientBalance,
                                       style: TextStyle(
                                           color: hasEnoughWallet
                                               ? Colors.white54
@@ -1000,8 +993,8 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                       if (paymentMethod == 'WALLET') ...[
                         const SizedBox(height: 10),
                         _darkField(
-                          label: 'Code PIN Wydad Pay (4 chiffres)',
-                          hint: '••••',
+                          label: l10n.pinCodeLabel,
+                          hint: l10n.pinCodeHint,
                           controller: _walletPinController,
                           icon: Icons.lock_outline,
                           obscureText: true,
@@ -1036,19 +1029,19 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                               const Icon(Icons.credit_card,
                                   color: Colors.white, size: 20),
                               const SizedBox(width: 10),
-                              const Expanded(
+                              Expanded(
                                 child: Column(
                                   crossAxisAlignment:
                                   CrossAxisAlignment.start,
                                   children: [
-                                    Text('Carte bancaire (CMI)',
-                                        style: TextStyle(
+                                    Text(l10n.cardBankLabel,
+                                        style: const TextStyle(
                                             color: Colors.white,
                                             fontFamily: 'Inter',
                                             fontWeight: FontWeight.w600,
                                             fontSize: 13)),
-                                    Text('Payer par carte bancaire',
-                                        style: TextStyle(
+                                    Text(l10n.payByCard,
+                                        style: const TextStyle(
                                             color: Colors.white54,
                                             fontFamily: 'Inter',
                                             fontSize: 11)),
@@ -1120,7 +1113,7 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                                 ),
                                 child: Center(
                                   child: Text(
-                                    'Payer ${_totalPrice.toStringAsFixed(0)} MAD',
+                                    '${l10n.pay} ${_totalPrice.toStringAsFixed(0)} MAD',
                                     style: const TextStyle(
                                         fontFamily: 'Inter',
                                         fontSize: 14,
@@ -1224,18 +1217,15 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
   // CRÉATION COMMANDE + DÉBIT WALLET
   // ═══════════════════════════════════════════════════════════
   Future<void> _createOrder(String paymentMethod, {String? pin}) async {
-    final l10n = AppLocalizations.of(context)!;
-
     final selectedTickets =
     ticketQuantities.entries.where((e) => e.value > 0).toList();
     if (selectedTickets.isEmpty) return;
 
     if (paymentMethod == 'WALLET' && (pin == null || pin.length != 4)) {
-      _showErrorDialog('Code PIN requis (4 chiffres).');
+      _showErrorDialog(l10n.pinRequired);
       return;
     }
 
-    // ✅ Active le loader overlay
     setState(() => _isProcessing = true);
 
     try {
@@ -1268,13 +1258,13 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
       );
 
       if (response.statusCode != 200 && response.statusCode != 201) {
-        _showErrorDialog(_GENERIC_ERROR_MSG);
+        _showErrorDialog(l10n.genericErrorMsg);
         return;
       }
 
       final data = jsonDecode(response.body);
       if (data["success"] != true) {
-        _showErrorDialog(_GENERIC_ERROR_MSG);
+        _showErrorDialog(l10n.genericErrorMsg);
         return;
       }
 
@@ -1284,7 +1274,6 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
       if (paymentMethod != 'WALLET') {
         if (orderData is Map<String, dynamic> &&
             orderData.containsKey("order_number")) {
-          // ⚠️ Désactive le loader AVANT de pousser le Navigator
           setState(() => _isProcessing = false);
           Navigator.push(
             context,
@@ -1305,7 +1294,7 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
             ),
           );
         } else {
-          _showErrorDialog(_GENERIC_ERROR_MSG);
+          _showErrorDialog(l10n.genericErrorMsg);
         }
         return;
       }
@@ -1314,9 +1303,8 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
       await _fetchWalletBalance();
       _showSuccessDialog();
     } catch (_) {
-      _showErrorDialog(_GENERIC_ERROR_MSG);
+      _showErrorDialog(l10n.genericErrorMsg);
     } finally {
-      // ✅ Garantie absolue : le loader s'arrête dans TOUS les cas
       if (mounted) setState(() => _isProcessing = false);
     }
   }
@@ -1358,15 +1346,15 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                     color: Color(0xFFF5CD52), size: 34),
               ),
               const SizedBox(height: 20),
-              const Text('Paiement réussi',
-                  style: TextStyle(
+              Text(l10n.paymentSuccessTitle,
+                  style: const TextStyle(
                       fontFamily: 'Inter',
                       fontSize: 20,
                       fontWeight: FontWeight.w900,
                       color: Colors.white)),
               const SizedBox(height: 10),
               Text(
-                'Vos billets ont été payés avec succès via votre portefeuille Wydad Pay.',
+                l10n.paymentSuccessMessage,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontFamily: 'Inter',
@@ -1389,9 +1377,9 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                       gradient: const LinearGradient(
                           colors: [Color(0xFFD11A2A), Color(0xFFA8161F)]),
                     ),
-                    child: const Center(
-                      child: Text('Retour aux évènements',
-                          style: TextStyle(
+                    child: Center(
+                      child: Text(l10n.backToEvents,
+                          style: const TextStyle(
                               fontFamily: 'Inter',
                               fontSize: 14,
                               fontWeight: FontWeight.w700,
@@ -1411,7 +1399,6 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
   // DIALOG ERREUR
   // ═══════════════════════════════════════════════════════════
   void _showErrorDialog(String message) {
-    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       barrierColor: Colors.black.withOpacity(0.75),

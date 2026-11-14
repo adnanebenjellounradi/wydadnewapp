@@ -29,6 +29,9 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
 
   final Color primary = const Color(0xFFA8161F);
 
+  /// l10n helper
+  AppLocalizations get l10n => AppLocalizations.of(context)!;
+
   Future<void> _fetchOrganizationSettings() async {
     try {
       final response = await http.get(
@@ -62,11 +65,12 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
     final enabled = settings["enable_shop"];
     if (enabled is bool) return enabled;
     if (enabled is int) return enabled == 1;
-    if (enabled is String) return enabled == "1" || enabled.toLowerCase() == "true";
+    if (enabled is String) {
+      return enabled == "1" || enabled.toLowerCase() == "true";
+    }
     return false;
   }
 
-  // ✅ NOUVEAU : Vérification avant d'ouvrir le modal de choix
   Future<void> _handleBoutiqueTap(BuildContext context) async {
     if (widget.token.isEmpty) {
       Navigator.pushNamed(context, '/login');
@@ -76,7 +80,6 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
     setState(() => isLoadingBoutique = true);
 
     try {
-      // Recharge les paramètres pour être sûr d'avoir la dernière valeur
       await _fetchOrganizationSettings();
       final enabled = await _isShopEnabled();
 
@@ -114,10 +117,10 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
               children: [
                 _dialogIcon(Icons.storefront_outlined),
                 const SizedBox(height: 20),
-                const Text(
-                  'Choisir une boutique',
+                Text(
+                  l10n.chooseStore,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Inter',
                     fontSize: 20,
                     fontWeight: FontWeight.w900,
@@ -126,7 +129,7 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  'Sélectionnez la boutique officielle Wydad AC',
+                  l10n.chooseStoreSubtitle,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: 'Inter',
@@ -138,11 +141,10 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                 const SizedBox(height: 24),
                 _storeButton(
                   label: 'KAPPA',
-                  subtitle: 'Boutique officielle Kappa',
+                  subtitle: l10n.kappaSubtitle,
                   icon: Icons.checkroom,
                   onTap: () {
                     Navigator.of(dialogContext).pop();
-                    // ✅ Plus besoin de vérifier enable_shop ici, c'est déjà fait en amont
                     Navigator.pushNamed(
                       context,
                       '/boutique',
@@ -155,8 +157,8 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                 ),
                 const SizedBox(height: 10),
                 _storeButton(
-                  label: 'WAC BRAND',
-                  subtitle: 'wacofficialbrand.com',
+                  label: l10n.wacBrand,
+                  subtitle: l10n.wacBrandSubtitle,
                   icon: Icons.public,
                   onTap: () {
                     Navigator.of(dialogContext).pop();
@@ -173,7 +175,7 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                   width: double.infinity,
                   child: GestureDetector(
                     onTap: () => Navigator.of(dialogContext).pop(),
-                    child: _glassButton(label: 'Annuler'),
+                    child: _glassButton(label: l10n.cancel),
                   ),
                 ),
               ],
@@ -333,7 +335,6 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
   }
 
   void _showShopMaintenanceModal(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       barrierDismissible: true,
@@ -408,8 +409,6 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-
     final items = [
       {'index': 2, 'icon': Icons.home_outlined, 'label': l10n.home},
       {'index': 0, 'icon': Icons.event_outlined, 'label': l10n.events},
@@ -417,7 +416,7 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
       {
         'index': -1,
         'icon': Icons.account_balance_wallet_outlined,
-        'label': 'Wallet',
+        'label': l10n.wallet,
       },
       {'index': 3, 'icon': Icons.person_outline, 'label': l10n.profile},
     ];
@@ -468,7 +467,7 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     if (isLoading)
-                      SizedBox(
+                      const SizedBox(
                         width: 22,
                         height: 22,
                         child: CircularProgressIndicator(
@@ -544,6 +543,8 @@ class _WacBrandWebViewPageState extends State<_WacBrandWebViewPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: const Color(0xFF170205),
       body: SafeArea(
@@ -569,9 +570,9 @@ class _WacBrandWebViewPageState extends State<_WacBrandWebViewPage> {
                     ),
                   ),
                   const Spacer(),
-                  const Text(
-                    'WAC BRAND',
-                    style: TextStyle(
+                  Text(
+                    l10n.wacBrand,
+                    style: const TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,

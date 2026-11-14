@@ -25,6 +25,9 @@ class _MesCommandesPageState extends State<MesCommandesPage> {
 
   final Color primary = const Color(0xFFA8161F);
 
+  /// l10n helper
+  AppLocalizations get l10n => AppLocalizations.of(context)!;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -34,7 +37,6 @@ class _MesCommandesPageState extends State<MesCommandesPage> {
   }
 
   Future<void> fetchOrders({int page = 1}) async {
-    final l10n = AppLocalizations.of(context)!;
     setState(() {
       isLoadingPage = true;
       currentPage = page;
@@ -85,7 +87,6 @@ class _MesCommandesPageState extends State<MesCommandesPage> {
   }
 
   Future<Map<String, dynamic>> fetchOrderDetails(int orderId) async {
-    final l10n = AppLocalizations.of(context)!;
     final response = await http.get(
       Uri.parse('https://ticketing.ma/api/customer/store/orders/$orderId'),
       headers: {
@@ -100,7 +101,6 @@ class _MesCommandesPageState extends State<MesCommandesPage> {
   }
 
   Future<void> deleteOrder(int orderId) async {
-    final l10n = AppLocalizations.of(context)!;
     try {
       final response = await http.delete(
         Uri.parse('https://ticketing.ma/api/customer/store/orders/$orderId'),
@@ -132,27 +132,37 @@ class _MesCommandesPageState extends State<MesCommandesPage> {
 
   String getStatusText(int status, AppLocalizations l10n) {
     switch (status) {
-      case 0: return l10n.statusNotProcessed;
-      case 1: return l10n.statusProcessing;
-      case 2: return l10n.statusProcessed;
-      case 3: return l10n.statusDelivered;
-      case 4: return l10n.statusCancelled;
-      default: return l10n.statusUnknown;
+      case 0:
+        return l10n.statusNotProcessed;
+      case 1:
+        return l10n.statusProcessing;
+      case 2:
+        return l10n.statusProcessed;
+      case 3:
+        return l10n.statusDelivered;
+      case 4:
+        return l10n.statusCancelled;
+      default:
+        return l10n.statusUnknown;
     }
   }
 
   Color getStatusColor(int status) {
     switch (status) {
-      case 0: return const Color(0xFFFFC97A);
-      case 1: return const Color(0xFF64B5F6);
-      case 2: return const Color(0xFFBA68C8);
-      case 3: return const Color(0xFF66BB6A);
-      default: return Colors.white54;
+      case 0:
+        return const Color(0xFFFFC97A);
+      case 1:
+        return const Color(0xFF64B5F6);
+      case 2:
+        return const Color(0xFFBA68C8);
+      case 3:
+        return const Color(0xFF66BB6A);
+      default:
+        return Colors.white54;
     }
   }
 
   void _showOrderDetailsModal(int orderId) async {
-    final l10n = AppLocalizations.of(context)!;
     try {
       final orderDetails = await fetchOrderDetails(orderId);
       showModalBottomSheet(
@@ -180,12 +190,10 @@ class _MesCommandesPageState extends State<MesCommandesPage> {
   // ═══════════════════════════════════════════════════════════
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-
-    final inProgress =
-    orders.where((o) => o['status'] != null && (o['status'] as int) < 3).toList();
-    final delivered =
-    orders.where((o) => o['status'] == 3).toList();
+    final inProgress = orders
+        .where((o) => o['status'] != null && (o['status'] as int) < 3)
+        .toList();
+    final delivered = orders.where((o) => o['status'] == 3).toList();
 
     return Scaffold(
       backgroundColor: const Color(0xFF170205),
@@ -202,7 +210,6 @@ class _MesCommandesPageState extends State<MesCommandesPage> {
         ),
         child: Stack(
           children: [
-            // Glow radial
             Positioned(
               top: -140,
               left: 0,
@@ -224,44 +231,44 @@ class _MesCommandesPageState extends State<MesCommandesPage> {
                 ),
               ),
             ),
-
             SafeArea(
               bottom: false,
               child: Column(
                 children: [
-                  // Header
                   Padding(
                     padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
                     child: _buildHeader(),
                   ),
-
-                  // Contenu
                   Expanded(
                     child: isLoading
                         ? Center(
-                      child: CircularProgressIndicator(color: primary),
+                      child:
+                      CircularProgressIndicator(color: primary),
                     )
                         : orders.isEmpty
                         ? _buildEmptyState(l10n)
                         : RefreshIndicator(
                       color: primary,
-                      onRefresh: () => fetchOrders(page: currentPage),
+                      onRefresh: () =>
+                          fetchOrders(page: currentPage),
                       child: ListView(
                         padding: const EdgeInsets.fromLTRB(
                             20, 20, 20, 40),
                         children: [
                           if (inProgress.isNotEmpty) ...[
-                            _sectionLabel('EN COURS'),
+                            _sectionLabel(l10n.inProgressSection),
                             const SizedBox(height: 10),
                             ...inProgress.map((o) =>
-                                _buildOrderCard(o, isInProgress: true)),
+                                _buildOrderCard(o,
+                                    isInProgress: true)),
                           ],
                           if (delivered.isNotEmpty) ...[
                             const SizedBox(height: 22),
-                            _sectionLabel('PRÉCÉDENTES'),
+                            _sectionLabel(l10n.previousSection),
                             const SizedBox(height: 10),
                             ...delivered.map((o) =>
-                                _buildOrderCard(o, isInProgress: false)),
+                                _buildOrderCard(o,
+                                    isInProgress: false)),
                           ],
                           if (totalPages > 1) ...[
                             const SizedBox(height: 20),
@@ -300,9 +307,9 @@ class _MesCommandesPageState extends State<MesCommandesPage> {
             ),
           ),
           const Spacer(),
-          const Text(
-            'Mes commandes',
-            style: TextStyle(
+          Text(
+            l10n.myOrdersTitle,
+            style: const TextStyle(
               fontSize: 17,
               fontWeight: FontWeight.w600,
               color: Colors.white,
@@ -339,8 +346,10 @@ class _MesCommandesPageState extends State<MesCommandesPage> {
             width: 180,
             height: 180,
             fit: BoxFit.contain,
-            errorBuilder: (_, __, ___) => const Icon(Icons.shopping_bag_outlined,
-                color: Colors.white30, size: 80),
+            errorBuilder: (_, __, ___) => const Icon(
+                Icons.shopping_bag_outlined,
+                color: Colors.white30,
+                size: 80),
           ),
           const SizedBox(height: 16),
           Text(
@@ -367,7 +376,8 @@ class _MesCommandesPageState extends State<MesCommandesPage> {
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.white,
               foregroundColor: primary,
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              padding:
+              const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -400,7 +410,6 @@ class _MesCommandesPageState extends State<MesCommandesPage> {
     final orderItems = order['order_items'] ?? [];
 
     if (isInProgress) {
-      // Carte "EN COURS" détaillée avec progression
       return GestureDetector(
         onTap: () => _showOrderDetailsModal(orderId),
         child: Container(
@@ -414,7 +423,6 @@ class _MesCommandesPageState extends State<MesCommandesPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header : Commande + badge statut
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -423,7 +431,7 @@ class _MesCommandesPageState extends State<MesCommandesPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Commande $orderIdStr',
+                          '${l10n.orderLabel} $orderIdStr',
                           style: const TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
@@ -433,7 +441,7 @@ class _MesCommandesPageState extends State<MesCommandesPage> {
                         ),
                         const SizedBox(height: 3),
                         Text(
-                          '$quantity articles · ${total.toStringAsFixed(0)} MAD · passée le ${createdAt.length > 10 ? createdAt.substring(0, 10) : createdAt}',
+                          '${l10n.itemsCount('$quantity')} · ${total.toStringAsFixed(0)} MAD · ${l10n.passedOn} ${createdAt.length > 10 ? createdAt.substring(0, 10) : createdAt}',
                           style: TextStyle(
                             fontSize: 12,
                             color: Colors.white.withOpacity(0.6),
@@ -452,8 +460,7 @@ class _MesCommandesPageState extends State<MesCommandesPage> {
                     ),
                     alignment: Alignment.center,
                     child: Text(
-                      getStatusText(status, AppLocalizations.of(context)!)
-                          .toUpperCase(),
+                      getStatusText(status, l10n).toUpperCase(),
                       style: TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.w700,
@@ -465,12 +472,8 @@ class _MesCommandesPageState extends State<MesCommandesPage> {
                 ],
               ),
               const SizedBox(height: 16),
-
-              // Barre de progression 4 étapes
               _buildProgressBar(status),
               const SizedBox(height: 16),
-
-              // Aperçu produits + info livraison
               Row(
                 children: [
                   _buildProductThumbs(orderItems),
@@ -480,7 +483,7 @@ class _MesCommandesPageState extends State<MesCommandesPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Livraison prévue',
+                          l10n.deliveryExpected,
                           style: const TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w600,
@@ -490,7 +493,7 @@ class _MesCommandesPageState extends State<MesCommandesPage> {
                         ),
                         const SizedBox(height: 2),
                         Text(
-                          'Transporteur : WAC Express',
+                          '${l10n.carrier} : ${l10n.carrierName}',
                           style: TextStyle(
                             fontSize: 12,
                             color: Colors.white.withOpacity(0.6),
@@ -503,8 +506,6 @@ class _MesCommandesPageState extends State<MesCommandesPage> {
                 ],
               ),
               const SizedBox(height: 14),
-
-              // Bouton
               SizedBox(
                 width: double.infinity,
                 height: 44,
@@ -513,14 +514,15 @@ class _MesCommandesPageState extends State<MesCommandesPage> {
                   style: OutlinedButton.styleFrom(
                     backgroundColor: Colors.white.withOpacity(0.08),
                     foregroundColor: Colors.white,
-                    side: BorderSide(color: Colors.white.withOpacity(0.16)),
+                    side:
+                    BorderSide(color: Colors.white.withOpacity(0.16)),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: const Text(
-                    'Voir les détails',
-                    style: TextStyle(
+                  child: Text(
+                    l10n.viewDetails,
+                    style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                       fontFamily: 'Inter',
@@ -534,7 +536,6 @@ class _MesCommandesPageState extends State<MesCommandesPage> {
       );
     }
 
-    // Carte "PRÉCÉDENTES" compacte
     return GestureDetector(
       onTap: () => _showOrderDetailsModal(orderId),
       child: Container(
@@ -563,7 +564,7 @@ class _MesCommandesPageState extends State<MesCommandesPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Commande $orderIdStr',
+                    '${l10n.orderLabel} $orderIdStr',
                     style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
@@ -573,7 +574,7 @@ class _MesCommandesPageState extends State<MesCommandesPage> {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    '$quantity article${quantity > 1 ? 's' : ''} · livrée',
+                    '$quantity ${quantity > 1 ? l10n.items : l10n.unit} · ${l10n.deliveredStatus}',
                     style: TextStyle(
                       fontSize: 12,
                       color: Colors.white.withOpacity(0.6),
@@ -599,7 +600,12 @@ class _MesCommandesPageState extends State<MesCommandesPage> {
   }
 
   Widget _buildProgressBar(int status) {
-    final steps = ['Confirmée', 'Préparée', 'Expédiée', 'Livrée'];
+    final steps = [
+      l10n.stepConfirmed,
+      l10n.stepPrepared,
+      l10n.stepShipped,
+      l10n.stepDelivered,
+    ];
     return Row(
       children: List.generate(4, (i) {
         final isDone = i <= status;
@@ -660,8 +666,8 @@ class _MesCommandesPageState extends State<MesCommandesPage> {
           borderRadius: BorderRadius.circular(10),
           color: Colors.white.withOpacity(0.06),
         ),
-        child: const Icon(Icons.shopping_bag,
-            color: Colors.white54, size: 22),
+        child:
+        const Icon(Icons.shopping_bag, color: Colors.white54, size: 22),
       );
     }
 
@@ -751,7 +757,6 @@ class _MesCommandesPageState extends State<MesCommandesPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        // Précédent
         GestureDetector(
           onTap: currentPage > 1 && !isLoadingPage
               ? () => fetchOrders(page: currentPage - 1)
@@ -774,8 +779,6 @@ class _MesCommandesPageState extends State<MesCommandesPage> {
           ),
         ),
         const SizedBox(width: 10),
-
-        // Page X / Y
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           decoration: BoxDecoration(
@@ -794,8 +797,6 @@ class _MesCommandesPageState extends State<MesCommandesPage> {
           ),
         ),
         const SizedBox(width: 10),
-
-        // Suivant
         GestureDetector(
           onTap: currentPage < totalPages && !isLoadingPage
               ? () => fetchOrders(page: currentPage + 1)
@@ -839,11 +840,16 @@ class OrderDetailsModal extends StatelessWidget {
 
   Color _statusColor(int status) {
     switch (status) {
-      case 0: return const Color(0xFFFFC97A);
-      case 1: return const Color(0xFF64B5F6);
-      case 2: return const Color(0xFFBA68C8);
-      case 3: return const Color(0xFF66BB6A);
-      default: return Colors.white54;
+      case 0:
+        return const Color(0xFFFFC97A);
+      case 1:
+        return const Color(0xFF64B5F6);
+      case 2:
+        return const Color(0xFFBA68C8);
+      case 3:
+        return const Color(0xFF66BB6A);
+      default:
+        return Colors.white54;
     }
   }
 
@@ -874,7 +880,6 @@ class OrderDetailsModal extends StatelessWidget {
       ),
       child: Column(
         children: [
-          // Header
           Container(
             padding: const EdgeInsets.fromLTRB(20, 16, 20, 12),
             decoration: BoxDecoration(
@@ -892,8 +897,8 @@ class OrderDetailsModal extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
                       color: Colors.white.withOpacity(0.08),
-                      border:
-                      Border.all(color: Colors.white.withOpacity(0.14)),
+                      border: Border.all(
+                          color: Colors.white.withOpacity(0.14)),
                     ),
                     child: const Icon(Icons.close,
                         color: Colors.white, size: 20),
@@ -901,7 +906,7 @@ class OrderDetailsModal extends StatelessWidget {
                 ),
                 const Spacer(),
                 Text(
-                  'Commande $orderId',
+                  '${l10n.orderLabel} $orderId',
                   style: const TextStyle(
                     fontFamily: 'Inter',
                     fontSize: 16,
@@ -914,31 +919,27 @@ class OrderDetailsModal extends StatelessWidget {
               ],
             ),
           ),
-
           Expanded(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Statut
                   Row(
                     children: [
-                      _statusBadge(
-                          'Statut', _statusText(status, l10n),
-                          _statusColor(status)),
+                      _statusBadge(l10n.statusLabel,
+                          _statusText(status, l10n), _statusColor(status)),
                       const SizedBox(width: 8),
                       _statusBadge(
-                          'Paiement',
+                          l10n.paymentLabel,
                           _paymentText(paymentStatus, l10n),
                           paymentStatus == 1
                               ? const Color(0xFF66BB6A)
                               : const Color(0xFFFF8A8A)),
                     ],
                   ),
-
                   const SizedBox(height: 20),
-                  _sectionTitle('Informations de livraison'),
+                  _sectionTitle(l10n.deliveryInfoSection),
                   const SizedBox(height: 10),
                   Container(
                     padding: const EdgeInsets.all(14),
@@ -958,7 +959,6 @@ class OrderDetailsModal extends StatelessWidget {
                       ],
                     ),
                   ),
-
                   const SizedBox(height: 20),
                   _sectionTitle('${l10n.orderedItems} ($quantity)'),
                   const SizedBox(height: 10),
@@ -989,13 +989,14 @@ class OrderDetailsModal extends StatelessWidget {
                             ),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10),
-                              child: product != null &&
-                                  product['image'] != null
+                              child:
+                              product != null && product['image'] != null
                                   ? Image.network(
                                 product['image'],
                                 fit: BoxFit.contain,
                                 errorBuilder: (_, __, ___) =>
-                                const Icon(Icons.shopping_bag,
+                                const Icon(
+                                    Icons.shopping_bag,
                                     color: Colors.black26),
                               )
                                   : const Icon(Icons.shopping_bag,
@@ -1046,7 +1047,6 @@ class OrderDetailsModal extends StatelessWidget {
                       ),
                     );
                   }),
-
                   const SizedBox(height: 16),
                   Container(
                     padding: const EdgeInsets.all(14),
@@ -1068,20 +1068,17 @@ class OrderDetailsModal extends StatelessWidget {
                             height: 1,
                             color: Colors.white.withOpacity(0.1)),
                         const SizedBox(height: 10),
-                        _summaryRow(
-                            l10n.total, '${total.toStringAsFixed(0)} MAD',
+                        _summaryRow(l10n.total,
+                            '${total.toStringAsFixed(0)} MAD',
                             bold: true),
                       ],
                     ),
                   ),
-
                   const SizedBox(height: 100),
                 ],
               ),
             ),
           ),
-
-          // Bouton payer
           if (paymentStatus == 0)
             Container(
               padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
@@ -1242,20 +1239,29 @@ class OrderDetailsModal extends StatelessWidget {
 
   String _statusText(int status, AppLocalizations l10n) {
     switch (status) {
-      case 0: return l10n.statusNotProcessed;
-      case 1: return l10n.statusProcessing;
-      case 2: return l10n.statusProcessed;
-      case 3: return l10n.statusDelivered;
-      case 4: return l10n.statusCancelled;
-      default: return l10n.statusUnknown;
+      case 0:
+        return l10n.statusNotProcessed;
+      case 1:
+        return l10n.statusProcessing;
+      case 2:
+        return l10n.statusProcessed;
+      case 3:
+        return l10n.statusDelivered;
+      case 4:
+        return l10n.statusCancelled;
+      default:
+        return l10n.statusUnknown;
     }
   }
 
   String _paymentText(int status, AppLocalizations l10n) {
     switch (status) {
-      case 0: return l10n.statusNotPaid;
-      case 1: return l10n.statusPaid;
-      default: return l10n.statusUnknown;
+      case 0:
+        return l10n.statusNotPaid;
+      case 1:
+        return l10n.statusPaid;
+      default:
+        return l10n.statusUnknown;
     }
   }
 }

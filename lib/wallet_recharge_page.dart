@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'wallet_service.dart';
 import 'cmi_payment_wallet.dart';
+import 'l10n/app_localizations.dart';
 
 class WalletRechargePage extends StatefulWidget {
   final String token;
@@ -13,10 +14,6 @@ class WalletRechargePage extends StatefulWidget {
 }
 
 class _WalletRechargePageState extends State<WalletRechargePage> {
-  static const String _GENERIC_ERROR_MSG =
-      "Nous rencontrons actuellement des problèmes, veuillez contacter le support.";
-
-  // 0: montant, 1: sélection carte, 2: CVV, 3: succès
   int _step = 0;
   String _amount = '200';
   bool _isLoading = false;
@@ -25,17 +22,18 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
   final TextEditingController _amountCtrl = TextEditingController(text: '200');
   final TextEditingController _cvvCtrl = TextEditingController();
 
-  // États cartes
   bool _isLoadingCards = true;
   String? _cardsError;
   List<Map<String, dynamic>> _savedCards = [];
   Map<String, dynamic>? _selectedCard;
 
-  // Wallet info
   Map<String, dynamic>? _walletInfo;
   double _walletBalance = 0.0;
 
   final Color primary = const Color(0xFFA8161F);
+
+  /// l10n helper
+  AppLocalizations get l10n => AppLocalizations.of(context)!;
 
   @override
   void initState() {
@@ -53,9 +51,6 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
 
   double get _amountValue => double.tryParse(_amount) ?? 0;
 
-  // ═══════════════════════════════════════════════════════════
-  // CHARGEMENT DES DONNÉES
-  // ═══════════════════════════════════════════════════════════
   Future<void> _fetchSavedCards() async {
     setState(() {
       _isLoadingCards = true;
@@ -73,7 +68,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
       if (!mounted) return;
       setState(() {
         _isLoadingCards = false;
-        _cardsError = 'Impossible de charger les cartes.';
+        _cardsError = l10n.cardsLoadFailed;
       });
     }
   }
@@ -90,17 +85,14 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
     } catch (_) {}
   }
 
-  // ═══════════════════════════════════════════════════════════
-  // NAVIGATION ENTRE ÉTAPES
-  // ═══════════════════════════════════════════════════════════
   void _goNext() async {
     if (_step == 0) {
       if (_amountValue < 50 || _amountValue > 1000) {
-        _showError('Montant entre 50 et 1000 MAD (niveau 1)');
+        _showError(l10n.amountBetween50And1000);
         return;
       }
       if (_isLoadingCards) {
-        _showError('Chargement des cartes en cours...');
+        _showError(l10n.loadingCardsInProgress);
         return;
       }
       if (_cardsError != null) {
@@ -108,29 +100,25 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
         return;
       }
       if (_savedCards.isEmpty) {
-        _showError(
-            'Aucune carte enregistrée. Ajoutez une carte depuis votre profil.');
+        _showError(l10n.noSavedCard);
         return;
       }
       setState(() => _step = 1);
     } else if (_step == 1) {
       if (_selectedCard == null) {
-        _showError('Veuillez sélectionner une carte');
+        _showError(l10n.pleaseSelectCard);
         return;
       }
       setState(() => _step = 2);
     } else if (_step == 2) {
       if (_cvvCtrl.text.length < 3) {
-        _showError('CVV invalide');
+        _showError(l10n.invalidCvv);
         return;
       }
       await _processRecharge();
     }
   }
 
-  // ═══════════════════════════════════════════════════════════
-  // PROCESSUS DE RECHARGE
-  // ═══════════════════════════════════════════════════════════
   Future<void> _processRecharge() async {
     setState(() => _isLoading = true);
 
@@ -147,7 +135,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
       setState(() => _isLoading = false);
 
       if (res == null || res['success'] != true) {
-        _showError(_GENERIC_ERROR_MSG);
+        _showError(l10n.genericErrorContactSupport);
         return;
       }
 
@@ -157,7 +145,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
       final redirectUrl = data['redirect_url']?.toString() ?? '';
 
       if (redirectUrl.isEmpty) {
-        _showError(_GENERIC_ERROR_MSG);
+        _showError(l10n.genericErrorContactSupport);
         return;
       }
 
@@ -191,12 +179,12 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
         await _fetchSavedCards();
         if (mounted) setState(() => _step = 3);
       } else {
-        _showError('Paiement annulé ou échoué.');
+        _showError(l10n.paymentCancelledOrFailed);
       }
     } catch (_) {
       if (!mounted) return;
       setState(() => _isLoading = false);
-      _showError(_GENERIC_ERROR_MSG);
+      _showError(l10n.genericErrorContactSupport);
     }
   }
 
@@ -208,10 +196,9 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
     ));
   }
 
-  // ✅ Redirige vers l'Accueil en fermant toutes les pages
   void _goToHome() {
     Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
-      '/acceuil', // Assure-toi que c'est bien orthographié ainsi dans main.dart
+      '/acceuil',
           (Route<dynamic> route) => false,
       arguments: {
         'token': widget.token,
@@ -219,9 +206,6 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
     );
   }
 
-  // ═══════════════════════════════════════════════════════════
-  // BUILD
-  // ═══════════════════════════════════════════════════════════
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -274,7 +258,8 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
           color: Colors.black.withOpacity(0.6),
           child: Center(
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 24),
+              padding:
+              const EdgeInsets.symmetric(horizontal: 28, vertical: 24),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
                 gradient: const LinearGradient(
@@ -291,10 +276,10 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
                   ),
                 ],
               ),
-              child: const Column(
+              child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     width: 36,
                     height: 36,
                     child: CircularProgressIndicator(
@@ -303,10 +288,10 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
                       strokeWidth: 3,
                     ),
                   ),
-                  SizedBox(height: 14),
+                  const SizedBox(height: 14),
                   Text(
-                    'Mise à jour du solde...',
-                    style: TextStyle(
+                    l10n.updatingBalance,
+                    style: const TextStyle(
                       fontFamily: 'Inter',
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
@@ -351,7 +336,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
           ),
           const Spacer(),
           Text(
-            _step == 3 ? 'Succès' : 'Recharger',
+            _step == 3 ? l10n.paymentSuccess : l10n.rechargeAction,
             style: const TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.w600,
@@ -366,7 +351,6 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
     );
   }
 
-  // ─── STEP 0 : MONTANT ───
   Widget _buildAmountStep() {
     return Column(
       children: [
@@ -384,7 +368,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
               const Icon(Icons.smartphone, color: Colors.white, size: 11),
               const SizedBox(width: 5),
               Text(
-                'Wydad Pay',
+                l10n.wydadPay,
                 style: TextStyle(
                   fontFamily: 'Inter',
                   fontSize: 10,
@@ -397,7 +381,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
         ),
         const SizedBox(height: 24),
         Text(
-          'Montant à recharger',
+          l10n.topUpYourWalletAmount,
           style: TextStyle(
             fontFamily: 'Inter',
             fontSize: 11,
@@ -457,7 +441,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
         ),
         const SizedBox(height: 6),
         Text(
-          'Plafond par transaction : 1 000 MAD (niveau 1)',
+          l10n.transactionLimitLevel1,
           style: TextStyle(
             fontFamily: 'Inter',
             fontSize: 10,
@@ -511,9 +495,9 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
-              'Total à payer',
-              style: TextStyle(
+            Text(
+              l10n.totalToPay,
+              style: const TextStyle(
                 fontFamily: 'Inter',
                 fontSize: 11,
                 fontWeight: FontWeight.w600,
@@ -546,7 +530,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
               ),
               const SizedBox(width: 8),
               Text(
-                'Chargement des cartes...',
+                l10n.loadingCards,
                 style: TextStyle(
                   fontFamily: 'Inter',
                   fontSize: 11,
@@ -558,10 +542,10 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
         else if (_cardsError != null)
           TextButton.icon(
             onPressed: _fetchSavedCards,
-            icon:
-            const Icon(Icons.refresh, color: Color(0xFFF5CD52), size: 16),
+            icon: const Icon(Icons.refresh,
+                color: Color(0xFFF5CD52), size: 16),
             label: Text(
-              'Réessayer le chargement des cartes',
+              l10n.retryLoadCards,
               style: TextStyle(
                 fontFamily: 'Inter',
                 fontSize: 11,
@@ -575,7 +559,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
               icon: const Icon(Icons.credit_card,
                   color: Color(0xFFF5CD52), size: 16),
               label: Text(
-                'Aucune carte. Actualiser',
+                l10n.noCardRefresh,
                 style: TextStyle(
                   fontFamily: 'Inter',
                   fontSize: 11,
@@ -598,9 +582,9 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
               ),
               elevation: 0,
             ),
-            child: const Text(
-              'Continuer',
-              style: TextStyle(
+            child: Text(
+              l10n.continueText,
+              style: const TextStyle(
                 fontFamily: 'Inter',
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
@@ -612,15 +596,14 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
     );
   }
 
-  // ─── STEP 1 : SÉLECTION CARTE ───
   Widget _buildCardSelectionStep() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 16),
-        const Text(
-          'Carte de paiement',
-          style: TextStyle(
+        Text(
+          l10n.paymentCard,
+          style: const TextStyle(
             fontFamily: 'Inter',
             fontSize: 18,
             fontWeight: FontWeight.w700,
@@ -629,7 +612,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
         ),
         const SizedBox(height: 8),
         Text(
-          'Sélectionnez la carte pour payer $_amount,00 MAD',
+          l10n.selectCardToPay('$_amount'),
           style: TextStyle(
             fontFamily: 'Inter',
             fontSize: 13,
@@ -668,9 +651,9 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
                   onPressed: _fetchSavedCards,
                   icon: const Icon(Icons.refresh,
                       color: Color(0xFFF5CD52), size: 18),
-                  label: const Text(
-                    'Réessayer',
-                    style: TextStyle(
+                  label: Text(
+                    l10n.retry,
+                    style: const TextStyle(
                         color: Color(0xFFF5CD52), fontFamily: 'Inter'),
                   ),
                 ),
@@ -690,11 +673,11 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
                   const Icon(Icons.credit_card_off,
                       color: Colors.white54, size: 40),
                   const SizedBox(height: 12),
-                  const Center(
+                  Center(
                     child: Text(
-                      'Aucune carte enregistrée.',
+                      l10n.noSavedCards,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: Colors.white70,
                           fontFamily: 'Inter',
                           fontWeight: FontWeight.w600),
@@ -702,7 +685,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    'Ajoutez une carte depuis votre profil pour recharger.',
+                    l10n.addCardFromProfile,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Colors.white.withOpacity(0.5),
@@ -714,9 +697,9 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
                     onPressed: _fetchSavedCards,
                     icon: const Icon(Icons.refresh,
                         color: Color(0xFFF5CD52), size: 18),
-                    label: const Text(
-                      'Actualiser',
-                      style: TextStyle(
+                    label: Text(
+                      l10n.refresh,
+                      style: const TextStyle(
                           color: Color(0xFFF5CD52), fontFamily: 'Inter'),
                     ),
                   ),
@@ -764,7 +747,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              card['scheme'] ?? 'Carte',
+                              card['scheme'] ?? l10n.cardDefault,
                               style: const TextStyle(
                                 fontFamily: 'Inter',
                                 fontSize: 15,
@@ -774,7 +757,8 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
                             ),
                             const SizedBox(height: 2),
                             Text(
-                              card['maskedPan'] ?? '•••• •••• •••• ••••',
+                              card['maskedPan'] ??
+                                  l10n.maskedPanPlaceholder,
                               style: TextStyle(
                                 fontFamily: 'Inter',
                                 fontSize: 13,
@@ -807,9 +791,9 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
               ),
               elevation: 0,
             ),
-            child: const Text(
-              'Continuer',
-              style: TextStyle(
+            child: Text(
+              l10n.continueText,
+              style: const TextStyle(
                 fontFamily: 'Inter',
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
@@ -821,15 +805,14 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
     );
   }
 
-  // ─── STEP 2 : CVV ───
   Widget _buildCvvStep() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 16),
-        const Text(
-          'Confirmation',
-          style: TextStyle(
+        Text(
+          l10n.confirmationTitle,
+          style: const TextStyle(
             fontFamily: 'Inter',
             fontSize: 18,
             fontWeight: FontWeight.w700,
@@ -838,7 +821,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
         ),
         const SizedBox(height: 8),
         Text(
-          'Saisissez le cryptogramme (CVV) pour valider le paiement.',
+          l10n.enterCvvPrompt,
           style: TextStyle(
             fontFamily: 'Inter',
             fontSize: 13,
@@ -858,7 +841,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
               const Icon(Icons.credit_card, color: Colors.white, size: 20),
               const SizedBox(width: 10),
               Text(
-                '${_selectedCard!['scheme'] ?? 'Carte'} ${_selectedCard!['maskedPan'] ?? ''}',
+                '${_selectedCard!['scheme'] ?? l10n.cardDefault} ${_selectedCard!['maskedPan'] ?? ''}',
                 style: const TextStyle(
                   fontFamily: 'Inter',
                   fontSize: 14,
@@ -883,7 +866,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
             color: Colors.white,
           ),
           decoration: InputDecoration(
-            hintText: '•••',
+            hintText: l10n.cvvHint,
             hintStyle: TextStyle(color: Colors.white.withOpacity(0.3)),
             counterText: '',
             filled: true,
@@ -925,9 +908,9 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
                 color: Color(0xFFA8161F),
               ),
             )
-                : const Text(
-              'Payer',
-              style: TextStyle(
+                : Text(
+              l10n.pay,
+              style: const TextStyle(
                 fontFamily: 'Inter',
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
@@ -939,7 +922,6 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
     );
   }
 
-  // ─── STEP 3 : SUCCÈS ───
   Widget _buildSuccessStep() {
     return Column(
       children: [
@@ -960,9 +942,9 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
           ),
         ),
         const SizedBox(height: 24),
-        const Text(
-          'Recharge effectuée',
-          style: TextStyle(
+        Text(
+          l10n.rechargeDone,
+          style: const TextStyle(
             fontFamily: 'Inter',
             fontSize: 22,
             fontWeight: FontWeight.w900,
@@ -971,7 +953,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
         ),
         const SizedBox(height: 8),
         Text(
-          'Votre compte a été rechargé avec succès.',
+          l10n.rechargeSuccessMessage,
           textAlign: TextAlign.center,
           style: TextStyle(
             fontFamily: 'Inter',
@@ -994,7 +976,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Montant rechargé',
+                    l10n.rechargedAmount,
                     style: TextStyle(
                       fontFamily: 'Inter',
                       fontSize: 12,
@@ -1019,7 +1001,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Nouveau solde',
+                    l10n.newBalance,
                     style: TextStyle(
                       fontFamily: 'Inter',
                       fontSize: 12,
@@ -1054,9 +1036,9 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
               ),
               elevation: 0,
             ),
-            child: const Text(
-              'Terminé',
-              style: TextStyle(
+            child: Text(
+              l10n.done,
+              style: const TextStyle(
                 fontFamily: 'Inter',
                 fontSize: 14,
                 fontWeight: FontWeight.w700,

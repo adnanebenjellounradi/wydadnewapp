@@ -29,13 +29,16 @@ class _InscriptionPageState extends State<InscriptionPage> {
   bool emailTouched = false;
   bool phoneTouched = false;
 
+  /// l10n helper
+  AppLocalizations get l10n => AppLocalizations.of(context)!;
+
   // ---------- VALIDATION ----------
 
   String? validateEmail(String? value, AppLocalizations l10n) {
     if (!emailTouched) return null;
     if (value != null && value.isNotEmpty) {
-      final emailRegex = RegExp(
-          r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+      final emailRegex =
+      RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
       if (!emailRegex.hasMatch(value)) {
         return l10n.invalidEmail;
       }
@@ -74,7 +77,6 @@ class _InscriptionPageState extends State<InscriptionPage> {
   }
 
   void showErrorModal(String message) {
-    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -139,7 +141,6 @@ class _InscriptionPageState extends State<InscriptionPage> {
   }
 
   void showSuccessModalDialog() {
-    final l10n = AppLocalizations.of(context)!;
     setState(() => showSuccessModal = true);
 
     showDialog(
@@ -216,7 +217,6 @@ class _InscriptionPageState extends State<InscriptionPage> {
   // ---------- API ----------
 
   String _extractErrorMessage(Map<String, dynamic> data) {
-    final l10n = AppLocalizations.of(context);
     try {
       if (data.containsKey('data') && data['data'] is Map) {
         final errorData = data['data'] as Map<String, dynamic>;
@@ -236,18 +236,13 @@ class _InscriptionPageState extends State<InscriptionPage> {
         });
         if (errorMessages.isNotEmpty) return errorMessages.join(', ');
       }
-      return data["message"] ??
-          (l10n?.registrationErrorGeneric ??
-              "Une erreur s'est produite lors de l'inscription");
+      return data["message"] ?? l10n.registrationErrorGeneric;
     } catch (_) {
-      return l10n?.registrationErrorGeneric ??
-          "Une erreur s'est produite lors de l'inscription";
+      return l10n.registrationErrorGeneric;
     }
   }
 
   Future<void> register() async {
-    final l10n = AppLocalizations.of(context)!;
-
     setState(() {
       emailTouched = true;
       phoneTouched = true;
@@ -275,7 +270,7 @@ class _InscriptionPageState extends State<InscriptionPage> {
       return;
     }
     if (!acceptTerms) {
-      showError("Veuillez accepter les conditions d'utilisation.");
+      showError(l10n.acceptTermsRequired);
       return;
     }
 
@@ -375,8 +370,6 @@ class _InscriptionPageState extends State<InscriptionPage> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-
     return Scaffold(
       backgroundColor: const Color(0xFF170205),
       resizeToAvoidBottomInset: true,
@@ -397,7 +390,6 @@ class _InscriptionPageState extends State<InscriptionPage> {
         ),
         child: Stack(
           children: [
-            // Top radial red glow
             Positioned(
               top: -140,
               left: 0,
@@ -419,7 +411,6 @@ class _InscriptionPageState extends State<InscriptionPage> {
                 ),
               ),
             ),
-
             SafeArea(
               child: SingleChildScrollView(
                 physics: const ClampingScrollPhysics(),
@@ -458,9 +449,9 @@ class _InscriptionPageState extends State<InscriptionPage> {
                               padding: EdgeInsets.zero,
                               minimumSize: const Size(0, 44),
                             ),
-                            child: const Text(
-                              'Plus tard',
-                              style: TextStyle(
+                            child: Text(
+                              l10n.later,
+                              style: const TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
                                 color: Color(0xC7FFFFFF),
@@ -474,9 +465,9 @@ class _InscriptionPageState extends State<InscriptionPage> {
 
                     // ── Title ──
                     const SizedBox(height: 20),
-                    const Text(
-                      'Créer votre compte',
-                      style: TextStyle(
+                    Text(
+                      l10n.createYourAccount,
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 28,
                         fontWeight: FontWeight.w600,
@@ -486,7 +477,7 @@ class _InscriptionPageState extends State<InscriptionPage> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Quelques infos pour acheter vos billets et suivre votre club.',
+                      l10n.registerSubtitle,
                       style: TextStyle(
                         color: Colors.white.withOpacity(0.72),
                         fontSize: 15,
@@ -504,11 +495,11 @@ class _InscriptionPageState extends State<InscriptionPage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              _fieldLabel('Prénom'),
+                              _fieldLabel(l10n.firstNameLabel),
                               const SizedBox(height: 6),
                               _darkInput(
                                 controller: firstNameController,
-                                hint: 'Prénom',
+                                hint: l10n.firstNameLabel,
                                 autofillHints: const [AutofillHints.givenName],
                               ),
                             ],
@@ -519,11 +510,11 @@ class _InscriptionPageState extends State<InscriptionPage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              _fieldLabel('Nom'),
+                              _fieldLabel(l10n.lastNameLabel),
                               const SizedBox(height: 6),
                               _darkInput(
                                 controller: lastNameController,
-                                hint: 'Nom',
+                                hint: l10n.lastNameLabel,
                                 autofillHints: const [AutofillHints.familyName],
                               ),
                             ],
@@ -535,11 +526,11 @@ class _InscriptionPageState extends State<InscriptionPage> {
                     const SizedBox(height: 16),
 
                     // ── Email ──
-                    _fieldLabel('E-mail'),
+                    _fieldLabel(l10n.emailLabel),
                     const SizedBox(height: 6),
                     _darkInput(
                       controller: emailController,
-                      hint: 'nom@exemple.com',
+                      hint: l10n.emailHint,
                       keyboardType: TextInputType.emailAddress,
                       autofillHints: const [AutofillHints.email],
                       errorText: validateEmail(emailController.text, l10n),
@@ -549,12 +540,12 @@ class _InscriptionPageState extends State<InscriptionPage> {
                     const SizedBox(height: 16),
 
                     // ── Phone ──
-                    _fieldLabel('Numéro de téléphone'),
+                    _fieldLabel(l10n.phoneLabel),
                     const SizedBox(height: 6),
                     _phoneField(l10n),
                     const SizedBox(height: 6),
                     Text(
-                      'Un code de vérification vous sera envoyé par SMS.',
+                      l10n.phoneVerificationNote,
                       style: TextStyle(
                         fontSize: 11,
                         color: Colors.white.withOpacity(0.6),
@@ -565,18 +556,17 @@ class _InscriptionPageState extends State<InscriptionPage> {
                     const SizedBox(height: 16),
 
                     // ── Password ──
-                    _fieldLabel('Mot de passe'),
+                    _fieldLabel(l10n.passwordLabel),
                     const SizedBox(height: 6),
                     _passwordField(
                       controller: passwordController,
-                      hint: '8 caractères minimum',
+                      hint: l10n.passwordMinHint,
                       visible: isPasswordVisible,
                       onToggle: () => setState(
                               () => isPasswordVisible = !isPasswordVisible),
                     ),
                     const SizedBox(height: 6),
 
-                    // Password strength bars
                     Row(
                       children: [
                         _strengthBar(active: true),
@@ -590,7 +580,7 @@ class _InscriptionPageState extends State<InscriptionPage> {
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      'Au moins 8 caractères, avec une majuscule et un chiffre.',
+                      l10n.passwordStrengthHint,
                       style: TextStyle(
                         fontSize: 12,
                         color: Colors.white.withOpacity(0.6),
@@ -601,11 +591,11 @@ class _InscriptionPageState extends State<InscriptionPage> {
                     const SizedBox(height: 16),
 
                     // ── Confirm password ──
-                    _fieldLabel('Confirmer le mot de passe'),
+                    _fieldLabel(l10n.confirmPasswordLabel),
                     const SizedBox(height: 6),
                     _passwordField(
                       controller: confirmPasswordController,
-                      hint: 'Retapez votre mot de passe',
+                      hint: l10n.confirmPasswordHint,
                       visible: isConfirmPasswordVisible,
                       onToggle: () => setState(() =>
                       isConfirmPasswordVisible =
@@ -651,10 +641,8 @@ class _InscriptionPageState extends State<InscriptionPage> {
                                   color: Colors.white.withOpacity(0.86),
                                   fontFamily: 'Inter',
                                 ),
-                                children: const [
-                                  TextSpan(
-                                      text:
-                                      "J'accepte les conditions d'utilisation et la politique de confidentialité."),
+                                children: [
+                                  TextSpan(text: l10n.acceptTermsText),
                                 ],
                               ),
                             ),
@@ -687,12 +675,13 @@ class _InscriptionPageState extends State<InscriptionPage> {
                           height: 24,
                           child: CircularProgressIndicator(
                             strokeWidth: 2.5,
-                            valueColor: AlwaysStoppedAnimation(primary),
+                            valueColor:
+                            AlwaysStoppedAnimation(primary),
                           ),
                         )
-                            : const Text(
-                          'Créer mon compte',
-                          style: TextStyle(
+                            : Text(
+                          l10n.createMyAccount,
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
                             fontFamily: 'Inter',
@@ -719,11 +708,11 @@ class _InscriptionPageState extends State<InscriptionPage> {
                               fontFamily: 'Inter',
                               color: Colors.white.withOpacity(0.72),
                             ),
-                            children: const [
-                              TextSpan(text: 'Déjà inscrit ? '),
+                            children: [
+                              TextSpan(text: l10n.alreadyRegistered),
                               TextSpan(
-                                text: 'Se connecter',
-                                style: TextStyle(
+                                text: l10n.loginLink,
+                                style: const TextStyle(
                                   fontWeight: FontWeight.w600,
                                   color: Colors.white,
                                 ),
@@ -785,9 +774,9 @@ class _InscriptionPageState extends State<InscriptionPage> {
         ),
         filled: true,
         fillColor: Colors.white.withOpacity(0.06),
-        // ✅ CRUCIAL : hauteur minimum, plus de compression
         isDense: false,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
+        contentPadding:
+        const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
         errorText: errorText,
         errorStyle: const TextStyle(
           color: Color(0xFFE5484D),
@@ -921,7 +910,9 @@ class _InscriptionPageState extends State<InscriptionPage> {
         height: 4,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(2),
-          color: active ? const Color(0xFFF5CD52) : Colors.white.withOpacity(0.16),
+          color: active
+              ? const Color(0xFFF5CD52)
+              : Colors.white.withOpacity(0.16),
         ),
       ),
     );

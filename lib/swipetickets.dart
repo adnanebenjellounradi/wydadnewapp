@@ -192,7 +192,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                     Text(
                       l10n.scanQRCode,
                       style: const TextStyle(
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
                         color: Colors.white,
@@ -242,7 +242,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                 Text(
                   l10n.positionQRCodeInFrame,
                   style: TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 12,
                     color: Colors.white.withOpacity(0.7),
                   ),
@@ -331,7 +331,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                 l10n.userNotFound,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                   fontSize: 20,
                   fontWeight: FontWeight.w900,
                   color: Colors.white,
@@ -341,7 +341,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
               Text(
                 "${l10n.userNotFoundMessage} $scannedEmail,\n${l10n.inviteQuestion}",
                 style: TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                   fontSize: 13,
                   height: 1.45,
                   color: Colors.white.withOpacity(0.75),
@@ -472,7 +472,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                       child: Text(
                         "${l10n.transfer} ${_selectedTickets.length} ${l10n.ticketPlural}",
                         style: const TextStyle(
-                          fontFamily: 'Inter',
+                          fontFamily: 'urbanist',
                           fontWeight: FontWeight.w900,
                           fontSize: 18,
                           color: Colors.white,
@@ -483,7 +483,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                     Text(
                       l10n.enterRecipientEmail,
                       style: TextStyle(
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                         fontSize: 12,
                         color: Colors.white.withOpacity(0.7),
                       ),
@@ -494,7 +494,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                       keyboardType: TextInputType.emailAddress,
                       cursorColor: Colors.white,
                       style: const TextStyle(
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                         fontSize: 13,
                         color: Colors.white,
                       ),
@@ -503,7 +503,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                             color: Colors.white.withOpacity(0.6), size: 18),
                         hintText: l10n.emailExample,
                         hintStyle: TextStyle(
-                          fontFamily: 'Inter',
+                          fontFamily: 'urbanist',
                           fontSize: 12,
                           color: Colors.white.withOpacity(0.4),
                         ),
@@ -575,7 +575,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                             Text(
                               l10n.scanQRCode,
                               style: TextStyle(
-                                fontFamily: 'Inter',
+                                fontFamily: 'urbanist',
                                 fontSize: 13,
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white.withOpacity(0.9),
@@ -687,7 +687,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
         child: Text(
           label,
           style: TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 14,
             fontWeight: FontWeight.w600,
             color: Colors.white.withOpacity(0.9),
@@ -710,7 +710,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
         child: Text(
           label,
           style: const TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 14,
             fontWeight: FontWeight.w700,
             color: Colors.white,
@@ -723,7 +723,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
   void _snack(String message, {bool error = false, bool warn = false}) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(message, style: const TextStyle(fontFamily: 'Inter')),
+        content: Text(message, style: const TextStyle(fontFamily: 'urbanist')),
         backgroundColor:
         error ? const Color(0xFFE5484D) : (warn ? amber : primary),
         behavior: SnackBarBehavior.floating,
@@ -749,7 +749,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
               Text(
                 label,
                 style: TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
                   color: Colors.white.withOpacity(0.9),
@@ -819,7 +819,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                               ? l10n.ticketPendingAcceptance
                               : l10n.noTicketsAvailable,
                           style: TextStyle(
-                            fontFamily: 'Inter',
+                            fontFamily: 'urbanist',
                             fontWeight: FontWeight.w600,
                             fontSize: 15,
                             color: Colors.white.withOpacity(0.7),
@@ -942,7 +942,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                                                     ? l10n.selected
                                                     : l10n.selectForTransfer,
                                                 style: TextStyle(
-                                                  fontFamily: 'Inter',
+                                                  fontFamily: 'urbanist',
                                                   fontWeight: FontWeight.w600,
                                                   fontSize: 12,
                                                   color: isSelected
@@ -1077,7 +1077,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                                       ? l10n.transferTickets.toUpperCase()
                                       : "${l10n.transfer.toUpperCase()} ${_selectedTickets.length} ${l10n.ticketPlural.toUpperCase()}${_selectedTickets.length > 1 ? 'S' : ''}",
                                   style: const TextStyle(
-                                    fontFamily: 'Inter',
+                                    fontFamily: 'urbanist',
                                     fontWeight: FontWeight.w800,
                                     fontSize: 14,
                                     color: Colors.white,
@@ -1130,7 +1130,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
                 color: Colors.white,
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
               ),
             ),
           ),
@@ -1233,7 +1233,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                   child: Text(
                     l10n.receivedTransferPending,
                     style: TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontWeight: FontWeight.w600,
                       fontSize: 13,
                       color: amber,
@@ -1260,7 +1260,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                 Text(
                   l10n.ticketNotTransferable,
                   style: TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontWeight: FontWeight.w600,
                     fontSize: 12,
                     color: amber,
@@ -1291,7 +1291,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                     color: statusColor,
                     fontWeight: FontWeight.w600,
                     fontSize: 11,
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                   ),
                 ),
                 Text(
@@ -1300,7 +1300,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                     color: statusColor,
                     fontWeight: FontWeight.w800,
                     fontSize: 11,
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                   ),
                 ),
               ],
@@ -1310,7 +1310,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
         Text(
           event["name"],
           style: const TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontWeight: FontWeight.w700,
             fontSize: 22,
             color: Colors.white,
@@ -1321,7 +1321,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
         Text(
           _formatDate(event["date"]),
           style: TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontWeight: FontWeight.w600,
             fontSize: 15,
             color: gold,
@@ -1332,7 +1332,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
         Text(
           event["address"],
           style: TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 13,
             fontWeight: FontWeight.w500,
             color: Colors.white.withOpacity(0.7),
@@ -1359,7 +1359,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                 child: Text(
                   l10n.individualTicketInfo,
                   style: TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 12,
                     height: 1.4,
                     color: Colors.white.withOpacity(0.75),
@@ -1390,7 +1390,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                   Text(
                     l10n.acceptTransfer,
                     style: const TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontWeight: FontWeight.w700,
                       fontSize: 14,
                       color: Colors.white,
@@ -1418,7 +1418,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                   Text(
                     l10n.rejectTransfer,
                     style: const TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontWeight: FontWeight.w700,
                       fontSize: 14,
                       color: Colors.white,
@@ -1449,7 +1449,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
           Text(
             message,
             style: TextStyle(
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
               fontWeight: FontWeight.w600,
               fontSize: 13,
               color: Colors.white.withOpacity(0.85),
@@ -1578,7 +1578,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                   TextSpan(
                     text: "${l10n.category}: ",
                     style: const TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontWeight: FontWeight.w700,
                       fontSize: 16,
                       color: Color(0xFFA8161F),
@@ -1587,7 +1587,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                   TextSpan(
                     text: widget.category ?? "",
                     style: const TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontWeight: FontWeight.w900,
                       fontSize: 20,
                       color: Color(0xFFA8161F),
@@ -1616,7 +1616,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                   child: Text(
                     scanMessage,
                     style: TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontSize: 11,
                       fontWeight: FontWeight.w700,
                       color: borderColor,
@@ -1653,7 +1653,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
           Text(
             l10n.ticketAlreadyScanned,
             style: const TextStyle(
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
               fontWeight: FontWeight.w800,
               fontSize: 16,
               color: Colors.white,
@@ -1664,7 +1664,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
           Text(
             l10n.scannedFromOtherDevice,
             style: TextStyle(
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
               fontSize: 13,
               height: 1.4,
               color: Colors.white.withOpacity(0.75),
@@ -1699,7 +1699,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
         Text(
           "$label: ",
           style: TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontWeight: FontWeight.w600,
             fontSize: 11,
             color: Colors.white.withOpacity(0.6),
@@ -1709,7 +1709,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
           child: Text(
             value,
             style: const TextStyle(
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
               fontSize: 11,
               color: Colors.white,
               fontWeight: FontWeight.w600,
@@ -1756,7 +1756,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                   : l10n.eventStartsIn,
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontWeight: FontWeight.w600,
                 fontSize: 12,
                 color: Colors.white.withOpacity(0.7),
@@ -1780,7 +1780,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                 Text(
                   timeRemaining,
                   style: const TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontWeight: FontWeight.w800,
                     fontSize: 18,
                     color: Color(0xFFE5484D),
@@ -1828,7 +1828,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
         Text(
           label,
           style: TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontWeight: FontWeight.w600,
             fontSize: 10,
             color: Colors.white.withOpacity(0.6),
@@ -1839,7 +1839,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
         Text(
           value,
           style: const TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontWeight: FontWeight.w800,
             fontSize: 12,
             color: Colors.white,
@@ -2089,7 +2089,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                 l10n.confirmTransfer,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                   fontSize: 20,
                   fontWeight: FontWeight.w900,
                   color: Colors.white,
@@ -2099,7 +2099,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
               Text(
                 l10n.recipient,
                 style: TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
                   color: Colors.white.withOpacity(0.6),
@@ -2118,7 +2118,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                 child: Text(
                   email,
                   style: TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontWeight: FontWeight.w800,
                     fontSize: 15,
                     color: gold,
@@ -2143,7 +2143,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                     Text(
                       "$ticketCount ${l10n.ticketPlural}",
                       style: TextStyle(
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                         fontWeight: FontWeight.w700,
                         fontSize: 14,
                         color: gold,
@@ -2168,7 +2168,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                       child: Text(
                         l10n.irreversibleAction,
                         style: TextStyle(
-                          fontFamily: 'Inter',
+                          fontFamily: 'urbanist',
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
                           color: amber,
@@ -2183,7 +2183,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                 l10n.confirmTransferQuestion,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
                   color: Colors.white.withOpacity(0.9),

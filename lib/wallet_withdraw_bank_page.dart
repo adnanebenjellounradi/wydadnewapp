@@ -108,7 +108,7 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
       SnackBar(
         content: Text(
           msg,
-          style: const TextStyle(fontFamily: 'Inter'),
+          style: const TextStyle(fontFamily: 'urbanist'),
         ),
         backgroundColor: primary,
         behavior: SnackBarBehavior.floating,
@@ -205,7 +205,7 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
         title: Text(
           l10n.walletWithdrawDeleteAccountTitle,
           style: const TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             color: Colors.white,
           ),
         ),
@@ -214,7 +214,7 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
             acc['name']?.toString() ?? '',
           ),
           style: TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             color: Colors.white.withOpacity(0.8),
           ),
         ),
@@ -224,7 +224,7 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
             child: Text(
               l10n.walletWithdrawCancel,
               style: TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 color: Colors.white.withOpacity(0.7),
               ),
             ),
@@ -234,7 +234,7 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
             child: Text(
               l10n.walletWithdrawDelete,
               style: const TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 color: Color(0xFFD11A2A),
               ),
             ),
@@ -341,7 +341,7 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
               fontSize: 17,
               fontWeight: FontWeight.w600,
               color: Colors.white,
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
             ),
           ),
           const Spacer(),
@@ -360,7 +360,7 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
         Text(
           l10n.walletWithdrawDestinationAccount,
           style: const TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 14,
             fontWeight: FontWeight.w600,
             color: Colors.white,
@@ -402,7 +402,7 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
             child: Text(
               l10n.walletWithdrawAddAnotherAccount,
               style: TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
                 color: Colors.white.withOpacity(0.9),
@@ -421,7 +421,7 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
             Text(
               l10n.walletWithdrawAmount,
               style: const TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
                 color: Colors.white,
@@ -432,7 +432,7 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
                 _balance.toStringAsFixed(2).replaceAll('.', ','),
               ),
               style: TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 12,
                 color: Colors.white.withOpacity(0.6),
               ),
@@ -468,7 +468,7 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
                   onChanged: (v) => setState(() => _amount = v),
                   cursorColor: Colors.white,
                   style: const TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 32,
                     fontWeight: FontWeight.w600,
                     letterSpacing: -1,
@@ -480,7 +480,7 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
                     contentPadding: EdgeInsets.zero,
                     hintText: '0',
                     hintStyle: TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontSize: 32,
                       fontWeight: FontWeight.w600,
                       color: Colors.white38,
@@ -491,7 +491,7 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
               Text(
                 'MAD',
                 style: TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                   fontSize: 16,
                   color: Colors.white.withOpacity(0.72),
                 ),
@@ -505,7 +505,7 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
         Text(
           l10n.walletWithdrawEstimatedReception,
           style: TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 12,
             color: Colors.white.withOpacity(0.6),
           ),
@@ -517,7 +517,7 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
           child: Text(
             l10n.walletWithdrawEnterPin,
             style: TextStyle(
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
               fontSize: 13,
               fontWeight: FontWeight.w500,
               color: Colors.white.withOpacity(0.86),
@@ -539,7 +539,7 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
           onChanged: (v) => setState(() => _pin = v),
           cursorColor: Colors.white,
           style: const TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 26,
             fontWeight: FontWeight.w600,
             letterSpacing: 18,
@@ -548,7 +548,7 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
           decoration: InputDecoration(
             hintText: '••••',
             hintStyle: TextStyle(
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
               fontSize: 26,
               letterSpacing: 18,
               color: Colors.white.withOpacity(0.35),
@@ -607,7 +607,7 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
                 : Text(
               l10n.walletWithdrawButton(_amount),
               style: const TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
               ),
@@ -694,7 +694,7 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
@@ -706,7 +706,7 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
                   Text(
                     l10n.walletWithdrawRib(maskedRib),
                     style: TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontSize: 12,
                       color: Colors.white.withOpacity(0.6),
                     ),
@@ -718,7 +718,7 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                         fontSize: 10,
                         color: Colors.white.withOpacity(0.5),
                       ),
@@ -739,7 +739,7 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
                 child: Text(
                   l10n.walletWithdrawDefault,
                   style: const TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 10,
                     fontWeight: FontWeight.w700,
                     color: Color(0xFFF5CD52),
@@ -798,7 +798,7 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
             child: Text(
               l10n.walletWithdrawEmptyAccounts,
               style: TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 12,
                 color: Colors.white.withOpacity(0.78),
               ),
@@ -839,7 +839,7 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
         Text(
           l10n.walletWithdrawTransferSent,
           style: const TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 18,
             fontWeight: FontWeight.w600,
             color: Colors.white,
@@ -856,7 +856,7 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
             Text(
               '$_amount,00',
               style: const TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 32,
                 fontWeight: FontWeight.w600,
                 letterSpacing: -1,
@@ -867,7 +867,7 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
             Text(
               'MAD',
               style: TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 13,
                 fontWeight: FontWeight.w500,
                 color: Colors.white.withOpacity(0.72),
@@ -881,7 +881,7 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
         Text(
           l10n.walletWithdrawToAccount(name),
           style: TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 11,
             color: Colors.white.withOpacity(0.72),
           ),
@@ -941,7 +941,7 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
             child: Text(
               l10n.walletWithdrawBackToWallet,
               style: const TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
               ),
@@ -961,7 +961,7 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
         Text(
           k,
           style: TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 11,
             color: Colors.white.withOpacity(0.6),
           ),
@@ -969,7 +969,7 @@ class _WalletWithdrawBankPageState extends State<WalletWithdrawBankPage> {
         Text(
           v,
           style: const TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 11,
             fontWeight: FontWeight.w600,
             color: Colors.white,

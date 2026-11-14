@@ -165,7 +165,7 @@ class _TransferDetailsPageState extends State<TransferDetailsPage> {
               fontSize: 17,
               fontWeight: FontWeight.w600,
               color: Colors.white,
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
             ),
           ),
           const Spacer(),
@@ -189,7 +189,7 @@ class _TransferDetailsPageState extends State<TransferDetailsPage> {
           Text(
             'ÉVÉNEMENT',
             style: TextStyle(
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
               fontSize: 10,
               fontWeight: FontWeight.w700,
               letterSpacing: 1.2,
@@ -200,7 +200,7 @@ class _TransferDetailsPageState extends State<TransferDetailsPage> {
           Text(
             transfer['eventName'] ?? '',
             style: const TextStyle(
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
               fontSize: 17,
               fontWeight: FontWeight.w700,
               color: Colors.white,
@@ -214,7 +214,7 @@ class _TransferDetailsPageState extends State<TransferDetailsPage> {
               Text(
                 _formatDate(transfer['eventDate']),
                 style: TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                   fontSize: 12,
                   color: Colors.white.withOpacity(0.7),
                 ),
@@ -232,7 +232,7 @@ class _TransferDetailsPageState extends State<TransferDetailsPage> {
                   child: Text(
                     transfer['eventAddress'],
                     style: TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontSize: 12,
                       color: Colors.white.withOpacity(0.7),
                     ),
@@ -264,7 +264,7 @@ class _TransferDetailsPageState extends State<TransferDetailsPage> {
           Text(
             'DESTINATAIRE',
             style: TextStyle(
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
               fontSize: 10,
               fontWeight: FontWeight.w700,
               letterSpacing: 1.2,
@@ -290,7 +290,7 @@ class _TransferDetailsPageState extends State<TransferDetailsPage> {
                 child: Text(
                   initial,
                   style: const TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontWeight: FontWeight.w800,
                     fontSize: 16,
                     color: Colors.white,
@@ -305,7 +305,7 @@ class _TransferDetailsPageState extends State<TransferDetailsPage> {
                     Text(
                       transfer['receiverName'] ?? '',
                       style: const TextStyle(
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                         color: Colors.white,
@@ -315,7 +315,7 @@ class _TransferDetailsPageState extends State<TransferDetailsPage> {
                     Text(
                       transfer['receiverEmail'] ?? '',
                       style: TextStyle(
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                         fontSize: 12,
                         color: Colors.white.withOpacity(0.6),
                       ),
@@ -347,7 +347,7 @@ class _TransferDetailsPageState extends State<TransferDetailsPage> {
           Text(
             'INFORMATIONS DU TRANSFERT',
             style: TextStyle(
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
               fontSize: 10,
               fontWeight: FontWeight.w700,
               letterSpacing: 1.2,
@@ -367,7 +367,7 @@ class _TransferDetailsPageState extends State<TransferDetailsPage> {
               child: Text(
                 statusText,
                 style: TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                   fontSize: 11,
                   fontWeight: FontWeight.w700,
                   color: statusColor,
@@ -383,7 +383,7 @@ class _TransferDetailsPageState extends State<TransferDetailsPage> {
             trailing: Text(
               _formatDate(transfer['transferDate']),
               style: const TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
                 color: Colors.white,
@@ -404,7 +404,7 @@ class _TransferDetailsPageState extends State<TransferDetailsPage> {
               child: Text(
                 '${transfer['totalTickets']}',
                 style: TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                   fontSize: 13,
                   fontWeight: FontWeight.w800,
                   color: gold,
@@ -424,7 +424,7 @@ class _TransferDetailsPageState extends State<TransferDetailsPage> {
         Text(
           label,
           style: TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 13,
             color: Colors.white.withOpacity(0.72),
           ),
@@ -450,7 +450,7 @@ class _TransferDetailsPageState extends State<TransferDetailsPage> {
           Text(
             'TICKETS TRANSFÉRÉS · ${tickets.length}',
             style: TextStyle(
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
               fontSize: 10,
               fontWeight: FontWeight.w700,
               letterSpacing: 1.2,
@@ -510,7 +510,7 @@ class _TransferDetailsPageState extends State<TransferDetailsPage> {
                 Text(
                   ticketNumber,
                   style: const TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
                     color: Colors.white,
@@ -521,7 +521,7 @@ class _TransferDetailsPageState extends State<TransferDetailsPage> {
                   Text(
                     seating,
                     style: TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontSize: 11,
                       color: Colors.white.withOpacity(0.6),
                     ),
@@ -539,7 +539,7 @@ class _TransferDetailsPageState extends State<TransferDetailsPage> {
             child: Text(
               statusText,
               style: TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 10,
                 fontWeight: FontWeight.w700,
                 color: statusColor,

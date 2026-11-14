@@ -76,7 +76,7 @@ class _WalletChangeAccountPageState extends State<WalletChangeAccountPage> {
                       Text(
                         l10n.myWalletAccounts,
                         style: const TextStyle(
-                          fontFamily: 'Inter',
+                          fontFamily: 'urbanist',
                           fontSize: 19,
                           fontWeight: FontWeight.w600,
                           color: Colors.white,
@@ -102,7 +102,7 @@ class _WalletChangeAccountPageState extends State<WalletChangeAccountPage> {
                   Text(
                     l10n.eachAccountLinkedToPhone,
                     style: TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontSize: 13,
                       color: Colors.white.withOpacity(0.6),
                     ),
@@ -147,7 +147,7 @@ class _WalletChangeAccountPageState extends State<WalletChangeAccountPage> {
                                     ? phone
                                     : l10n.phoneMaskPlaceholder,
                                 style: const TextStyle(
-                                  fontFamily: 'Inter',
+                                  fontFamily: 'urbanist',
                                   fontSize: 15,
                                   fontWeight: FontWeight.w600,
                                   color: Colors.white,
@@ -160,7 +160,7 @@ class _WalletChangeAccountPageState extends State<WalletChangeAccountPage> {
                                   l10n.balancePlaceholder,
                                 ),
                                 style: TextStyle(
-                                  fontFamily: 'Inter',
+                                  fontFamily: 'urbanist',
                                   fontSize: 12,
                                   color: Colors.white.withOpacity(0.6),
                                 ),
@@ -211,7 +211,7 @@ class _WalletChangeAccountPageState extends State<WalletChangeAccountPage> {
                               Text(
                                 l10n.phoneMaskPlaceholder,
                                 style: const TextStyle(
-                                  fontFamily: 'Inter',
+                                  fontFamily: 'urbanist',
                                   fontSize: 15,
                                   fontWeight: FontWeight.w600,
                                   color: Colors.white,
@@ -223,7 +223,7 @@ class _WalletChangeAccountPageState extends State<WalletChangeAccountPage> {
                                   l10n.balancePlaceholder,
                                 ),
                                 style: TextStyle(
-                                  fontFamily: 'Inter',
+                                  fontFamily: 'urbanist',
                                   fontSize: 12,
                                   color: Colors.white.withOpacity(0.6),
                                 ),
@@ -251,7 +251,7 @@ class _WalletChangeAccountPageState extends State<WalletChangeAccountPage> {
                         SnackBar(
                           content: Text(
                             l10n.accountAddSoon,
-                            style: const TextStyle(fontFamily: 'Inter'),
+                            style: const TextStyle(fontFamily: 'urbanist'),
                           ),
                           backgroundColor: primary,
                           behavior: SnackBarBehavior.floating,
@@ -275,7 +275,7 @@ class _WalletChangeAccountPageState extends State<WalletChangeAccountPage> {
                           Text(
                             l10n.addWalletAccount,
                             style: const TextStyle(
-                              fontFamily: 'Inter',
+                              fontFamily: 'urbanist',
                               fontSize: 15,
                               fontWeight: FontWeight.w500,
                               color: Colors.white,

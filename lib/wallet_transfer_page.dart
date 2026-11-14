@@ -46,7 +46,7 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
       SnackBar(
         content: Text(
           msg,
-          style: const TextStyle(fontFamily: 'Inter'),
+          style: const TextStyle(fontFamily: 'urbanist'),
         ),
         backgroundColor: primary,
         behavior: SnackBarBehavior.floating,
@@ -190,7 +190,7 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
               fontSize: 15,
               fontWeight: FontWeight.w600,
               color: Colors.white,
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
             ),
           ),
           const Spacer(),
@@ -209,7 +209,7 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
         Text(
           l10n.walletTransferRecipientQuestion,
           style: const TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 18,
             fontWeight: FontWeight.w600,
             letterSpacing: -0.4,
@@ -220,7 +220,7 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
         Text(
           l10n.walletTransferRecipientWalletActive,
           style: TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 12,
             color: Colors.white.withOpacity(0.72),
           ),
@@ -229,7 +229,7 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
         Text(
           l10n.walletTransferPhoneNumber,
           style: TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 10,
             fontWeight: FontWeight.w500,
             color: Colors.white.withOpacity(0.72),
@@ -254,7 +254,7 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
                 child: const Text(
                   '+212',
                   style: TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 13,
                     fontWeight: FontWeight.w500,
                     color: Colors.white,
@@ -273,14 +273,14 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
                   ],
                   cursorColor: Colors.white,
                   style: const TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 13,
                     color: Colors.white,
                   ),
                   decoration: InputDecoration(
                     hintText: '6 00 00 00 00',
                     hintStyle: TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontSize: 13,
                       color: Colors.white.withOpacity(0.4),
                     ),
@@ -331,7 +331,7 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
             child: Text(
               l10n.walletTransferContinue,
               style: const TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
               ),
@@ -370,7 +370,7 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
           child: const Text(
             'AB',
             style: TextStyle(
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
               fontSize: 15,
               fontWeight: FontWeight.w600,
               color: Colors.white,
@@ -381,7 +381,7 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
         Text(
           _recipient,
           style: const TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 14,
             fontWeight: FontWeight.w600,
             color: Colors.white,
@@ -391,7 +391,7 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
         Text(
           l10n.walletTransferAmountToSend,
           style: TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 11,
             color: Colors.white.withOpacity(0.72),
           ),
@@ -418,7 +418,7 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
                 onChanged: (v) => setState(() => _amount = v),
                 cursorColor: Colors.white,
                 style: const TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                   fontSize: 40,
                   fontWeight: FontWeight.w600,
                   letterSpacing: -1.6,
@@ -430,7 +430,7 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
                   contentPadding: EdgeInsets.zero,
                   hintText: '0',
                   hintStyle: TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 40,
                     fontWeight: FontWeight.w600,
                     color: Colors.white38,
@@ -442,7 +442,7 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
             Text(
               'MAD',
               style: TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
                 color: Colors.white.withOpacity(0.72),
@@ -481,7 +481,7 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
                     child: Text(
                       '$v',
                       style: const TextStyle(
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
                         color: Colors.white,
@@ -497,7 +497,7 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
         Text(
           l10n.walletTransferOptionalMessage,
           style: TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 10,
             fontWeight: FontWeight.w500,
             color: Colors.white.withOpacity(0.72),
@@ -509,19 +509,19 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
           maxLength: 60,
           cursorColor: Colors.white,
           style: const TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 13,
             color: Colors.white,
           ),
           decoration: InputDecoration(
             hintText: l10n.walletTransferNoteHint,
             hintStyle: TextStyle(
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
               fontSize: 13,
               color: Colors.white.withOpacity(0.4),
             ),
             counterStyle: TextStyle(
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
               fontSize: 9,
               color: Colors.white.withOpacity(0.4),
             ),
@@ -568,7 +568,7 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
             child: Text(
               l10n.walletTransferContinue,
               style: const TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
               ),
@@ -598,7 +598,7 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
               Text(
                 l10n.walletTransferYouSend,
                 style: TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                   fontSize: 11,
                   color: Colors.white.withOpacity(0.72),
                 ),
@@ -612,7 +612,7 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
                   Text(
                     '$_amount,00',
                     style: const TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontSize: 32,
                       fontWeight: FontWeight.w600,
                       letterSpacing: -1,
@@ -623,7 +623,7 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
                   Text(
                     'MAD',
                     style: TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontSize: 13,
                       fontWeight: FontWeight.w500,
                       color: Colors.white.withOpacity(0.72),
@@ -649,7 +649,7 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
         Text(
           l10n.walletTransferEnterPin,
           style: TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 11,
             fontWeight: FontWeight.w500,
             color: Colors.white.withOpacity(0.86),
@@ -668,7 +668,7 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
           onChanged: (v) => setState(() => _pin = v),
           cursorColor: Colors.white,
           style: const TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 22,
             fontWeight: FontWeight.w600,
             letterSpacing: 12,
@@ -677,7 +677,7 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
           decoration: InputDecoration(
             hintText: '••••',
             hintStyle: TextStyle(
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
               fontSize: 22,
               letterSpacing: 12,
               color: Colors.white.withOpacity(0.35),
@@ -734,7 +734,7 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
                 : Text(
               l10n.walletTransferConfirm,
               style: const TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
               ),
@@ -768,7 +768,7 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
         Text(
           l10n.walletTransferCreditSent,
           style: const TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 18,
             fontWeight: FontWeight.w600,
             color: Colors.white,
@@ -783,7 +783,7 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
             Text(
               '$_amount,00',
               style: const TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 32,
                 fontWeight: FontWeight.w600,
                 letterSpacing: -1,
@@ -794,7 +794,7 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
             Text(
               'MAD',
               style: TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 13,
                 fontWeight: FontWeight.w500,
                 color: Colors.white.withOpacity(0.72),
@@ -806,7 +806,7 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
         Text(
           l10n.walletTransferToRecipient(_recipient),
           style: TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 11,
             color: Colors.white.withOpacity(0.72),
           ),
@@ -859,7 +859,7 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
             child: Text(
               l10n.walletTransferBackToWallet,
               style: const TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
               ),
@@ -877,7 +877,7 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
         Text(
           k,
           style: TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 11,
             color: Colors.white.withOpacity(0.6),
           ),
@@ -885,7 +885,7 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
         Text(
           v,
           style: const TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 11,
             fontWeight: FontWeight.w600,
             color: Colors.white,

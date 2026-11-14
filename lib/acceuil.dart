@@ -289,7 +289,7 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
                   l10n.chooseStore,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 20,
                     fontWeight: FontWeight.w900,
                     color: Colors.white,
@@ -300,7 +300,7 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
                   l10n.chooseStoreSubtitle,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 13,
                     height: 1.45,
                     color: Colors.white.withOpacity(0.75),
@@ -395,7 +395,7 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
                   Text(
                     label,
                     style: const TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontSize: 14,
                       fontWeight: FontWeight.w800,
                       letterSpacing: 0.4,
@@ -406,7 +406,7 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
                   Text(
                     subtitle,
                     style: TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontSize: 11,
                       color: Colors.white.withOpacity(0.65),
                     ),
@@ -450,7 +450,7 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
                   title,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 20,
                     fontWeight: FontWeight.w900,
                     color: Colors.white,
@@ -461,7 +461,7 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
                   l10n.featureComingSoon,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 13,
                     height: 1.45,
                     color: Colors.white.withOpacity(0.75),
@@ -504,7 +504,7 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
                   l10n.comingSoon,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 20,
                     fontWeight: FontWeight.w900,
                     color: Colors.white,
@@ -515,7 +515,7 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
                   l10n.shopUnderMaintenance,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 13,
                     height: 1.45,
                     color: Colors.white.withOpacity(0.75),
@@ -558,7 +558,7 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
                   l10n.loginRequired,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 20,
                     fontWeight: FontWeight.w900,
                     color: Colors.white,
@@ -569,7 +569,7 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
                   l10n.loginToAccessQuiz,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 13,
                     height: 1.45,
                     color: Colors.white.withOpacity(0.75),
@@ -600,7 +600,7 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
                           Text(
                             l10n.login,
                             style: const TextStyle(
-                              fontFamily: 'Inter',
+                              fontFamily: 'urbanist',
                               fontSize: 14,
                               fontWeight: FontWeight.w700,
                               color: Colors.white,
@@ -648,7 +648,7 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
                   l10n.logout,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 20,
                     fontWeight: FontWeight.w900,
                     color: Colors.white,
@@ -659,7 +659,7 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
                   l10n.logoutConfirmation,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 13,
                     height: 1.45,
                     color: Colors.white.withOpacity(0.75),
@@ -755,7 +755,7 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
         child: Text(
           label,
           style: TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 14,
             fontWeight: FontWeight.w600,
             color: Colors.white.withOpacity(0.9),
@@ -778,7 +778,7 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
         child: Text(
           label,
           style: const TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 14,
             fontWeight: FontWeight.w700,
             color: Colors.white,
@@ -821,7 +821,7 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
                 lang['name'] as String,
                 style: TextStyle(
                   color: Colors.white,
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                   fontWeight:
                   selected ? FontWeight.bold : FontWeight.normal,
                 ),
@@ -1013,7 +1013,7 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
                         fontWeight: FontWeight.w900,
                         letterSpacing: 0.4,
                         color: Colors.white,
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                       ),
                     ),
                   ],
@@ -1039,7 +1039,7 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
                   color: Colors.white,
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                 ),
               ),
             ),
@@ -1161,7 +1161,7 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
                         fontWeight: FontWeight.w700,
                         letterSpacing: 1.6,
                         color: Colors.white.withOpacity(0.88),
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                       ),
                     ),
                     Column(
@@ -1175,7 +1175,7 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
                             letterSpacing: -0.6,
                             height: 1,
                             color: Colors.white,
-                            fontFamily: 'Inter',
+                            fontFamily: 'urbanist',
                           ),
                         ),
                         const SizedBox(height: 6),
@@ -1184,7 +1184,7 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
                           style: TextStyle(
                             fontSize: 13,
                             color: Colors.white.withOpacity(0.88),
-                            fontFamily: 'Inter',
+                            fontFamily: 'urbanist',
                           ),
                         ),
                         const SizedBox(height: 14),
@@ -1212,7 +1212,7 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
                                     fontSize: 14,
                                     fontWeight: FontWeight.w800,
                                     color: Colors.white,
-                                    fontFamily: 'Inter',
+                                    fontFamily: 'urbanist',
                                   ),
                                 ),
                                 const SizedBox(width: 8),
@@ -1286,7 +1286,7 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
                               fontWeight: FontWeight.w900,
                               letterSpacing: 0.3,
                               color: Colors.white,
-                              fontFamily: 'Inter',
+                              fontFamily: 'urbanist',
                             ),
                           ),
                           const SizedBox(height: 3),
@@ -1295,7 +1295,7 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
                             style: TextStyle(
                               fontSize: 10,
                               color: Colors.white.withOpacity(0.75),
-                              fontFamily: 'Inter',
+                              fontFamily: 'urbanist',
                             ),
                           ),
                         ],
@@ -1327,7 +1327,7 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
                                 fontSize: 12,
                                 fontWeight: FontWeight.w800,
                                 color: Colors.white,
-                                fontFamily: 'Inter',
+                                fontFamily: 'urbanist',
                               ),
                             ),
                           ],
@@ -1343,7 +1343,7 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
                             style: TextStyle(
                               fontSize: 10,
                               color: Colors.white.withOpacity(0.7),
-                              fontFamily: 'Inter',
+                              fontFamily: 'urbanist',
                             ),
                           ),
                           const SizedBox(height: 2),
@@ -1370,7 +1370,7 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
                                     fontWeight: FontWeight.w900,
                                     letterSpacing: -0.3,
                                     color: Colors.white,
-                                    fontFamily: 'Inter',
+                                    fontFamily: 'urbanist',
                                   ),
                                 ),
                                 const TextSpan(
@@ -1379,7 +1379,7 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
                                     fontSize: 10,
                                     fontWeight: FontWeight.w700,
                                     color: Colors.white,
-                                    fontFamily: 'Inter',
+                                    fontFamily: 'urbanist',
                                   ),
                                 ),
                               ],
@@ -1520,7 +1520,7 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
                               letterSpacing: 0.3,
                               height: 1.2,
                               color: Colors.white,
-                              fontFamily: 'Inter',
+                              fontFamily: 'urbanist',
                             ),
                           ),
                           const SizedBox(height: 3),
@@ -1530,7 +1530,7 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
                               fontSize: 11,
                               height: 1.3,
                               color: Colors.white.withOpacity(0.7),
-                              fontFamily: 'Inter',
+                              fontFamily: 'urbanist',
                             ),
                           ),
                         ],
@@ -1615,7 +1615,7 @@ class _WacBrandWebViewPageState extends State<_WacBrandWebViewPage> {
                       fontSize: 17,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                     ),
                   ),
                   const Spacer(),

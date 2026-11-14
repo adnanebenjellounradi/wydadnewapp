@@ -46,7 +46,7 @@ class _WalletRechargeCashPageState extends State<WalletRechargeCashPage> {
 
   void _showError(String msg) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(msg, style: const TextStyle(fontFamily: 'Inter')),
+      content: Text(msg, style: const TextStyle(fontFamily: 'urbanist')),
       backgroundColor: primary,
       behavior: SnackBarBehavior.floating,
     ));
@@ -155,7 +155,7 @@ class _WalletRechargeCashPageState extends State<WalletRechargeCashPage> {
               fontSize: 17,
               fontWeight: FontWeight.w600,
               color: Colors.white,
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
             ),
           ),
           const Spacer(),
@@ -173,7 +173,7 @@ class _WalletRechargeCashPageState extends State<WalletRechargeCashPage> {
         Text(
           l10n.amountToDeposit,
           style: const TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 13,
             fontWeight: FontWeight.w600,
             color: Colors.white,
@@ -201,7 +201,7 @@ class _WalletRechargeCashPageState extends State<WalletRechargeCashPage> {
                   ],
                   cursorColor: Colors.white,
                   style: const TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 28,
                     fontWeight: FontWeight.w600,
                     letterSpacing: -0.8,
@@ -213,7 +213,7 @@ class _WalletRechargeCashPageState extends State<WalletRechargeCashPage> {
                     contentPadding: EdgeInsets.zero,
                     hintText: '0',
                     hintStyle: TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontSize: 28,
                       fontWeight: FontWeight.w600,
                       color: Colors.white38,
@@ -225,7 +225,7 @@ class _WalletRechargeCashPageState extends State<WalletRechargeCashPage> {
               Text(
                 'MAD',
                 style: TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                   fontSize: 13,
                   fontWeight: FontWeight.w500,
                   color: Colors.white.withOpacity(0.72),
@@ -265,7 +265,7 @@ class _WalletRechargeCashPageState extends State<WalletRechargeCashPage> {
                     child: Text(
                       v == 1000 ? '1 000' : '$v',
                       style: const TextStyle(
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                         fontSize: 11,
                         fontWeight: FontWeight.w600,
                         color: Colors.white,
@@ -288,7 +288,7 @@ class _WalletRechargeCashPageState extends State<WalletRechargeCashPage> {
               child: Text(
                 l10n.cashAgencyInfo,
                 style: TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                   fontSize: 11,
                   height: 1.5,
                   color: Colors.white.withOpacity(0.78),
@@ -323,7 +323,7 @@ class _WalletRechargeCashPageState extends State<WalletRechargeCashPage> {
                 : Text(
               l10n.getMyDepositCode,
               style: const TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
               ),
@@ -342,7 +342,7 @@ class _WalletRechargeCashPageState extends State<WalletRechargeCashPage> {
           l10n.presentCodeAndCin,
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 12,
             height: 1.5,
             color: Colors.white.withOpacity(0.78),
@@ -361,7 +361,7 @@ class _WalletRechargeCashPageState extends State<WalletRechargeCashPage> {
               Text(
                 l10n.depositCodeLabel,
                 style: TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                   fontSize: 10,
                   fontWeight: FontWeight.w600,
                   letterSpacing: 1.2,
@@ -372,7 +372,7 @@ class _WalletRechargeCashPageState extends State<WalletRechargeCashPage> {
               Text(
                 _depositCode ?? '------',
                 style: const TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                   fontSize: 26,
                   fontWeight: FontWeight.w800,
                   letterSpacing: 5,
@@ -405,7 +405,7 @@ class _WalletRechargeCashPageState extends State<WalletRechargeCashPage> {
                 child: Text(
                   l10n.balanceWillBeCredited,
                   style: TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 10,
                     height: 1.5,
                     color: Colors.white.withOpacity(0.86),
@@ -437,7 +437,7 @@ class _WalletRechargeCashPageState extends State<WalletRechargeCashPage> {
             child: Text(
               l10n.backToHome,
               style: const TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
               ),
@@ -455,7 +455,7 @@ class _WalletRechargeCashPageState extends State<WalletRechargeCashPage> {
         Text(
           k,
           style: TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 11,
             color: const Color(0xFF07060F).withOpacity(0.6),
           ),
@@ -463,7 +463,7 @@ class _WalletRechargeCashPageState extends State<WalletRechargeCashPage> {
         Text(
           v,
           style: const TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 11,
             fontWeight: FontWeight.w700,
             color: Color(0xFFA8161F),

@@ -56,7 +56,7 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
     if (!mounted) return;
     setState(() => _copied = true);
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(l10n.ribCopied, style: const TextStyle(fontFamily: 'Inter')),
+      content: Text(l10n.ribCopied, style: const TextStyle(fontFamily: 'urbanist')),
       backgroundColor: primary,
       behavior: SnackBarBehavior.floating,
     ));
@@ -106,7 +106,7 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
                   Text(
                     l10n.addBankAccount,
                     style: TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
                       color: Colors.white,
@@ -116,7 +116,7 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
                   Text(
                     l10n.addBankAccountDescription,
                     style: TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontSize: 12,
                       height: 1.4,
                       color: Colors.white.withOpacity(0.65),
@@ -222,7 +222,7 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
                           : Text(
                         l10n.saveBankAccount,
                         style: TextStyle(
-                          fontFamily: 'Inter',
+                          fontFamily: 'urbanist',
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
                         ),
@@ -244,7 +244,7 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
 
   void _sheetError(BuildContext ctx, String msg) {
     ScaffoldMessenger.of(ctx).showSnackBar(SnackBar(
-      content: Text(msg, style: const TextStyle(fontFamily: 'Inter')),
+      content: Text(msg, style: const TextStyle(fontFamily: 'urbanist')),
       backgroundColor: primary,
       behavior: SnackBarBehavior.floating,
     ));
@@ -263,7 +263,7 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
         Text(
           label,
           style: TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 11,
             fontWeight: FontWeight.w500,
             color: Colors.white.withOpacity(0.72),
@@ -276,14 +276,14 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
           inputFormatters: inputFormatters,
           cursorColor: Colors.white,
           style: const TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 13,
             color: Colors.white,
           ),
           decoration: InputDecoration(
             hintText: hint,
             hintStyle: TextStyle(
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
               fontSize: 13,
               color: Colors.white.withOpacity(0.4),
             ),
@@ -317,12 +317,12 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
         backgroundColor: const Color(0xFF23030A),
         title: Text(
           l10n.deleteAccountConfirmationTitle,
-          style: TextStyle(fontFamily: 'Inter', color: Colors.white),
+          style: TextStyle(fontFamily: 'urbanist', color: Colors.white),
         ),
         content: Text(
           l10n.deleteAccountConfirmationMessage(name),
           style: TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             color: Colors.white.withOpacity(0.8),
           ),
         ),
@@ -332,7 +332,7 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
             child: Text(
               l10n.cancel,
               style: TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 color: Colors.white.withOpacity(0.7),
               ),
             ),
@@ -342,7 +342,7 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
             child: Text(
               l10n.delete,
               style: TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 color: Color(0xFFD11A2A),
               ),
             ),
@@ -363,7 +363,7 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
           res?['message']?.toString() ?? l10n.deleteFailed,
-          style: const TextStyle(fontFamily: 'Inter'),
+          style: const TextStyle(fontFamily: 'urbanist'),
         ),
         backgroundColor: primary,
         behavior: SnackBarBehavior.floating,
@@ -403,7 +403,7 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
                       Text(
                         l10n.bankTransferDescription,
                         style: TextStyle(
-                          fontFamily: 'Inter',
+                          fontFamily: 'urbanist',
                           fontSize: 13,
                           height: 1.5,
                           color: Colors.white.withOpacity(0.78),
@@ -452,7 +452,7 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
               fontSize: 17,
               fontWeight: FontWeight.w600,
               color: Colors.white,
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
             ),
           ),
           const Spacer(),
@@ -490,7 +490,7 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       content: Text(
                         l10n.shareComingSoon,
-                        style: TextStyle(fontFamily: 'Inter'),
+                        style: TextStyle(fontFamily: 'urbanist'),
                       ),
                       backgroundColor: primary,
                       behavior: SnackBarBehavior.floating,
@@ -540,7 +540,7 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
                 child: Text(
                   l10n.noBankAccount,
                   style: TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                     color: Colors.white,
@@ -553,7 +553,7 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
           Text(
             l10n.noBankAccountDescription,
             style: TextStyle(
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
               fontSize: 12,
               height: 1.45,
               color: Colors.white.withOpacity(0.7),
@@ -576,7 +576,7 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
               child: Text(
                 l10n.addBankAccount,
                 style: TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
                 ),
@@ -601,7 +601,7 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
             Text(
               l10n.myBankAccounts,
               style: TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 13,
                 fontWeight: FontWeight.w700,
                 color: Colors.white,
@@ -612,7 +612,7 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
               child: Text(
                 l10n.add,
                 style: TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
                   color: Colors.white.withOpacity(0.8),
@@ -663,7 +663,7 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
-                            fontFamily: 'Inter',
+                            fontFamily: 'urbanist',
                             fontSize: 13,
                             fontWeight: FontWeight.w600,
                             color: Colors.white,
@@ -673,7 +673,7 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
                         Text(
                           l10n.ribMaskedFormat(masked),
                           style: TextStyle(
-                            fontFamily: 'Inter',
+                            fontFamily: 'urbanist',
                             fontSize: 11,
                             color: Colors.white.withOpacity(0.6),
                           ),
@@ -723,7 +723,7 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
           Text(
             l10n.myWalletRib,
             style: TextStyle(
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
               fontSize: 11,
               fontWeight: FontWeight.w600,
               letterSpacing: 1.4,
@@ -734,7 +734,7 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
           Text(
             _walletRib,
             style: const TextStyle(
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
               fontSize: 18,
               fontWeight: FontWeight.w700,
               letterSpacing: 0.8,
@@ -752,7 +752,7 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
                     Text(
                       l10n.accountHolder,
                       style: TextStyle(
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                         fontSize: 11,
                         color: Colors.white.withOpacity(0.75),
                       ),
@@ -760,7 +760,7 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
                     Text(
                       _holder.isNotEmpty ? _holder : l10n.defaultAccountHolder,
                       style: const TextStyle(
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                         color: Colors.white,
@@ -776,7 +776,7 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
                     Text(
                       l10n.bank,
                       style: TextStyle(
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                         fontSize: 11,
                         color: Colors.white.withOpacity(0.75),
                       ),
@@ -784,7 +784,7 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
                     Text(
                       _bank.isNotEmpty ? _bank : l10n.defaultBank,
                       style: const TextStyle(
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                         color: Colors.white,
@@ -826,7 +826,7 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
             Text(
               label,
               style: TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
                 color: primaryStyle ? primary : Colors.white,
@@ -865,7 +865,7 @@ class _WalletRechargeRibPageState extends State<WalletRechargeRibPage> {
                   child: Text(
                     t,
                     style: TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontSize: 13,
                       height: 1.4,
                       color: Colors.white.withOpacity(0.78),

@@ -277,7 +277,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   Text(
                     l10n.myProfile,
                     style: const TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: Color(0xFFA8161F),
@@ -319,7 +319,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               Text(
                 l10n.scanToGetContact,
                 style: TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                   fontSize: 11,
                   color: Colors.grey[600],
                 ),
@@ -334,7 +334,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   label: Text(
                     l10n.shareProfile,
                     style: const TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
                     ),
@@ -364,7 +364,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   child: Text(
                     l10n.close,
                     style: const TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
                     ),
@@ -438,7 +438,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 lang['label'] as String,
                 style: TextStyle(
                   color: Colors.white,
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                   fontSize: 13,
                   fontWeight:
                   selected ? FontWeight.bold : FontWeight.normal,
@@ -588,7 +588,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               fontSize: 15,
               fontWeight: FontWeight.w600,
               color: Colors.white,
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
             ),
           ),
           const Spacer(),
@@ -630,7 +630,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           child: Text(
             initials,
             style: const TextStyle(
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
               fontSize: 16,
               fontWeight: FontWeight.w800,
               color: Colors.white,
@@ -647,7 +647,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
                   color: Colors.white,
@@ -657,7 +657,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               Text(
                 l10n.supporterWac,
                 style: TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                   fontSize: 11,
                   color: Colors.white.withOpacity(0.6),
                 ),
@@ -680,7 +680,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 Text(
                   widget.currentLocale.toUpperCase(),
                   style: const TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 11,
                     fontWeight: FontWeight.w600,
                     color: Colors.white,
@@ -719,7 +719,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             Text(
               l10n.shareMyProfile,
               style: const TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 13,
                 fontWeight: FontWeight.w700,
                 color: Colors.white,
@@ -739,7 +739,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         fontWeight: FontWeight.w600,
         letterSpacing: 0.8,
         color: Colors.white.withOpacity(0.6),
-        fontFamily: 'Inter',
+        fontFamily: 'urbanist',
       ),
     );
   }
@@ -789,7 +789,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     child: Text(
                       emailController.text,
                       style: TextStyle(
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                         fontSize: 13,
                         color: Colors.white.withOpacity(0.6),
                       ),
@@ -804,7 +804,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             Text(
               l10n.emailCannotBeChangedShort,
               style: TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 10,
                 color: Colors.white.withOpacity(0.55),
               ),
@@ -836,7 +836,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     child: const Text(
                       '+212',
                       style: TextStyle(
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
                         color: Colors.white,
@@ -851,7 +851,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       textDirection: TextDirection.ltr,
                       cursorColor: Colors.white,
                       style: const TextStyle(
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                         fontSize: 13,
                         color: Colors.white,
                       ),
@@ -928,7 +928,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         fontSize: 11,
         fontWeight: FontWeight.w500,
         color: Colors.white.withOpacity(0.72),
-        fontFamily: 'Inter',
+        fontFamily: 'urbanist',
       ),
     );
   }
@@ -951,14 +951,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
           obscureText: obscure,
           cursorColor: Colors.white,
           style: const TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 13,
             color: Colors.white,
           ),
           decoration: InputDecoration(
             hintText: hint,
             hintStyle: TextStyle(
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
               fontSize: 13,
               color: Colors.white.withOpacity(0.5),
             ),
@@ -980,7 +980,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               borderSide: BorderSide(color: Colors.white.withOpacity(0.6)),
             ),
             errorStyle: const TextStyle(
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
               color: Color(0xFFE5484D),
               fontSize: 10,
             ),
@@ -1008,7 +1008,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               child: Text(
                 l10n.cancel,
                 style: const TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
                 ),
@@ -1042,7 +1042,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   : Text(
                 l10n.save,
                 style: const TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
                 ),

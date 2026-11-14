@@ -294,7 +294,7 @@ class _TransferHistoryPageState extends State<TransferHistoryPage> {
               fontSize: 17,
               fontWeight: FontWeight.w600,
               color: Colors.white,
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
             ),
           ),
           const Spacer(),
@@ -326,7 +326,7 @@ class _TransferHistoryPageState extends State<TransferHistoryPage> {
           Text(
             l10n.loadingTransfers,
             style: TextStyle(
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
               fontSize: 13,
               color: Colors.white.withOpacity(0.7),
             ),
@@ -348,7 +348,7 @@ class _TransferHistoryPageState extends State<TransferHistoryPage> {
             Text(
               _errorMessage!,
               style: TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 13,
                 color: Colors.white.withOpacity(0.8),
               ),
@@ -374,7 +374,7 @@ class _TransferHistoryPageState extends State<TransferHistoryPage> {
                     Text(
                       l10n.retry,
                       style: const TextStyle(
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
                         color: Colors.white,
@@ -406,7 +406,7 @@ class _TransferHistoryPageState extends State<TransferHistoryPage> {
             Text(
               l10n.noTransfersSent,
               style: TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 17,
                 fontWeight: FontWeight.w600,
                 color: Colors.white.withOpacity(0.7),
@@ -417,7 +417,7 @@ class _TransferHistoryPageState extends State<TransferHistoryPage> {
               l10n.noTransfersSentMessage,
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 13,
                 color: Colors.white.withOpacity(0.5),
               ),
@@ -457,7 +457,7 @@ class _TransferHistoryPageState extends State<TransferHistoryPage> {
                   Text(
                     l10n.totalTransfers,
                     style: TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontSize: 13,
                       color: Colors.white.withOpacity(0.8),
                     ),
@@ -465,7 +465,7 @@ class _TransferHistoryPageState extends State<TransferHistoryPage> {
                   Text(
                     '$totalTransfers',
                     style: const TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontSize: 24,
                       fontWeight: FontWeight.w900,
                       color: Colors.white,
@@ -578,7 +578,7 @@ class _TransferHistoryPageState extends State<TransferHistoryPage> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontWeight: FontWeight.w700,
                       fontSize: 14,
                       color: Colors.white,
@@ -601,7 +601,7 @@ class _TransferHistoryPageState extends State<TransferHistoryPage> {
                       Text(
                         statusText,
                         style: TextStyle(
-                          fontFamily: 'Inter',
+                          fontFamily: 'urbanist',
                           fontSize: 10,
                           fontWeight: FontWeight.w800,
                           color: statusColor,
@@ -633,7 +633,7 @@ class _TransferHistoryPageState extends State<TransferHistoryPage> {
                         child: Text(
                           ticket["name"] ?? l10n.ticket,
                           style: const TextStyle(
-                            fontFamily: 'Inter',
+                            fontFamily: 'urbanist',
                             fontWeight: FontWeight.w600,
                             fontSize: 13,
                             color: Colors.white,
@@ -649,7 +649,7 @@ class _TransferHistoryPageState extends State<TransferHistoryPage> {
                         child: Text(
                           "${ticket["price"] ?? 0} MAD",
                           style: TextStyle(
-                            fontFamily: 'Inter',
+                            fontFamily: 'urbanist',
                             fontSize: 11,
                             fontWeight: FontWeight.w700,
                             color: gold,
@@ -672,7 +672,7 @@ class _TransferHistoryPageState extends State<TransferHistoryPage> {
                             Text(
                               l10n.recipient,
                               style: TextStyle(
-                                fontFamily: 'Inter',
+                                fontFamily: 'urbanist',
                                 fontSize: 10,
                                 color: Colors.white.withOpacity(0.5),
                               ),
@@ -682,7 +682,7 @@ class _TransferHistoryPageState extends State<TransferHistoryPage> {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
-                                fontFamily: 'Inter',
+                                fontFamily: 'urbanist',
                                 fontWeight: FontWeight.w600,
                                 fontSize: 12,
                                 color: Colors.white,
@@ -694,7 +694,7 @@ class _TransferHistoryPageState extends State<TransferHistoryPage> {
                       Text(
                         "${transfer["quantity"]}x",
                         style: TextStyle(
-                          fontFamily: 'Inter',
+                          fontFamily: 'urbanist',
                           fontWeight: FontWeight.w800,
                           fontSize: 14,
                           color: gold,
@@ -716,7 +716,7 @@ class _TransferHistoryPageState extends State<TransferHistoryPage> {
                 Text(
                   _formatDate(createdAt),
                   style: TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 11,
                     color: Colors.white.withOpacity(0.5),
                   ),
@@ -745,7 +745,7 @@ class _TransferHistoryPageState extends State<TransferHistoryPage> {
         Text(
           count.toString(),
           style: const TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 16,
             fontWeight: FontWeight.w800,
             color: Colors.white,
@@ -754,7 +754,7 @@ class _TransferHistoryPageState extends State<TransferHistoryPage> {
         Text(
           label,
           style: TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 10,
             color: Colors.white.withOpacity(0.75),
           ),

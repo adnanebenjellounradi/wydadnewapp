@@ -99,7 +99,7 @@ class _WalletWithdrawPageState extends State<WalletWithdrawPage> {
                         l10n.walletWithdrawChooseMethod,
                         textAlign: TextAlign.center,
                         style: const TextStyle(
-                          fontFamily: 'Inter',
+                          fontFamily: 'urbanist',
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                           letterSpacing: -0.3,
@@ -114,7 +114,7 @@ class _WalletWithdrawPageState extends State<WalletWithdrawPage> {
                               .replaceAll('.', ','),
                         ),
                         style: TextStyle(
-                          fontFamily: 'Inter',
+                          fontFamily: 'urbanist',
                           fontSize: 11,
                           color: Colors.white.withOpacity(0.6),
                         ),
@@ -189,7 +189,7 @@ class _WalletWithdrawPageState extends State<WalletWithdrawPage> {
               fontSize: 15,
               fontWeight: FontWeight.w600,
               color: Colors.white,
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
             ),
           ),
           const Spacer(),
@@ -241,7 +241,7 @@ class _WalletWithdrawPageState extends State<WalletWithdrawPage> {
                   Text(
                     title,
                     style: const TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
@@ -251,7 +251,7 @@ class _WalletWithdrawPageState extends State<WalletWithdrawPage> {
                   Text(
                     subtitle,
                     style: TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontSize: 10,
                       color: Colors.white.withOpacity(0.6),
                     ),

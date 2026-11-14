@@ -77,7 +77,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(
             jsonResponse['message'] ?? l10n.codeSentToEmail,
-            style: const TextStyle(color: Colors.white, fontFamily: 'Inter'),
+            style: const TextStyle(color: Colors.white, fontFamily: 'urbanist'),
           ),
           backgroundColor: Colors.green,
           behavior: SnackBarBehavior.floating,
@@ -90,7 +90,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('${l10n.error}: $e',
-            style: const TextStyle(color: Colors.white, fontFamily: 'Inter')),
+            style: const TextStyle(color: Colors.white, fontFamily: 'urbanist')),
         backgroundColor: const Color(0xFFE41E26),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(
@@ -125,7 +125,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(
             jsonResponse['message'] ?? l10n.passwordResetSuccess,
-            style: const TextStyle(color: Colors.white, fontFamily: 'Inter'),
+            style: const TextStyle(color: Colors.white, fontFamily: 'urbanist'),
           ),
           backgroundColor: Colors.green,
           behavior: SnackBarBehavior.floating,
@@ -140,7 +140,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('${l10n.error}: $e',
-            style: const TextStyle(color: Colors.white, fontFamily: 'Inter')),
+            style: const TextStyle(color: Colors.white, fontFamily: 'urbanist')),
         backgroundColor: const Color(0xFFE41E26),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(
@@ -246,7 +246,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                 fontSize: 24,
                                 fontWeight: FontWeight.w700,
                                 letterSpacing: -0.4,
-                                fontFamily: 'Inter',
+                                fontFamily: 'urbanist',
                               ),
                             ),
                             const SizedBox(height: 8),
@@ -262,7 +262,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                   color: Colors.white.withOpacity(0.72),
                                   fontSize: 14,
                                   height: 1.5,
-                                  fontFamily: 'Inter',
+                                  fontFamily: 'urbanist',
                                 ),
                               ),
                             ),
@@ -333,7 +333,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                 child: Text(
                                   l10n.changeEmail,
                                   style: TextStyle(
-                                    fontFamily: 'Inter',
+                                    fontFamily: 'urbanist',
                                     color: Colors.white.withOpacity(0.86),
                                     fontWeight: FontWeight.w600,
                                     fontSize: 14,
@@ -366,7 +366,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                     child: Text(
                                       l10n.resetCodeInfo,
                                       style: TextStyle(
-                                        fontFamily: 'Inter',
+                                        fontFamily: 'urbanist',
                                         color: Colors.white.withOpacity(0.72),
                                         fontSize: 12,
                                         height: 1.5,
@@ -416,7 +416,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               fontSize: 17,
               fontWeight: FontWeight.w600,
               color: Colors.white,
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
             ),
           ),
           const Spacer(),
@@ -445,7 +445,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             fontSize: 12,
             fontWeight: FontWeight.w500,
             color: Colors.white.withOpacity(0.72),
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
           ),
         ),
         const SizedBox(height: 6),
@@ -458,7 +458,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           onChanged: onChanged,
           cursorColor: Colors.white,
           style: const TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 15,
             color: Colors.white,
           ),
@@ -483,7 +483,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               borderSide: BorderSide(color: Colors.white.withOpacity(0.6)),
             ),
             errorStyle: const TextStyle(
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
               color: Color(0xFFE5484D),
               fontSize: 11,
             ),
@@ -524,7 +524,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             : Text(
           label,
           style: const TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 16,
             fontWeight: FontWeight.w700,
           ),

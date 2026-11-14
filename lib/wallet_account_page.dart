@@ -109,7 +109,7 @@ class _WalletAccountPageState extends State<WalletAccountPage> {
               fontSize: 15,
               fontWeight: FontWeight.w600,
               color: Colors.white,
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
             ),
           ),
           const Spacer(),
@@ -167,7 +167,7 @@ class _WalletAccountPageState extends State<WalletAccountPage> {
                 child: Text(
                   initials.toUpperCase(),
                   style: const TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                     color: Colors.white,
@@ -182,7 +182,7 @@ class _WalletAccountPageState extends State<WalletAccountPage> {
                     Text(
                       fullName.isNotEmpty ? fullName : l10n.namePlaceholder,
                       style: const TextStyle(
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                         color: Colors.white,
@@ -192,7 +192,7 @@ class _WalletAccountPageState extends State<WalletAccountPage> {
                     Text(
                       phone.isNotEmpty ? phone : '—',
                       style: TextStyle(
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                         fontSize: 11,
                         color: Colors.white.withOpacity(0.72),
                       ),
@@ -216,7 +216,7 @@ class _WalletAccountPageState extends State<WalletAccountPage> {
                       Text(
                         l10n.verified,
                         style: const TextStyle(
-                          fontFamily: 'Inter',
+                          fontFamily: 'urbanist',
                           fontSize: 10,
                           fontWeight: FontWeight.w600,
                           color: Color(0xFFF5CD52),
@@ -252,7 +252,7 @@ class _WalletAccountPageState extends State<WalletAccountPage> {
           Text(
             label,
             style: TextStyle(
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
               fontSize: 10,
               color: Colors.white.withOpacity(0.6),
             ),
@@ -263,7 +263,7 @@ class _WalletAccountPageState extends State<WalletAccountPage> {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
               fontSize: 12,
               fontWeight: FontWeight.w600,
               color: Colors.white,
@@ -293,7 +293,7 @@ class _WalletAccountPageState extends State<WalletAccountPage> {
               Text(
                 l10n.identityVerification,
                 style: const TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
                   color: Colors.white,
@@ -302,7 +302,7 @@ class _WalletAccountPageState extends State<WalletAccountPage> {
               Text(
                 '${(progress * 100).round()} %',
                 style: const TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
                   color: Colors.white,
@@ -364,7 +364,7 @@ class _WalletAccountPageState extends State<WalletAccountPage> {
           Text(
             label,
             style: TextStyle(
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
               fontSize: 12,
               color:
               done ? Colors.white : Colors.white.withOpacity(0.72),
@@ -397,7 +397,7 @@ class _WalletAccountPageState extends State<WalletAccountPage> {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(l10n.walletSessionClosed,
-                      style: const TextStyle(fontFamily: 'Inter')),
+                      style: const TextStyle(fontFamily: 'urbanist')),
                   backgroundColor: primary,
                   behavior: SnackBarBehavior.floating,
                 ),
@@ -432,7 +432,7 @@ class _WalletAccountPageState extends State<WalletAccountPage> {
               child: Text(
                 label,
                 style: const TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
                   color: Colors.white,

@@ -145,7 +145,7 @@ class _TicketsPageState extends State<TicketsPage> {
                   l10n.userNotFound,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 20,
                     fontWeight: FontWeight.w900,
                     color: Colors.white,
@@ -155,7 +155,7 @@ class _TicketsPageState extends State<TicketsPage> {
                 Text(
                   "${l10n.userNotFoundMessage} $scannedEmail,\n${l10n.inviteQuestion}",
                   style: TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 13,
                     height: 1.45,
                     color: Colors.white.withOpacity(0.75),
@@ -426,7 +426,7 @@ class _TicketsPageState extends State<TicketsPage> {
                   l10n.confirmTransfer,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 20,
                     fontWeight: FontWeight.w900,
                     color: Colors.white,
@@ -436,7 +436,7 @@ class _TicketsPageState extends State<TicketsPage> {
                 Text(
                   l10n.recipient,
                   style: TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
                     color: Colors.white.withOpacity(0.6),
@@ -454,7 +454,7 @@ class _TicketsPageState extends State<TicketsPage> {
                   child: Text(
                     email,
                     style: TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontWeight: FontWeight.w800,
                       fontSize: 16,
                       color: gold,
@@ -477,7 +477,7 @@ class _TicketsPageState extends State<TicketsPage> {
                       Text(
                         "$ticketCount ${l10n.ticketPlural}",
                         style: TextStyle(
-                          fontFamily: 'Inter',
+                          fontFamily: 'urbanist',
                           fontWeight: FontWeight.w700,
                           fontSize: 14,
                           color: gold,
@@ -502,7 +502,7 @@ class _TicketsPageState extends State<TicketsPage> {
                         child: Text(
                           l10n.irreversibleAction,
                           style: TextStyle(
-                            fontFamily: 'Inter',
+                            fontFamily: 'urbanist',
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
                             color: amber,
@@ -517,7 +517,7 @@ class _TicketsPageState extends State<TicketsPage> {
                   l10n.confirmTransferQuestion,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                     color: Colors.white.withOpacity(0.9),
@@ -572,7 +572,7 @@ class _TicketsPageState extends State<TicketsPage> {
                     Text(
                       l10n.scanQRCode,
                       style: const TextStyle(
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
                         color: Colors.white,
@@ -621,7 +621,7 @@ class _TicketsPageState extends State<TicketsPage> {
                 Text(
                   l10n.positionQRCodeInFrame,
                   style: TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 12,
                     color: Colors.white.withOpacity(0.7),
                   ),
@@ -858,7 +858,7 @@ class _TicketsPageState extends State<TicketsPage> {
         child: Text(
           label,
           style: TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 14,
             fontWeight: FontWeight.w600,
             color: Colors.white.withOpacity(0.9),
@@ -881,7 +881,7 @@ class _TicketsPageState extends State<TicketsPage> {
         child: Text(
           label,
           style: const TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 14,
             fontWeight: FontWeight.w700,
             color: Colors.white,
@@ -894,7 +894,7 @@ class _TicketsPageState extends State<TicketsPage> {
   void _snack(String message, {bool error = false, bool warn = false}) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(message, style: const TextStyle(fontFamily: 'Inter')),
+        content: Text(message, style: const TextStyle(fontFamily: 'urbanist')),
         backgroundColor: error ? const Color(0xFFE5484D) : (warn ? amber : primary),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -919,7 +919,7 @@ class _TicketsPageState extends State<TicketsPage> {
               Text(
                 label,
                 style: TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
                   color: Colors.white.withOpacity(0.9),
@@ -1008,7 +1008,7 @@ class _TicketsPageState extends State<TicketsPage> {
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
                 color: Colors.white,
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
               ),
             ),
           ),
@@ -1047,7 +1047,7 @@ class _TicketsPageState extends State<TicketsPage> {
             Text(
               l10n.noTicketFound,
               style: TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 15,
                 color: Colors.white.withOpacity(0.7),
               ),
@@ -1074,7 +1074,7 @@ class _TicketsPageState extends State<TicketsPage> {
             Text(
               isSender ? l10n.ticketPendingAcceptance : l10n.noTicketsAvailable,
               style: TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 15,
                 fontWeight: FontWeight.w600,
                 color: Colors.white.withOpacity(0.7),
@@ -1149,7 +1149,7 @@ class _TicketsPageState extends State<TicketsPage> {
                 child: Text(
                   l10n.pendingTransferReceived,
                   style: TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontWeight: FontWeight.w700,
                     fontSize: 13,
                     color: amber,
@@ -1196,7 +1196,7 @@ class _TicketsPageState extends State<TicketsPage> {
           Text(
             l10n.transferInformation,
             style: const TextStyle(
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
               fontWeight: FontWeight.w700,
               fontSize: 13,
               color: Colors.white,
@@ -1206,7 +1206,7 @@ class _TicketsPageState extends State<TicketsPage> {
           Text(
             "${l10n.from}: ${order["sender"]["name"]} ${order["sender"]["last_name"]}",
             style: TextStyle(
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
               fontSize: 12,
               color: Colors.white.withOpacity(0.72),
             ),
@@ -1215,7 +1215,7 @@ class _TicketsPageState extends State<TicketsPage> {
           Text(
             "${l10n.numberOfTickets}: ${order["order_child"].length}",
             style: TextStyle(
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
               fontSize: 12,
               color: Colors.white.withOpacity(0.72),
             ),
@@ -1291,7 +1291,7 @@ class _TicketsPageState extends State<TicketsPage> {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                         fontWeight: FontWeight.w800,
                         fontSize: 14,
                         color: Colors.white,
@@ -1352,7 +1352,7 @@ class _TicketsPageState extends State<TicketsPage> {
                               Text(
                                 l10n.details.toUpperCase(),
                                 style: const TextStyle(
-                                  fontFamily: 'Inter',
+                                  fontFamily: 'urbanist',
                                   fontWeight: FontWeight.w700,
                                   fontSize: 11,
                                   color: Colors.white,
@@ -1405,7 +1405,7 @@ class _TicketsPageState extends State<TicketsPage> {
         Text(
           label,
           style: TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontWeight: FontWeight.w600,
             fontSize: 10,
             color: Colors.white.withOpacity(0.6),
@@ -1416,7 +1416,7 @@ class _TicketsPageState extends State<TicketsPage> {
         Text(
           value,
           style: const TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontWeight: FontWeight.w800,
             fontSize: 12,
             color: Colors.white,
@@ -1453,7 +1453,7 @@ class _TicketsPageState extends State<TicketsPage> {
           Text(
             config["text"],
             style: TextStyle(
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
               fontWeight: FontWeight.w700,
               fontSize: 10,
               color: color,
@@ -1504,7 +1504,7 @@ class _TicketsPageState extends State<TicketsPage> {
             Text(
               label,
               style: TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontWeight: FontWeight.w800,
                 fontSize: 14,
                 letterSpacing: 0.6,
@@ -1552,7 +1552,7 @@ class _TicketsPageState extends State<TicketsPage> {
                       child: Text(
                         "${l10n.transfer} ${_selectedTickets.length} ${l10n.ticketPlural}",
                         style: const TextStyle(
-                          fontFamily: 'Inter',
+                          fontFamily: 'urbanist',
                           fontWeight: FontWeight.w900,
                           fontSize: 18,
                           color: Colors.white,
@@ -1563,7 +1563,7 @@ class _TicketsPageState extends State<TicketsPage> {
                     Text(
                       l10n.enterRecipientEmail,
                       style: TextStyle(
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                         fontSize: 12,
                         color: Colors.white.withOpacity(0.7),
                       ),
@@ -1574,7 +1574,7 @@ class _TicketsPageState extends State<TicketsPage> {
                       keyboardType: TextInputType.emailAddress,
                       cursorColor: Colors.white,
                       style: const TextStyle(
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                         fontSize: 13,
                         color: Colors.white,
                       ),
@@ -1582,7 +1582,7 @@ class _TicketsPageState extends State<TicketsPage> {
                         prefixIcon: Icon(Icons.email, color: Colors.white.withOpacity(0.6), size: 18),
                         hintText: l10n.emailExample,
                         hintStyle: TextStyle(
-                          fontFamily: 'Inter',
+                          fontFamily: 'urbanist',
                           fontSize: 12,
                           color: Colors.white.withOpacity(0.4),
                         ),
@@ -1645,7 +1645,7 @@ class _TicketsPageState extends State<TicketsPage> {
                             Text(
                               l10n.scanQRCode,
                               style: TextStyle(
-                                fontFamily: 'Inter',
+                                fontFamily: 'urbanist',
                                 fontSize: 13,
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white.withOpacity(0.9),

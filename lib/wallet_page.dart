@@ -110,7 +110,7 @@ class _WalletPageState extends State<WalletPage> {
                 Text(
                   l10n.comingSoon,
                   style: const TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 20,
                     fontWeight: FontWeight.w900,
                     color: Colors.white,
@@ -121,7 +121,7 @@ class _WalletPageState extends State<WalletPage> {
                   l10n.subscriptionComingSoonMessage,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 13,
                     height: 1.45,
                     color: Colors.white.withOpacity(0.75),
@@ -144,7 +144,7 @@ class _WalletPageState extends State<WalletPage> {
                         child: Text(
                           l10n.gotIt,
                           style: const TextStyle(
-                            fontFamily: 'Inter',
+                            fontFamily: 'urbanist',
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
                             color: Colors.white,
@@ -275,7 +275,7 @@ class _WalletPageState extends State<WalletPage> {
               fontSize: 17,
               fontWeight: FontWeight.w900,
               color: Colors.white,
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
             ),
           ),
           const Spacer(),
@@ -299,7 +299,7 @@ class _WalletPageState extends State<WalletPage> {
                   Text(
                     '${l10n.levelLabel} ',
                     style: const TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontSize: 10,
                       fontWeight: FontWeight.w700,
                       color: Color(0xFFF5CD52),
@@ -308,7 +308,7 @@ class _WalletPageState extends State<WalletPage> {
                   Text(
                     '$_level',
                     style: const TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontSize: 10,
                       fontWeight: FontWeight.w700,
                       color: Color(0xFFF5CD52),
@@ -383,7 +383,7 @@ class _WalletPageState extends State<WalletPage> {
                       Text(
                         l10n.digitalWallet,
                         style: TextStyle(
-                          fontFamily: 'Inter',
+                          fontFamily: 'urbanist',
                           fontSize: 10,
                           fontWeight: FontWeight.w700,
                           letterSpacing: 1.4,
@@ -401,7 +401,7 @@ class _WalletPageState extends State<WalletPage> {
                           child: Text(
                             l10n.verifiedBadge,
                             style: const TextStyle(
-                              fontFamily: 'Inter',
+                              fontFamily: 'urbanist',
                               fontSize: 8,
                               fontWeight: FontWeight.w800,
                               letterSpacing: 0.5,
@@ -417,7 +417,7 @@ class _WalletPageState extends State<WalletPage> {
                       Text(
                         l10n.availableBalanceLabel,
                         style: TextStyle(
-                          fontFamily: 'Inter',
+                          fontFamily: 'urbanist',
                           fontSize: 11,
                           color: Colors.white.withOpacity(0.82),
                         ),
@@ -431,7 +431,7 @@ class _WalletPageState extends State<WalletPage> {
                                   .toStringAsFixed(2)
                                   .replaceAll('.', ','),
                               style: const TextStyle(
-                                fontFamily: 'Inter',
+                                fontFamily: 'urbanist',
                                 fontSize: 28,
                                 fontWeight: FontWeight.w900,
                                 letterSpacing: -0.6,
@@ -441,7 +441,7 @@ class _WalletPageState extends State<WalletPage> {
                             const TextSpan(
                               text: ' MAD',
                               style: TextStyle(
-                                fontFamily: 'Inter',
+                                fontFamily: 'urbanist',
                                 fontSize: 13,
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white,
@@ -474,7 +474,7 @@ class _WalletPageState extends State<WalletPage> {
                                 ? _phone
                                 : l10n.phoneMaskPlaceholder,
                             style: const TextStyle(
-                              fontFamily: 'Inter',
+                              fontFamily: 'urbanist',
                               fontSize: 10,
                               fontWeight: FontWeight.w600,
                               color: Colors.white,
@@ -562,7 +562,7 @@ class _WalletPageState extends State<WalletPage> {
                 Text(
                   a['label'] as String,
                   style: const TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 10,
                     fontWeight: FontWeight.w600,
                     color: Colors.white,
@@ -586,7 +586,7 @@ class _WalletPageState extends State<WalletPage> {
             Text(
               l10n.latestOperations,
               style: const TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 13,
                 fontWeight: FontWeight.w700,
                 color: Colors.white,
@@ -598,7 +598,7 @@ class _WalletPageState extends State<WalletPage> {
               child: Text(
                 l10n.seeAll,
                 style: TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                   fontSize: 11,
                   fontWeight: FontWeight.w600,
                   color: Colors.white.withOpacity(0.8),
@@ -622,7 +622,7 @@ class _WalletPageState extends State<WalletPage> {
               child: Text(
                 l10n.noOperation,
                 style: TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                   fontSize: 11,
                   color: Colors.white.withOpacity(0.5),
                 ),
@@ -691,7 +691,7 @@ class _WalletPageState extends State<WalletPage> {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 11,
                     fontWeight: FontWeight.w600,
                     color: Colors.white,
@@ -701,7 +701,7 @@ class _WalletPageState extends State<WalletPage> {
                 Text(
                   dateFormatted,
                   style: TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 9,
                     color: Colors.white.withOpacity(0.6),
                   ),
@@ -712,7 +712,7 @@ class _WalletPageState extends State<WalletPage> {
           Text(
             '${isIncome ? '+' : '−'} ${amount.abs().toStringAsFixed(2).replaceAll('.', ',')}',
             style: TextStyle(
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
               fontSize: 11,
               fontWeight: FontWeight.w700,
               color: isIncome ? const Color(0xFFF5CD52) : Colors.white,
@@ -782,7 +782,7 @@ class _WalletPageState extends State<WalletPage> {
                                 Text(
                                   l10n.subscriptionLabel,
                                   style: const TextStyle(
-                                    fontFamily: 'Inter',
+                                    fontFamily: 'urbanist',
                                     fontSize: 9,
                                     fontWeight: FontWeight.w800,
                                     letterSpacing: 1.4,
@@ -793,7 +793,7 @@ class _WalletPageState extends State<WalletPage> {
                                 Text(
                                   l10n.season2026_27,
                                   style: const TextStyle(
-                                    fontFamily: 'Inter',
+                                    fontFamily: 'urbanist',
                                     fontSize: 16,
                                     fontWeight: FontWeight.w900,
                                     color: Colors.white,
@@ -823,7 +823,7 @@ class _WalletPageState extends State<WalletPage> {
                                       ? _fullName
                                       : l10n.supporterNamePlaceholder,
                                   style: const TextStyle(
-                                    fontFamily: 'Inter',
+                                    fontFamily: 'urbanist',
                                     fontSize: 12,
                                     fontWeight: FontWeight.w800,
                                     color: Colors.white,
@@ -833,7 +833,7 @@ class _WalletPageState extends State<WalletPage> {
                                 Text(
                                   l10n.tribuneInfoPlaceholder,
                                   style: TextStyle(
-                                    fontFamily: 'Inter',
+                                    fontFamily: 'urbanist',
                                     fontSize: 10,
                                     color: Colors.white.withOpacity(0.72),
                                   ),
@@ -941,7 +941,7 @@ class _WalletPageState extends State<WalletPage> {
                     child: Text(
                       opt['label'] as String,
                       style: const TextStyle(
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
                         color: Colors.white,
@@ -1000,7 +1000,7 @@ class _WalletPageState extends State<WalletPage> {
                 Text(
                   _showAbo ? l10n.wydadPay : l10n.subscriptionLabel,
                   style: TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 9,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 1.4,
@@ -1013,7 +1013,7 @@ class _WalletPageState extends State<WalletPage> {
                       ? '${_balance.toStringAsFixed(2).replaceAll('.', ',')} MAD'
                       : l10n.season2026_27,
                   style: const TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 13,
                     fontWeight: FontWeight.w800,
                     color: Colors.white,

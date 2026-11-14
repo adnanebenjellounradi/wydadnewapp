@@ -121,7 +121,7 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                   l10n.chooseStore,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 20,
                     fontWeight: FontWeight.w900,
                     color: Colors.white,
@@ -132,7 +132,7 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                   l10n.chooseStoreSubtitle,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 13,
                     height: 1.45,
                     color: Colors.white.withOpacity(0.75),
@@ -227,7 +227,7 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                   Text(
                     label,
                     style: const TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontSize: 14,
                       fontWeight: FontWeight.w800,
                       letterSpacing: 0.4,
@@ -238,7 +238,7 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                   Text(
                     subtitle,
                     style: TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontSize: 11,
                       color: Colors.white.withOpacity(0.65),
                     ),
@@ -301,7 +301,7 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
         child: Text(
           label,
           style: TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 14,
             fontWeight: FontWeight.w600,
             color: Colors.white.withOpacity(0.9),
@@ -324,7 +324,7 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
         child: Text(
           label,
           style: const TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 14,
             fontWeight: FontWeight.w700,
             color: Colors.white,
@@ -355,7 +355,7 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                   l10n.comingSoon,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 20,
                     fontWeight: FontWeight.w900,
                     color: Colors.white,
@@ -366,7 +366,7 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                   l10n.shopUnderMaintenance,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 13,
                     height: 1.45,
                     color: Colors.white.withOpacity(0.75),
@@ -494,7 +494,7 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                         color: isSelected
                             ? const Color(0xFFFEE15A)
                             : Colors.white.withOpacity(0.7),
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                       ),
                     ),
                   ],
@@ -576,7 +576,7 @@ class _WacBrandWebViewPageState extends State<_WacBrandWebViewPage> {
                       fontSize: 17,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                     ),
                   ),
                   const Spacer(),

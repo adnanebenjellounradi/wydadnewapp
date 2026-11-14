@@ -313,7 +313,7 @@ class _MesCommandesPageState extends State<MesCommandesPage> {
               fontSize: 17,
               fontWeight: FontWeight.w600,
               color: Colors.white,
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
             ),
           ),
           const Spacer(),
@@ -331,7 +331,7 @@ class _MesCommandesPageState extends State<MesCommandesPage> {
         fontWeight: FontWeight.w600,
         letterSpacing: 0.8,
         color: Colors.white.withOpacity(0.6),
-        fontFamily: 'Inter',
+        fontFamily: 'urbanist',
       ),
     );
   }
@@ -355,7 +355,7 @@ class _MesCommandesPageState extends State<MesCommandesPage> {
           Text(
             l10n.noOrdersFound,
             style: const TextStyle(
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
               fontSize: 16,
               fontWeight: FontWeight.w600,
               color: Colors.white,
@@ -365,7 +365,7 @@ class _MesCommandesPageState extends State<MesCommandesPage> {
           Text(
             l10n.ordersWillAppearHere,
             style: TextStyle(
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
               fontSize: 13,
               color: Colors.white.withOpacity(0.6),
             ),
@@ -385,7 +385,7 @@ class _MesCommandesPageState extends State<MesCommandesPage> {
             child: Text(
               l10n.goToStore,
               style: const TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 15,
                 fontWeight: FontWeight.w700,
               ),
@@ -436,7 +436,7 @@ class _MesCommandesPageState extends State<MesCommandesPage> {
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
                             color: Colors.white,
-                            fontFamily: 'Inter',
+                            fontFamily: 'urbanist',
                           ),
                         ),
                         const SizedBox(height: 3),
@@ -445,7 +445,7 @@ class _MesCommandesPageState extends State<MesCommandesPage> {
                           style: TextStyle(
                             fontSize: 12,
                             color: Colors.white.withOpacity(0.6),
-                            fontFamily: 'Inter',
+                            fontFamily: 'urbanist',
                           ),
                         ),
                       ],
@@ -465,7 +465,7 @@ class _MesCommandesPageState extends State<MesCommandesPage> {
                         fontSize: 10,
                         fontWeight: FontWeight.w700,
                         color: getStatusColor(status),
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                       ),
                     ),
                   ),
@@ -488,7 +488,7 @@ class _MesCommandesPageState extends State<MesCommandesPage> {
                             fontSize: 13,
                             fontWeight: FontWeight.w600,
                             color: Colors.white,
-                            fontFamily: 'Inter',
+                            fontFamily: 'urbanist',
                           ),
                         ),
                         const SizedBox(height: 2),
@@ -497,7 +497,7 @@ class _MesCommandesPageState extends State<MesCommandesPage> {
                           style: TextStyle(
                             fontSize: 12,
                             color: Colors.white.withOpacity(0.6),
-                            fontFamily: 'Inter',
+                            fontFamily: 'urbanist',
                           ),
                         ),
                       ],
@@ -525,7 +525,7 @@ class _MesCommandesPageState extends State<MesCommandesPage> {
                     style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                     ),
                   ),
                 ),
@@ -569,7 +569,7 @@ class _MesCommandesPageState extends State<MesCommandesPage> {
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                     ),
                   ),
                   const SizedBox(height: 2),
@@ -578,7 +578,7 @@ class _MesCommandesPageState extends State<MesCommandesPage> {
                     style: TextStyle(
                       fontSize: 12,
                       color: Colors.white.withOpacity(0.6),
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                     ),
                   ),
                 ],
@@ -590,7 +590,7 @@ class _MesCommandesPageState extends State<MesCommandesPage> {
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
                 color: Colors.white,
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
               ),
             ),
           ],
@@ -641,7 +641,7 @@ class _MesCommandesPageState extends State<MesCommandesPage> {
                     fontSize: 11,
                     fontWeight: isDone ? FontWeight.w600 : FontWeight.w500,
                     color: textColor,
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                   ),
                 ),
               ],
@@ -740,7 +740,7 @@ class _MesCommandesPageState extends State<MesCommandesPage> {
                     color: Colors.white,
                     fontSize: 12,
                     fontWeight: FontWeight.w700,
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                   ),
                 ),
               ),
@@ -792,7 +792,7 @@ class _MesCommandesPageState extends State<MesCommandesPage> {
               fontSize: 14,
               fontWeight: FontWeight.w600,
               color: Colors.white,
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
             ),
           ),
         ),
@@ -908,7 +908,7 @@ class OrderDetailsModal extends StatelessWidget {
                 Text(
                   '${l10n.orderLabel} $orderId',
                   style: const TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
                     color: Colors.white,
@@ -1015,7 +1015,7 @@ class OrderDetailsModal extends StatelessWidget {
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(
-                                    fontFamily: 'Inter',
+                                    fontFamily: 'urbanist',
                                     fontSize: 13,
                                     fontWeight: FontWeight.w600,
                                     color: Colors.white,
@@ -1026,7 +1026,7 @@ class OrderDetailsModal extends StatelessWidget {
                                   Text(
                                     '${l10n.size}: ${size['name']} · ${l10n.quantity}: $qty',
                                     style: TextStyle(
-                                      fontFamily: 'Inter',
+                                      fontFamily: 'urbanist',
                                       fontSize: 11,
                                       color: Colors.white.withOpacity(0.6),
                                     ),
@@ -1037,7 +1037,7 @@ class OrderDetailsModal extends StatelessWidget {
                           Text(
                             '${itemSubtotal.toStringAsFixed(0)} MAD',
                             style: const TextStyle(
-                              fontFamily: 'Inter',
+                              fontFamily: 'urbanist',
                               fontSize: 13,
                               fontWeight: FontWeight.w700,
                               color: Colors.white,
@@ -1129,7 +1129,7 @@ class OrderDetailsModal extends StatelessWidget {
                   child: Text(
                     l10n.payNow,
                     style: const TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontWeight: FontWeight.w700,
                       fontSize: 16,
                     ),
@@ -1157,7 +1157,7 @@ class OrderDetailsModal extends StatelessWidget {
             Text(
               label,
               style: TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 10,
                 color: color.withOpacity(0.8),
                 letterSpacing: 0.4,
@@ -1167,7 +1167,7 @@ class OrderDetailsModal extends StatelessWidget {
             Text(
               value,
               style: TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 13,
                 fontWeight: FontWeight.w700,
                 color: color,
@@ -1183,7 +1183,7 @@ class OrderDetailsModal extends StatelessWidget {
     return Text(
       text,
       style: const TextStyle(
-        fontFamily: 'Inter',
+        fontFamily: 'urbanist',
         fontSize: 14,
         fontWeight: FontWeight.w700,
         color: Colors.white,
@@ -1201,7 +1201,7 @@ class OrderDetailsModal extends StatelessWidget {
           child: Text(
             text,
             style: const TextStyle(
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
               fontSize: 13,
               color: Colors.white,
             ),
@@ -1218,7 +1218,7 @@ class OrderDetailsModal extends StatelessWidget {
         Text(
           label,
           style: TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: bold ? 15 : 13,
             fontWeight: bold ? FontWeight.w700 : FontWeight.w500,
             color: bold ? Colors.white : Colors.white.withOpacity(0.72),
@@ -1227,7 +1227,7 @@ class OrderDetailsModal extends StatelessWidget {
         Text(
           value,
           style: TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: bold ? 17 : 13,
             fontWeight: bold ? FontWeight.w700 : FontWeight.w600,
             color: Colors.white,

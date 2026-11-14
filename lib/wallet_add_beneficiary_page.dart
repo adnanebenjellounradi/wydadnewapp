@@ -48,7 +48,7 @@ class _WalletAddBeneficiaryPageState extends State<WalletAddBeneficiaryPage> {
 
   void _showError(String msg) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(msg, style: const TextStyle(fontFamily: 'Inter')),
+      content: Text(msg, style: const TextStyle(fontFamily: 'urbanist')),
       backgroundColor: primary,
       behavior: SnackBarBehavior.floating,
     ));
@@ -122,7 +122,7 @@ class _WalletAddBeneficiaryPageState extends State<WalletAddBeneficiaryPage> {
                       Text(
                         l10n.addAccountInMyName,
                         style: const TextStyle(
-                          fontFamily: 'Inter',
+                          fontFamily: 'urbanist',
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
                           color: Colors.white,
@@ -132,7 +132,7 @@ class _WalletAddBeneficiaryPageState extends State<WalletAddBeneficiaryPage> {
                       Text(
                         l10n.addAccountSubtitle,
                         style: TextStyle(
-                          fontFamily: 'Inter',
+                          fontFamily: 'urbanist',
                           fontSize: 12,
                           height: 1.5,
                           color: Colors.white.withOpacity(0.72),
@@ -176,7 +176,7 @@ class _WalletAddBeneficiaryPageState extends State<WalletAddBeneficiaryPage> {
                             child: Text(
                               l10n.useWalletPhone,
                               style: TextStyle(
-                                fontFamily: 'Inter',
+                                fontFamily: 'urbanist',
                                 fontSize: 12,
                                 color: Colors.white.withOpacity(0.86),
                               ),
@@ -215,7 +215,7 @@ class _WalletAddBeneficiaryPageState extends State<WalletAddBeneficiaryPage> {
                               child: Text(
                                 l10n.ribWarning,
                                 style: TextStyle(
-                                  fontFamily: 'Inter',
+                                  fontFamily: 'urbanist',
                                   fontSize: 10,
                                   height: 1.5,
                                   color: Colors.white.withOpacity(0.86),
@@ -252,7 +252,7 @@ class _WalletAddBeneficiaryPageState extends State<WalletAddBeneficiaryPage> {
                               : Text(
                             l10n.saveThisAccount,
                             style: const TextStyle(
-                              fontFamily: 'Inter',
+                              fontFamily: 'urbanist',
                               fontSize: 15,
                               fontWeight: FontWeight.w700,
                             ),
@@ -296,7 +296,7 @@ class _WalletAddBeneficiaryPageState extends State<WalletAddBeneficiaryPage> {
               fontSize: 17,
               fontWeight: FontWeight.w600,
               color: Colors.white,
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
             ),
           ),
           const Spacer(),
@@ -320,7 +320,7 @@ class _WalletAddBeneficiaryPageState extends State<WalletAddBeneficiaryPage> {
         Text(
           label,
           style: TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 11,
             fontWeight: FontWeight.w500,
             color: Colors.white.withOpacity(0.72),
@@ -334,14 +334,14 @@ class _WalletAddBeneficiaryPageState extends State<WalletAddBeneficiaryPage> {
           enabled: enabled,
           cursorColor: Colors.white,
           style: TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 13,
             color: enabled ? Colors.white : Colors.white.withOpacity(0.5),
           ),
           decoration: InputDecoration(
             hintText: hint,
             hintStyle: TextStyle(
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
               fontSize: 13,
               color: Colors.white.withOpacity(0.4),
             ),

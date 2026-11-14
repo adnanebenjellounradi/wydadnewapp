@@ -94,7 +94,7 @@ class _InscriptionPageState extends State<InscriptionPage> {
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: Color(0xFFE41E26),
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -104,7 +104,7 @@ class _InscriptionPageState extends State<InscriptionPage> {
             message,
             style: TextStyle(
               fontSize: 16,
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
               color: Colors.grey[700],
             ),
             textAlign: TextAlign.center,
@@ -128,7 +128,7 @@ class _InscriptionPageState extends State<InscriptionPage> {
                       color: Colors.white,
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                     ),
                   ),
                 ),
@@ -160,7 +160,7 @@ class _InscriptionPageState extends State<InscriptionPage> {
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: Color(0xFFE41E26),
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -170,7 +170,7 @@ class _InscriptionPageState extends State<InscriptionPage> {
             l10n.verifyEmailMessage,
             style: TextStyle(
               fontSize: 16,
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
               color: Colors.grey[700],
             ),
             textAlign: TextAlign.center,
@@ -200,7 +200,7 @@ class _InscriptionPageState extends State<InscriptionPage> {
                       color: Colors.white,
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                     ),
                   ),
                 ),
@@ -455,7 +455,7 @@ class _InscriptionPageState extends State<InscriptionPage> {
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
                                 color: Color(0xC7FFFFFF),
-                                fontFamily: 'Inter',
+                                fontFamily: 'urbanist',
                               ),
                             ),
                           ),
@@ -472,7 +472,7 @@ class _InscriptionPageState extends State<InscriptionPage> {
                         fontSize: 28,
                         fontWeight: FontWeight.w600,
                         letterSpacing: -0.6,
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -481,7 +481,7 @@ class _InscriptionPageState extends State<InscriptionPage> {
                       style: TextStyle(
                         color: Colors.white.withOpacity(0.72),
                         fontSize: 15,
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                         height: 1.4,
                       ),
                     ),
@@ -549,7 +549,7 @@ class _InscriptionPageState extends State<InscriptionPage> {
                       style: TextStyle(
                         fontSize: 11,
                         color: Colors.white.withOpacity(0.6),
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                       ),
                     ),
 
@@ -584,7 +584,7 @@ class _InscriptionPageState extends State<InscriptionPage> {
                       style: TextStyle(
                         fontSize: 12,
                         color: Colors.white.withOpacity(0.6),
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                       ),
                     ),
 
@@ -639,7 +639,7 @@ class _InscriptionPageState extends State<InscriptionPage> {
                                   fontSize: 13,
                                   height: 1.5,
                                   color: Colors.white.withOpacity(0.86),
-                                  fontFamily: 'Inter',
+                                  fontFamily: 'urbanist',
                                 ),
                                 children: [
                                   TextSpan(text: l10n.acceptTermsText),
@@ -684,7 +684,7 @@ class _InscriptionPageState extends State<InscriptionPage> {
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
-                            fontFamily: 'Inter',
+                            fontFamily: 'urbanist',
                           ),
                         ),
                       ),
@@ -705,7 +705,7 @@ class _InscriptionPageState extends State<InscriptionPage> {
                           text: TextSpan(
                             style: TextStyle(
                               fontSize: 14,
-                              fontFamily: 'Inter',
+                              fontFamily: 'urbanist',
                               color: Colors.white.withOpacity(0.72),
                             ),
                             children: [
@@ -744,7 +744,7 @@ class _InscriptionPageState extends State<InscriptionPage> {
         fontSize: 12,
         fontWeight: FontWeight.w500,
         color: Colors.white.withOpacity(0.72),
-        fontFamily: 'Inter',
+        fontFamily: 'urbanist',
       ),
     );
   }
@@ -766,13 +766,13 @@ class _InscriptionPageState extends State<InscriptionPage> {
       style: const TextStyle(
         color: Colors.white,
         fontSize: 15,
-        fontFamily: 'Inter',
+        fontFamily: 'urbanist',
       ),
       decoration: InputDecoration(
         hintText: hint,
         hintStyle: TextStyle(
           color: Colors.white.withOpacity(0.5),
-          fontFamily: 'Inter',
+          fontFamily: 'urbanist',
           fontSize: 15,
         ),
         filled: true,
@@ -784,7 +784,7 @@ class _InscriptionPageState extends State<InscriptionPage> {
         errorStyle: const TextStyle(
           color: Color(0xFFE5484D),
           fontSize: 11,
-          fontFamily: 'Inter',
+          fontFamily: 'urbanist',
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
@@ -821,7 +821,7 @@ class _InscriptionPageState extends State<InscriptionPage> {
               color: Colors.white,
               fontSize: 15,
               fontWeight: FontWeight.w600,
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
             ),
           ),
         ),
@@ -857,13 +857,13 @@ class _InscriptionPageState extends State<InscriptionPage> {
           style: const TextStyle(
             color: Colors.white,
             fontSize: 15,
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
           ),
           decoration: InputDecoration(
             hintText: hint,
             hintStyle: TextStyle(
               color: Colors.white.withOpacity(0.5),
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
               fontSize: 15,
             ),
             filled: true,

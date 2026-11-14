@@ -128,7 +128,7 @@ class _EventsPageState extends State<EventsPage> {
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -139,7 +139,7 @@ class _EventsPageState extends State<EventsPage> {
                     fontSize: 14,
                     color: Colors.grey.shade600,
                     height: 1.5,
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -168,7 +168,7 @@ class _EventsPageState extends State<EventsPage> {
                           style: const TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
-                            fontFamily: 'Inter',
+                            fontFamily: 'urbanist',
                           ),
                         ),
                       ],
@@ -192,7 +192,7 @@ class _EventsPageState extends State<EventsPage> {
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                       ),
                     ),
                   ),
@@ -252,7 +252,7 @@ class _EventsPageState extends State<EventsPage> {
                   l10n.chooseStore,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 20,
                     fontWeight: FontWeight.w900,
                     color: Colors.white,
@@ -263,7 +263,7 @@ class _EventsPageState extends State<EventsPage> {
                   l10n.chooseStoreSubtitle,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 13,
                     height: 1.45,
                     color: Colors.white.withOpacity(0.75),
@@ -387,7 +387,7 @@ class _EventsPageState extends State<EventsPage> {
                   Text(
                     label,
                     style: const TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontSize: 14,
                       fontWeight: FontWeight.w800,
                       letterSpacing: 0.4,
@@ -398,7 +398,7 @@ class _EventsPageState extends State<EventsPage> {
                   Text(
                     subtitle,
                     style: TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontSize: 11,
                       color: Colors.white.withOpacity(0.65),
                     ),
@@ -461,7 +461,7 @@ class _EventsPageState extends State<EventsPage> {
         child: Text(
           label,
           style: TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 14,
             fontWeight: FontWeight.w600,
             color: Colors.white.withOpacity(0.9),
@@ -484,7 +484,7 @@ class _EventsPageState extends State<EventsPage> {
         child: Text(
           label,
           style: const TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 14,
             fontWeight: FontWeight.w700,
             color: Colors.white,
@@ -515,7 +515,7 @@ class _EventsPageState extends State<EventsPage> {
                   l10n.comingSoon,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 20,
                     fontWeight: FontWeight.w900,
                     color: Colors.white,
@@ -526,7 +526,7 @@ class _EventsPageState extends State<EventsPage> {
                   l10n.shopUnderMaintenance,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 13,
                     height: 1.45,
                     color: Colors.white.withOpacity(0.75),
@@ -693,7 +693,7 @@ class _EventsPageState extends State<EventsPage> {
               fontSize: 20,
               fontWeight: FontWeight.w900,
               color: Colors.white,
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
             ),
           ),
         ],
@@ -742,7 +742,7 @@ class _EventsPageState extends State<EventsPage> {
                   color: selected
                       ? Colors.white
                       : Colors.white.withOpacity(0.75),
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                 ),
               ),
             ),
@@ -768,7 +768,7 @@ class _EventsPageState extends State<EventsPage> {
             Text(
               l10n.noEventsAvailable,
               style: TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 15,
                 color: Colors.white.withOpacity(0.7),
               ),
@@ -871,7 +871,7 @@ class _EventsPageState extends State<EventsPage> {
                             color: isClosed
                                 ? const Color(0xFFFEE15A)
                                 : Colors.white,
-                            fontFamily: 'Inter',
+                            fontFamily: 'urbanist',
                           ),
                         ),
                       ),
@@ -891,7 +891,7 @@ class _EventsPageState extends State<EventsPage> {
                               fontSize: 17,
                               fontWeight: FontWeight.w900,
                               color: Colors.white,
-                              fontFamily: 'Inter',
+                              fontFamily: 'urbanist',
                             ),
                           ),
                           const SizedBox(height: 2),
@@ -900,7 +900,7 @@ class _EventsPageState extends State<EventsPage> {
                             style: TextStyle(
                               fontSize: 12,
                               color: Colors.white.withOpacity(0.78),
-                              fontFamily: 'Inter',
+                              fontFamily: 'urbanist',
                             ),
                           ),
                         ],
@@ -1063,7 +1063,7 @@ class _EventsPageState extends State<EventsPage> {
                 fontSize: 13,
                 fontWeight: FontWeight.w800,
                 color: textColor,
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
               ),
             ),
           ],
@@ -1096,7 +1096,7 @@ class _EventsPageState extends State<EventsPage> {
                 fontSize: 13,
                 fontWeight: FontWeight.w700,
                 color: Colors.white,
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
               ),
             ),
           ],
@@ -1130,7 +1130,7 @@ class _EventsPageState extends State<EventsPage> {
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
                 color: Colors.white,
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
               ),
             ),
           ),
@@ -1243,7 +1243,7 @@ class _WacBrandWebViewPageState extends State<_WacBrandWebViewPage> {
                       fontSize: 17,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                     ),
                   ),
                   const Spacer(),

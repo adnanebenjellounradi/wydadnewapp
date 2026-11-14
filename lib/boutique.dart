@@ -366,7 +366,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
     _saveCartToStorage();
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(l10n.productAddedToCart,
-          style: const TextStyle(color: Colors.white, fontFamily: 'Inter')),
+          style: const TextStyle(color: Colors.white, fontFamily: 'urbanist')),
       backgroundColor: primary,
       duration: const Duration(seconds: 1),
     ));
@@ -558,7 +558,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
               fontSize: 17,
               fontWeight: FontWeight.w700,
               color: Colors.white,
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
             ),
           ),
           const Spacer(),
@@ -606,7 +606,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
                         fontSize: 11,
                         fontWeight: FontWeight.w800,
                         color: Color(0xFFA8161F),
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                       ),
                     ),
                   ),
@@ -673,7 +673,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                     color: Colors.white,
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                   ),
                 ),
               ),
@@ -725,7 +725,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
                     Text(
                       l10n.chooseCategory,
                       style: const TextStyle(
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                         fontSize: 17,
                         fontWeight: FontWeight.w700,
                         color: Colors.white,
@@ -783,7 +783,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
                               child: Text(
                                 chip['label'] as String,
                                 style: TextStyle(
-                                  fontFamily: 'Inter',
+                                  fontFamily: 'urbanist',
                                   fontSize: 15,
                                   fontWeight: isSelected
                                       ? FontWeight.w700
@@ -898,7 +898,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
                               fontSize: 10,
                               fontWeight: FontWeight.w800,
                               color: Colors.white,
-                              fontFamily: 'Inter',
+                              fontFamily: 'urbanist',
                             ),
                           ),
                         ),
@@ -920,7 +920,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
                         fontWeight: FontWeight.w600,
                         height: 1.3,
                         color: Colors.white,
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -930,7 +930,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
                         color: Colors.white,
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -967,7 +967,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
                           style: const TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.w700,
-                            fontFamily: 'Inter',
+                            fontFamily: 'urbanist',
                           ),
                         ),
                       ),
@@ -994,7 +994,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
             style: const TextStyle(
               color: Colors.white70,
               fontSize: 15,
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
             ),
           ),
         ],
@@ -1027,7 +1027,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(l10n.errorLoadingProductDetails,
-            style: const TextStyle(fontFamily: 'Inter')),
+            style: const TextStyle(fontFamily: 'urbanist')),
         backgroundColor: Colors.red,
       ));
     }
@@ -1038,7 +1038,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(l10n.cartIsEmpty,
             style:
-            const TextStyle(fontFamily: 'Inter', color: Colors.white)),
+            const TextStyle(fontFamily: 'urbanist', color: Colors.white)),
         backgroundColor: primary,
       ));
       return;
@@ -1074,7 +1074,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
                           fontSize: 17,
                           fontWeight: FontWeight.w600,
                           color: Colors.white,
-                          fontFamily: 'Inter',
+                          fontFamily: 'urbanist',
                         ),
                       ),
                       const Spacer(),
@@ -1150,7 +1150,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
                                                 fontSize: 14,
                                                 fontWeight: FontWeight.w600,
                                                 color: Colors.white,
-                                                fontFamily: 'Inter',
+                                                fontFamily: 'urbanist',
                                               ),
                                             ),
                                             const SizedBox(height: 3),
@@ -1160,7 +1160,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
                                                 fontSize: 12,
                                                 color: Colors.white
                                                     .withOpacity(0.6),
-                                                fontFamily: 'Inter',
+                                                fontFamily: 'urbanist',
                                               ),
                                             ),
                                           ],
@@ -1194,7 +1194,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
                                             fontSize: 12,
                                             fontWeight: FontWeight.w700,
                                             color: Colors.white,
-                                            fontFamily: 'Inter',
+                                            fontFamily: 'urbanist',
                                           ),
                                         ),
                                       ),
@@ -1281,7 +1281,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w700,
-                              fontFamily: 'Inter',
+                              fontFamily: 'urbanist',
                             ),
                           ),
                         ),
@@ -1333,7 +1333,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
                 fontSize: 13,
                 fontWeight: FontWeight.w700,
                 color: Colors.white,
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
               ),
             ),
           ),
@@ -1364,7 +1364,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
             fontSize: 14,
             fontWeight: bold ? FontWeight.w600 : FontWeight.normal,
             color: bold ? Colors.white : Colors.white.withOpacity(0.72),
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
           ),
         ),
         Text(
@@ -1373,7 +1373,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
             fontSize: bold ? 20 : 14,
             fontWeight: bold ? FontWeight.w700 : FontWeight.w500,
             color: Colors.white,
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
           ),
         ),
       ],
@@ -1438,7 +1438,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
                                 fontSize: 12,
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white,
-                                fontFamily: 'Inter',
+                                fontFamily: 'urbanist',
                               ),
                             ),
                             const Spacer(),
@@ -1464,7 +1464,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
                                   color: Colors.white.withOpacity(0.86),
-                                  fontFamily: 'Inter',
+                                  fontFamily: 'urbanist',
                                 ),
                               ),
                               const SizedBox(height: 10),
@@ -1528,7 +1528,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
                                 style: TextStyle(
                                   fontSize: 12,
                                   color: Colors.white.withOpacity(0.6),
-                                  fontFamily: 'Inter',
+                                  fontFamily: 'urbanist',
                                 ),
                               ),
                               const SizedBox(height: 18),
@@ -1538,7 +1538,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
                                   color: Colors.white.withOpacity(0.86),
-                                  fontFamily: 'Inter',
+                                  fontFamily: 'urbanist',
                                 ),
                               ),
                               const SizedBox(height: 10),
@@ -1571,7 +1571,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
                                     style: TextStyle(
                                       fontSize: 14,
                                       color: Colors.white.withOpacity(0.72),
-                                      fontFamily: 'Inter',
+                                      fontFamily: 'urbanist',
                                     ),
                                   ),
                                   Text(
@@ -1580,7 +1580,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
                                       fontSize: 20,
                                       fontWeight: FontWeight.w700,
                                       color: Colors.white,
-                                      fontFamily: 'Inter',
+                                      fontFamily: 'urbanist',
                                     ),
                                   ),
                                 ],
@@ -1624,7 +1624,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
                                     style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w700,
-                                      fontFamily: 'Inter',
+                                      fontFamily: 'urbanist',
                                     ),
                                   ),
                                 ),
@@ -1663,7 +1663,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
             fontSize: 12,
             fontWeight: FontWeight.w500,
             color: Colors.white.withOpacity(0.72),
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
           ),
         ),
         const SizedBox(height: 5),
@@ -1677,14 +1677,14 @@ class _BoutiquePageState extends State<BoutiquePage> {
           style: const TextStyle(
             fontSize: 14,
             color: Colors.white,
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
           ),
           decoration: InputDecoration(
             hintText: hint,
             hintStyle: TextStyle(
               fontSize: 14,
               color: Colors.white.withOpacity(0.5),
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
             ),
             filled: true,
             fillColor: Colors.white.withOpacity(0.06),
@@ -1695,7 +1695,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
             errorStyle: const TextStyle(
               fontSize: 11,
               color: Color(0xFFE5484D),
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
@@ -1769,7 +1769,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                     ),
                   ),
                   Text(
@@ -1779,7 +1779,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
                       color: highlightSub
                           ? const Color(0xFFF5CD52)
                           : Colors.white.withOpacity(0.6),
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                     ),
                   ),
                 ],
@@ -1962,7 +1962,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
               Text(
                 l10n.unavailableProducts,
                 style: const TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
                   color: Colors.white,
@@ -1987,7 +1987,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
                       child: Text(
                         '${p['product_name']} - ${p['size_name']}\n${p['message']}',
                         style: const TextStyle(
-                          fontFamily: 'Inter',
+                          fontFamily: 'urbanist',
                           color: Colors.white,
                           fontSize: 13,
                         ),
@@ -2011,7 +2011,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
                   child: Text(
                     l10n.close,
                     style: const TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontWeight: FontWeight.bold,
                       color: Color(0xFFA8161F),
                     ),
@@ -2072,7 +2072,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
                   l10n.comingSoon,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 20,
                     fontWeight: FontWeight.w900,
                     color: Colors.white,
@@ -2083,7 +2083,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
                   l10n.shopUnderMaintenance,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 13,
                     height: 1.45,
                     color: Colors.white.withOpacity(0.75),
@@ -2109,7 +2109,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
                         child: Text(
                           l10n.close,
                           style: const TextStyle(
-                            fontFamily: 'Inter',
+                            fontFamily: 'urbanist',
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
                             color: Colors.white,
@@ -2132,13 +2132,13 @@ class _BoutiquePageState extends State<BoutiquePage> {
       context: context,
       builder: (_) => AlertDialog(
         title: Text(l10n.error,
-            style: const TextStyle(fontFamily: 'Inter')),
-        content: Text(msg, style: const TextStyle(fontFamily: 'Inter')),
+            style: const TextStyle(fontFamily: 'urbanist')),
+        content: Text(msg, style: const TextStyle(fontFamily: 'urbanist')),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
             child:
-            Text(l10n.ok, style: const TextStyle(fontFamily: 'Inter')),
+            Text(l10n.ok, style: const TextStyle(fontFamily: 'urbanist')),
           ),
         ],
       ),
@@ -2173,7 +2173,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w700,
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                 ),
               ),
               const SizedBox(height: 12),
@@ -2184,7 +2184,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
                   fontSize: 14,
                   color: Colors.grey.shade600,
                   height: 1.5,
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                 ),
               ),
               const SizedBox(height: 24),
@@ -2205,7 +2205,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
                   child: Text(
                     l10n.login,
                     style: const TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -2226,7 +2226,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
                   child: Text(
                     l10n.cancel,
                     style: const TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -2393,7 +2393,7 @@ class _ProductDetailsSheetState extends State<_ProductDetailsSheet> {
                             fontWeight: FontWeight.w600,
                             letterSpacing: 1.4,
                             color: Colors.white.withOpacity(0.6),
-                            fontFamily: 'Inter',
+                            fontFamily: 'urbanist',
                           ),
                         ),
                         const SizedBox(height: 6),
@@ -2411,7 +2411,7 @@ class _ProductDetailsSheetState extends State<_ProductDetailsSheet> {
                                   letterSpacing: -0.3,
                                   height: 1.25,
                                   color: Colors.white,
-                                  fontFamily: 'Inter',
+                                  fontFamily: 'urbanist',
                                 ),
                               ),
                             ),
@@ -2422,7 +2422,7 @@ class _ProductDetailsSheetState extends State<_ProductDetailsSheet> {
                                 fontSize: 18,
                                 fontWeight: FontWeight.w800,
                                 color: Colors.white,
-                                fontFamily: 'Inter',
+                                fontFamily: 'urbanist',
                               ),
                             ),
                           ],
@@ -2438,7 +2438,7 @@ class _ProductDetailsSheetState extends State<_ProductDetailsSheet> {
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
                                   color: Colors.white,
-                                  fontFamily: 'Inter',
+                                  fontFamily: 'urbanist',
                                 ),
                               ),
                               Text(
@@ -2447,7 +2447,7 @@ class _ProductDetailsSheetState extends State<_ProductDetailsSheet> {
                                   fontSize: 12,
                                   fontWeight: FontWeight.w500,
                                   color: Colors.white.withOpacity(0.72),
-                                  fontFamily: 'Inter',
+                                  fontFamily: 'urbanist',
                                 ),
                               ),
                             ],
@@ -2495,7 +2495,7 @@ class _ProductDetailsSheetState extends State<_ProductDetailsSheet> {
                                       decoration: available
                                           ? null
                                           : TextDecoration.lineThrough,
-                                      fontFamily: 'Inter',
+                                      fontFamily: 'urbanist',
                                     ),
                                   ),
                                 ),
@@ -2513,7 +2513,7 @@ class _ProductDetailsSheetState extends State<_ProductDetailsSheet> {
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white,
-                                fontFamily: 'Inter',
+                                fontFamily: 'urbanist',
                               ),
                             ),
                             Container(
@@ -2553,7 +2553,7 @@ class _ProductDetailsSheetState extends State<_ProductDetailsSheet> {
                                         fontSize: 16,
                                         fontWeight: FontWeight.w700,
                                         color: Colors.white,
-                                        fontFamily: 'Inter',
+                                        fontFamily: 'urbanist',
                                       ),
                                     ),
                                   ),
@@ -2586,7 +2586,7 @@ class _ProductDetailsSheetState extends State<_ProductDetailsSheet> {
                               fontSize: 13,
                               height: 1.55,
                               color: Colors.white.withOpacity(0.72),
-                              fontFamily: 'Inter',
+                              fontFamily: 'urbanist',
                             ),
                           ),
                           const SizedBox(height: 12),
@@ -2603,7 +2603,7 @@ class _ProductDetailsSheetState extends State<_ProductDetailsSheet> {
                                 style: TextStyle(
                                   fontSize: 12,
                                   color: Colors.white.withOpacity(0.72),
-                                  fontFamily: 'Inter',
+                                  fontFamily: 'urbanist',
                                 ),
                               ),
                             ),
@@ -2655,7 +2655,7 @@ class _ProductDetailsSheetState extends State<_ProductDetailsSheet> {
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                       ),
                     ),
                   ],

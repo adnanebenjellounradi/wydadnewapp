@@ -69,7 +69,7 @@ class _WalletRechargeMethodPageState extends State<WalletRechargeMethodPage> {
                         l10n.howToTopUpQuestion,
                         textAlign: TextAlign.center,
                         style: const TextStyle(
-                          fontFamily: 'Inter',
+                          fontFamily: 'urbanist',
                           fontSize: 19,
                           fontWeight: FontWeight.w700,
                           letterSpacing: -0.3,
@@ -83,7 +83,7 @@ class _WalletRechargeMethodPageState extends State<WalletRechargeMethodPage> {
                                 .toStringAsFixed(2)
                                 .replaceAll('.', ',')),
                         style: TextStyle(
-                          fontFamily: 'Inter',
+                          fontFamily: 'urbanist',
                           fontSize: 11,
                           color: Colors.white.withOpacity(0.6),
                         ),
@@ -155,7 +155,7 @@ class _WalletRechargeMethodPageState extends State<WalletRechargeMethodPage> {
               fontSize: 17,
               fontWeight: FontWeight.w600,
               color: Colors.white,
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
             ),
           ),
           const Spacer(),
@@ -218,7 +218,7 @@ class _WalletRechargeMethodPageState extends State<WalletRechargeMethodPage> {
                   Text(
                     title,
                     style: const TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
@@ -228,7 +228,7 @@ class _WalletRechargeMethodPageState extends State<WalletRechargeMethodPage> {
                   Text(
                     subtitle,
                     style: TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontSize: 12,
                       color: Colors.white.withOpacity(0.6),
                     ),

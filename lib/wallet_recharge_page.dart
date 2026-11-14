@@ -190,7 +190,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
 
   void _showError(String msg) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(msg, style: const TextStyle(fontFamily: 'Inter')),
+      content: Text(msg, style: const TextStyle(fontFamily: 'urbanist')),
       backgroundColor: primary,
       behavior: SnackBarBehavior.floating,
     ));
@@ -292,7 +292,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
                   Text(
                     l10n.updatingBalance,
                     style: const TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
@@ -341,7 +341,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
               fontSize: 15,
               fontWeight: FontWeight.w600,
               color: Colors.white,
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
             ),
           ),
           const Spacer(),
@@ -370,7 +370,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
               Text(
                 l10n.wydadPay,
                 style: TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                   fontSize: 10,
                   fontWeight: FontWeight.w500,
                   color: Colors.white.withOpacity(0.86),
@@ -383,7 +383,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
         Text(
           l10n.topUpYourWalletAmount,
           style: TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 11,
             color: Colors.white.withOpacity(0.72),
           ),
@@ -407,7 +407,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
                 onChanged: (v) => setState(() => _amount = v),
                 cursorColor: Colors.white,
                 style: const TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                   fontSize: 40,
                   fontWeight: FontWeight.w600,
                   letterSpacing: -1.6,
@@ -419,7 +419,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
                   contentPadding: EdgeInsets.zero,
                   hintText: '0',
                   hintStyle: TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 40,
                     fontWeight: FontWeight.w600,
                     color: Colors.white38,
@@ -431,7 +431,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
             Text(
               'MAD',
               style: TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
                 color: Colors.white.withOpacity(0.72),
@@ -443,7 +443,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
         Text(
           l10n.transactionLimitLevel1,
           style: TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 10,
             color: Colors.white.withOpacity(0.6),
           ),
@@ -479,7 +479,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
                     child: Text(
                       '$v',
                       style: const TextStyle(
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
                         color: Colors.white,
@@ -498,7 +498,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
             Text(
               l10n.totalToPay,
               style: const TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 11,
                 fontWeight: FontWeight.w600,
                 color: Colors.white,
@@ -507,7 +507,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
             Text(
               '$_amount,00 MAD',
               style: const TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 11,
                 fontWeight: FontWeight.w600,
                 color: Colors.white,
@@ -532,7 +532,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
               Text(
                 l10n.loadingCards,
                 style: TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                   fontSize: 11,
                   color: Colors.white.withOpacity(0.6),
                 ),
@@ -547,7 +547,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
             label: Text(
               l10n.retryLoadCards,
               style: TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 11,
                 color: Colors.white.withOpacity(0.8),
               ),
@@ -561,7 +561,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
               label: Text(
                 l10n.noCardRefresh,
                 style: TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                   fontSize: 11,
                   color: Colors.white.withOpacity(0.8),
                 ),
@@ -585,7 +585,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
             child: Text(
               l10n.continueText,
               style: const TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
               ),
@@ -604,7 +604,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
         Text(
           l10n.paymentCard,
           style: const TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 18,
             fontWeight: FontWeight.w700,
             color: Colors.white,
@@ -614,7 +614,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
         Text(
           l10n.selectCardToPay('$_amount'),
           style: TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 13,
             color: Colors.white.withOpacity(0.7),
           ),
@@ -644,7 +644,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
                   _cardsError!,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                      color: Colors.white70, fontFamily: 'Inter'),
+                      color: Colors.white70, fontFamily: 'urbanist'),
                 ),
                 const SizedBox(height: 12),
                 TextButton.icon(
@@ -654,7 +654,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
                   label: Text(
                     l10n.retry,
                     style: const TextStyle(
-                        color: Color(0xFFF5CD52), fontFamily: 'Inter'),
+                        color: Color(0xFFF5CD52), fontFamily: 'urbanist'),
                   ),
                 ),
               ],
@@ -679,7 +679,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                           color: Colors.white70,
-                          fontFamily: 'Inter',
+                          fontFamily: 'urbanist',
                           fontWeight: FontWeight.w600),
                     ),
                   ),
@@ -689,7 +689,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Colors.white.withOpacity(0.5),
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                         fontSize: 12),
                   ),
                   const SizedBox(height: 12),
@@ -700,7 +700,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
                     label: Text(
                       l10n.refresh,
                       style: const TextStyle(
-                          color: Color(0xFFF5CD52), fontFamily: 'Inter'),
+                          color: Color(0xFFF5CD52), fontFamily: 'urbanist'),
                     ),
                   ),
                 ],
@@ -749,7 +749,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
                             Text(
                               card['scheme'] ?? l10n.cardDefault,
                               style: const TextStyle(
-                                fontFamily: 'Inter',
+                                fontFamily: 'urbanist',
                                 fontSize: 15,
                                 fontWeight: FontWeight.w700,
                                 color: Colors.white,
@@ -760,7 +760,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
                               card['maskedPan'] ??
                                   l10n.maskedPanPlaceholder,
                               style: TextStyle(
-                                fontFamily: 'Inter',
+                                fontFamily: 'urbanist',
                                 fontSize: 13,
                                 color: Colors.white.withOpacity(0.6),
                               ),
@@ -794,7 +794,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
             child: Text(
               l10n.continueText,
               style: const TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
               ),
@@ -813,7 +813,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
         Text(
           l10n.confirmationTitle,
           style: const TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 18,
             fontWeight: FontWeight.w700,
             color: Colors.white,
@@ -823,7 +823,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
         Text(
           l10n.enterCvvPrompt,
           style: TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 13,
             color: Colors.white.withOpacity(0.7),
           ),
@@ -843,7 +843,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
               Text(
                 '${_selectedCard!['scheme'] ?? l10n.cardDefault} ${_selectedCard!['maskedPan'] ?? ''}',
                 style: const TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
                   color: Colors.white,
@@ -860,7 +860,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
           maxLength: 3,
           textAlign: TextAlign.center,
           style: const TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 24,
             letterSpacing: 8,
             color: Colors.white,
@@ -911,7 +911,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
                 : Text(
               l10n.pay,
               style: const TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
               ),
@@ -945,7 +945,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
         Text(
           l10n.rechargeDone,
           style: const TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 22,
             fontWeight: FontWeight.w900,
             color: Colors.white,
@@ -956,7 +956,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
           l10n.rechargeSuccessMessage,
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 13,
             height: 1.45,
             color: Colors.white.withOpacity(0.7),
@@ -978,7 +978,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
                   Text(
                     l10n.rechargedAmount,
                     style: TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontSize: 12,
                       color: Colors.white.withOpacity(0.7),
                     ),
@@ -986,7 +986,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
                   Text(
                     '$_amount,00 MAD',
                     style: const TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontSize: 13,
                       fontWeight: FontWeight.w700,
                       color: Colors.white,
@@ -1003,7 +1003,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
                   Text(
                     l10n.newBalance,
                     style: TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontSize: 12,
                       color: Colors.white.withOpacity(0.7),
                     ),
@@ -1011,7 +1011,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
                   Text(
                     '${_walletBalance.toStringAsFixed(2).replaceAll('.', ',')} MAD',
                     style: const TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontSize: 15,
                       fontWeight: FontWeight.w900,
                       color: Color(0xFFF5CD52),
@@ -1039,7 +1039,7 @@ class _WalletRechargePageState extends State<WalletRechargePage> {
             child: Text(
               l10n.done,
               style: const TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
               ),

@@ -594,7 +594,7 @@ class _WydadQuizPageState extends State<WydadQuizPage> {
                 Text(
                   'Chargement du quiz...',
                   style: TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 14,
                     color: Colors.white.withOpacity(0.7),
                   ),
@@ -641,7 +641,7 @@ class _WydadQuizPageState extends State<WydadQuizPage> {
                             _errorMessage!,
                             style: const TextStyle(
                               fontSize: 15,
-                              fontFamily: 'Inter',
+                              fontFamily: 'urbanist',
                               color: Colors.white,
                             ),
                             textAlign: TextAlign.center,
@@ -661,7 +661,7 @@ class _WydadQuizPageState extends State<WydadQuizPage> {
                             child: Text(
                               l10n.retry,
                               style: const TextStyle(
-                                fontFamily: 'Inter',
+                                fontFamily: 'urbanist',
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
@@ -771,7 +771,7 @@ class _WydadQuizPageState extends State<WydadQuizPage> {
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
                   color: Colors.white,
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                 ),
               ),
               const Spacer(),
@@ -839,7 +839,7 @@ class _WydadQuizPageState extends State<WydadQuizPage> {
                               fontWeight: FontWeight.w800,
                               height: 1,
                               color: Colors.white.withOpacity(0.08),
-                              fontFamily: 'Inter',
+                              fontFamily: 'urbanist',
                             ),
                           ),
                         ),
@@ -854,7 +854,7 @@ class _WydadQuizPageState extends State<WydadQuizPage> {
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 22,
-                                  fontFamily: 'Inter',
+                                  fontFamily: 'urbanist',
                                   fontWeight: FontWeight.w800,
                                   height: 1.3,
                                 ),
@@ -865,7 +865,7 @@ class _WydadQuizPageState extends State<WydadQuizPage> {
                                     '${_questions.length} questions sur le club',
                                 style: TextStyle(
                                   color: Colors.white.withOpacity(0.86),
-                                  fontFamily: 'Inter',
+                                  fontFamily: 'urbanist',
                                   fontSize: 13,
                                 ),
                               ),
@@ -888,7 +888,7 @@ class _WydadQuizPageState extends State<WydadQuizPage> {
                                         Text(
                                           '${_questions.length} questions',
                                           style: const TextStyle(
-                                            fontFamily: 'Inter',
+                                            fontFamily: 'urbanist',
                                             color: Colors.white,
                                             fontSize: 11,
                                             fontWeight: FontWeight.w600,
@@ -909,7 +909,7 @@ class _WydadQuizPageState extends State<WydadQuizPage> {
                                       child: Text(
                                         sponsorName,
                                         style: const TextStyle(
-                                          fontFamily: 'Inter',
+                                          fontFamily: 'urbanist',
                                           color: Colors.white,
                                           fontSize: 10,
                                           fontWeight: FontWeight.w700,
@@ -949,7 +949,7 @@ class _WydadQuizPageState extends State<WydadQuizPage> {
                             const Text(
                               'Récompenses',
                               style: TextStyle(
-                                fontFamily: 'Inter',
+                                fontFamily: 'urbanist',
                                 fontSize: 15,
                                 fontWeight: FontWeight.w700,
                                 color: Colors.white,
@@ -977,7 +977,7 @@ class _WydadQuizPageState extends State<WydadQuizPage> {
                                 child: Text(
                                   '#${reward.rank}',
                                   style: const TextStyle(
-                                    fontFamily: 'Inter',
+                                    fontFamily: 'urbanist',
                                     color: Colors.white,
                                     fontSize: 11,
                                     fontWeight: FontWeight.w800,
@@ -989,7 +989,7 @@ class _WydadQuizPageState extends State<WydadQuizPage> {
                                 child: Text(
                                   reward.description,
                                   style: const TextStyle(
-                                    fontFamily: 'Inter',
+                                    fontFamily: 'urbanist',
                                     fontSize: 13,
                                     color: Colors.white,
                                   ),
@@ -1038,7 +1038,7 @@ class _WydadQuizPageState extends State<WydadQuizPage> {
                         Text(
                           l10n.youHaveAlreadyParticipated,
                           style: const TextStyle(
-                            fontFamily: 'Inter',
+                            fontFamily: 'urbanist',
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
                             color: Color(0xFF4CAF50),
@@ -1065,7 +1065,7 @@ class _WydadQuizPageState extends State<WydadQuizPage> {
                         Text(
                           l10n.startQuiz,
                           style: const TextStyle(
-                            fontFamily: 'Inter',
+                            fontFamily: 'urbanist',
                             fontSize: 16,
                             fontWeight: FontWeight.w700,
                           ),
@@ -1096,7 +1096,7 @@ class _WydadQuizPageState extends State<WydadQuizPage> {
             Text(
               value,
               style: const TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
                 color: Colors.white,
@@ -1106,7 +1106,7 @@ class _WydadQuizPageState extends State<WydadQuizPage> {
             Text(
               label,
               style: TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 11,
                 color: Colors.white.withOpacity(0.6),
               ),
@@ -1140,7 +1140,7 @@ class _WydadQuizPageState extends State<WydadQuizPage> {
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
                   color: Colors.white,
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                 ),
               ),
               const Spacer(),
@@ -1165,7 +1165,7 @@ class _WydadQuizPageState extends State<WydadQuizPage> {
                         fontSize: 13,
                         fontWeight: FontWeight.w700,
                         color: _timeLeft < 5 ? Colors.red : Colors.white,
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                       ),
                     ),
                   ],
@@ -1234,14 +1234,14 @@ class _WydadQuizPageState extends State<WydadQuizPage> {
                             fontWeight: FontWeight.w800,
                             height: 1,
                             color: Colors.white.withOpacity(0.08),
-                            fontFamily: 'Inter',
+                            fontFamily: 'urbanist',
                           ),
                         ),
                       ),
                       Text(
                         question.question,
                         style: const TextStyle(
-                          fontFamily: 'Inter',
+                          fontFamily: 'urbanist',
                           fontSize: 20,
                           fontWeight: FontWeight.w700,
                           color: Colors.white,
@@ -1309,7 +1309,7 @@ class _WydadQuizPageState extends State<WydadQuizPage> {
                             child: Text(
                               String.fromCharCode(65 + index),
                               style: const TextStyle(
-                                fontFamily: 'Inter',
+                                fontFamily: 'urbanist',
                                 fontSize: 13,
                                 fontWeight: FontWeight.w800,
                                 color: Colors.white,
@@ -1321,7 +1321,7 @@ class _WydadQuizPageState extends State<WydadQuizPage> {
                             child: Text(
                               question.options[index],
                               style: const TextStyle(
-                                fontFamily: 'Inter',
+                                fontFamily: 'urbanist',
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white,
@@ -1335,7 +1335,7 @@ class _WydadQuizPageState extends State<WydadQuizPage> {
                                 fontSize: 11,
                                 fontWeight: FontWeight.w700,
                                 color: markColor,
-                                fontFamily: 'Inter',
+                                fontFamily: 'urbanist',
                               ),
                             ),
                         ],
@@ -1354,7 +1354,7 @@ class _WydadQuizPageState extends State<WydadQuizPage> {
                       color: _isCorrect
                           ? const Color(0xFF4CAF50)
                           : const Color(0xFFFF8A8A),
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                     ),
                   ),
                 ] else ...[
@@ -1364,7 +1364,7 @@ class _WydadQuizPageState extends State<WydadQuizPage> {
                     style: TextStyle(
                       fontSize: 12,
                       color: Colors.white.withOpacity(0.6),
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                     ),
                   ),
                 ],
@@ -1414,7 +1414,7 @@ class _WydadQuizPageState extends State<WydadQuizPage> {
                       Text(
                         '$_score/${_questions.length}',
                         style: const TextStyle(
-                          fontFamily: 'Inter',
+                          fontFamily: 'urbanist',
                           fontSize: 32,
                           fontWeight: FontWeight.w800,
                           letterSpacing: -1,
@@ -1425,7 +1425,7 @@ class _WydadQuizPageState extends State<WydadQuizPage> {
                       Text(
                         'bonnes réponses',
                         style: TextStyle(
-                          fontFamily: 'Inter',
+                          fontFamily: 'urbanist',
                           fontSize: 11,
                           color: Colors.white.withOpacity(0.72),
                         ),
@@ -1442,7 +1442,7 @@ class _WydadQuizPageState extends State<WydadQuizPage> {
           Text(
             _getResultMessage(percentage),
             style: const TextStyle(
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
               fontSize: 24,
               fontWeight: FontWeight.w800,
               color: Colors.white,
@@ -1471,7 +1471,7 @@ class _WydadQuizPageState extends State<WydadQuizPage> {
                     fontSize: 14,
                     fontWeight: FontWeight.w800,
                     color: Color(0xFFFFC97A),
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                   ),
                 ),
               ],
@@ -1519,7 +1519,7 @@ class _WydadQuizPageState extends State<WydadQuizPage> {
                         const Text(
                           'Vous participez au tirage',
                           style: TextStyle(
-                            fontFamily: 'Inter',
+                            fontFamily: 'urbanist',
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
                             color: Colors.white,
@@ -1531,7 +1531,7 @@ class _WydadQuizPageState extends State<WydadQuizPage> {
                               ? _rewards.first.description
                               : '2 billets pour le prochain match',
                           style: TextStyle(
-                            fontFamily: 'Inter',
+                            fontFamily: 'urbanist',
                             fontSize: 12,
                             color: Colors.white.withOpacity(0.86),
                             height: 1.4,
@@ -1563,7 +1563,7 @@ class _WydadQuizPageState extends State<WydadQuizPage> {
               child: Text(
                 'Retour à l\'accueil',
                 style: const TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
                 ),
@@ -1576,7 +1576,7 @@ class _WydadQuizPageState extends State<WydadQuizPage> {
                 ? 'Score enregistré · ${l10n.yourScoreOf} $_score/${_questions.length}'
                 : 'Nouveau quiz demain à 12:00',
             style: TextStyle(
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
               fontSize: 12,
               color: Colors.white.withOpacity(0.6),
             ),
@@ -1603,7 +1603,7 @@ class _WydadQuizPageState extends State<WydadQuizPage> {
               Text(
                 l10n.winnersList,
                 style: const TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                   fontSize: 15,
                   fontWeight: FontWeight.w700,
                   color: Colors.white,
@@ -1631,7 +1631,7 @@ class _WydadQuizPageState extends State<WydadQuizPage> {
                     child: Text(
                       l10n.youParticipatedInQuiz,
                       style: const TextStyle(
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                         color: Color(0xFF4CAF50),
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
@@ -1684,7 +1684,7 @@ class _WydadQuizPageState extends State<WydadQuizPage> {
                         Text(
                           winner.participantName,
                           style: const TextStyle(
-                            fontFamily: 'Inter',
+                            fontFamily: 'urbanist',
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
                             color: Colors.white,
@@ -1694,7 +1694,7 @@ class _WydadQuizPageState extends State<WydadQuizPage> {
                         Text(
                           winner.rewardDescription,
                           style: TextStyle(
-                            fontFamily: 'Inter',
+                            fontFamily: 'urbanist',
                             fontSize: 12,
                             color: Colors.white.withOpacity(0.7),
                           ),
@@ -1712,7 +1712,7 @@ class _WydadQuizPageState extends State<WydadQuizPage> {
                     child: Text(
                       '#${winner.rank}',
                       style: TextStyle(
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                         fontSize: 12,
                         fontWeight: FontWeight.w800,
                         color: rankColor,

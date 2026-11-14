@@ -938,7 +938,7 @@ class _WydadNewsPageState extends State<WydadNewsPage> {
               fontSize: 15,
               fontWeight: FontWeight.w700,
               color: Colors.white,
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
             ),
           ),
           const Spacer(),
@@ -983,14 +983,14 @@ class _WydadNewsPageState extends State<WydadNewsPage> {
         onChanged: (v) => setState(() => _searchQuery = v),
         cursorColor: Colors.white,
         style: const TextStyle(
-          fontFamily: 'Inter',
+          fontFamily: 'urbanist',
           fontSize: 13,
           color: Colors.white,
         ),
         decoration: InputDecoration(
           hintText: 'Rechercher dans les actualités...',
           hintStyle: TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 13,
             color: Colors.white.withOpacity(0.5),
           ),
@@ -1028,7 +1028,7 @@ class _WydadNewsPageState extends State<WydadNewsPage> {
             const Text(
               'Erreur de chargement',
               style: TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 15,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
@@ -1039,7 +1039,7 @@ class _WydadNewsPageState extends State<WydadNewsPage> {
               _errorMessage ?? 'Impossible de charger les actualités',
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 12,
                 color: Colors.white.withOpacity(0.6),
               ),
@@ -1049,7 +1049,7 @@ class _WydadNewsPageState extends State<WydadNewsPage> {
               onPressed: _loadFacebookPosts,
               icon: const Icon(Icons.refresh, size: 16),
               label: const Text('Réessayer',
-                  style: TextStyle(fontFamily: 'Inter', fontSize: 13)),
+                  style: TextStyle(fontFamily: 'urbanist', fontSize: 13)),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
                 foregroundColor: primary,
@@ -1077,7 +1077,7 @@ class _WydadNewsPageState extends State<WydadNewsPage> {
           const Text(
             'Aucune actualité trouvée',
             style: TextStyle(
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
               fontSize: 15,
               fontWeight: FontWeight.bold,
               color: Colors.white,
@@ -1092,7 +1092,7 @@ class _WydadNewsPageState extends State<WydadNewsPage> {
                   : 'La page Wydad n\'a pas encore publié d\'actualités',
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 12,
                 color: Colors.white.withOpacity(0.6),
               ),
@@ -1115,7 +1115,7 @@ class _WydadNewsPageState extends State<WydadNewsPage> {
                 ),
               ),
               child: const Text('Effacer la recherche',
-                  style: TextStyle(fontFamily: 'Inter', fontSize: 13)),
+                  style: TextStyle(fontFamily: 'urbanist', fontSize: 13)),
             ),
         ],
       ),
@@ -1258,7 +1258,7 @@ class _WydadNewsPageState extends State<WydadNewsPage> {
                               Text(
                                 post.isVideo ? 'Vidéo' : 'Actualité',
                                 style: TextStyle(
-                                  fontFamily: 'Inter',
+                                  fontFamily: 'urbanist',
                                   fontSize: 9,
                                   fontWeight: FontWeight.w700,
                                   color: post.isVideo
@@ -1277,7 +1277,7 @@ class _WydadNewsPageState extends State<WydadNewsPage> {
                         Text(
                           _getTimeAgo(post.createdTime),
                           style: TextStyle(
-                            fontFamily: 'Inter',
+                            fontFamily: 'urbanist',
                             fontSize: 10,
                             color: Colors.white.withOpacity(0.5),
                           ),
@@ -1289,7 +1289,7 @@ class _WydadNewsPageState extends State<WydadNewsPage> {
                       text: post.message,
                       style: TextStyle(
                         fontSize: 13,
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                         height: 1.35,
                         color: Colors.white.withOpacity(0.9),
                       ),
@@ -1377,7 +1377,7 @@ class _WydadNewsPageState extends State<WydadNewsPage> {
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w600,
-                          fontFamily: 'Inter',
+                          fontFamily: 'urbanist',
                           height: 1.3,
                           color: Colors.white.withOpacity(0.9),
                         ),
@@ -1388,7 +1388,7 @@ class _WydadNewsPageState extends State<WydadNewsPage> {
                       Text(
                         _getTimeAgo(post.createdTime),
                         style: TextStyle(
-                          fontFamily: 'Inter',
+                          fontFamily: 'urbanist',
                           fontSize: 9,
                           color: Colors.white.withOpacity(0.5),
                         ),
@@ -1586,7 +1586,7 @@ class WydadNewsDetailPage extends StatelessWidget {
                           Text(
                             'Page officielle Wydad',
                             style: TextStyle(
-                              fontFamily: 'Inter',
+                              fontFamily: 'urbanist',
                               fontSize: 11,
                               fontWeight: FontWeight.w600,
                               color: Color(0xFF64B5F6),
@@ -1608,7 +1608,7 @@ class WydadNewsDetailPage extends StatelessWidget {
                           DateFormat('dd MMMM yyyy à HH:mm', 'fr_FR')
                               .format(post.createdTime),
                           style: TextStyle(
-                            fontFamily: 'Inter',
+                            fontFamily: 'urbanist',
                             fontSize: 12,
                             color: Colors.white.withOpacity(0.6),
                           ),
@@ -1629,7 +1629,7 @@ class WydadNewsDetailPage extends StatelessWidget {
                       child: LinkText(
                         text: post.message,
                         style: TextStyle(
-                          fontFamily: 'Inter',
+                          fontFamily: 'urbanist',
                           fontSize: 14,
                           height: 1.6,
                           color: Colors.white.withOpacity(0.9),
@@ -1646,7 +1646,7 @@ class WydadNewsDetailPage extends StatelessWidget {
                       const Text(
                         'Photos',
                         style: TextStyle(
-                          fontFamily: 'Inter',
+                          fontFamily: 'urbanist',
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
                           color: Colors.white,
@@ -1695,7 +1695,7 @@ class WydadNewsDetailPage extends StatelessWidget {
                         label: const Text(
                           'Voir sur Facebook',
                           style: TextStyle(
-                            fontFamily: 'Inter',
+                            fontFamily: 'urbanist',
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
                           ),

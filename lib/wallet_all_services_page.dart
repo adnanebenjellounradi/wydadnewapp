@@ -127,7 +127,7 @@ class WalletAllServicesPage extends StatelessWidget {
               fontSize: 17,
               fontWeight: FontWeight.w600,
               color: Colors.white,
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
             ),
           ),
           const Spacer(),
@@ -145,7 +145,7 @@ class WalletAllServicesPage extends StatelessWidget {
         fontWeight: FontWeight.w600,
         letterSpacing: 0.8,
         color: Colors.white.withOpacity(0.6),
-        fontFamily: 'Inter',
+        fontFamily: 'urbanist',
       ),
     );
   }
@@ -175,7 +175,7 @@ class WalletAllServicesPage extends StatelessWidget {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(
                 l10n.comingSoonMessage(item['label'] as String),
-                style: const TextStyle(fontFamily: 'Inter'),
+                style: const TextStyle(fontFamily: 'urbanist'),
               ),
               backgroundColor: primary,
               behavior: SnackBarBehavior.floating,
@@ -235,7 +235,7 @@ class WalletAllServicesPage extends StatelessWidget {
                     color: disabled
                         ? Colors.white.withOpacity(0.45)
                         : Colors.white,
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     height: 1.25,
                   ),
                 ),
@@ -248,7 +248,7 @@ class WalletAllServicesPage extends StatelessWidget {
                       fontWeight: FontWeight.w700,
                       letterSpacing: 0.6,
                       color: Colors.white.withOpacity(0.5),
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                     ),
                   ),
                 ],

@@ -184,7 +184,7 @@ class _CMIPaymentWebViewWalletState extends State<CMIPaymentWebViewWallet> {
           color: isDark ? Colors.white : Colors.black,
           fontWeight: FontWeight.w600,
           fontSize: 18,
-          fontFamily: 'Inter',
+          fontFamily: 'urbanist',
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -297,7 +297,7 @@ class _WalletRechargeSuccess extends StatelessWidget {
                 Text(
                   l10n.rechargeDone,
                   style: const TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
                     color: Colors.white,
@@ -310,7 +310,7 @@ class _WalletRechargeSuccess extends StatelessWidget {
                     Text(
                       '+${amount.toStringAsFixed(0)},00',
                       style: const TextStyle(
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                         fontSize: 32,
                         fontWeight: FontWeight.w600,
                         color: Color(0xFFF5CD52),
@@ -320,7 +320,7 @@ class _WalletRechargeSuccess extends StatelessWidget {
                     Text(
                       'MAD',
                       style: TextStyle(
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                         fontSize: 13,
                         color: Colors.white.withOpacity(0.72),
                       ),
@@ -341,7 +341,7 @@ class _WalletRechargeSuccess extends StatelessWidget {
                         l10n.referenceLabel,
                         style: const TextStyle(
                           color: Colors.white60,
-                          fontFamily: 'Inter',
+                          fontFamily: 'urbanist',
                           fontSize: 11,
                         ),
                       ),
@@ -349,7 +349,7 @@ class _WalletRechargeSuccess extends StatelessWidget {
                         reference,
                         style: const TextStyle(
                           color: Colors.white,
-                          fontFamily: 'Inter',
+                          fontFamily: 'urbanist',
                           fontSize: 11,
                           fontWeight: FontWeight.w600,
                         ),
@@ -378,7 +378,7 @@ class _WalletRechargeSuccess extends StatelessWidget {
                     child: Text(
                       l10n.backToHome,
                       style: const TextStyle(
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                         fontWeight: FontWeight.w600,
                       ),
                     ),

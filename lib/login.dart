@@ -99,7 +99,7 @@ class _LoginPageState extends State<LoginPage> {
                   fontSize: 17,
                   fontWeight: FontWeight.bold,
                   color: Color(0xFFE41E26),
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -109,7 +109,7 @@ class _LoginPageState extends State<LoginPage> {
             message,
             style: TextStyle(
               fontSize: 13,
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
               color: Colors.grey[700],
             ),
             textAlign: TextAlign.center,
@@ -133,7 +133,7 @@ class _LoginPageState extends State<LoginPage> {
                       color: Colors.white,
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                     ),
                   ),
                 ),
@@ -163,7 +163,7 @@ class _LoginPageState extends State<LoginPage> {
                   fontSize: 17,
                   fontWeight: FontWeight.bold,
                   color: Colors.orange,
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -176,7 +176,7 @@ class _LoginPageState extends State<LoginPage> {
                 l10n.alreadyConnectedMessage,
                 style: TextStyle(
                   fontSize: 12,
-                  fontFamily: 'Inter',
+                  fontFamily: 'urbanist',
                   color: Colors.grey[700],
                 ),
                 textAlign: TextAlign.center,
@@ -199,7 +199,7 @@ class _LoginPageState extends State<LoginPage> {
                         l10n.disconnectInstructions,
                         style: TextStyle(
                           fontSize: 12,
-                          fontFamily: 'Inter',
+                          fontFamily: 'urbanist',
                           fontWeight: FontWeight.w500,
                           color: Colors.blue[800],
                         ),
@@ -229,7 +229,7 @@ class _LoginPageState extends State<LoginPage> {
                       color: Colors.white,
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                     ),
                   ),
                 ),
@@ -477,7 +477,7 @@ class _LoginPageState extends State<LoginPage> {
                                 fontSize: 13,
                                 fontWeight: FontWeight.w500,
                                 color: Color(0xC7FFFFFF),
-                                fontFamily: 'Inter',
+                                fontFamily: 'urbanist',
                               ),
                             ),
                           ),
@@ -514,7 +514,7 @@ class _LoginPageState extends State<LoginPage> {
                         fontSize: 24,
                         fontWeight: FontWeight.w600,
                         letterSpacing: -0.5,
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                       ),
                     ),
                     const SizedBox(height: 6),
@@ -523,7 +523,7 @@ class _LoginPageState extends State<LoginPage> {
                       style: TextStyle(
                         color: Colors.white.withOpacity(0.72),
                         fontSize: 13,
-                        fontFamily: 'Inter',
+                        fontFamily: 'urbanist',
                         height: 1.4,
                       ),
                     ),
@@ -563,7 +563,7 @@ class _LoginPageState extends State<LoginPage> {
                               fontSize: 12,
                               fontWeight: FontWeight.w500,
                               color: Color(0xDBFFFFFF),
-                              fontFamily: 'Inter',
+                              fontFamily: 'urbanist',
                             ),
                           ),
                         ),
@@ -603,7 +603,7 @@ class _LoginPageState extends State<LoginPage> {
                           style: const TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
-                            fontFamily: 'Inter',
+                            fontFamily: 'urbanist',
                           ),
                         ),
                       ),
@@ -619,7 +619,7 @@ class _LoginPageState extends State<LoginPage> {
                           text: TextSpan(
                             style: TextStyle(
                               fontSize: 13,
-                              fontFamily: 'Inter',
+                              fontFamily: 'urbanist',
                               color: Colors.white.withOpacity(0.72),
                             ),
                             children: [
@@ -655,7 +655,7 @@ class _LoginPageState extends State<LoginPage> {
         fontSize: 11,
         fontWeight: FontWeight.w500,
         color: Colors.white.withOpacity(0.72),
-        fontFamily: 'Inter',
+        fontFamily: 'urbanist',
       ),
     );
   }
@@ -676,13 +676,13 @@ class _LoginPageState extends State<LoginPage> {
         style: const TextStyle(
           color: Colors.white,
           fontSize: 14,
-          fontFamily: 'Inter',
+          fontFamily: 'urbanist',
         ),
         decoration: InputDecoration(
           hintText: hint,
           hintStyle: TextStyle(
             color: Colors.white.withOpacity(0.5),
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 14,
           ),
           filled: true,
@@ -721,13 +721,13 @@ class _LoginPageState extends State<LoginPage> {
         style: const TextStyle(
           color: Colors.white,
           fontSize: 14,
-          fontFamily: 'Inter',
+          fontFamily: 'urbanist',
         ),
         decoration: InputDecoration(
           hintText: l10n.passwordHintLogin,
           hintStyle: TextStyle(
             color: Colors.white.withOpacity(0.5),
-            fontFamily: 'Inter',
+            fontFamily: 'urbanist',
             fontSize: 14,
           ),
           filled: true,

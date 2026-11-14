@@ -135,7 +135,7 @@ class _WalletHistoryPageState extends State<WalletHistoryPage> {
               fontSize: 17,
               fontWeight: FontWeight.w600,
               color: Colors.white,
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
             ),
           ),
           const Spacer(),
@@ -183,7 +183,7 @@ class _WalletHistoryPageState extends State<WalletHistoryPage> {
                   child: Text(
                     t['label'] as String,
                     style: const TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
@@ -207,7 +207,7 @@ class _WalletHistoryPageState extends State<WalletHistoryPage> {
           child: Text(
             day,
             style: TextStyle(
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
               fontSize: 12,
               fontWeight: FontWeight.w600,
               letterSpacing: 0.6,
@@ -262,7 +262,7 @@ class _WalletHistoryPageState extends State<WalletHistoryPage> {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
-                            fontFamily: 'Inter',
+                            fontFamily: 'urbanist',
                             fontSize: 15,
                             fontWeight: FontWeight.w500,
                             color: Colors.white,
@@ -272,7 +272,7 @@ class _WalletHistoryPageState extends State<WalletHistoryPage> {
                         Text(
                           time,
                           style: TextStyle(
-                            fontFamily: 'Inter',
+                            fontFamily: 'urbanist',
                             fontSize: 12,
                             color: Colors.white.withOpacity(0.6),
                           ),
@@ -283,7 +283,7 @@ class _WalletHistoryPageState extends State<WalletHistoryPage> {
                   Text(
                     '${isIncome ? '+' : '−'}${amount.abs().toStringAsFixed(2).replaceAll('.', ',')}',
                     style: TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
                       color:
@@ -310,7 +310,7 @@ class _WalletHistoryPageState extends State<WalletHistoryPage> {
           Text(
             l10n.noTransactions,
             style: TextStyle(
-              fontFamily: 'Inter',
+              fontFamily: 'urbanist',
               fontSize: 15,
               color: Colors.white.withOpacity(0.6),
             ),

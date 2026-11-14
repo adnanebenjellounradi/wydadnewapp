@@ -254,7 +254,7 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                       fontSize: 18,
                       fontWeight: FontWeight.w900,
                       color: Colors.white,
-                      fontFamily: 'Inter')),
+                      fontFamily: 'urbanist')),
             ],
           ),
         ),
@@ -280,7 +280,7 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
                         color: Colors.white.withOpacity(0.86),
-                        fontFamily: 'Inter')),
+                        fontFamily: 'urbanist')),
                 const SizedBox(height: 12),
                 ...tickets.map((ticket) => _buildTicketRow(ticket)).toList(),
               ],
@@ -356,7 +356,7 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                           fontWeight: FontWeight.w800,
                           letterSpacing: 1.4,
                           color: Colors.white.withOpacity(0.8),
-                          fontFamily: 'Inter')),
+                          fontFamily: 'urbanist')),
                   const SizedBox(height: 4),
                   Text(name,
                       maxLines: 1,
@@ -365,7 +365,7 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                           fontSize: 18,
                           fontWeight: FontWeight.w900,
                           color: Colors.white,
-                          fontFamily: 'Inter')),
+                          fontFamily: 'urbanist')),
                   const SizedBox(height: 4),
                   Text('$date · $address',
                       maxLines: 1,
@@ -373,7 +373,7 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                       style: TextStyle(
                           fontSize: 12,
                           color: Colors.white.withOpacity(0.8),
-                          fontFamily: 'Inter')),
+                          fontFamily: 'urbanist')),
                 ],
               ),
             ),
@@ -458,13 +458,13 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                                 fontSize: 15,
                                 fontWeight: FontWeight.w700,
                                 color: Colors.white,
-                                fontFamily: 'Inter')),
+                                fontFamily: 'urbanist')),
                         const SizedBox(height: 2),
                         Text(_availabilityLabel(ticket),
                             style: TextStyle(
                                 fontSize: 12,
                                 color: _availabilityColor(ticket),
-                                fontFamily: 'Inter')),
+                                fontFamily: 'urbanist')),
                       ],
                     ),
                   ),
@@ -473,7 +473,7 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                           fontSize: 15,
                           fontWeight: FontWeight.w800,
                           color: Colors.white,
-                          fontFamily: 'Inter')),
+                          fontFamily: 'urbanist')),
                 ],
               ),
             ),
@@ -497,13 +497,13 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                               fontSize: 13,
                               fontWeight: FontWeight.w700,
                               color: Colors.white,
-                              fontFamily: 'Inter')),
+                              fontFamily: 'urbanist')),
                       const SizedBox(height: 2),
                       Text('$maxPerOrder ${l10n.maxPerAccount}',
                           style: TextStyle(
                               fontSize: 11,
                               color: Colors.white.withOpacity(0.6),
-                              fontFamily: 'Inter')),
+                              fontFamily: 'urbanist')),
                     ],
                   ),
                   Container(
@@ -542,7 +542,7 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                                   fontSize: 17,
                                   fontWeight: FontWeight.w800,
                                   color: Colors.white,
-                                  fontFamily: 'Inter')),
+                                  fontFamily: 'urbanist')),
                         ),
                         GestureDetector(
                           onTap: quantity < maxPerOrder
@@ -633,7 +633,7 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                       style: TextStyle(
                           fontSize: 12,
                           color: Colors.white.withOpacity(0.6),
-                          fontFamily: 'Inter')),
+                          fontFamily: 'urbanist')),
                   _isWalletLoading
                       ? const SizedBox(
                       width: 40,
@@ -646,7 +646,7 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                           fontSize: 13,
                           fontWeight: FontWeight.w700,
                           color: Color(0xFFF5CD52),
-                          fontFamily: 'Inter')),
+                          fontFamily: 'urbanist')),
                 ],
               ),
               Text('${total.toStringAsFixed(0)},00 MAD',
@@ -654,7 +654,7 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                       fontSize: 20,
                       fontWeight: FontWeight.w900,
                       color: Colors.white,
-                      fontFamily: 'Inter')),
+                      fontFamily: 'urbanist')),
             ],
           ),
           const SizedBox(height: 10),
@@ -668,7 +668,7 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                   style: TextStyle(
                       fontSize: 13,
                       color: Colors.white.withOpacity(0.72),
-                      fontFamily: 'Inter')),
+                      fontFamily: 'urbanist')),
             ],
           ),
           const SizedBox(height: 14),
@@ -686,7 +686,7 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
               ),
               child: Text(l10n.continueText,
                   style: const TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontSize: 16,
                       fontWeight: FontWeight.w800)),
             ),
@@ -712,14 +712,14 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
                   color: Colors.white.withOpacity(0.7),
-                  fontFamily: 'Inter')),
+                  fontFamily: 'urbanist')),
           const SizedBox(height: 8),
           Text(subtitle,
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontSize: 14,
                   color: Colors.white.withOpacity(0.5),
-                  fontFamily: 'Inter')),
+                  fontFamily: 'urbanist')),
         ],
       ),
     );
@@ -768,7 +768,7 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                   Text(
                     l10n.processingTitle,
                     style: const TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontSize: 15,
                       fontWeight: FontWeight.w700,
                       color: Colors.white,
@@ -778,7 +778,7 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                   Text(
                     l10n.processingSubtitle,
                     style: TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontSize: 12,
                       color: Colors.white.withOpacity(0.7),
                     ),
@@ -882,14 +882,14 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                               children: [
                                 Text(l10n.personalInformation,
                                     style: const TextStyle(
-                                        fontFamily: 'Inter',
+                                        fontFamily: 'urbanist',
                                         fontSize: 18,
                                         fontWeight: FontWeight.w900,
                                         color: Colors.white)),
                                 const SizedBox(height: 4),
                                 Text(l10n.enterPersonalInfoToFinalizeOrder,
                                     style: TextStyle(
-                                        fontFamily: 'Inter',
+                                        fontFamily: 'urbanist',
                                         fontSize: 12,
                                         height: 1.4,
                                         color:
@@ -941,7 +941,7 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                       const SizedBox(height: 12),
                       Text(l10n.paymentMethodLabel,
                           style: const TextStyle(
-                              fontFamily: 'Inter',
+                              fontFamily: 'urbanist',
                               fontSize: 13,
                               fontWeight: FontWeight.w700,
                               color: Colors.white)),
@@ -982,7 +982,7 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                                     Text(l10n.wydadPayLabel,
                                         style: const TextStyle(
                                             color: Colors.white,
-                                            fontFamily: 'Inter',
+                                            fontFamily: 'urbanist',
                                             fontWeight: FontWeight.w600,
                                             fontSize: 13)),
                                     Text(
@@ -993,7 +993,7 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                                           color: hasEnoughWallet
                                               ? Colors.white54
                                               : Colors.redAccent,
-                                          fontFamily: 'Inter',
+                                          fontFamily: 'urbanist',
                                           fontSize: 11),
                                     ),
                                   ],
@@ -1055,13 +1055,13 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                                     Text(l10n.cardBankLabel,
                                         style: const TextStyle(
                                             color: Colors.white,
-                                            fontFamily: 'Inter',
+                                            fontFamily: 'urbanist',
                                             fontWeight: FontWeight.w600,
                                             fontSize: 13)),
                                     Text(l10n.payByCard,
                                         style: const TextStyle(
                                             color: Colors.white54,
-                                            fontFamily: 'Inter',
+                                            fontFamily: 'urbanist',
                                             fontSize: 11)),
                                   ],
                                 ),
@@ -1092,7 +1092,7 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                                 child: Center(
                                   child: Text(l10n.cancel,
                                       style: TextStyle(
-                                          fontFamily: 'Inter',
+                                          fontFamily: 'urbanist',
                                           fontSize: 14,
                                           fontWeight: FontWeight.w600,
                                           color: Colors.white
@@ -1133,7 +1133,7 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                                   child: Text(
                                     '${l10n.pay} ${_totalPrice.toStringAsFixed(0)} MAD',
                                     style: const TextStyle(
-                                        fontFamily: 'Inter',
+                                        fontFamily: 'urbanist',
                                         fontSize: 14,
                                         fontWeight: FontWeight.w700,
                                         color: Colors.white),
@@ -1171,7 +1171,7 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
       children: [
         Text(label,
             style: TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 11,
                 fontWeight: FontWeight.w500,
                 color: Colors.white.withOpacity(0.72))),
@@ -1186,11 +1186,11 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
           obscureText ? TextInputType.number : TextInputType.text,
           cursorColor: Colors.white,
           style: const TextStyle(
-              fontFamily: 'Inter', fontSize: 13, color: Colors.white),
+              fontFamily: 'urbanist', fontSize: 13, color: Colors.white),
           decoration: InputDecoration(
             hintText: hint,
             hintStyle: TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 13,
                 color: Colors.white.withOpacity(0.4)),
             prefixIcon:
@@ -1201,7 +1201,7 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
             const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
             errorText: errorText,
             errorStyle: const TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'urbanist',
                 fontSize: 11,
                 color: Color(0xFFE5484D)),
             border: OutlineInputBorder(
@@ -1366,7 +1366,7 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
               const SizedBox(height: 20),
               Text(l10n.paymentSuccessTitle,
                   style: const TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontSize: 20,
                       fontWeight: FontWeight.w900,
                       color: Colors.white)),
@@ -1375,7 +1375,7 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                 l10n.paymentSuccessMessage,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'urbanist',
                     fontSize: 13,
                     height: 1.45,
                     color: Colors.white.withOpacity(0.75)),
@@ -1398,7 +1398,7 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                     child: Center(
                       child: Text(l10n.backToEvents,
                           style: const TextStyle(
-                              fontFamily: 'Inter',
+                              fontFamily: 'urbanist',
                               fontSize: 14,
                               fontWeight: FontWeight.w700,
                               color: Colors.white)),
@@ -1452,7 +1452,7 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
               const SizedBox(height: 20),
               Text(l10n.error,
                   style: const TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontSize: 20,
                       fontWeight: FontWeight.w900,
                       color: Colors.white)),
@@ -1460,7 +1460,7 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
               Text(message,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'urbanist',
                       fontSize: 13,
                       height: 1.45,
                       color: Colors.white.withOpacity(0.75))),
@@ -1479,7 +1479,7 @@ class _AcheterTicketInEventPageState extends State<AcheterTicketInEventPage> {
                     child: Center(
                       child: Text(l10n.ok,
                           style: const TextStyle(
-                              fontFamily: 'Inter',
+                              fontFamily: 'urbanist',
                               fontSize: 14,
                               fontWeight: FontWeight.w700,
                               color: Colors.white)),

@@ -911,7 +911,7 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
           Positioned(
             left: 16,
             right: 16,
-            bottom: 24,
+            bottom: 40,
             child: CustomBottomNavigation(
               currentIndex: 2,
               onTap: (index) {
@@ -1527,7 +1527,7 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
                           Text(
                             tile['sub'] as String,
                             style: TextStyle(
-                              fontSize: 10,
+                              fontSize: 11,
                               height: 1.3,
                               color: Colors.white.withOpacity(0.7),
                               fontFamily: 'Inter',

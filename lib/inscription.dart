@@ -722,8 +722,11 @@ class _InscriptionPageState extends State<InscriptionPage> {
                         ),
                       ),
                     ),
+                    const SizedBox(height: 30),
                   ],
+
                 ),
+
               ),
             ),
           ],

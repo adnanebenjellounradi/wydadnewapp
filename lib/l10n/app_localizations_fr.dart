@@ -1687,7 +1687,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get storeSub => 'Maillots et produits officiels';
 
   @override
-  String get newsSub => 'Toute la vie du club';
+  String get newsSub => 'Suivez les actualités du club';
 
   @override
   String get fanZone => 'FAN ZONE';

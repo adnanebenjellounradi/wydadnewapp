@@ -446,7 +446,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
           Positioned(
             left: 16,
             right: 16,
-            bottom: 24,
+            bottom: 40,
             child: CustomBottomNavigation(
               currentIndex: 1,
               onTap: (index) {

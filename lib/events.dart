@@ -640,7 +640,7 @@ class _EventsPageState extends State<EventsPage> {
           Positioned(
             left: 16,
             right: 16,
-            bottom: 24,
+            bottom: 40,
             child: CustomBottomNavigation(
               currentIndex: 0,
               onTap: (index) {

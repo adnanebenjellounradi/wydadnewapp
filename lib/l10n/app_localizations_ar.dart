@@ -1678,16 +1678,16 @@ class AppLocalizationsAr extends AppLocalizations {
   String get balanceLabel => 'الرصيد';
 
   @override
-  String get ticketplace => 'TICKETPLACE';
+  String get ticketplace => 'إعادة بيع التذاكر';
 
   @override
-  String get ticketplaceSub => 'إعادة البيع بين المشجعين';
+  String get ticketplaceSub => ' منصة إعادة البيع بين المشجعين';
 
   @override
   String get storeSub => 'القمصان والمنتجات الرسمية';
 
   @override
-  String get newsSub => 'كل أخبار النادي وأحداثه';
+  String get newsSub => 'تابعوا مستجدات النادي كل يوم';
 
   @override
   String get fanZone => 'منطقة المشجعين';
@@ -1711,7 +1711,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get wacBrandSubtitle => 'wacofficialbrand.com';
 
   @override
-  String get ticketplaceLabel => 'Ticketplace';
+  String get ticketplaceLabel => 'إعادة بيع التذاكر';
 
   @override
   String get howToTopUpQuestion => 'كيف تريد تعبئة حسابك؟';
@@ -2624,10 +2624,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get continueWithoutAccount => 'المتابعة بدون حساب';
 
   @override
-  String get mockTicketplace => 'TICKETPLACE';
+  String get mockTicketplace => 'إعادة بيع التذاكر';
 
   @override
-  String get mockResale => 'إعادة البيع بين المشجعين';
+  String get mockResale => ' منصة إعادة البيع بين المشجعين';
 
   @override
   String get mockFrom => 'ابتداءً من';

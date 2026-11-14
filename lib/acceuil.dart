@@ -43,21 +43,45 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
   double _walletBalance = 0;
   bool _walletLoading = false;
 
+  /// Flags issus de l'API organisation
+  bool _isUnderMaintenance = false;
+  bool _shouldUpdateVersion = false;
+
+  /// true tant qu'on n'a pas récupéré l'état (évite un flash de contenu)
+  bool _initialOrgCheckDone = false;
+
   final Color primary = const Color(0xFFA8161F);
 
-  /// l10n helper
   AppLocalizations get l10n => AppLocalizations.of(context)!;
 
   @override
   void initState() {
     super.initState();
-    if (isLoggedIn) {
+    _bootstrap();
+  }
+
+  Future<void> _bootstrap() async {
+    // On récupère d'abord l'état de l'organisation (maintenance / update)
+    // AVANT d'afficher l'accueil, pour éviter un flash de contenu bloqué.
+    await _fetchOrganizationData();
+
+    if (!mounted) return;
+
+    // Marque la vérification initiale comme terminée
+    setState(() => _initialOrgCheckDone = true);
+
+    // Si l'app n'est pas bloquée, on charge les données utilisateur
+    if (!_isBlocked && isLoggedIn) {
       _loadUserData();
       _fetchOrganizationSettings();
-      _fetchOrganizationData();
       _loadWalletBalance();
+    } else if (!_isBlocked && !isLoggedIn) {
+      // rien de plus à charger
     }
   }
+
+  /// L'app est-elle bloquée (maintenance ou update obligatoire) ?
+  bool get _isBlocked => _isUnderMaintenance || _shouldUpdateVersion;
 
   @override
   void didUpdateWidget(AcceuilPage oldWidget) {
@@ -69,6 +93,7 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
 
   Future<void> _loadUserData() async {
     final prefs = await SharedPreferences.getInstance();
+    if (!mounted) return;
     setState(() {
       userName = prefs.getString('user_name') ?? '';
       userLastName = prefs.getString('user_last_name') ?? '';
@@ -100,7 +125,7 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
       );
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        if (data["success"] == true) {
+        if (data["success"] == true && mounted) {
           setState(() => organizationSettings = data["data"]);
         }
       }
@@ -113,7 +138,7 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
     try {
       const String uniqueId = "dsqqqqqlkkkkljlkwwwwwww";
       final uri = Uri.parse(
-          "https://quizzbackoff.ma/api/public/organisation/1")
+          "https://quizzbackoff.ma/api/public/organisation/5")
           .replace(queryParameters: {
         'mobileApp': 'true',
         'unique_id': uniqueId,
@@ -124,7 +149,11 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
         if (data["success"] == true) {
           final orgData = data["data"] as Map<String, dynamic>;
           if (mounted) {
-            setState(() => organizationData = orgData);
+            setState(() {
+              organizationData = orgData;
+              _isUnderMaintenance = orgData['isUndermaintenance'] == true;
+              _shouldUpdateVersion = orgData['shouldUpdateVersion'] == true;
+            });
           }
           await _saveOrgSettingsToPrefs(orgData);
           return orgData;
@@ -142,6 +171,10 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
     await prefs.setBool('activatedchari', orgData['activatedchari'] == true);
     await prefs.setBool(
         'ticketplaceactivated', orgData['ticketplaceactivated'] == true);
+    await prefs.setBool(
+        'isUndermaintenance', orgData['isUndermaintenance'] == true);
+    await prefs.setBool(
+        'shouldUpdateVersion', orgData['shouldUpdateVersion'] == true);
   }
 
   Future<bool> _isUserLoggedIn() async {
@@ -263,6 +296,165 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
     } finally {
       if (mounted) setState(() => isLoading = false);
     }
+  }
+
+  // ═══════════════════════════════════════════════════════════
+  // PAGE PLEIN ÉCRAN — MAINTENANCE
+  // ═══════════════════════════════════════════════════════════
+  Widget _buildMaintenanceFullScreen() {
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        backgroundColor: const Color(0xFF170205),
+        body: Container(
+          width: double.infinity,
+          height: double.infinity,
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Color(0xFF4A0710),
+                Color(0xFF23030A),
+                Color(0xFF120104),
+              ],
+              stops: [0.0, 0.3, 1.0],
+            ),
+          ),
+          child: SafeArea(
+            child: Center(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _dialogIcon(Icons.build_circle_outlined),
+                    const SizedBox(height: 28),
+                    Text(
+                      l10n.maintenanceTitle,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontFamily: 'urbanist',
+                        fontSize: 24,
+                        fontWeight: FontWeight.w900,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 14),
+                    Text(
+                      l10n.maintenanceMessage,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontFamily: 'urbanist',
+                        fontSize: 14,
+                        height: 1.5,
+                        color: Colors.white.withOpacity(0.75),
+                      ),
+                    ),
+                    const SizedBox(height: 32),
+                    SizedBox(
+                      width: double.infinity,
+                      child: GestureDetector(
+                        onTap: () async {
+                          setState(() => isLoading = true);
+                          await _fetchOrganizationData();
+                          if (!mounted) return;
+                          setState(() => isLoading = false);
+                        },
+                        child: _gradientButton(label: l10n.retry),
+                      ),
+                    ),
+                    if (isLoading) ...[
+                      const SizedBox(height: 20),
+                      CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(primary),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  // ═══════════════════════════════════════════════════════════
+  // PAGE PLEIN ÉCRAN — MISE À JOUR REQUISE
+  // ═══════════════════════════════════════════════════════════
+  Widget _buildUpdateFullScreen() {
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        backgroundColor: const Color(0xFF170205),
+        body: Container(
+          width: double.infinity,
+          height: double.infinity,
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Color(0xFF4A0710),
+                Color(0xFF23030A),
+                Color(0xFF120104),
+              ],
+              stops: [0.0, 0.3, 1.0],
+            ),
+          ),
+          child: SafeArea(
+            child: Center(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _dialogIcon(Icons.system_update_rounded),
+                    const SizedBox(height: 28),
+                    Text(
+                      l10n.updateRequiredTitle,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontFamily: 'urbanist',
+                        fontSize: 24,
+                        fontWeight: FontWeight.w900,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 14),
+                    Text(
+                      l10n.updateRequiredMessage,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontFamily: 'urbanist',
+                        fontSize: 14,
+                        height: 1.5,
+                        color: Colors.white.withOpacity(0.75),
+                      ),
+                    ),
+                    const SizedBox(height: 32),
+                    SizedBox(
+                      width: double.infinity,
+                      child: GestureDetector(
+                        onTap: () {
+                          // TODO: rediriger vers le store
+                          // ex: launchUrl(Uri.parse('https://play.google.com/store/apps/details?id=...'));
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(l10n.updateOpenStore)),
+                          );
+                        },
+                        child: _gradientButton(label: l10n.updateNow),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   // ═══════════════════════════════════════════════════════════
@@ -843,8 +1035,38 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
     );
   }
 
+  // ═══════════════════════════════════════════════════════════
+  // BUILD
+  // ═══════════════════════════════════════════════════════════
   @override
   Widget build(BuildContext context) {
+    // 1) Tant qu'on n'a pas fini la 1ère vérif → écran de chargement plein écran
+    if (!_initialOrgCheckDone) {
+      return const Scaffold(
+        backgroundColor: Color(0xFF170205),
+        body: Center(
+          child: CircularProgressIndicator(
+            color: Color(0xFFA8161F),
+          ),
+        ),
+      );
+    }
+
+    // 2) Maintenance → page plein écran, rien d'autre
+    if (_isUnderMaintenance) {
+      return _buildMaintenanceFullScreen();
+    }
+
+    // 3) Update obligatoire → page plein écran, rien d'autre
+    if (_shouldUpdateVersion) {
+      return _buildUpdateFullScreen();
+    }
+
+    // 4) Sinon → accueil normal
+    return _buildHome();
+  }
+
+  Widget _buildHome() {
     return Scaffold(
       backgroundColor: const Color(0xFF170205),
       body: Stack(

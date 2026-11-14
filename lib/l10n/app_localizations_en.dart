@@ -398,7 +398,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noData => 'No data';
 
   @override
-  String get retry => 'Try again';
+  String get retry => 'Retry';
 
   @override
   String get success => 'Success';
@@ -1597,10 +1597,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get updateRequired => 'Update Required';
 
   @override
-  String get updateRequiredMessage => 'Please update the app to the latest version to view your tickets.';
+  String get updateRequiredMessage => 'A new version of the application is available. Please update to continue.';
 
   @override
-  String get updateNow => 'Update Now';
+  String get updateNow => 'Update now';
 
   @override
   String get alreadyConnected => 'You are already connected on another device.';
@@ -2930,4 +2930,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get referenceLabel => 'Reference';
+
+  @override
+  String get maintenanceTitle => 'Under maintenance';
+
+  @override
+  String get maintenanceMessage => 'The application is currently under maintenance. Please try again later.';
+
+  @override
+  String get updateRequiredTitle => 'Update required';
+
+  @override
+  String get updateOpenStore => 'Opening store...';
 }

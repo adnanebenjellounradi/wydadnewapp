@@ -229,7 +229,7 @@ class _WalletPageState extends State<WalletPage> {
             Positioned(
               left: 16,
               right: 16,
-              bottom: 30,
+              bottom: 50,
               child: _buildSwitchPill(),
             ),
         ],

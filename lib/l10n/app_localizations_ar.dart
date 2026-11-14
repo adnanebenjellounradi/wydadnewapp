@@ -1597,7 +1597,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get updateRequired => 'التحديث مطلوب';
 
   @override
-  String get updateRequiredMessage => ' يرجى تحديث التطبيق إلى أحدث إصدار لعرض تذاكرك.';
+  String get updateRequiredMessage => 'تتوفر نسخة جديدة من التطبيق. يرجى التحديث للمتابعة.';
 
   @override
   String get updateNow => 'تحديث الآن';
@@ -2930,4 +2930,16 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get referenceLabel => 'المرجع';
+
+  @override
+  String get maintenanceTitle => 'صيانة جارية';
+
+  @override
+  String get maintenanceMessage => 'التطبيق حالياً في وضع الصيانة. يرجى المحاولة لاحقاً.';
+
+  @override
+  String get updateRequiredTitle => 'تحديث مطلوب';
+
+  @override
+  String get updateOpenStore => 'جارٍ فتح المتجر...';
 }

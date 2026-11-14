@@ -1130,5 +1130,12 @@
 
     "wallet": "المحفظة",
 
-    "referenceLabel": "المرجع"
+    "referenceLabel": "المرجع",
+    "maintenanceTitle": "صيانة جارية",
+    "maintenanceMessage": "التطبيق حالياً في وضع الصيانة. يرجى المحاولة لاحقاً.",
+    "updateRequiredTitle": "تحديث مطلوب",
+    "updateRequiredMessage": "تتوفر نسخة جديدة من التطبيق. يرجى التحديث للمتابعة.",
+    "updateNow": "تحديث الآن",
+    "updateOpenStore": "جارٍ فتح المتجر...",
+    "retry": "إعادة المحاولة"
 }

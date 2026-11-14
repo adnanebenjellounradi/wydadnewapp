@@ -1597,10 +1597,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get updateRequired => 'Mise à jour requise';
 
   @override
-  String get updateRequiredMessage => 'Veuillez installer la dernière version de l\'application pour voir vos tickets.';
+  String get updateRequiredMessage => 'Une nouvelle version de l\'application est disponible. Veuillez mettre à jour pour continuer.';
 
   @override
-  String get updateNow => 'Mettre à jour maintenant';
+  String get updateNow => 'Mettre à jour';
 
   @override
   String get alreadyConnected => 'Vous êtes déjà connecté sur un autre appareil. ';
@@ -2930,4 +2930,16 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get referenceLabel => 'Référence';
+
+  @override
+  String get maintenanceTitle => 'Maintenance en cours';
+
+  @override
+  String get maintenanceMessage => 'L\'application est actuellement en maintenance. Veuillez réessayer plus tard.';
+
+  @override
+  String get updateRequiredTitle => 'Mise à jour requise';
+
+  @override
+  String get updateOpenStore => 'Ouverture du store...';
 }

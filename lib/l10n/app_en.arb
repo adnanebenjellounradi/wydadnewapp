@@ -1130,6 +1130,13 @@
 
     "wallet": "Wallet",
 
-    "referenceLabel": "Reference"
+    "referenceLabel": "Reference",
+    "maintenanceTitle": "Under maintenance",
+    "maintenanceMessage": "The application is currently under maintenance. Please try again later.",
+    "updateRequiredTitle": "Update required",
+    "updateRequiredMessage": "A new version of the application is available. Please update to continue.",
+    "updateNow": "Update now",
+    "updateOpenStore": "Opening store...",
+    "retry": "Retry"
 
 }

@@ -874,7 +874,7 @@ abstract class AppLocalizations {
   /// No description provided for @retry.
   ///
   /// In en, this message translates to:
-  /// **'Try again'**
+  /// **'Retry'**
   String get retry;
 
   /// No description provided for @success.
@@ -3268,13 +3268,13 @@ abstract class AppLocalizations {
   /// No description provided for @updateRequiredMessage.
   ///
   /// In en, this message translates to:
-  /// **'Please update the app to the latest version to view your tickets.'**
+  /// **'A new version of the application is available. Please update to continue.'**
   String get updateRequiredMessage;
 
   /// No description provided for @updateNow.
   ///
   /// In en, this message translates to:
-  /// **'Update Now'**
+  /// **'Update now'**
   String get updateNow;
 
   /// No description provided for @alreadyConnected.
@@ -5814,6 +5814,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Reference'**
   String get referenceLabel;
+
+  /// No description provided for @maintenanceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Under maintenance'**
+  String get maintenanceTitle;
+
+  /// No description provided for @maintenanceMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'The application is currently under maintenance. Please try again later.'**
+  String get maintenanceMessage;
+
+  /// No description provided for @updateRequiredTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Update required'**
+  String get updateRequiredTitle;
+
+  /// No description provided for @updateOpenStore.
+  ///
+  /// In en, this message translates to:
+  /// **'Opening store...'**
+  String get updateOpenStore;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

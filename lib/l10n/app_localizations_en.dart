@@ -2942,4 +2942,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get updateOpenStore => 'Opening store...';
+
+  @override
+  String get supportUnavailableTitle => 'Support unavailable';
+
+  @override
+  String get supportUnavailableMessage => 'Customer service is currently unavailable. Please try again later.';
 }

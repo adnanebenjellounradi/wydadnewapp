@@ -19,6 +19,7 @@ import 'wallet_all_services_page.dart';
 import 'wallet_account_page.dart';
 import 'wallet_change_account_page.dart';
 import 'presentation_page.dart';
+import 'chatbot_page.dart';
 import 'login.dart';
 import 'acceuil.dart';
 import 'events.dart';
@@ -398,7 +399,12 @@ class _MyAppState extends State<MyApp> {
                   currentOrganizationId: args['organizationId'],
                 ),
               );
-
+            case '/chatbot':
+              return MaterialPageRoute(
+                builder: (_) => ChatbotPage(
+                  organizationId: args['organizationId']?.toString(),
+                ),
+              );
             case '/cmiPaymentBoutique':
               return MaterialPageRoute(
                 builder: (_) => CMIPaymentWebViewBoutique(
@@ -604,7 +610,6 @@ class _SecureAppState extends State<SecureApp> with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
     //_initializeSecurity();
   }
-
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);

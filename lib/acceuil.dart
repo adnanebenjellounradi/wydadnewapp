@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'l10n/app_localizations.dart';
 import 'package:country_flags/country_flags.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -46,6 +47,9 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
   /// Flags issus de l'API organisation
   bool _isUnderMaintenance = false;
   bool _shouldUpdateVersion = false;
+  String? _versionRequired;
+  String _currentAppVersion = '';
+  bool _isSupportActivated = true; // ✅ NOUVEAU
 
   /// true tant qu'on n'a pas récupéré l'état (évite un flash de contenu)
   bool _initialOrgCheckDone = false;
@@ -61,16 +65,19 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
   }
 
   Future<void> _bootstrap() async {
-    // On récupère d'abord l'état de l'organisation (maintenance / update)
-    // AVANT d'afficher l'accueil, pour éviter un flash de contenu bloqué.
+    try {
+      final packageInfo = await PackageInfo.fromPlatform();
+      _currentAppVersion = packageInfo.version;
+    } catch (_) {
+      _currentAppVersion = '';
+    }
+
     await _fetchOrganizationData();
 
     if (!mounted) return;
 
-    // Marque la vérification initiale comme terminée
     setState(() => _initialOrgCheckDone = true);
 
-    // Si l'app n'est pas bloquée, on charge les données utilisateur
     if (!_isBlocked && isLoggedIn) {
       _loadUserData();
       _fetchOrganizationSettings();
@@ -80,8 +87,20 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
     }
   }
 
-  /// L'app est-elle bloquée (maintenance ou update obligatoire) ?
-  bool get _isBlocked => _isUnderMaintenance || _shouldUpdateVersion;
+  bool get _isBlocked => _isUnderMaintenance || _isUpdateRequired;
+
+  bool get _isUpdateRequired {
+    if (!_shouldUpdateVersion) return false;
+    if (_versionRequired == null || _versionRequired!.trim().isEmpty) {
+      return true;
+    }
+    return _normalizeVersion(_currentAppVersion) !=
+        _normalizeVersion(_versionRequired!);
+  }
+
+  String _normalizeVersion(String v) {
+    return v.trim().toLowerCase().replaceFirst(RegExp(r'^v'), '');
+  }
 
   @override
   void didUpdateWidget(AcceuilPage oldWidget) {
@@ -153,6 +172,8 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
               organizationData = orgData;
               _isUnderMaintenance = orgData['isUndermaintenance'] == true;
               _shouldUpdateVersion = orgData['shouldUpdateVersion'] == true;
+              _versionRequired = orgData['versionrequired']?.toString();
+              _isSupportActivated = orgData['isactivatedsupport'] == true; // ✅ NOUVEAU
             });
           }
           await _saveOrgSettingsToPrefs(orgData);
@@ -175,6 +196,10 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
         'isUndermaintenance', orgData['isUndermaintenance'] == true);
     await prefs.setBool(
         'shouldUpdateVersion', orgData['shouldUpdateVersion'] == true);
+    if (orgData['versionrequired'] != null) {
+      await prefs.setString(
+          'versionrequired', orgData['versionrequired'].toString());
+    }
   }
 
   Future<bool> _isUserLoggedIn() async {
@@ -433,13 +458,21 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
                         color: Colors.white.withOpacity(0.75),
                       ),
                     ),
+                    const SizedBox(height: 10),
+                    Text(
+                      'Version actuelle: $_currentAppVersion  •  Requise: ${_versionRequired ?? "-"}',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontFamily: 'urbanist',
+                        fontSize: 12,
+                        color: Colors.white.withOpacity(0.55),
+                      ),
+                    ),
                     const SizedBox(height: 32),
                     SizedBox(
                       width: double.infinity,
                       child: GestureDetector(
                         onTap: () {
-                          // TODO: rediriger vers le store
-                          // ex: launchUrl(Uri.parse('https://play.google.com/store/apps/details?id=...'));
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text(l10n.updateOpenStore)),
                           );
@@ -705,6 +738,61 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
                 const SizedBox(height: 10),
                 Text(
                   l10n.shopUnderMaintenance,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: 'urbanist',
+                    fontSize: 13,
+                    height: 1.45,
+                    color: Colors.white.withOpacity(0.75),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                SizedBox(
+                  width: double.infinity,
+                  child: GestureDetector(
+                    onTap: () => Navigator.of(context).pop(),
+                    child: _gradientButton(label: l10n.close),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  // ✅ NOUVEAU MODAL : Support indisponible avec L10N
+  void _showSupportUnavailableModal(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      barrierColor: Colors.black.withOpacity(0.75),
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          insetPadding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(24, 28, 24, 20),
+            decoration: _dialogDecoration(),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _dialogIcon(Icons.support_agent),
+                const SizedBox(height: 20),
+                Text(
+                  l10n.supportUnavailableTitle, // ✅ Utilisation de l10n
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontFamily: 'urbanist',
+                    fontSize: 20,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  l10n.supportUnavailableMessage, // ✅ Utilisation de l10n
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: 'urbanist',
@@ -1040,7 +1128,6 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
   // ═══════════════════════════════════════════════════════════
   @override
   Widget build(BuildContext context) {
-    // 1) Tant qu'on n'a pas fini la 1ère vérif → écran de chargement plein écran
     if (!_initialOrgCheckDone) {
       return const Scaffold(
         backgroundColor: Color(0xFF170205),
@@ -1052,17 +1139,14 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
       );
     }
 
-    // 2) Maintenance → page plein écran, rien d'autre
     if (_isUnderMaintenance) {
       return _buildMaintenanceFullScreen();
     }
 
-    // 3) Update obligatoire → page plein écran, rien d'autre
-    if (_shouldUpdateVersion) {
+    if (_isUpdateRequired) {
       return _buildUpdateFullScreen();
     }
 
-    // 4) Sinon → accueil normal
     return _buildHome();
   }
 
@@ -1244,6 +1328,41 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
             ),
           ),
           const Spacer(),
+
+          // ✅ Bouton Support avec vérification
+          if (isLoggedIn)
+            GestureDetector(
+              onTap: () {
+                if (_isSupportActivated) {
+                  Navigator.pushNamed(
+                    context,
+                    '/chatbot',
+                    arguments: {
+                      'token': widget.token,
+                      'organizationId': widget.organizationId,
+                    },
+                  );
+                } else {
+                  _showSupportUnavailableModal(context); // ✅ Modal l10n
+                }
+              },
+              child: Container(
+                width: 40,
+                height: 40,
+                margin: const EdgeInsets.only(right: 8),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: Colors.white.withOpacity(0.07),
+                  border: Border.all(color: Colors.white.withOpacity(0.14)),
+                ),
+                child: Icon(
+                  Icons.support_agent,
+                  color: _isSupportActivated ? Colors.white : Colors.white.withOpacity(0.4), // ✅ Grisé si inactif
+                  size: 20,
+                ),
+              ),
+            ),
+
           GestureDetector(
             onTap: () => _showLanguageMenu(context),
             child: Container(

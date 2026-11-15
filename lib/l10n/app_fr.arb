@@ -1137,5 +1137,7 @@
     "updateRequiredMessage": "Une nouvelle version de l'application est disponible. Veuillez mettre à jour pour continuer.",
     "updateNow": "Mettre à jour",
     "updateOpenStore": "Ouverture du store...",
-    "retry": "Réessayer"
+    "retry": "Réessayer",
+      "supportUnavailableTitle": "Support indisponible",
+      "supportUnavailableMessage": "Le service client n'est pas disponible pour le moment. Veuillez réessayer plus tard."
 }

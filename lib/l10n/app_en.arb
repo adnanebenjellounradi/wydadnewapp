@@ -1137,6 +1137,8 @@
     "updateRequiredMessage": "A new version of the application is available. Please update to continue.",
     "updateNow": "Update now",
     "updateOpenStore": "Opening store...",
-    "retry": "Retry"
+    "retry": "Retry",
+      "supportUnavailableTitle": "Support unavailable",
+      "supportUnavailableMessage": "Customer service is currently unavailable. Please try again later."
 
 }

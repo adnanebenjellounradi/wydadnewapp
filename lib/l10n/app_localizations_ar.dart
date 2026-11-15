@@ -2942,4 +2942,10 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get updateOpenStore => 'جارٍ فتح المتجر...';
+
+  @override
+  String get supportUnavailableTitle => 'الدعم غير متوفر';
+
+  @override
+  String get supportUnavailableMessage => 'خدمة العملاء غير متوفرة حالياً. يرجى المحاولة لاحقاً.';
 }

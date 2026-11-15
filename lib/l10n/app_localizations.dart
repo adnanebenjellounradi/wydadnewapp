@@ -5838,6 +5838,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Opening store...'**
   String get updateOpenStore;
+
+  /// No description provided for @supportUnavailableTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Support unavailable'**
+  String get supportUnavailableTitle;
+
+  /// No description provided for @supportUnavailableMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Customer service is currently unavailable. Please try again later.'**
+  String get supportUnavailableMessage;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

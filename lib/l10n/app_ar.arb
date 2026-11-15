@@ -1137,5 +1137,7 @@
     "updateRequiredMessage": "تتوفر نسخة جديدة من التطبيق. يرجى التحديث للمتابعة.",
     "updateNow": "تحديث الآن",
     "updateOpenStore": "جارٍ فتح المتجر...",
-    "retry": "إعادة المحاولة"
+    "retry": "إعادة المحاولة",
+      "supportUnavailableTitle": "الدعم غير متوفر",
+      "supportUnavailableMessage": "خدمة العملاء غير متوفرة حالياً. يرجى المحاولة لاحقاً."
 }

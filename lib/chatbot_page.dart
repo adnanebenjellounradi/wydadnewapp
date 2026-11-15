@@ -90,6 +90,12 @@ class _ChatbotPageState extends State<ChatbotPage> {
     super.dispose();
   }
 
+  // ✅ Vérification des horaires (9h - 19h)
+  bool _isWithinBusinessHours() {
+    final now = DateTime.now();
+    return now.hour >= 9 && now.hour < 22;
+  }
+
   // ═══════════════════════════════════════════════════════
   // APPEL API /api/chat/step
   // ═══════════════════════════════════════════════════════
@@ -153,7 +159,12 @@ class _ChatbotPageState extends State<ChatbotPage> {
       _scrollToBottom();
 
       if (data['escalate'] == true) {
-        await _startLiveChat();
+        // ✅ Vérification des horaires avant de lancer le live chat
+        if (_isWithinBusinessHours()) {
+          await _startLiveChat();
+        } else {
+          _showOutsideHoursModal(context);
+        }
       }
     } catch (e) {
       setState(() {
@@ -253,11 +264,103 @@ class _ChatbotPageState extends State<ChatbotPage> {
   }
 
   // ═══════════════════════════════════════════════════════
+  // MODAL HORS HORAIRES
+  // ═══════════════════════════════════════════════════════
+  void _showOutsideHoursModal(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      barrierColor: Colors.black.withOpacity(0.75),
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          insetPadding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(24, 28, 24, 20),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(24),
+              gradient: const LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Color(0xFF5E0A13), Color(0xFF2E0409)],
+              ),
+              border: Border.all(color: Colors.white.withOpacity(0.16)),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 68,
+                  height: 68,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white.withOpacity(0.12),
+                    border: Border.all(color: Colors.white.withOpacity(0.25)),
+                  ),
+                  child: const Icon(Icons.access_time, color: Colors.white, size: 34),
+                ),
+                const SizedBox(height: 20),
+                const Text(
+                  'Conseiller indisponible',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: 'urbanist',
+                    fontSize: 20,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  'Nos conseillers sont disponibles de 9h à 19h. Veuillez réessayer pendant les heures d\'ouverture.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: 'urbanist',
+                    fontSize: 13,
+                    height: 1.45,
+                    color: Colors.white.withOpacity(0.75),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                SizedBox(
+                  width: double.infinity,
+                  child: GestureDetector(
+                    onTap: () => Navigator.of(context).pop(),
+                    child: Container(
+                      height: 48,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(14),
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFFD11A2A), Color(0xFFA8161F)],
+                        ),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          'Fermer',
+                          style: TextStyle(
+                            fontFamily: 'urbanist',
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  // ═══════════════════════════════════════════════════════
   // BUILD
   // ═══════════════════════════════════════════════════════
   @override
   Widget build(BuildContext context) {
-    // ✅ Calcul de la hauteur : 80% de l'écran
     final screenHeight = MediaQuery.of(context).size.height;
     final discussionHeight = screenHeight * 0.8;
 
@@ -268,14 +371,10 @@ class _ChatbotPageState extends State<ChatbotPage> {
         child: Column(
           children: [
             _buildHeader(),
-
-            // ✅ ZONE DE DISCUSSION (80% de la hauteur, scrollable)
             SizedBox(
               height: discussionHeight - 150,
               child: _buildMessages(),
             ),
-
-            // ✅ INPUT (Le reste de l'espace, positionné à 60px du bas)
             if (_liveMode)
               Container(
                 padding: const EdgeInsets.only(bottom: 30),
@@ -309,8 +408,6 @@ class _ChatbotPageState extends State<ChatbotPage> {
             ),
           ),
           const SizedBox(width: 12),
-
-          // ✅ Avatar du Conseiller (icône casque)
           CircleAvatar(
             radius: 18,
             backgroundColor: _liveMode ? const Color(0xFFF5CD52) : const Color(0xFFE41E26),
@@ -320,7 +417,6 @@ class _ChatbotPageState extends State<ChatbotPage> {
               size: 20,
             ),
           ),
-
           const SizedBox(width: 10),
           Expanded(
             child: Column(
@@ -377,7 +473,6 @@ class _ChatbotPageState extends State<ChatbotPage> {
               if (!isUser)
                 Padding(
                   padding: const EdgeInsets.only(right: 8),
-                  // ✅ Avatar avec l'icône casque pour le conseiller
                   child: CircleAvatar(
                     radius: 16,
                     backgroundColor: isAgent ? const Color(0xFFF5CD52) : const Color(0xFFE41E26),
@@ -465,7 +560,6 @@ class _ChatbotPageState extends State<ChatbotPage> {
         children: [
           const Padding(
             padding: EdgeInsets.only(right: 8),
-            // ✅ Avatar avec l'icône casque pour l'indicateur d'écriture
             child: CircleAvatar(
               radius: 16,
               backgroundColor: Color(0xFFF5CD52),

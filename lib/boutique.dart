@@ -6,7 +6,7 @@ import 'dart:convert';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'l10n/app_localizations.dart';
 import 'bottomnavigation.dart';
-import 'wallet_service.dart'; // ✅ Import nécessaire pour le solde
+import 'wallet_service.dart';
 
 class BoutiquePage extends StatefulWidget {
   final String token;
@@ -37,7 +37,8 @@ class _BoutiquePageState extends State<BoutiquePage> {
   int? selectedCategoryId;
   Map<String, Map<String, dynamic>> selectedProducts = {};
 
-  // ✅ Nouveaux champs pour le wallet
+  // ✅ Wallet temporairement désactivé (backend ne débite pas encore
+  // sur /store/orders). Champs conservés pour réactivation future.
   double _walletBalance = 0.0;
   bool _isWalletLoading = true;
   final TextEditingController _walletPinController = TextEditingController();
@@ -86,7 +87,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
     super.initState();
     isLoggedIn = widget.token.isNotEmpty;
     _loadCartFromStorage();
-    _fetchWalletBalance(); // ✅ Récupérer le solde
+    _fetchWalletBalance(); // Conservé pour réactivation future
     _checkShopStatus();
     fetchData();
   }
@@ -1418,13 +1419,14 @@ class _BoutiquePageState extends State<BoutiquePage> {
 
   void _showDeliveryForm() {
     _loadUserInfoFromPrefs(_fullNameController, phoneController);
-    _addressController.clear(); // ← Ajouter si tu veux repartir de zéro
+    _addressController.clear();
     setState(() {
       fullNameError = null;
       phoneError = null;
       addressError = null;
     });
-    String paymentMethod = 'wallet';
+    // ✅ Toujours CMI tant que le backend ne gère pas BAAS_WALLET
+    String paymentMethod = 'card';
     _walletPinController.clear();
     final safeBottom = MediaQuery.of(context).padding.bottom;
 
@@ -1432,17 +1434,16 @@ class _BoutiquePageState extends State<BoutiquePage> {
       context: context,
       builder: (_) => StatefulBuilder(
         builder: (context, setModal) {
-          final hasEnoughWallet = _walletBalance >= totalAmount;
-          final pinValid = _walletPinController.text.length == 4;
-// ✅ AJOUT : vérification adresse + nom + téléphone
-          final addressOk = validateAddress(_addressController.text, l10n) == null;
-          final nameOk = validateFullName(_fullNameController.text, l10n) == null;
-          final phoneOk = validatePhoneNumber(phoneController.text, l10n) == null;
+          final addressOk =
+              validateAddress(_addressController.text, l10n) == null;
+          final nameOk =
+              validateFullName(_fullNameController.text, l10n) == null;
+          final phoneOk =
+              validatePhoneNumber(phoneController.text, l10n) == null;
           final personalOk = addressOk && nameOk && phoneOk;
 
-          final canPay = personalOk &&
-              ((paymentMethod == 'wallet' && hasEnoughWallet && pinValid) ||
-                  (paymentMethod == 'card'));
+          // ✅ Wallet désactivé → seul CMI compte
+          final canPay = personalOk && paymentMethod == 'card';
 
           return Dialog(
             insetPadding: EdgeInsets.zero,
@@ -1522,7 +1523,8 @@ class _BoutiquePageState extends State<BoutiquePage> {
                                               validateFullName(v, l10n);
                                         });
                                       },
-                                      validator: (v) => validateFullName(v, l10n),
+                                      validator: (v) =>
+                                          validateFullName(v, l10n),
                                     ),
                                   ),
                                   const SizedBox(width: 10),
@@ -1544,26 +1546,26 @@ class _BoutiquePageState extends State<BoutiquePage> {
                                         });
                                         formatPhoneNumber(v);
                                       },
-                                      validator: (v) => validatePhoneNumber(v, l10n),
+                                      validator: (v) =>
+                                          validatePhoneNumber(v, l10n),
                                     ),
                                   ),
                                 ],
                               ),
                               const SizedBox(height: 10),
-                            _darkInput(
-                              controller: _addressController,
-                              label: l10n.fullAddress,
-                              hint: l10n.addressHint,
-                              errorText: addressError,
-                              onChanged: (v) {
-                                setModal(() {
-                                  customerAddress = v;
-                                  addressError = validateAddress(v, l10n);
-                                });
-                              },
-                              // ✅ AJOUT : bloque la validation si l'adresse est vide
-                              validator: (v) => validateAddress(v, l10n),
-                            ),
+                              _darkInput(
+                                controller: _addressController,
+                                label: l10n.fullAddress,
+                                hint: l10n.addressHint,
+                                errorText: addressError,
+                                onChanged: (v) {
+                                  setModal(() {
+                                    customerAddress = v;
+                                    addressError = validateAddress(v, l10n);
+                                  });
+                                },
+                                validator: (v) => validateAddress(v, l10n),
+                              ),
                               const SizedBox(height: 8),
                               Text(
                                 '${l10n.estimatedDelivery}: ${isCasablancaDelivery ? "1-2" : "3-5"} ${l10n.days} · ${deliveryFee.toStringAsFixed(0)} MAD',
@@ -1585,42 +1587,42 @@ class _BoutiquePageState extends State<BoutiquePage> {
                               ),
                               const SizedBox(height: 10),
 
-                              // ✅ WALLET TILE
+                              // ═══════════════════════════════════════════
+                              // WALLET — TEMPORAIREMENT DÉSACTIVÉ
+                              // Le backend ne débite pas encore le wallet
+                              // sur /api/customer/store/orders.
+                              // À réactiver quand le backend supportera
+                              // BAAS_WALLET sur cet endpoint.
+                              // ═══════════════════════════════════════════
                               _paymentTile(
                                 icon: Icons.account_balance_wallet,
                                 title: l10n.wydadPayLabel,
-                                subtitle: _isWalletLoading
-                                    ? "Chargement..."
-                                    : hasEnoughWallet
-                                    ? '${l10n.balanceLabel}: ${_walletBalance.toStringAsFixed(2)} MAD'
-                                    : l10n.insufficientBalance,
-                                selected: paymentMethod == 'wallet',
-                                highlightSub: hasEnoughWallet,
-                                onTap: hasEnoughWallet
-                                    ? () => setModal(() => paymentMethod = 'wallet')
-                                    : null,
+                                subtitle: l10n.featureComingSoon,
+                                selected: false,
+                                highlightSub: false,
+                                onTap: () {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        l10n.featureComingSoon,
+                                        style: const TextStyle(
+                                            fontFamily: 'urbanist'),
+                                      ),
+                                      backgroundColor:
+                                      const Color(0xFFA8161F),
+                                      duration:
+                                      const Duration(seconds: 2),
+                                    ),
+                                  );
+                                },
                               ),
-
-                              // ✅ CHAMP PIN WALLET
-                              if (paymentMethod == 'wallet') ...[
-                                const SizedBox(height: 10),
-                                _darkInput(
-                                  controller: _walletPinController,
-                                  label: l10n.pinCodeLabel,
-                                  hint: l10n.pinCodeHint,
-                                  keyboardType: TextInputType.number,
-                                  obscureText: true,
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.digitsOnly,
-                                    LengthLimitingTextInputFormatter(4),
-                                  ],
-                                  onChanged: (v) => setModal(() {}),
-                                ),
-                              ],
 
                               const SizedBox(height: 8),
 
-                              // ✅ CARD TILE
+                              // ═══════════════════════════════════════════
+                              // CARTE BANCAIRE — SEUL MOYEN ACTIF
+                              // ═══════════════════════════════════════════
                               _paymentTile(
                                 icon: Icons.credit_card,
                                 title: l10n.bankCard,
@@ -1658,21 +1660,24 @@ class _BoutiquePageState extends State<BoutiquePage> {
                                 width: double.infinity,
                                 height: 54,
                                 child: ElevatedButton(
-                                  onPressed: (isCreatingOrder || !canPay)
+                                  onPressed:
+                                  (isCreatingOrder || !canPay)
                                       ? null
                                       : () {
-                                    if (_formKey.currentState!.validate()) {
+                                    if (_formKey.currentState!
+                                        .validate()) {
                                       Navigator.pop(context);
                                       _createOrder(
                                         paymentMethod: paymentMethod,
-                                        pin: paymentMethod == 'wallet' ? _walletPinController.text : null,
+                                        pin: null,
                                       );
                                     }
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.white,
                                     foregroundColor: primary,
-                                    disabledBackgroundColor: Colors.white.withOpacity(0.3),
+                                    disabledBackgroundColor:
+                                    Colors.white.withOpacity(0.3),
                                     shape: RoundedRectangleBorder(
                                       borderRadius:
                                       BorderRadius.circular(12),
@@ -1725,7 +1730,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
     ValueChanged<String>? onChanged,
     List<TextInputFormatter>? inputFormatters,
     bool obscureText = false,
-    FormFieldValidator<String>? validator, // ✅ AJOUT
+    FormFieldValidator<String>? validator,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1740,7 +1745,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
           ),
         ),
         const SizedBox(height: 5),
-        TextFormField( // ✅ Changé de TextField à TextFormField
+        TextFormField(
           controller: controller,
           keyboardType: keyboardType,
           autofillHints: autofillHints,
@@ -1748,7 +1753,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
           obscureText: obscureText,
           cursorColor: Colors.white,
           onChanged: onChanged,
-          validator: validator, // ✅ AJOUT
+          validator: validator,
           style: const TextStyle(
             fontSize: 14,
             color: Colors.white,
@@ -1877,6 +1882,9 @@ class _BoutiquePageState extends State<BoutiquePage> {
     );
   }
 
+  // ═══════════════════════════════════════════════════════════
+  // CRÉATION COMMANDE — UNIQUEMENT CMI
+  // ═══════════════════════════════════════════════════════════
   Future<void> _createOrder({required String paymentMethod, String? pin}) async {
     setState(() => isCreatingOrder = true);
     try {
@@ -1937,19 +1945,15 @@ class _BoutiquePageState extends State<BoutiquePage> {
 
       if (items.isEmpty) throw Exception('invalid_cart');
 
+      // ✅ payment_type toujours 'CMI'
       final body = {
         'items': items,
         'delivery_type': isCasablancaDelivery ? 1 : 2,
         'customer_name': customerName,
         'customer_phone': '0' + customerPhone.replaceAll(' ', ''),
         'customer_address': customerAddress,
-        // ✅ Envoi du payment_type
-        'payment_type': paymentMethod == 'wallet' ? 'BAAS_WALLET' : 'CMI',
+        'payment_type': 'CMI',
       };
-      // ✅ Envoi du PIN
-      if (paymentMethod == 'wallet' && pin != null) {
-        body['pin'] = pin;
-      }
 
       final res = await http.post(
         Uri.parse('https://ticketing.ma/api/customer/store/orders'),
@@ -1962,24 +1966,23 @@ class _BoutiquePageState extends State<BoutiquePage> {
 
       if (res.statusCode == 201 || res.statusCode == 200) {
         final data = json.decode(res.body);
+
+        // ✅ Vérifier le succès backend
+        if (data['success'] != true) {
+          throw Exception(data['message'] ?? 'create_order_failed');
+        }
+
         final orderId = data['data']['order_id'];
 
         if (mounted) {
           Navigator.of(context).popUntil((r) => r.isFirst);
-
-          // ✅ Si WALLET, on affiche le succès direct
-          if (paymentMethod == 'wallet') {
-            await _fetchWalletBalance(); // Mettre à jour le solde
-            _showSuccessDialog();
-          } else {
-            // ✅ Si CARD, on redirige CMI
-            _navigateToCMIPayment(orderId);
-          }
+          _navigateToCMIPayment(orderId);
         }
       } else {
         throw Exception('create_order_failed');
       }
     } catch (e) {
+      debugPrint('[BOUTIQUE] createOrder error: $e');
       _showErrorDialog('${l10n.error}: $e');
     } finally {
       if (mounted) setState(() => isCreatingOrder = false);
@@ -2270,8 +2273,8 @@ class _BoutiquePageState extends State<BoutiquePage> {
                 width: double.infinity,
                 child: GestureDetector(
                   onTap: () {
-                    Navigator.pop(context); // Fermer dialog
-                    _loadCartFromStorage(); // Rafraichir le panier
+                    Navigator.pop(context);
+                    _loadCartFromStorage();
                   },
                   child: Container(
                     height: 48,

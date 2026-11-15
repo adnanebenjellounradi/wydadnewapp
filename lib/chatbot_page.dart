@@ -38,6 +38,7 @@ class _ChatbotPageState extends State<ChatbotPage> {
   bool _isEnd = false;
   bool _isLoading = false;
   String? _errorMessage;
+  bool _hasEscalated = false; // ✅ NOUVEAU : Empêche de recliquer sur les boutons
 
   // ✅ Infos utilisateur
   Map<String, String> _userInfo = {};
@@ -93,13 +94,16 @@ class _ChatbotPageState extends State<ChatbotPage> {
   // ✅ Vérification des horaires (9h - 19h)
   bool _isWithinBusinessHours() {
     final now = DateTime.now();
-    return now.hour >= 9 && now.hour < 22;
+    return now.hour >= 9 && now.hour < 19;
   }
 
   // ═══════════════════════════════════════════════════════
   // APPEL API /api/chat/step
   // ═══════════════════════════════════════════════════════
   Future<void> _loadStep({required String nodeId, String? answer}) async {
+    // ✅ Si on a déjà escaladé, on ne permet plus de cliquer sur les boutons
+    if (_hasEscalated) return;
+
     setState(() {
       _isLoading = true;
       _isTyping = true;
@@ -159,6 +163,11 @@ class _ChatbotPageState extends State<ChatbotPage> {
       _scrollToBottom();
 
       if (data['escalate'] == true) {
+        // ✅ On désactive les boutons immédiatement
+        setState(() {
+          _hasEscalated = true;
+        });
+
         // ✅ Vérification des horaires avant de lancer le live chat
         if (_isWithinBusinessHours()) {
           await _startLiveChat();
@@ -184,6 +193,19 @@ class _ChatbotPageState extends State<ChatbotPage> {
       _liveMode = true;
       _isTyping = true;
     });
+
+    // ✅ Message automatique du conseiller après 1,5s
+    await Future.delayed(const Duration(milliseconds: 1500));
+    if (mounted) {
+      setState(() {
+        _isTyping = false;
+        _messages.add({
+          'role': 'agent',
+          'content': 'Je suis le conseiller de PMG ticketing, veuillez me décrire votre problème.',
+        });
+      });
+      _scrollToBottom();
+    }
 
     _pusher = PusherChannelsFlutter.getInstance();
 
@@ -213,6 +235,12 @@ class _ChatbotPageState extends State<ChatbotPage> {
             });
             _scrollToBottom();
           }
+        } else if (event.eventName == 'conversation_ended') {
+          setState(() {
+            _isEnd = true;
+            _liveMode = false;
+          });
+          _showConversationEndedModal();
         }
       },
       onError: (message, code, error) {
@@ -222,9 +250,6 @@ class _ChatbotPageState extends State<ChatbotPage> {
 
     await _pusher!.connect();
     await _pusher!.subscribe(channelName: 'private-org-$_orgId-conv-$_conversationId');
-
-    await Future.delayed(const Duration(milliseconds: 1500));
-    setState(() => _isTyping = false);
   }
 
   Future<void> _sendLiveMessage() async {
@@ -264,7 +289,7 @@ class _ChatbotPageState extends State<ChatbotPage> {
   }
 
   // ═══════════════════════════════════════════════════════
-  // MODAL HORS HORAIRES
+  // MODALS
   // ═══════════════════════════════════════════════════════
   void _showOutsideHoursModal(BuildContext context) {
     showDialog(
@@ -353,6 +378,37 @@ class _ChatbotPageState extends State<ChatbotPage> {
           ),
         );
       },
+    );
+  }
+
+  void _showConversationEndedModal() {
+    if (!mounted) return;
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        backgroundColor: const Color(0xFF2E0409),
+        title: const Text(
+          'Conversation terminée',
+          style: TextStyle(color: Colors.white, fontFamily: 'urbanist', fontWeight: FontWeight.bold),
+        ),
+        content: const Text(
+          'Le conseiller a mis fin à la conversation. Merci de votre visite.',
+          style: TextStyle(color: Colors.white70, fontFamily: 'urbanist'),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+            },
+            child: const Text(
+              'Retour à l\'accueil',
+              style: TextStyle(color: Color(0xFFF5CD52), fontFamily: 'urbanist'),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -464,6 +520,9 @@ class _ChatbotPageState extends State<ChatbotPage> {
         final isAgent = role == 'agent';
         final buttons = msg['buttons'] as List<Map<String, dynamic>>?;
 
+        // ✅ On vérifie si on doit désactiver les boutons
+        final bool canClickButtons = !_hasEscalated && !_isEnd;
+
         return Padding(
           padding: const EdgeInsets.only(bottom: 16),
           child: Row(
@@ -511,7 +570,7 @@ class _ChatbotPageState extends State<ChatbotPage> {
                         ),
                       ),
                     ),
-                    if (!isUser && buttons != null && buttons.isNotEmpty && !_isEnd)
+                    if (!isUser && buttons != null && buttons.isNotEmpty)
                       Padding(
                         padding: const EdgeInsets.only(top: 10),
                         child: Wrap(
@@ -520,21 +579,32 @@ class _ChatbotPageState extends State<ChatbotPage> {
                           children: buttons.map((button) {
                             final label = button['label']?.toString() ?? '';
                             return GestureDetector(
-                              onTap: () => _loadStep(nodeId: _currentNodeId, answer: label),
+                              // ✅ On désactive l'action si on a déjà escaladé
+                              onTap: canClickButtons
+                                  ? () => _loadStep(nodeId: _currentNodeId, answer: label)
+                                  : null,
                               child: Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(12),
-                                  color: Colors.white.withOpacity(0.08),
-                                  border: Border.all(color: Colors.white.withOpacity(0.2)),
+                                  color: canClickButtons
+                                      ? Colors.white.withOpacity(0.08)
+                                      : Colors.white.withOpacity(0.03), // ✅ Grisé
+                                  border: Border.all(
+                                    color: canClickButtons
+                                        ? Colors.white.withOpacity(0.2)
+                                        : Colors.white.withOpacity(0.05), // ✅ Grisé
+                                  ),
                                 ),
                                 child: Text(
                                   label,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontFamily: 'urbanist',
                                     fontSize: 13,
                                     fontWeight: FontWeight.w600,
-                                    color: Colors.white,
+                                    color: canClickButtons
+                                        ? Colors.white
+                                        : Colors.white.withOpacity(0.3), // ✅ Grisé
                                   ),
                                 ),
                               ),

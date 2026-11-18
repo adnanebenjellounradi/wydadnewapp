@@ -5850,6 +5850,186 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Customer service is currently unavailable. Please try again later.'**
   String get supportUnavailableMessage;
+
+  /// No description provided for @transferTicketsButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer tickets'**
+  String get transferTicketsButton;
+
+  /// No description provided for @receivedTicketsSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Received tickets'**
+  String get receivedTicketsSection;
+
+  /// No description provided for @receivedFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'Received from'**
+  String get receivedFrom;
+
+  /// No description provided for @transferTicketsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer tickets'**
+  String get transferTicketsTitle;
+
+  /// No description provided for @selectTicketsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Check the tickets to send, one by one or a whole order at once.'**
+  String get selectTicketsHint;
+
+  /// No description provided for @selectAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Select all'**
+  String get selectAll;
+
+  /// No description provided for @deselectAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Deselect all'**
+  String get deselectAll;
+
+  /// No description provided for @unavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Unavailable'**
+  String get unavailable;
+
+  /// No description provided for @selectionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Selection'**
+  String get selectionLabel;
+
+  /// No description provided for @continueLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get continueLabel;
+
+  /// No description provided for @selectAtLeastOneTicket.
+  ///
+  /// In en, this message translates to:
+  /// **'Select at least one ticket'**
+  String get selectAtLeastOneTicket;
+
+  /// No description provided for @unselectableNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Tickets already transferred or on resale cannot be selected.'**
+  String get unselectableNotice;
+
+  /// No description provided for @qrWillAppear.
+  ///
+  /// In en, this message translates to:
+  /// **'The QR code will appear 3 hours before the match'**
+  String get qrWillAppear;
+
+  /// No description provided for @availableIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Available in'**
+  String get availableIn;
+
+  /// No description provided for @kickoffIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Kickoff in'**
+  String get kickoffIn;
+
+  /// No description provided for @matchStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Match started'**
+  String get matchStarted;
+
+  /// No description provided for @presentCodeAtEntrance.
+  ///
+  /// In en, this message translates to:
+  /// **'Present this code at the entrance. Brightness increased automatically.'**
+  String get presentCodeAtEntrance;
+
+  /// No description provided for @transferExplanation.
+  ///
+  /// In en, this message translates to:
+  /// **'Free transfer to a close one. Once sent, it cannot be cancelled: only the recipient can accept or refuse it.'**
+  String get transferExplanation;
+
+  /// No description provided for @ticketsToTransfer.
+  ///
+  /// In en, this message translates to:
+  /// **'Tickets to transfer'**
+  String get ticketsToTransfer;
+
+  /// No description provided for @recipientEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Recipient email'**
+  String get recipientEmail;
+
+  /// No description provided for @or.
+  ///
+  /// In en, this message translates to:
+  /// **'or'**
+  String get or;
+
+  /// No description provided for @scanProfileQR.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan their profile QR code'**
+  String get scanProfileQR;
+
+  /// No description provided for @youWillSend.
+  ///
+  /// In en, this message translates to:
+  /// **'You are about to send'**
+  String get youWillSend;
+
+  /// No description provided for @irreversibleWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Irreversible action. Once sent, you will not be able to cancel this transfer. Only the recipient will be able to accept or refuse it.'**
+  String get irreversibleWarning;
+
+  /// No description provided for @transferHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer history'**
+  String get transferHistory;
+
+  /// No description provided for @sent.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent'**
+  String get sent;
+
+  /// No description provided for @received.
+  ///
+  /// In en, this message translates to:
+  /// **'Received'**
+  String get received;
+
+  /// No description provided for @noTransfers.
+  ///
+  /// In en, this message translates to:
+  /// **'No transfers'**
+  String get noTransfers;
+
+  /// No description provided for @transferHistoryExplanation.
+  ///
+  /// In en, this message translates to:
+  /// **'A transfer remains \"pending\" until the recipient responds. Only they can accept or refuse it: a sent transfer cannot be cancelled. Once accepted, the ticket is reissued in their name and the old QR code is no longer valid. If refused, the ticket returns to you.'**
+  String get transferHistoryExplanation;
+
+  /// No description provided for @ticketSingularLower.
+  ///
+  /// In en, this message translates to:
+  /// **'ticket'**
+  String get ticketSingularLower;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

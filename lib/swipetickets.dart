@@ -24,6 +24,7 @@ class SwipeTicketsPage extends StatefulWidget {
   final String? userEmail;
   final bool isSender;
   final String? category;
+  final int? selectedTicketId;
   final String? senderEmail;
   final int initialTicketIndex;
   final bool isReceiver;
@@ -44,6 +45,7 @@ class SwipeTicketsPage extends StatefulWidget {
     required this.isSender,
     this.senderEmail,
     this.initialTicketIndex = 0,
+    this.selectedTicketId,
     required this.isReceiver,
   }) : super(key: key);
 
@@ -74,7 +76,6 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
   final Color gold = const Color(0xFFF5CD52);
   final Color amber = const Color(0xFFFFC97A);
 
-  /// l10n helper
   AppLocalizations get l10n => AppLocalizations.of(context)!;
 
   @override
@@ -87,9 +88,13 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
 
     _filteredTickets = _filterTickets(widget.tickets);
 
-    int validIndex = widget.initialTicketIndex;
-    if (validIndex >= _filteredTickets.length) {
-      validIndex = 0;
+    int validIndex = 0;
+    if (widget.selectedTicketId != null) {
+      final idx = _filteredTickets
+          .indexWhere((t) => t["id"] == widget.selectedTicketId);
+      if (idx >= 0) validIndex = idx;
+    } else if (widget.initialTicketIndex < _filteredTickets.length) {
+      validIndex = widget.initialTicketIndex;
     }
     _currentIndex = validIndex;
     _pageController = PageController(initialPage: validIndex);
@@ -110,12 +115,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
   }
 
   List<dynamic> _filterTickets(List<dynamic> tickets) {
-    if (widget.isSender) {
-      return tickets.where((ticket) {
-        final transferStatus = ticket["transfer_status"] ?? 20;
-        return transferStatus != 0;
-      }).toList();
-    }
+    // Le filtrage est fait par l'appelant (TicketsPage / OrdersOfOneEventPage).
     return tickets;
   }
 
@@ -171,6 +171,9 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
     }
   }
 
+  // ═══════════════════════════════════════════════════════════
+  // SCAN QR / SEARCH CUSTOMER (inchangé)
+  // ═══════════════════════════════════════════════════════════
   Future<String?> _scanQRCodeForEmail() async {
     return await showDialog<String>(
       context: context,
@@ -763,7 +766,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
   }
 
   // ═══════════════════════════════════════════════════════════
-  // BUILD
+  // BUILD — DESIGN HTML
   // ═══════════════════════════════════════════════════════════
 
   @override
@@ -783,19 +786,728 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
     }
 
     if (_filteredTickets.isEmpty) {
-      return Scaffold(
-        backgroundColor: const Color(0xFF170205),
-        body: Container(
+      return _buildEmptyState();
+    }
+
+    return Scaffold(
+      backgroundColor: const Color(0xFF170205),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: RadialGradient(
+            center: Alignment(0, -0.9),
+            radius: 1.1,
+            colors: [
+              Color(0xFFC8172A),
+              Color(0x00C8172A),
+            ],
+            stops: [0.0, 0.62],
+          ),
+        ),
+        child: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [
-                Color(0xFF4A0710),
-                Color(0xFF23030A),
-                Color(0xFF120104)
-              ],
-              stops: [0.0, 0.3, 1.0],
+              colors: [Color(0xFF4A0710), Color(0xFF23030A), Color(0xFF120104)],
+              stops: [0.0, 0.30, 1.0],
+            ),
+          ),
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 28),
+              child: Column(
+                children: [
+                  _buildHeader(),
+                  const SizedBox(height: 14),
+                  _buildEventTitle(),
+                  const SizedBox(height: 18),
+                  Expanded(
+                    child: PageView.builder(
+                      controller: _pageController,
+                      itemCount: _filteredTickets.length,
+                      onPageChanged: (index) {
+                        setState(() {
+                          _currentIndex = index;
+                        });
+                      },
+                      itemBuilder: (context, index) {
+                        final ticket = _filteredTickets[index];
+                        return SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              // Carte rouge (QR uniquement)
+                              _buildTicketCard(ticket),
+                              const SizedBox(height: 14),
+                              // Note personnelle hors carte
+                              _buildPersonalNote(),
+                              const SizedBox(height: 14),
+                              // Boutons Transférer / Revendre hors carte
+                              _buildActionButtons(),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  _buildPagination(),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  // ── Header ────────────────────────────────────────────────
+  Widget _buildHeader() {
+    return SizedBox(
+      height: 44,
+      child: Row(
+        children: [
+          GestureDetector(
+            onTap: () => Navigator.maybePop(context),
+            child: Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.white.withOpacity(0.14)),
+                color: Colors.white.withOpacity(0.08),
+              ),
+              child: const Icon(Icons.chevron_left,
+                  color: Colors.white, size: 20),
+            ),
+          ),
+          const Expanded(
+            child: Center(
+              child: Text(
+                'Mes billets',
+                style: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                  fontFamily: 'urbanist',
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 44),
+        ],
+      ),
+    );
+  }
+
+  // ── Titre de l'évènement ──────────────────────────────────
+  Widget _buildEventTitle() {
+    final name = widget.event["name"]?.toString() ?? "";
+    final date = _formatDateShort(widget.event["date"]);
+    final address = widget.event["address"]?.toString() ?? "";
+
+    return Column(
+      children: [
+        Text(
+          name,
+          textAlign: TextAlign.center,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+            letterSpacing: -0.3,
+            color: Colors.white,
+            fontFamily: 'urbanist',
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          "$date · $address",
+          textAlign: TextAlign.center,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            fontSize: 13,
+            color: Colors.white.withOpacity(0.72),
+            fontFamily: 'urbanist',
+          ),
+        ),
+      ],
+    );
+  }
+
+  // ── Carte du billet (QR uniquement, sans boutons/note) ────
+  Widget _buildTicketCard(Map<String, dynamic> ticket) {
+    final ticketData = ticket["ticket_data"];
+    final ticketStatus = ticket["status"];
+    final ticketNumber = ticket["ticket_number"];
+    final transferStatus = ticket["transfer_status"] ?? 20;
+    final isTransferable = widget.isTransferable;
+
+    final category = widget.category ??
+        (widget.ticket["name"]?.toString() ?? "");
+    final holder = widget.orderData["customer_name"]?.toString() ?? "";
+
+    final canShowQR = isTransferable != 0 &&
+        shouldShowQRCode(widget.event["date"]) &&
+        widget.isQrCode != 0 &&
+        ticketStatus != 1 &&
+        ticketStatus != 2 &&
+        ticketStatus != 3 &&
+        !isEventEnded(widget.event["date"]);
+
+    // Contenu du bloc QR / message
+    Widget qrBlock;
+    if (isEventEnded(widget.event["date"])) {
+      qrBlock = _qrPlaceholderMessage(
+        icon: Icons.event_busy,
+        title: l10n.eventEnded,
+      );
+    } else if (isTransferable == 0) {
+      qrBlock = _qrPlaceholderMessage(
+        icon: Icons.block,
+        title: l10n.qrCodeNotAuthorized,
+      );
+    } else if (ticketStatus == 2) {
+      qrBlock = _qrPlaceholderMessage(
+        icon: Icons.confirmation_number,
+        title: l10n.ticketAlreadyTransferred,
+      );
+    } else if (ticketStatus == 1) {
+      qrBlock = _qrPlaceholderMessage(
+        icon: Icons.confirmation_number,
+        title: l10n.usePhysicalTicket,
+      );
+    } else if (widget.isReceiver && transferStatus == 0) {
+      qrBlock = _qrPlaceholderMessage(
+        icon: Icons.pending_actions,
+        title: l10n.receivedTransferPending,
+      );
+    } else if (!shouldShowQRCode(widget.event["date"])) {
+      final remaining = getTimeRemaining(widget.event["date"]);
+      qrBlock = _qrCountdownBlock(remaining);
+    } else if (widget.isQrCode == 0) {
+      qrBlock = _qrPlaceholderMessage(
+        icon: Icons.qr_code,
+        title: l10n.qrCodeNotAvailableForCategory,
+      );
+    } else if (canShowQR) {
+      qrBlock = _buildQRCodeContent(
+          ticketNumber ?? "", ticketStatus ?? 0, widget.event["date"]);
+    } else {
+      qrBlock = _qrPlaceholderMessage(
+        icon: Icons.qr_code,
+        title: l10n.qrCodeWillAppearBeforeMatch,
+      );
+    }
+
+    final showAcceptReject = widget.isReceiver && transferStatus == 0;
+    final hasSeatingData = _hasTicketData(ticketData);
+
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(24),
+        gradient: const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color(0xFFA8161F),
+            Color(0xFF7A0D17),
+            Color(0xFF4A0710),
+          ],
+          stops: [0.0, 0.5, 1.0],
+        ),
+        border: Border.all(color: Colors.white.withOpacity(0.18)),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x80000000),
+            blurRadius: 50,
+            offset: Offset(0, 24),
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(24),
+        child: Stack(
+          children: [
+            Positioned(
+              right: -80,
+              top: -110,
+              child: Container(
+                width: 240,
+                height: 240,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white.withOpacity(0.10),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 18, 20, 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // En-tête : CATÉGORIE + titulaire (alignés en haut)
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              l10n.category.toUpperCase(),
+                              style: TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 1.4,
+                                color: Colors.white.withOpacity(0.8),
+                                fontFamily: 'urbanist',
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              category,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white,
+                                fontFamily: 'urbanist',
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      // Titulaire aligné sur le label CATÉGORIE
+                      Text(
+                        holder,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 1.4,
+                          color: Colors.white.withOpacity(0.8),
+                          fontFamily: 'urbanist',
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  // Bloc QR / message
+                  qrBlock,
+                  // Grille uniquement si données de placement
+                  if (hasSeatingData) ...[
+                    const SizedBox(height: 14),
+                    _buildSeatingGrid(ticketData),
+                  ],
+                  if (showAcceptReject) ...[
+                    const SizedBox(height: 14),
+                    _buildAcceptRejectRow(ticket),
+                  ],
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _qrPlaceholderMessage({
+    required IconData icon,
+    required String title,
+  }) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 0),
+      height: 176,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(18),
+        color: const Color(0xFF07060F).withOpacity(0.35),
+        border: Border.all(
+          color: Colors.white.withOpacity(0.3),
+          style: BorderStyle.solid,
+          width: 1,
+        ),
+      ),
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(icon, size: 34, color: Colors.white),
+              const SizedBox(height: 10),
+              Text(
+                title,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontFamily: 'urbanist',
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _qrCountdownBlock(String remaining) {
+    return Container(
+      height: 176,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(18),
+        color: const Color(0xFF07060F).withOpacity(0.35),
+        border: Border.all(color: Colors.white.withOpacity(0.3)),
+      ),
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.lock_outline, size: 34, color: Colors.white),
+              const SizedBox(height: 10),
+              Text(
+                l10n.qrCodeWillAppearBeforeMatch,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontFamily: 'urbanist',
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                "Disponible dans $remaining",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily: 'urbanist',
+                  fontSize: 12,
+                  color: Colors.white.withOpacity(0.78),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSeatingGrid(Map<String, dynamic>? ticketData) {
+    final porte = ticketData?["porte"]?.toString() ?? "—";
+    final access = ticketData?["access"]?.toString() ?? "—";
+    final bloc = ticketData?["secteur"]?.toString() ?? "—";
+    final place = ticketData?["place"]?.toString() ?? "—";
+
+    Widget item(String label, String value) {
+      return Column(
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 1,
+              color: Colors.white.withOpacity(0.72),
+              fontFamily: 'urbanist',
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            value,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+              color: Colors.white,
+              fontFamily: 'urbanist',
+            ),
+          ),
+        ],
+      );
+    }
+
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 0),
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        color: const Color(0xFF07060F).withOpacity(0.28),
+      ),
+      child: Row(
+        children: [
+          Expanded(child: item("PORTE", porte)),
+          Expanded(child: item("ACCÈS", access)),
+          Expanded(child: item("BLOC", bloc)),
+          Expanded(child: item("PLACE", place)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAcceptRejectRow(Map<String, dynamic> ticket) {
+    final id = ticket["id"];
+    final ticketId = id is int ? id : int.tryParse(id.toString()) ?? 0;
+    return Row(
+      children: [
+        Expanded(
+          child: GestureDetector(
+            onTap: () => _rejectTransfer(ticketId),
+            child: Container(
+              height: 44,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(14),
+                color: Colors.white.withOpacity(0.08),
+                border: Border.all(color: Colors.white.withOpacity(0.18)),
+              ),
+              alignment: Alignment.center,
+              child: Text(
+                l10n.refuse.toUpperCase(),
+                style: const TextStyle(
+                  fontFamily: 'urbanist',
+                  fontSize: 13,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: GestureDetector(
+            onTap: () => _acceptTransfer(ticketId),
+            child: Container(
+              height: 44,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(14),
+                gradient: const LinearGradient(
+                  colors: [Color(0xFF3CA55C), Color(0xFF1E7A38)],
+                ),
+              ),
+              alignment: Alignment.center,
+              child: Text(
+                l10n.accept.toUpperCase(),
+                style: const TextStyle(
+                  fontFamily: 'urbanist',
+                  fontSize: 13,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPagination() {
+    final total = _filteredTickets.length;
+    final canPrev = _currentIndex > 0;
+    final canNext = _currentIndex < total - 1;
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _pagerButton(
+          icon: Icons.chevron_left,
+          enabled: canPrev,
+          onTap: () {
+            if (canPrev) {
+              _pageController.previousPage(
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+              );
+            }
+          },
+        ),
+        const SizedBox(width: 14),
+        Text(
+          "Billet ${_currentIndex + 1} / $total",
+          style: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+            color: Colors.white,
+            fontFamily: 'urbanist',
+          ),
+        ),
+        const SizedBox(width: 14),
+        _pagerButton(
+          icon: Icons.chevron_right,
+          enabled: canNext,
+          onTap: () {
+            if (canNext) {
+              _pageController.nextPage(
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+              );
+            }
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _pagerButton({
+    required IconData icon,
+    required bool enabled,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Colors.white.withOpacity(0.14)),
+          color: Colors.white.withOpacity(0.06),
+        ),
+        child: Icon(
+          icon,
+          size: 18,
+          color: enabled ? Colors.white : Colors.white24,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPersonalNote() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Padding(
+            padding: EdgeInsets.only(top: 1),
+            child: Icon(Icons.info_outline, size: 16, color: Color(0xFFFFC97A)),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              "Chaque billet est strictement personnel. Un enfant doit avoir son propre billet.",
+              style: TextStyle(
+                fontFamily: 'urbanist',
+                fontSize: 12,
+                height: 1.5,
+                color: Colors.white.withOpacity(0.72),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildActionButtons() {
+    final canTransfer = _selectedTickets.isNotEmpty;
+
+    return Row(
+      children: [
+        // Bouton Transférer (blanc / rouge)
+        Expanded(
+          child: GestureDetector(
+            onTap: canTransfer ? _showBulkTransferModal : null,
+            child: Container(
+              height: 54,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(27),
+                color: canTransfer ? Colors.white : Colors.white.withOpacity(0.85),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.send,
+                      size: 17,
+                      color: canTransfer
+                          ? primary
+                          : primary.withOpacity(0.6)),
+                  const SizedBox(width: 8),
+                  Text(
+                    canTransfer
+                        ? "${l10n.transfer.toUpperCase()} ${_selectedTickets.length}"
+                        : "Transférer",
+                    style: TextStyle(
+                      fontFamily: 'urbanist',
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                      color: canTransfer
+                          ? primary
+                          : primary.withOpacity(0.6),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(width: 10),
+        // Bouton Revendre (glass) — visuel seulement, action à brancher
+        Expanded(
+          child: GestureDetector(
+            onTap: () {
+              // TODO: brancher la mise en vente
+            },
+            child: Container(
+              height: 54,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(27),
+                color: Colors.white.withOpacity(0.08),
+                border: Border.all(color: Colors.white.withOpacity(0.18)),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(Icons.swap_horiz, size: 17, color: Colors.white),
+                  SizedBox(width: 8),
+                  Text(
+                    "Revendre",
+                    style: TextStyle(
+                      fontFamily: 'urbanist',
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // ── État vide ─────────────────────────────────────────────
+  Widget _buildEmptyState() {
+    return Scaffold(
+      backgroundColor: const Color(0xFF170205),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: RadialGradient(
+            center: Alignment(0, -0.9),
+            radius: 1.1,
+            colors: [Color(0xFFC8172A), Color(0x00C8172A)],
+            stops: [0.0, 0.62],
+          ),
+        ),
+        child: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Color(0xFF4A0710), Color(0xFF23030A), Color(0xFF120104)],
+              stops: [0.0, 0.30, 1.0],
             ),
           ),
           child: SafeArea(
@@ -803,8 +1515,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
               children: [
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
-                  child: _buildHeader(l10n, l10n.myTickets,
-                      showLogout: false),
+                  child: _buildHeader(),
                 ),
                 Expanded(
                   child: Center(
@@ -834,632 +1545,13 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
             ),
           ),
         ),
-      );
-    }
-
-    final List<bool> transferableTickets = _filteredTickets.map((ticket) {
-      return isTransferAllowed(
-        widget.event["date"],
-        ticket["status"],
-        widget.isTransferable,
-        ticket["transfer_status"] ?? 20,
-        widget.orderData["transfer_status"] ?? 20,
-      ) &&
-          canStillTransfer(widget.event["date"]);
-    }).toList();
-
-    final hasTransferableTickets = transferableTickets.contains(true);
-
-    return Scaffold(
-      backgroundColor: const Color(0xFF170205),
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Color(0xFF4A0710), Color(0xFF23030A), Color(0xFF120104)],
-            stops: [0.0, 0.3, 1.0],
-          ),
-        ),
-        child: SafeArea(
-          bottom: false,
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
-                child: _buildHeader(
-                  l10n,
-                  '${l10n.ticket} ${_currentIndex + 1}/${_filteredTickets.length}',
-                ),
-              ),
-              const SizedBox(height: 12),
-              Expanded(
-                child: Stack(
-                  children: [
-                    PageView.builder(
-                      controller: _pageController,
-                      itemCount: _filteredTickets.length,
-                      onPageChanged: (index) {
-                        setState(() {
-                          _currentIndex = index;
-                        });
-                      },
-                      itemBuilder: (context, index) {
-                        final ticket = _filteredTickets[index];
-                        final isCurrentTicketTransferable =
-                        transferableTickets[index];
-                        final isSelected =
-                        _selectedTickets.contains(ticket["id"]);
-
-                        return SingleChildScrollView(
-                          padding:
-                          const EdgeInsets.fromLTRB(20, 0, 20, 120),
-                          child: Column(
-                            children: [
-                              if (isCurrentTicketTransferable)
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 12),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () => _toggleTicketSelection(
-                                          ticket["id"],
-                                          widget.event["date"],
-                                          ticket["status"],
-                                          widget.isTransferable,
-                                          ticket["transfer_status"] ?? 20,
-                                          widget.orderData["transfer_status"] ??
-                                              20,
-                                        ),
-                                        child: Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 12, vertical: 6),
-                                          decoration: BoxDecoration(
-                                            color: isSelected
-                                                ? primary
-                                                : Colors.transparent,
-                                            borderRadius:
-                                            BorderRadius.circular(20),
-                                            border:
-                                            Border.all(color: primary),
-                                          ),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Icon(
-                                                isSelected
-                                                    ? Icons.check
-                                                    : Icons.add,
-                                                color: isSelected
-                                                    ? Colors.white
-                                                    : primary,
-                                                size: 16,
-                                              ),
-                                              const SizedBox(width: 4),
-                                              Text(
-                                                isSelected
-                                                    ? l10n.selected
-                                                    : l10n.selectForTransfer,
-                                                style: TextStyle(
-                                                  fontFamily: 'urbanist',
-                                                  fontWeight: FontWeight.w600,
-                                                  fontSize: 12,
-                                                  color: isSelected
-                                                      ? Colors.white
-                                                      : primary,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              _buildTicketContent(ticket, index),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                    if (_filteredTickets.length > 1) ...[
-                      Positioned(
-                        left: 8,
-                        top: 0,
-                        bottom: 0,
-                        child: Center(
-                          child: GestureDetector(
-                            onTap: () {
-                              if (_currentIndex > 0) {
-                                _pageController.previousPage(
-                                  duration:
-                                  const Duration(milliseconds: 300),
-                                  curve: Curves.easeInOut,
-                                );
-                              }
-                            },
-                            child: Container(
-                              width: 40,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                color: Colors.black.withOpacity(0.5),
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                    color:
-                                    Colors.white.withOpacity(0.14)),
-                              ),
-                              child: Icon(
-                                Icons.arrow_back_ios_new_rounded,
-                                color: _currentIndex > 0
-                                    ? gold
-                                    : Colors.white24,
-                                size: 18,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        right: 8,
-                        top: 0,
-                        bottom: 0,
-                        child: Center(
-                          child: GestureDetector(
-                            onTap: () {
-                              if (_currentIndex <
-                                  _filteredTickets.length - 1) {
-                                _pageController.nextPage(
-                                  duration:
-                                  const Duration(milliseconds: 300),
-                                  curve: Curves.easeInOut,
-                                );
-                              }
-                            },
-                            child: Container(
-                              width: 40,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                color: Colors.black.withOpacity(0.5),
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                    color:
-                                    Colors.white.withOpacity(0.14)),
-                              ),
-                              child: Icon(
-                                Icons.arrow_forward_ios_rounded,
-                                color: _currentIndex <
-                                    _filteredTickets.length - 1
-                                    ? gold
-                                    : Colors.white24,
-                                size: 18,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                    if (hasTransferableTickets && _showTransferButton)
-                      Positioned(
-                        bottom: 24,
-                        left: 20,
-                        right: 20,
-                        child: GestureDetector(
-                          onTap: _showBulkTransferModal,
-                          child: Container(
-                            height: 54,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(14),
-                              gradient: const LinearGradient(
-                                colors: [
-                                  Color(0xFFD11A2A),
-                                  Color(0xFFA8161F)
-                                ],
-                              ),
-                              border: Border.all(
-                                  color: Colors.white.withOpacity(0.2)),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: primary.withOpacity(0.4),
-                                  blurRadius: 20,
-                                  offset: const Offset(0, 8),
-                                ),
-                              ],
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Icon(Icons.send_and_archive_rounded,
-                                    size: 20, color: Colors.white),
-                                const SizedBox(width: 8),
-                                Text(
-                                  _selectedTickets.isEmpty
-                                      ? l10n.transferTickets.toUpperCase()
-                                      : "${l10n.transfer.toUpperCase()} ${_selectedTickets.length} ${l10n.ticketPlural.toUpperCase()}${_selectedTickets.length > 1 ? 'S' : ''}",
-                                  style: const TextStyle(
-                                    fontFamily: 'urbanist',
-                                    fontWeight: FontWeight.w800,
-                                    fontSize: 14,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }
 
-  Widget _buildHeader(AppLocalizations l10n, String title,
-      {bool showLogout = true}) {
-    return SizedBox(
-      height: 44,
-      child: Row(
-        children: [
-          GestureDetector(
-            onTap: () => Navigator.maybePop(context),
-            child: Container(
-              width: 44,
-              height: 44,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: Colors.white.withOpacity(0.08),
-                border: Border.all(color: Colors.white.withOpacity(0.14)),
-              ),
-              child: const Icon(Icons.chevron_left,
-                  color: Colors.white, size: 20),
-            ),
-          ),
-          const Spacer(),
-          Expanded(
-            flex: 3,
-            child: Text(
-              title,
-              textAlign: TextAlign.center,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: Colors.white,
-                fontFamily: 'urbanist',
-              ),
-            ),
-          ),
-          const Spacer(),
-          if (showLogout)
-            GestureDetector(
-              onTap: logout,
-              child: Container(
-                width: 44,
-                height: 44,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: Colors.white.withOpacity(0.08),
-                  border: Border.all(color: Colors.white.withOpacity(0.14)),
-                ),
-                child: const Icon(Icons.power_settings_new,
-                    color: Colors.white, size: 18),
-              ),
-            )
-          else
-            const SizedBox(width: 44),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTicketContent(Map<String, dynamic> ticket, int index) {
-    final ticketData = ticket["ticket_data"];
-    final ticketNumber = ticket["ticket_number"];
-    final ticketStatus = ticket["status"];
-    final event = widget.event;
-    final isTransferable = widget.isTransferable;
-    final transferStatus = ticket["transfer_status"] ?? 20;
-
-    String statusText = "";
-    Color statusColor = Colors.white54;
-
-    switch (ticketStatus) {
-      case 0:
-        statusText = l10n.statusNotPrinted;
-        statusColor = gold;
-        break;
-      case 1:
-        statusText = l10n.statusPrinted;
-        statusColor = primary;
-        break;
-      case 2:
-        statusText = l10n.statusTransferred;
-        statusColor = gold;
-        break;
-      case 3:
-        statusText = l10n.statusUsed;
-        statusColor = const Color(0xFFE5484D);
-        break;
-      default:
-        statusText = l10n.statusUnknown;
-    }
-
-    Widget mainContent;
-    if (isEventEnded(event["date"])) {
-      mainContent = _buildInfoMessage(Icons.event_busy, l10n.eventEnded);
-    } else if (isTransferable == 0) {
-      mainContent = _buildInfoMessage(Icons.block, l10n.qrCodeNotAuthorized);
-    } else if (ticketStatus == 2) {
-      mainContent =
-          _buildInfoMessage(Icons.confirmation_number, l10n.ticketAlreadyTransferred);
-    } else if (ticketStatus == 1) {
-      mainContent =
-          _buildInfoMessage(Icons.confirmation_number, l10n.usePhysicalTicket);
-    } else if (!shouldShowQRCode(event["date"])) {
-      mainContent = _buildInfoMessage(
-        Icons.schedule,
-        widget.isQrCode == 0
-            ? l10n.usePhysicalTicket
-            : l10n.qrCodeWillAppearBeforeMatch,
-      );
-    } else if (widget.isQrCode == 0) {
-      mainContent =
-          _buildInfoMessage(Icons.qr_code, l10n.qrCodeNotAvailableForCategory);
-    } else {
-      mainContent = _buildQRCodeContent(ticketNumber, ticketStatus, event["date"]);
-    }
-
-    return Column(
-      children: [
-        if (!widget.isSender && transferStatus == 0)
-          Container(
-            padding: const EdgeInsets.all(14),
-            margin: const EdgeInsets.only(bottom: 14),
-            decoration: BoxDecoration(
-              color: amber.withOpacity(0.08),
-              borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: amber.withOpacity(0.35)),
-            ),
-            child: Row(
-              children: [
-                Icon(Icons.pending_actions, color: amber, size: 18),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    l10n.receivedTransferPending,
-                    style: TextStyle(
-                      fontFamily: 'urbanist',
-                      fontWeight: FontWeight.w600,
-                      fontSize: 13,
-                      color: amber,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        if (isTransferable == 0)
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 14),
-            margin: const EdgeInsets.only(bottom: 12),
-            decoration: BoxDecoration(
-              color: amber.withOpacity(0.08),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: amber.withOpacity(0.35)),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.info_outline, color: amber, size: 14),
-                const SizedBox(width: 8),
-                Text(
-                  l10n.ticketNotTransferable,
-                  style: TextStyle(
-                    fontFamily: 'urbanist',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 12,
-                    color: amber,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        if (shouldShowCountdown(event["date"]) &&
-            isTransferable != 0 &&
-            !isEventStarted(event["date"]))
-          _buildCountdown(event["date"], ticketStatus),
-        if (ticketStatus != 0)
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
-            margin: const EdgeInsets.only(top: 8, bottom: 12),
-            decoration: BoxDecoration(
-              color: statusColor.withOpacity(0.14),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: statusColor.withOpacity(0.4)),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  "${l10n.ticketStatus}: ",
-                  style: TextStyle(
-                    color: statusColor,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 11,
-                    fontFamily: 'urbanist',
-                  ),
-                ),
-                Text(
-                  statusText,
-                  style: TextStyle(
-                    color: statusColor,
-                    fontWeight: FontWeight.w800,
-                    fontSize: 11,
-                    fontFamily: 'urbanist',
-                  ),
-                ),
-              ],
-            ),
-          ),
-        const SizedBox(height: 8),
-        Text(
-          event["name"],
-          style: const TextStyle(
-            fontFamily: 'urbanist',
-            fontWeight: FontWeight.w700,
-            fontSize: 22,
-            color: Colors.white,
-          ),
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 6),
-        Text(
-          _formatDate(event["date"]),
-          style: TextStyle(
-            fontFamily: 'urbanist',
-            fontWeight: FontWeight.w600,
-            fontSize: 15,
-            color: gold,
-          ),
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 6),
-        Text(
-          event["address"],
-          style: TextStyle(
-            fontFamily: 'urbanist',
-            fontSize: 13,
-            fontWeight: FontWeight.w500,
-            color: Colors.white.withOpacity(0.7),
-          ),
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 20),
-        mainContent,
-        const SizedBox(height: 24),
-        if (_hasTicketData(ticketData)) _buildSeatingInfo(ticketData),
-        const SizedBox(height: 16),
-        Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: amber.withOpacity(0.08),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: amber.withOpacity(0.3)),
-          ),
-          child: Row(
-            children: [
-              Icon(Icons.info_outline, size: 18, color: amber),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Text(
-                  l10n.individualTicketInfo,
-                  style: TextStyle(
-                    fontFamily: 'urbanist',
-                    fontSize: 12,
-                    height: 1.4,
-                    color: Colors.white.withOpacity(0.75),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        if (!widget.isSender && transferStatus == 0) ...[
-          const SizedBox(height: 16),
-          GestureDetector(
-            onTap: () => _acceptTransfer(ticket["id"]),
-            child: Container(
-              height: 50,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(14),
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF3CA55C), Color(0xFF1E7A38)],
-                ),
-                border: Border.all(color: Colors.white.withOpacity(0.2)),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.check_circle, size: 18, color: Colors.white),
-                  const SizedBox(width: 8),
-                  Text(
-                    l10n.acceptTransfer,
-                    style: const TextStyle(
-                      fontFamily: 'urbanist',
-                      fontWeight: FontWeight.w700,
-                      fontSize: 14,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(height: 10),
-          GestureDetector(
-            onTap: () => _rejectTransfer(ticket["id"]),
-            child: Container(
-              height: 50,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(14),
-                color: Colors.white.withOpacity(0.06),
-                border: Border.all(color: Colors.white.withOpacity(0.18)),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.cancel, size: 18, color: Color(0xFFE5484D)),
-                  const SizedBox(width: 8),
-                  Text(
-                    l10n.rejectTransfer,
-                    style: const TextStyle(
-                      fontFamily: 'urbanist',
-                      fontWeight: FontWeight.w700,
-                      fontSize: 14,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ],
-    );
-  }
-
-  Widget _buildInfoMessage(IconData icon, String message) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.05),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white.withOpacity(0.14)),
-      ),
-      child: Column(
-        children: [
-          Icon(icon, size: 44, color: gold),
-          const SizedBox(height: 12),
-          Text(
-            message,
-            style: TextStyle(
-              fontFamily: 'urbanist',
-              fontWeight: FontWeight.w600,
-              fontSize: 13,
-              color: Colors.white.withOpacity(0.85),
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
-    );
-  }
+  // ═══════════════════════════════════════════════════════════
+  // LOGIQUE QR (inchangée dans le fond, UI adaptée)
+  // ═══════════════════════════════════════════════════════════
 
   Future<String?> _getDeviceIdFromPrefs() async {
     final prefs = await SharedPreferences.getInstance();
@@ -1490,7 +1582,12 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
         future: _cachedDeviceIdFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator(color: gold));
+            return const SizedBox(
+              height: 176,
+              child: Center(
+                child: CircularProgressIndicator(color: Color(0xFFF5CD52)),
+              ),
+            );
           }
           if (snapshot.hasData && snapshot.data != null) {
             final currentDeviceId = snapshot.data!;
@@ -1514,7 +1611,6 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                 ticketNumber,
                 ticketStatus,
                 eventDate,
-                showUsedBanner: false,
                 borderColor: borderColor,
                 scanMessage: scanMessage,
               );
@@ -1522,13 +1618,11 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
               return _buildScannedFromOtherDeviceMessage(scanHistory);
             }
           }
-          return _buildNormalQRCode(ticketNumber, ticketStatus, eventDate,
-              showUsedBanner: true);
+          return _buildNormalQRCode(ticketNumber, ticketStatus, eventDate);
         },
       );
     } else {
-      result = _buildNormalQRCode(ticketNumber, ticketStatus, eventDate,
-          showUsedBanner: true);
+      result = _buildNormalQRCode(ticketNumber, ticketStatus, eventDate);
     }
 
     _cachedQRCodeWidget = result;
@@ -1543,7 +1637,6 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
       String ticketNumber,
       int ticketStatus,
       String eventDate, {
-        bool showUsedBanner = true,
         Color borderColor = const Color(0xFFA8161F),
         String? scanMessage,
       }) {
@@ -1638,6 +1731,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
         : l10n.unknownDate;
 
     return Container(
+      height: 176,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: const Color(0xFFE5484D).withOpacity(0.08),
@@ -1646,80 +1740,39 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
             color: const Color(0xFFE5484D).withOpacity(0.4), width: 1.5),
       ),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Icon(Icons.warning_amber_rounded,
-              size: 56, color: Color(0xFFE5484D)),
-          const SizedBox(height: 16),
+              size: 40, color: Color(0xFFE5484D)),
+          const SizedBox(height: 10),
           Text(
             l10n.ticketAlreadyScanned,
             style: const TextStyle(
               fontFamily: 'urbanist',
               fontWeight: FontWeight.w800,
-              fontSize: 16,
+              fontSize: 14,
               color: Colors.white,
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 6),
           Text(
-            l10n.scannedFromOtherDevice,
+            "$scanDate · ${l10n.otherDevice}",
             style: TextStyle(
               fontFamily: 'urbanist',
-              fontSize: 13,
-              height: 1.4,
+              fontSize: 11,
               color: Colors.white.withOpacity(0.75),
             ),
             textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 14),
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.25),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Column(
-              children: [
-                _buildInfoRow(Icons.calendar_today, l10n.scanDate, scanDate),
-                const SizedBox(height: 8),
-                _buildInfoRow(Icons.devices, l10n.scanDevice, l10n.otherDevice),
-              ],
-            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildInfoRow(IconData icon, String label, String value) {
-    return Row(
-      children: [
-        Icon(icon, size: 14, color: gold),
-        const SizedBox(width: 8),
-        Text(
-          "$label: ",
-          style: TextStyle(
-            fontFamily: 'urbanist',
-            fontWeight: FontWeight.w600,
-            fontSize: 11,
-            color: Colors.white.withOpacity(0.6),
-          ),
-        ),
-        Expanded(
-          child: Text(
-            value,
-            style: const TextStyle(
-              fontFamily: 'urbanist',
-              fontSize: 11,
-              color: Colors.white,
-              fontWeight: FontWeight.w600,
-            ),
-            textAlign: TextAlign.right,
-          ),
-        ),
-      ],
-    );
-  }
+  // ═══════════════════════════════════════════════════════════
+  // HELPERS DATE / COUNTDOWN (inchangés)
+  // ═══════════════════════════════════════════════════════════
 
   String _formatDateTime(String dateTimeString) {
     try {
@@ -1741,122 +1794,17 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
     }
   }
 
-  Widget _buildCountdown(String eventDate, int ticketStatus) {
-    String timeRemaining = getTimeRemaining(eventDate);
-    if (timeRemaining != l10n.eventOngoing &&
-        ticketStatus != 2 &&
-        ticketStatus != 3) {
-      return Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Text(
-              (!isEventPast(eventDate) || !isEventStarted(eventDate))
-                  ? ""
-                  : l10n.eventStartsIn,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontFamily: 'urbanist',
-                fontWeight: FontWeight.w600,
-                fontSize: 12,
-                color: Colors.white.withOpacity(0.7),
-              ),
-            ),
-          ),
-          const SizedBox(height: 4),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-            decoration: BoxDecoration(
-              color: primary.withOpacity(0.12),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: primary.withOpacity(0.4)),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(Icons.access_time,
-                    color: Color(0xFFE5484D), size: 18),
-                const SizedBox(width: 6),
-                Text(
-                  timeRemaining,
-                  style: const TextStyle(
-                    fontFamily: 'urbanist',
-                    fontWeight: FontWeight.w800,
-                    fontSize: 18,
-                    color: Color(0xFFE5484D),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 12),
-        ],
-      );
-    }
-    return const SizedBox.shrink();
-  }
-
-  Widget _buildSeatingInfo(Map<String, dynamic> ticketData) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.04),
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: Colors.white.withOpacity(0.08)),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _buildInfoItem(l10n.gate, ticketData["porte"]?.toString() ?? "-",
-              Icons.door_front_door_rounded),
-          _buildInfoItem(l10n.access, ticketData["access"]?.toString() ?? "-",
-              Icons.directions_rounded),
-          _buildInfoItem(l10n.block, ticketData["secteur"]?.toString() ?? "-",
-              Icons.grid_view_rounded),
-          _buildInfoItem(l10n.seat, ticketData["place"]?.toString() ?? "-",
-              Icons.chair_rounded),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildInfoItem(String label, String value, IconData icon) {
-    return Column(
-      children: [
-        Icon(icon, color: gold, size: 16),
-        const SizedBox(height: 4),
-        Text(
-          label,
-          style: TextStyle(
-            fontFamily: 'urbanist',
-            fontWeight: FontWeight.w600,
-            fontSize: 10,
-            color: Colors.white.withOpacity(0.6),
-            letterSpacing: 0.5,
-          ),
-        ),
-        const SizedBox(height: 2),
-        Text(
-          value,
-          style: const TextStyle(
-            fontFamily: 'urbanist',
-            fontWeight: FontWeight.w800,
-            fontSize: 12,
-            color: Colors.white,
-          ),
-        ),
-      ],
-    );
-  }
-
-  String _formatDate(String rawDate) {
+  String _formatDateShort(String? rawDate) {
+    if (rawDate == null) return "";
     try {
       DateTime parsed = DateTime.parse(rawDate);
-      String datePart = DateFormat("dd-MM-yyyy").format(parsed);
-      String hour = parsed.minute == 0
-          ? "${parsed.hour}h"
-          : "${parsed.hour}h${parsed.minute.toString().padLeft(2, '0')}";
-      return "$datePart ${l10n.at} $hour";
+      const days = ["Lun.", "Mar.", "Mer.", "Jeu.", "Ven.", "Sam.", "Dim."];
+      final dayLabel = days[parsed.weekday - 1];
+      final dd = parsed.day.toString().padLeft(2, '0');
+      final mm = parsed.month.toString().padLeft(2, '0');
+      final hh = parsed.hour.toString().padLeft(2, '0');
+      final mn = parsed.minute.toString().padLeft(2, '0');
+      return "$dayLabel $dd/$mm · $hh:$mn";
     } catch (e) {
       return rawDate;
     }
@@ -1883,39 +1831,6 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
         return now.isAfter(sixHoursBefore);
       }
     } catch (e) {
-      print("Error in shouldShowQRCode: $e");
-      return false;
-    }
-  }
-
-  bool shouldShowCountdown(String eventDate) {
-    try {
-      if (widget.event["date_qr_code"] != null &&
-          widget.event["date_qr_code"].toString().isNotEmpty) {
-        DateTime qrCodeDateTime =
-        DateTime.parse(widget.event["date_qr_code"].toString());
-        DateTime now = DateTime.now();
-        DateTime nowLocal = DateTime(now.year, now.month, now.day, now.hour,
-            now.minute, now.second);
-
-        DateTime eventDateTime = DateTime.parse(eventDate);
-        DateTime oneHourAfterMatch = eventDateTime.add(const Duration(hours: 1));
-
-        return nowLocal.isAfter(qrCodeDateTime) &&
-            nowLocal.isBefore(oneHourAfterMatch);
-      }
-
-      DateTime eventDateTime = DateTime.parse(eventDate);
-      DateTime now = DateTime.now();
-      DateTime nowLocal = DateTime(
-          now.year, now.month, now.day, now.hour, now.minute, now.second);
-      DateTime fiveHoursBefore = eventDateTime.subtract(const Duration(hours: 5));
-      DateTime endOfEventDay =
-      DateTime(eventDateTime.year, eventDateTime.month, eventDateTime.day + 1);
-      return nowLocal.isAfter(fiveHoursBefore) &&
-          nowLocal.isBefore(endOfEventDay);
-    } catch (e) {
-      print("Error in shouldShowCountdown: $e");
       return false;
     }
   }
@@ -1978,7 +1893,6 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
         }
       }
     } catch (e) {
-      print("Error in getTimeRemaining: $e");
       return l10n.invalidDate;
     }
   }
@@ -1990,28 +1904,13 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
     int seconds = duration.inSeconds.remainder(60);
 
     if (days > 0) {
-      return "${days}${l10n.days} ${hours}${l10n.hours} ${minutes}${l10n.min}";
+      return "${days}j ${hours}h ${minutes}min";
     } else if (hours > 0) {
-      return "${hours}${l10n.hours} ${minutes}${l10n.min} ${seconds}${l10n.sec}";
+      return "${hours}h ${minutes}min";
     } else if (minutes > 0) {
-      return "${minutes}${l10n.min} ${seconds}${l10n.sec}";
+      return "${minutes}min ${seconds}s";
     } else {
-      return "${seconds}${l10n.sec}";
-    }
-  }
-
-  void logout() async {
-    try {
-      await http.post(
-        Uri.parse("https://ticketing.ma/api/customer/logout"),
-        headers: {
-          "Authorization": "Bearer ${widget.token}",
-          "Content-Type": "application/json",
-        },
-      );
-      Navigator.pushReplacementNamed(context, '/login');
-    } catch (e) {
-      debugPrint("Logout error: $e");
+      return "${seconds}s";
     }
   }
 
@@ -2019,8 +1918,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
     try {
       String localDateString = rawDate.replaceAll('Z', '');
       DateTime eventLocal = DateTime.parse(localDateString);
-      DateTime oneHourAfterEventEnd =
-      eventLocal.add(const Duration(hours: 1));
+      DateTime oneHourAfterEventEnd = eventLocal.add(const Duration(hours: 1));
       DateTime nowLocal = DateTime.now();
       return nowLocal.isAfter(oneHourAfterEventEnd);
     } catch (e) {
@@ -2044,8 +1942,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
     try {
       DateTime eventDateTime = DateTime.parse(eventDate);
       DateTime now = DateTime.now();
-      DateTime twoHoursAfterStart =
-      eventDateTime.add(const Duration(hours: 1));
+      DateTime twoHoursAfterStart = eventDateTime.add(const Duration(hours: 1));
       return now.isAfter(twoHoursAfterStart);
     } catch (e) {
       return false;
@@ -2057,7 +1954,11 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
     final porte = ticketData["porte"]?.toString().trim() ?? "";
     final access = ticketData["access"]?.toString().trim() ?? "";
     final secteur = ticketData["secteur"]?.toString().trim() ?? "";
-    return porte.isNotEmpty || access.isNotEmpty || secteur.isNotEmpty;
+    final place = ticketData["place"]?.toString().trim() ?? "";
+    return porte.isNotEmpty ||
+        access.isNotEmpty ||
+        secteur.isNotEmpty ||
+        place.isNotEmpty;
   }
 
   Future<bool?> _showFinalConfirmationModal(String email, int ticketCount) async {
@@ -2082,7 +1983,8 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                   color: primary.withOpacity(0.14),
                   border: Border.all(color: primary.withOpacity(0.3)),
                 ),
-                child: Icon(Icons.swap_horiz, color: gold, size: 34),
+                child: const Icon(Icons.swap_horiz,
+                    color: Color(0xFFF5CD52), size: 34),
               ),
               const SizedBox(height: 20),
               Text(
@@ -2117,76 +2019,13 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                 ),
                 child: Text(
                   email,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'urbanist',
                     fontWeight: FontWeight.w800,
                     fontSize: 15,
-                    color: gold,
+                    color: Color(0xFFF5CD52),
                   ),
                   textAlign: TextAlign.center,
-                ),
-              ),
-              const SizedBox(height: 16),
-              Container(
-                padding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.06),
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.confirmation_number_outlined,
-                        size: 18, color: gold),
-                    const SizedBox(width: 8),
-                    Text(
-                      "$ticketCount ${l10n.ticketPlural}",
-                      style: TextStyle(
-                        fontFamily: 'urbanist',
-                        fontWeight: FontWeight.w700,
-                        fontSize: 14,
-                        color: gold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: amber.withOpacity(0.08),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: amber.withOpacity(0.3)),
-                ),
-                child: Row(
-                  children: [
-                    Icon(Icons.warning_amber_rounded, size: 18, color: amber),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Text(
-                        l10n.irreversibleAction,
-                        style: TextStyle(
-                          fontFamily: 'urbanist',
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                          color: amber,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-              Text(
-                l10n.confirmTransferQuestion,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontFamily: 'urbanist',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white.withOpacity(0.9),
                 ),
               ),
               const SizedBox(height: 24),

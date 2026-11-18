@@ -94,7 +94,7 @@ class _ChatbotPageState extends State<ChatbotPage> {
   // ✅ Vérification des horaires (9h - 19h)
   bool _isWithinBusinessHours() {
     final now = DateTime.now();
-    return now.hour >= 9 && now.hour < 19;
+    return now.hour >= 9 && now.hour < 23;
   }
 
   // ═══════════════════════════════════════════════════════
@@ -337,7 +337,7 @@ class _ChatbotPageState extends State<ChatbotPage> {
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  'Nos conseillers sont disponibles de 9h à 19h. Veuillez réessayer pendant les heures d\'ouverture.',
+                  'Nos conseillers sont disponibles de 9h à 23h. Veuillez réessayer pendant les heures d\'ouverture.',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: 'urbanist',

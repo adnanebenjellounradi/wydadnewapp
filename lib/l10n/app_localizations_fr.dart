@@ -2948,4 +2948,94 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get supportUnavailableMessage => 'Le service client n\'est pas disponible pour le moment. Veuillez réessayer plus tard.';
+
+  @override
+  String get transferTicketsButton => 'Transférer des billets';
+
+  @override
+  String get receivedTicketsSection => 'Billets reçus';
+
+  @override
+  String get receivedFrom => 'Reçu de';
+
+  @override
+  String get transferTicketsTitle => 'Transférer des billets';
+
+  @override
+  String get selectTicketsHint => 'Cochez les billets à envoyer, un par un ou toute une commande d\'un coup.';
+
+  @override
+  String get selectAll => 'Tout sélectionner';
+
+  @override
+  String get deselectAll => 'Tout désélectionner';
+
+  @override
+  String get unavailable => 'Indisponible';
+
+  @override
+  String get selectionLabel => 'Sélection';
+
+  @override
+  String get continueLabel => 'Continuer';
+
+  @override
+  String get selectAtLeastOneTicket => 'Sélectionnez au moins un billet';
+
+  @override
+  String get unselectableNotice => 'Les billets déjà transférés ou en revente ne peuvent pas être sélectionnés.';
+
+  @override
+  String get qrWillAppear => 'Le QR code s\'affichera 3 h avant le match';
+
+  @override
+  String get availableIn => 'Disponible dans';
+
+  @override
+  String get kickoffIn => 'Coup d\'envoi dans';
+
+  @override
+  String get matchStarted => 'Match commencé';
+
+  @override
+  String get presentCodeAtEntrance => 'Présentez ce code à l\'entrée. Luminosité augmentée automatiquement.';
+
+  @override
+  String get transferExplanation => 'Transfert gratuit à un proche. Une fois envoyé, il ne peut plus être annulé : seul le destinataire peut l\'accepter ou le refuser.';
+
+  @override
+  String get ticketsToTransfer => 'Billets à transférer';
+
+  @override
+  String get recipientEmail => 'E-mail du destinataire';
+
+  @override
+  String get or => 'ou';
+
+  @override
+  String get scanProfileQR => 'Scanner le QR code de son profil';
+
+  @override
+  String get youWillSend => 'Vous allez envoyer';
+
+  @override
+  String get irreversibleWarning => 'Action irréversible. Une fois envoyés, vous ne pourrez plus annuler ce transfert. Seul le destinataire pourra l\'accepter ou le refuser.';
+
+  @override
+  String get transferHistory => 'Historique des transferts';
+
+  @override
+  String get sent => 'Envoyés';
+
+  @override
+  String get received => 'Reçus';
+
+  @override
+  String get noTransfers => 'Aucun transfert';
+
+  @override
+  String get transferHistoryExplanation => 'Un transfert reste « en attente » tant que le destinataire n\'a pas répondu. Lui seul peut l\'accepter ou le refuser : un transfert envoyé ne peut pas être annulé. Une fois accepté, le billet est réémis à son nom et l\'ancien QR code n\'est plus valable. S\'il est refusé, le billet vous revient.';
+
+  @override
+  String get ticketSingularLower => 'billet';
 }

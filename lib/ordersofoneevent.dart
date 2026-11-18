@@ -5,6 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'l10n/app_localizations.dart';
 import 'transfertHistory.dart';
+import 'select_tickets_to_transfer_page.dart'; // E5b
+import 'swipetickets.dart'; // ⚠️ adapte le nom réel
 
 class OrdersOfOneEventPage extends StatefulWidget {
   final String token;
@@ -32,9 +34,17 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
   String? userEmail;
 
   int _openOrderIndex = -1;
-  final Color primary = const Color(0xFFA8161F);
 
-  /// l10n helper
+  // ═══════════════════════════════════════════════════════════
+  // CACHE DÉTAIL DE COMMANDE (pour avoir order_child)
+  // ═══════════════════════════════════════════════════════════
+  final Map<int, Map<String, dynamic>> _orderDetailsCache = {};
+  final Set<int> _loadingOrderDetails = {};
+
+  final Color primary = const Color(0xFFA8161F);
+  final Color gold = const Color(0xFFF5CD52);
+  final Color amber = const Color(0xFFFFC97A);
+
   AppLocalizations get l10n => AppLocalizations.of(context)!;
 
   @override
@@ -108,6 +118,44 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
     setState(() => isLoading = false);
   }
 
+  // ═══════════════════════════════════════════════════════════
+  // FETCH DÉTAIL (contient order_child = la liste des tickets)
+  // ═══════════════════════════════════════════════════════════
+  Future<Map<String, dynamic>?> _fetchOrderDetail(int orderId) async {
+    if (_orderDetailsCache.containsKey(orderId)) {
+      return _orderDetailsCache[orderId];
+    }
+    if (_loadingOrderDetails.contains(orderId)) return null;
+
+    setState(() => _loadingOrderDetails.add(orderId));
+    try {
+      final res = await http.get(
+        Uri.parse("https://ticketing.ma/api/customer/orders/$orderId"),
+        headers: {
+          "Authorization": "Bearer ${widget.token}",
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        },
+      );
+      if (res.statusCode == 200) {
+        final data = jsonDecode(res.body);
+        if (data["success"] == true && data["data"] != null) {
+          _orderDetailsCache[orderId] = data["data"];
+          return data["data"];
+        }
+      }
+    } catch (e) {
+      debugPrint("fetchOrderDetail error: $e");
+    } finally {
+      if (mounted) {
+        setState(() => _loadingOrderDetails.remove(orderId));
+      } else {
+        _loadingOrderDetails.remove(orderId);
+      }
+    }
+    return null;
+  }
+
   double _getOrderTotal(dynamic order) {
     final candidates = [
       order["total"],
@@ -152,6 +200,25 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
     return 0;
   }
 
+  String _buildSeatSubtitle(dynamic order) {
+    final ticket = order["ticket"];
+    final children = order["order_child"] as List<dynamic>? ?? [];
+    final firstChild = children.isNotEmpty ? children.first : null;
+    final data = firstChild?["ticket_data"] ?? {};
+
+    final parts = <String>[];
+    final cat = ticket?["name"]?.toString();
+    if (cat != null && cat.isNotEmpty) parts.add(cat);
+
+    final porte = data["porte"]?.toString();
+    if (porte != null && porte.isNotEmpty) parts.add('Porte $porte');
+
+    final place = data["place"]?.toString();
+    if (place != null && place.isNotEmpty) parts.add('Place $place');
+
+    return parts.join(' · ');
+  }
+
   void _showUpdateRequiredDialog() {
     showDialog(
       context: context,
@@ -187,12 +254,10 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
                   height: 68,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: const Color(0xFFFFC97A).withOpacity(0.14),
-                    border: Border.all(
-                        color: const Color(0xFFFFC97A).withOpacity(0.3)),
+                    color: amber.withOpacity(0.14),
+                    border: Border.all(color: amber.withOpacity(0.3)),
                   ),
-                  child: const Icon(Icons.update_rounded,
-                      color: Color(0xFFFFC97A), size: 34),
+                  child: Icon(Icons.update_rounded, color: amber, size: 34),
                 ),
                 const SizedBox(height: 20),
                 Text(
@@ -264,6 +329,134 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
     Navigator.pushReplacementNamed(context, '/login');
   }
 
+  void _openTransferSelection() {
+    final sourceOrders = orders
+        .where((o) => !(o["order_type"] == "Transfer" &&
+        isUserReceiver(o) &&
+        o["transfer_status"] == 0))
+        .toList();
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => SelectTicketsToTransferPage(
+          token: widget.token,
+          eventId: widget.eventId,
+          currentOrganizationId: widget.currentOrganizationId,
+          eventName: eventName,
+          eventDate: eventDate,
+          orders: sourceOrders,
+          userEmail: userEmail,
+        ),
+      ),
+    ).then((changed) {
+      if (changed == true) fetchOrders();
+    });
+  }
+
+  // ═══════════════════════════════════════════════════════════
+  // NAVIGATION VERS SWIPETICKETSPAGE
+  // ═══════════════════════════════════════════════════════════
+  void _openTicketPage(dynamic order, {dynamic child}) {
+    final orderId = order["id"];
+    final orderIdAsInt =
+    orderId is int ? orderId : int.tryParse(orderId.toString()) ?? 0;
+    if (orderIdAsInt <= 0) return;
+
+    final String? myEmail = userEmail?.trim();
+    final orderType = order["order_type"]?.toString();
+    final sender = order["sender"];
+    final receiver = order["receiver"];
+
+    bool computedIsSender;
+    if (orderType != "Transfer" || sender == null) {
+      computedIsSender = false;
+    } else {
+      computedIsSender = sender["email"]?.toString().trim() == myEmail;
+    }
+    final bool computedIsReceiver =
+        receiver != null && receiver["email"]?.toString().trim() == myEmail;
+
+    // Tickets bruts (depuis order_child si présent)
+    final children = (order["order_child"] as List<dynamic>? ?? [])
+        .cast<Map<String, dynamic>>();
+
+    final List<Map<String, dynamic>> tickets = children.isNotEmpty
+        ? children
+        : <Map<String, dynamic>>[
+      {
+        "id": order["ticket"]?["id"],
+        "ticket_number": order["ticket_number"] ?? '',
+        "status": order["status"] ?? 0,
+        "transfer_status": order["transfer_status"],
+        "ticket_data": order["ticket_data"],
+        "scan_history": order["scan_history"],
+      }
+    ];
+
+    final List<Map<String, dynamic>> filteredTickets = computedIsSender
+        ? tickets.where((t) {
+      final s = t["transfer_status"] ?? 20;
+      return s != 0;
+    }).toList()
+        : tickets;
+
+    int initialIndex = 0;
+    if (child != null) {
+      final childId = child["id"];
+      final idx = filteredTickets.indexWhere((t) => t["id"] == childId);
+      if (idx >= 0) initialIndex = idx;
+    }
+
+    final ticketModel = (order["ticket"] as Map<String, dynamic>?) ??
+        <String, dynamic>{
+          "name": order["ticket"]?["name"] ?? '',
+          "price": order["ticket"]?["price"] ?? 0,
+        };
+
+    final Map<String, dynamic> event =
+        (order["event"] as Map<String, dynamic>?) ??
+            <String, dynamic>{
+              "name": eventName,
+              "date": order["event"]?["date"] ?? '',
+              "address": order["event"]?["address"] ?? '',
+              "date_qr_code": order["event"]?["date_qr_code"],
+            };
+
+    debugPrint("ORDER: $order");
+    debugPrint("TICKETS (${tickets.length}): $tickets");
+    debugPrint("isSender=$computedIsSender isReceiver=$computedIsReceiver");
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => SwipeTicketsPage(
+          token: widget.token,
+          orderId: orderIdAsInt,
+          currentOrganizationId: widget.currentOrganizationId,
+          orderData: Map<String, dynamic>.from(order),
+          tickets: tickets,
+          event: event,
+          ticket: ticketModel,
+          isQrCode: (order["is_qr_code"] as int?) ?? 1,
+          isTransferable: (order["is_transferable"] as int?) ?? 1,
+          userEmail: userEmail,
+          category: ticketModel["name"]?.toString(),
+          isSender: computedIsSender,
+          senderEmail: order["sender"]?["email"]?.toString(),
+          initialTicketIndex: initialIndex,
+          selectedTicketId: child?["id"],
+          isReceiver: computedIsReceiver,
+        ),
+      ),
+    ).then((changed) {
+      if (changed == true) {
+        _orderDetailsCache.remove(orderIdAsInt);
+        fetchOrders();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -297,12 +490,12 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
               ),
               Expanded(
                 child: SingleChildScrollView(
-                  padding:
-                  const EdgeInsets.fromLTRB(20, 0, 20, 32),
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 32),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       ..._buildPendingTransfers(l10n),
+                      ..._buildReceivedTickets(l10n),
                       _buildOrdersSection(l10n),
                     ],
                   ),
@@ -357,7 +550,7 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
           ),
           const Spacer(),
           Text(
-            l10n.myOrders,
+            l10n.myTickets,
             style: const TextStyle(
               fontSize: 17,
               fontWeight: FontWeight.w600,
@@ -426,10 +619,7 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
           end: Alignment.bottomRight,
           colors: [Color(0xFFA8161F), Color(0xFF7A0D17), Color(0xFF4A0710)],
         ),
-        border: Border.all(
-          color: Colors.white.withOpacity(0.18),
-          width: 1,
-        ),
+        border: Border.all(color: Colors.white.withOpacity(0.18), width: 1),
       ),
       child: Row(
         children: [
@@ -491,6 +681,9 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
     );
   }
 
+  // ═══════════════════════════════════════════════════════════
+  // TRANSFERTS EN ATTENTE
+  // ═══════════════════════════════════════════════════════════
   List<Widget> _buildPendingTransfers(AppLocalizations l10n) {
     final pendingOrders = orders
         .where((o) =>
@@ -522,8 +715,7 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
     final senderName = order["sender"]?["name"]?.toString() ??
         order["user"]?["name"]?.toString() ??
         l10n.senderPlaceholder;
-    final ticket = order["ticket"];
-    final ticketName = ticket?["name"]?.toString() ?? '';
+    final seatSubtitle = _buildSeatSubtitle(order);
     final orderId = order["id"];
     final orderIdAsInt =
     orderId is int ? orderId : int.tryParse(orderId.toString()) ?? 0;
@@ -533,8 +725,8 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        color: const Color(0xFFFFC97A).withOpacity(0.08),
-        border: Border.all(color: const Color(0xFFFFC97A).withOpacity(0.35)),
+        color: amber.withOpacity(0.08),
+        border: Border.all(color: amber.withOpacity(0.35)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -546,10 +738,10 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
                 height: 40,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: const Color(0xFFFFC97A).withOpacity(0.16),
+                  color: amber.withOpacity(0.16),
                 ),
-                child: const Icon(Icons.move_to_inbox_rounded,
-                    color: Color(0xFFFFC97A), size: 20),
+                child:
+                Icon(Icons.move_to_inbox_rounded, color: amber, size: 20),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -567,9 +759,9 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
                         fontFamily: 'urbanist',
                       ),
                     ),
-                    if (ticketName.isNotEmpty)
+                    if (seatSubtitle.isNotEmpty)
                       Text(
-                        ticketName,
+                        seatSubtitle,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -586,7 +778,7 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
                 padding: const EdgeInsets.symmetric(horizontal: 7),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(6),
-                  color: const Color(0xFFFFC97A).withOpacity(0.18),
+                  color: amber.withOpacity(0.18),
                 ),
                 alignment: Alignment.center,
                 child: Text(
@@ -675,6 +867,114 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
     );
   }
 
+  // ═══════════════════════════════════════════════════════════
+  // BILLETS REÇUS
+  // ═══════════════════════════════════════════════════════════
+  List<Widget> _buildReceivedTickets(AppLocalizations l10n) {
+    final received = orders
+        .where((o) =>
+    o["order_type"] == "Transfer" &&
+        isUserReceiver(o) &&
+        o["transfer_status"] == 1)
+        .toList();
+
+    if (received.isEmpty) return [];
+
+    return [
+      const SizedBox(height: 20),
+      Text(
+        '${l10n.receivedTicketsSection.toUpperCase()} · ${received.length}',
+        style: TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+          letterSpacing: 0.8,
+          color: Colors.white.withOpacity(0.6),
+          fontFamily: 'urbanist',
+        ),
+      ),
+      const SizedBox(height: 10),
+      ...received.map((o) => _buildReceivedTicketCard(o, l10n)),
+    ];
+  }
+
+  Widget _buildReceivedTicketCard(dynamic order, AppLocalizations l10n) {
+    final senderName = order["sender"]?["name"]?.toString() ??
+        order["user"]?["name"]?.toString() ??
+        l10n.senderPlaceholder;
+    final seatSubtitle = _buildSeatSubtitle(order);
+    final ticketName =
+        order["ticket"]?["name"]?.toString() ?? l10n.ticketFallback;
+
+    return GestureDetector(
+      onTap: () => _openTicketPage(order),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        constraints: const BoxConstraints(minHeight: 64),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: Colors.white.withOpacity(0.07),
+          border: Border.all(color: Colors.white.withOpacity(0.12)),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: gold.withOpacity(0.12),
+              ),
+              child:
+              Icon(Icons.confirmation_number_outlined, color: gold, size: 17),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    '${l10n.ticket} · $ticketName',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                      fontFamily: 'urbanist',
+                    ),
+                  ),
+                  Text(
+                    seatSubtitle.isNotEmpty
+                        ? '${l10n.receivedFrom} $senderName · $seatSubtitle'
+                        : '${l10n.receivedFrom} $senderName',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.white.withOpacity(0.6),
+                      fontFamily: 'urbanist',
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Text(
+              l10n.validLabel,
+              style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFFF5CD52),
+                fontFamily: 'urbanist',
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Future<void> _handleAcceptTransfer(int orderId) async {
     try {
       final res = await http.post(
@@ -688,6 +988,7 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
       if (res.statusCode == 200) {
         final data = jsonDecode(res.body);
         if (data["success"] == true) {
+          _orderDetailsCache.remove(orderId);
           fetchOrders();
         }
       }
@@ -709,6 +1010,7 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
       if (res.statusCode == 200) {
         final data = jsonDecode(res.body);
         if (data["success"] == true) {
+          _orderDetailsCache.remove(orderId);
           fetchOrders();
         }
       }
@@ -717,10 +1019,12 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
     }
   }
 
+  // ═══════════════════════════════════════════════════════════
+  // MES COMMANDES (accordéon)
+  // ═══════════════════════════════════════════════════════════
   Widget _buildOrdersSection(AppLocalizations l10n) {
     final normalOrders = orders
-        .where((o) =>
-    !(o["order_type"] == "Transfer" &&
+        .where((o) => !(o["order_type"] == "Transfer" &&
         isUserReceiver(o) &&
         o["transfer_status"] == 0))
         .toList();
@@ -742,6 +1046,34 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
                 fontFamily: 'urbanist',
               ),
             ),
+            GestureDetector(
+              onTap: _openTransferSelection,
+              child: Container(
+                height: 32,
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(9),
+                  border:
+                  Border.all(color: Colors.white.withOpacity(0.28)),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.send, size: 14, color: Colors.white),
+                    const SizedBox(width: 6),
+                    Text(
+                      l10n.transferTicketsButton,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                        fontFamily: 'urbanist',
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
         const SizedBox(height: 10),
@@ -756,46 +1088,55 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
   Widget _buildOrderAccordion(dynamic order, int index,
       List<dynamic> normalOrders, AppLocalizations l10n) {
     final isOpen = _openOrderIndex == index;
-    final orderChildren = order["order_child"] as List<dynamic>? ?? [];
     final orderId = order["id"];
     final orderIdAsInt =
     orderId is int ? orderId : int.tryParse(orderId.toString()) ?? 0;
 
+    // ═══ Utilise le détail (cache) si dispo, sinon la version liste ═══
+    final detail = _orderDetailsCache[orderIdAsInt];
+    final merged = detail != null
+        ? <String, dynamic>{...order, ...detail}
+        : order;
+
+    final orderChildren =
+        (merged["order_child"] as List<dynamic>?) ?? <dynamic>[];
+
+    final isLoadingDetail =
+        _loadingOrderDetails.contains(orderIdAsInt) && detail == null;
+
     final ticketCount = orderChildren.isNotEmpty
         ? orderChildren.length
-        : (order["quantity"] as int? ?? 1);
+        : (merged["quantity"] as int? ?? 1);
 
-    final total = _getOrderTotal(order);
+    final total = _getOrderTotal(merged);
     final totalLabel = '${total.toStringAsFixed(2).replaceAll('.', ',')} MAD';
 
-    final orderType = order["order_type"]?.toString() ?? '';
+    final orderType = merged["order_type"]?.toString() ?? '';
     final isTransfer = orderType == "Transfer";
-    final transferStatus = order["transfer_status"] as int?;
-    final isReceived = isUserReceiver(order);
+    final transferStatus = merged["transfer_status"] as int?;
+    final isReceived = isUserReceiver(merged);
 
     String badge = l10n.paidLabel;
-    Color badgeColor = const Color(0xFFF5CD52);
-    Color badgeBg = const Color(0xFFF5CD52).withOpacity(0.14);
+    Color badgeColor = gold;
+    Color badgeBg = gold.withOpacity(0.14);
 
     if (isTransfer && isReceived) {
       badge = transferStatus == 1 ? l10n.receivedLabel : l10n.inPendingLabel;
-      badgeColor = transferStatus == 1
-          ? const Color(0xFFF5CD52)
-          : const Color(0xFFFFC97A);
+      badgeColor = transferStatus == 1 ? gold : amber;
       badgeBg = badgeColor.withOpacity(0.14);
     } else if (isTransfer) {
       badge = l10n.transferredLabel;
-      badgeColor = const Color(0xFFFFC97A);
+      badgeColor = amber;
       badgeBg = badgeColor.withOpacity(0.14);
     }
 
-    final date = order["created_at"]?.toString() ?? '';
+    final date = merged["created_at"]?.toString() ?? '';
     final dateFormatted = date.length > 16
         ? date.substring(0, 16).replaceAll('T', ' · ')
         : date;
     final paymentMethod =
-        order["payment_method"]?.toString() ?? l10n.walletLabel;
-    final ticketName = order["ticket"]?["name"]?.toString() ?? '';
+        merged["payment_method"]?.toString() ?? l10n.walletLabel;
+    final ticketName = merged["ticket"]?["name"]?.toString() ?? '';
 
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
@@ -808,9 +1149,14 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
         children: [
           InkWell(
             onTap: () {
+              final willOpen = !isOpen;
               setState(() {
-                _openOrderIndex = isOpen ? -1 : index;
+                _openOrderIndex = willOpen ? index : -1;
               });
+              if (willOpen) {
+                // ⚠️ Charge le détail pour avoir la vraie liste order_child
+                _fetchOrderDetail(orderIdAsInt);
+              }
             },
             borderRadius: BorderRadius.circular(16),
             child: Padding(
@@ -824,7 +1170,7 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
                         Row(
                           children: [
                             Text(
-                              '${order["order_id"] ?? "#$orderIdAsInt"}',
+                              '${merged["order_id"] ?? "#$orderIdAsInt"}',
                               style: const TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w600,
@@ -917,17 +1263,33 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (orderChildren.isEmpty)
+                  if (isLoadingDetail)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      child: Center(
+                        child: SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: gold,
+                          ),
+                        ),
+                      ),
+                    )
+                  else if (orderChildren.isEmpty)
                     _buildTicketRow(
-                      order: order,
+                      order: merged,
                       child: null,
                       orderIdAsInt: orderIdAsInt,
+                      index: 0,
                     )
                   else
-                    ...orderChildren.map((child) => _buildTicketRow(
-                      order: order,
-                      child: child,
+                    ...orderChildren.asMap().entries.map((entry) => _buildTicketRow(
+                      order: merged,
+                      child: entry.value,
                       orderIdAsInt: orderIdAsInt,
+                      index: entry.key,       // ✅ passe l'index
                     )),
                   const SizedBox(height: 10),
                   Text(
@@ -950,8 +1312,12 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
     required dynamic order,
     required dynamic child,
     required int orderIdAsInt,
+    required int index,
   }) {
-    final ticketNumber = child?["ticket_number"] ?? '';
+    final rawTicketNumber = child?["ticket_number"]?.toString() ?? '';
+    final ticketNumber = rawTicketNumber.length > 5
+        ? '…${rawTicketNumber.substring(rawTicketNumber.length - 5)}'
+        : rawTicketNumber;
     final ticketName =
         order["ticket"]?["name"]?.toString() ?? l10n.ticketFallback;
     final isTransfer = order["order_type"] == "Transfer";
@@ -959,14 +1325,14 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
     final isReceived = isUserReceiver(order);
 
     String stateLabel = l10n.validLabel;
-    Color stateColor = const Color(0xFFF5CD52);
-    Color iconBg = const Color(0xFFF5CD52).withOpacity(0.12);
-    Color iconColor = const Color(0xFFF5CD52);
+    Color stateColor = gold;
+    Color iconBg = gold.withOpacity(0.12);
+    Color iconColor = gold;
 
     if (isTransfer && isReceived) {
       if (transferStatus == 0) {
         stateLabel = l10n.inPendingLabel;
-        stateColor = const Color(0xFFFFC97A);
+        stateColor = amber;
         iconBg = stateColor.withOpacity(0.12);
         iconColor = stateColor;
       } else if (transferStatus == 1) {
@@ -974,30 +1340,15 @@ class _OrdersOfOneEventPageState extends State<OrdersOfOneEventPage> {
       }
     } else if (isTransfer) {
       stateLabel = l10n.transferredLabel;
-      stateColor = const Color(0xFFFFC97A);
+      stateColor = amber;
       iconBg = stateColor.withOpacity(0.12);
       iconColor = stateColor;
     }
 
-    final label = ticketNumber.isNotEmpty
-        ? '${l10n.ticketNumberLabel(ticketNumber)} · $ticketName'
-        : ticketName;
+    final label = '${l10n.ticket} ${index + 1} · $ticketName';
 
     return InkWell(
-      onTap: () {
-        if (orderIdAsInt > 0) {
-          Navigator.pushNamed(
-            context,
-            '/tickets',
-            arguments: {
-              "token": widget.token,
-              "orderId": orderIdAsInt,
-              "selectedTicketId": child?["id"],
-              "organizationId": widget.currentOrganizationId,
-            },
-          );
-        }
-      },
+      onTap: () => _openTicketPage(order, child: child),
       child: Container(
         constraints: const BoxConstraints(minHeight: 56),
         decoration: BoxDecoration(

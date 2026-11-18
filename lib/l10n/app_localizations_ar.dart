@@ -2948,4 +2948,94 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get supportUnavailableMessage => 'خدمة العملاء غير متوفرة حالياً. يرجى المحاولة لاحقاً.';
+
+  @override
+  String get transferTicketsButton => 'نقل التذاكر';
+
+  @override
+  String get receivedTicketsSection => 'التذاكر المستلمة';
+
+  @override
+  String get receivedFrom => 'مستلمة من';
+
+  @override
+  String get transferTicketsTitle => 'نقل التذاكر';
+
+  @override
+  String get selectTicketsHint => 'حدد التذاكر المراد إرسالها، واحدة تلو الأخرى أو طلبًا كاملًا دفعة واحدة.';
+
+  @override
+  String get selectAll => 'تحديد الكل';
+
+  @override
+  String get deselectAll => 'إلغاء تحديد الكل';
+
+  @override
+  String get unavailable => 'غير متوفر';
+
+  @override
+  String get selectionLabel => 'التحديد';
+
+  @override
+  String get continueLabel => 'متابعة';
+
+  @override
+  String get selectAtLeastOneTicket => 'اختر تذكرة واحدة على الأقل';
+
+  @override
+  String get unselectableNotice => 'لا يمكن اختيار التذاكر التي تم نقلها بالفعل أو المعروضة لإعادة البيع.';
+
+  @override
+  String get qrWillAppear => 'سيظهر رمز QR قبل المباراة بثلاث ساعات';
+
+  @override
+  String get availableIn => 'متاح في غضون';
+
+  @override
+  String get kickoffIn => 'انطلاق المباراة بعد';
+
+  @override
+  String get matchStarted => 'بدأت المباراة';
+
+  @override
+  String get presentCodeAtEntrance => 'اعرض هذا الرمز عند المدخل. يتم رفع السطوع تلقائيًا.';
+
+  @override
+  String get transferExplanation => 'نقل مجاني إلى شخص قريب. بمجرد الإرسال، لا يمكن إلغاؤه: يمكن للمستلم فقط قبوله أو رفضه.';
+
+  @override
+  String get ticketsToTransfer => 'التذاكر المراد نقلها';
+
+  @override
+  String get recipientEmail => 'بريد المستلم الإلكتروني';
+
+  @override
+  String get or => 'أو';
+
+  @override
+  String get scanProfileQR => 'مسح رمز QR الخاص بملفه الشخصي';
+
+  @override
+  String get youWillSend => 'أنت على وشك إرسال';
+
+  @override
+  String get irreversibleWarning => 'إجراء لا رجعة فيه. بمجرد الإرسال، لن تتمكن من إلغاء هذا النقل. يمكن للمستلم فقط قبوله أو رفضه.';
+
+  @override
+  String get transferHistory => 'سجل النقل';
+
+  @override
+  String get sent => 'المرسلة';
+
+  @override
+  String get received => 'المستلمة';
+
+  @override
+  String get noTransfers => 'لا توجد عمليات نقل';
+
+  @override
+  String get transferHistoryExplanation => 'يبقى النقل \"قيد الانتظار\" حتى يرد المستلم. هو الوحيد الذي يمكنه قبوله أو رفضه: لا يمكن إلغاء النقل المرسل. بمجرد القبول، تُصدر التذكرة باسمه ولن يعود رمز QR القديم صالحًا. في حالة الرفض، تعود التذكرة إليك.';
+
+  @override
+  String get ticketSingularLower => 'تذكرة';
 }

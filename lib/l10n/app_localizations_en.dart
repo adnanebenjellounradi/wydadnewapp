@@ -2948,4 +2948,94 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get supportUnavailableMessage => 'Customer service is currently unavailable. Please try again later.';
+
+  @override
+  String get transferTicketsButton => 'Transfer tickets';
+
+  @override
+  String get receivedTicketsSection => 'Received tickets';
+
+  @override
+  String get receivedFrom => 'Received from';
+
+  @override
+  String get transferTicketsTitle => 'Transfer tickets';
+
+  @override
+  String get selectTicketsHint => 'Check the tickets to send, one by one or a whole order at once.';
+
+  @override
+  String get selectAll => 'Select all';
+
+  @override
+  String get deselectAll => 'Deselect all';
+
+  @override
+  String get unavailable => 'Unavailable';
+
+  @override
+  String get selectionLabel => 'Selection';
+
+  @override
+  String get continueLabel => 'Continue';
+
+  @override
+  String get selectAtLeastOneTicket => 'Select at least one ticket';
+
+  @override
+  String get unselectableNotice => 'Tickets already transferred or on resale cannot be selected.';
+
+  @override
+  String get qrWillAppear => 'The QR code will appear 3 hours before the match';
+
+  @override
+  String get availableIn => 'Available in';
+
+  @override
+  String get kickoffIn => 'Kickoff in';
+
+  @override
+  String get matchStarted => 'Match started';
+
+  @override
+  String get presentCodeAtEntrance => 'Present this code at the entrance. Brightness increased automatically.';
+
+  @override
+  String get transferExplanation => 'Free transfer to a close one. Once sent, it cannot be cancelled: only the recipient can accept or refuse it.';
+
+  @override
+  String get ticketsToTransfer => 'Tickets to transfer';
+
+  @override
+  String get recipientEmail => 'Recipient email';
+
+  @override
+  String get or => 'or';
+
+  @override
+  String get scanProfileQR => 'Scan their profile QR code';
+
+  @override
+  String get youWillSend => 'You are about to send';
+
+  @override
+  String get irreversibleWarning => 'Irreversible action. Once sent, you will not be able to cancel this transfer. Only the recipient will be able to accept or refuse it.';
+
+  @override
+  String get transferHistory => 'Transfer history';
+
+  @override
+  String get sent => 'Sent';
+
+  @override
+  String get received => 'Received';
+
+  @override
+  String get noTransfers => 'No transfers';
+
+  @override
+  String get transferHistoryExplanation => 'A transfer remains \"pending\" until the recipient responds. Only they can accept or refuse it: a sent transfer cannot be cancelled. Once accepted, the ticket is reissued in their name and the old QR code is no longer valid. If refused, the ticket returns to you.';
+
+  @override
+  String get ticketSingularLower => 'ticket';
 }

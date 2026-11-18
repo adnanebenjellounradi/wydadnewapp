@@ -829,11 +829,6 @@ class _WalletTransferPageState extends State<WalletTransferPage> {
               ),
               const SizedBox(height: 8),
               _kv(l10n.walletTransferPhone, _recipient),
-              const SizedBox(height: 8),
-              _kv(
-                l10n.walletTransferReference,
-                '[RÉFÉRENCE]',
-              ),
             ],
           ),
         ),

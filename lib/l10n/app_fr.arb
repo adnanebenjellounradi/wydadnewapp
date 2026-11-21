@@ -1169,5 +1169,11 @@
         "received": "Reçus",
         "noTransfers": "Aucun transfert",
         "transferHistoryExplanation": "Un transfert reste « en attente » tant que le destinataire n'a pas répondu. Lui seul peut l'accepter ou le refuser : un transfert envoyé ne peut pas être annulé. Une fois accepté, le billet est réémis à son nom et l'ancien QR code n'est plus valable. S'il est refusé, le billet vous revient.",
-        "ticketSingularLower": "billet"
+        "ticketSingularLower": "billet",
+          "saleOpenLabel": "VENTE OUVERTE",
+          "saleClosedLabel": "VENTE FERMÉE",
+          "readMore": "Lire l'actu",
+          "allEvents": "Tous les événements",
+          "allNews" : "Actualités"
+
 }

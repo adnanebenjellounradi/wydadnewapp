@@ -1,7 +1,16 @@
-import 'package:flutter/material.dart';
 import 'dart:io';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+import 'package:webview_flutter_android/webview_flutter_android.dart';
+import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
+import 'package:screen_protector/screen_protector.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+
+import 'AcheterTicketInEvent.dart';
 import 'loading.dart';
 import 'wallet_page.dart';
 import 'wallet_add_beneficiary_page.dart';
@@ -29,26 +38,22 @@ import 'tickets.dart';
 import 'singleTicket.dart';
 import 'inscription.dart';
 import 'ordersofoneevent.dart';
-import 'AcheterTicketInEvent.dart';
 import 'successPayment.dart';
 import 'failPayment.dart';
 import 'cmi_payment_boutique.dart';
 import 'success_payment_boutique.dart';
 import 'editProfile.dart';
-import 'package:flutter/services.dart';
-import 'package:webview_flutter/webview_flutter.dart';
-import 'package:webview_flutter_android/webview_flutter_android.dart';
-import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'rateplayers.dart';
 import 'formation.dart';
 import 'wydadQuizz.dart';
 import 'news_page.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'l10n/app_localizations.dart';
 import 'bottomnavigation.dart';
-import 'package:screen_protector/screen_protector.dart';
-import 'package:intl/date_symbol_data_local.dart';
+import 'ticketplace_events_screen.dart';
+import 'my_listings_screen.dart';
+import 'event_listings_screen.dart';
+import 'buy_listing_screen.dart';
+import 'publish_resale_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -107,8 +112,8 @@ class _MyAppState extends State<MyApp> {
       fontFamily: 'Urbanist',
       brightness: Brightness.light,
       scaffoldBackgroundColor: Colors.white,
-      primaryColor: Color(0xFFE41E26),
-      appBarTheme: AppBarTheme(
+      primaryColor: const Color(0xFFE41E26),
+      appBarTheme: const AppBarTheme(
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Color(0xFFE41E26)),
         titleTextStyle: TextStyle(
@@ -122,18 +127,18 @@ class _MyAppState extends State<MyApp> {
         bodyColor: Colors.black,
         displayColor: Colors.black,
       ),
-      colorScheme: ColorScheme.light(
+      colorScheme: const ColorScheme.light(
         primary: Color(0xFFE41E26),
         surface: Colors.white,
         onSurface: Colors.black,
       ),
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         backgroundColor: Colors.white,
-        selectedItemColor: Color(0xFFE41E26),
+        selectedItemColor: const Color(0xFFE41E26),
         unselectedItemColor: Colors.grey[600],
         selectedLabelStyle:
-        TextStyle(fontFamily: 'Urbanist', fontWeight: FontWeight.w600),
-        unselectedLabelStyle: TextStyle(fontFamily: 'Urbanist'),
+        const TextStyle(fontFamily: 'Urbanist', fontWeight: FontWeight.w600),
+        unselectedLabelStyle: const TextStyle(fontFamily: 'Urbanist'),
       ),
     );
 
@@ -141,8 +146,8 @@ class _MyAppState extends State<MyApp> {
       fontFamily: 'Urbanist',
       brightness: Brightness.dark,
       scaffoldBackgroundColor: Colors.black,
-      primaryColor: Color(0xFFE41E26),
-      appBarTheme: AppBarTheme(
+      primaryColor: const Color(0xFFE41E26),
+      appBarTheme: const AppBarTheme(
         backgroundColor: Colors.black,
         iconTheme: IconThemeData(color: Color(0xFFE41E26)),
         titleTextStyle: TextStyle(
@@ -156,18 +161,18 @@ class _MyAppState extends State<MyApp> {
         bodyColor: Colors.white,
         displayColor: Colors.white,
       ),
-      colorScheme: ColorScheme.dark(
+      colorScheme: const ColorScheme.dark(
         primary: Color(0xFFE41E26),
         surface: Colors.black,
         onSurface: Colors.white,
       ),
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         backgroundColor: Colors.black,
-        selectedItemColor: Color(0xFFE41E26),
+        selectedItemColor: const Color(0xFFE41E26),
         unselectedItemColor: Colors.grey[400],
         selectedLabelStyle:
-        TextStyle(fontFamily: 'Urbanist', fontWeight: FontWeight.w600),
-        unselectedLabelStyle: TextStyle(fontFamily: 'Urbanist'),
+        const TextStyle(fontFamily: 'Urbanist', fontWeight: FontWeight.w600),
+        unselectedLabelStyle: const TextStyle(fontFamily: 'Urbanist'),
       ),
     );
 
@@ -223,88 +228,71 @@ class _MyAppState extends State<MyApp> {
                   defaultPhone: args['phone']?.toString(),
                 ),
               );
-          // ✅ NOUVEAU : choix du mode d'alimentation
             case '/walletRechargeMethod':
               return MaterialPageRoute(
                 builder: (_) => WalletRechargeMethodPage(
                     token: args['token'] as String? ?? ''),
               );
-
-          // Alimentation par carte bancaire
             case '/walletRecharge':
               return MaterialPageRoute(
                 builder: (_) =>
                     WalletRechargePage(token: args['token'] as String? ?? ''),
               );
-
-          // ✅ NOUVEAU : alimentation par virement bancaire (RIB)
             case '/walletRechargeRib':
               return MaterialPageRoute(
                 builder: (_) => WalletRechargeRibPage(
                     token: args['token'] as String? ?? ''),
               );
-
-          // ✅ NOUVEAU : alimentation en espèces en agence
             case '/walletRechargeCash':
               return MaterialPageRoute(
                 builder: (_) => WalletRechargeCashPage(
                     token: args['token'] as String? ?? ''),
               );
-
             case '/walletTransfer':
               return MaterialPageRoute(
                 builder: (_) =>
                     WalletTransferPage(token: args['token'] as String? ?? ''),
               );
-
             case '/walletWithdraw':
               return MaterialPageRoute(
                 builder: (_) =>
                     WalletWithdrawPage(token: args['token'] as String? ?? ''),
               );
-
             case '/walletWithdrawBank':
               return MaterialPageRoute(
                 builder: (_) => WalletWithdrawBankPage(
                     token: args['token'] as String? ?? ''),
               );
-
             case '/walletWithdrawCash':
               return MaterialPageRoute(
                 builder: (_) => WalletWithdrawCashPage(
                     token: args['token'] as String? ?? ''),
               );
-
             case '/walletHistory':
               return MaterialPageRoute(
                 builder: (_) =>
                     WalletHistoryPage(token: args['token'] as String? ?? ''),
               );
-
             case '/walletTxDetail':
               return MaterialPageRoute(
                 builder: (_) =>
                     WalletHistoryPage(token: args['token'] as String? ?? ''),
               );
-
             case '/walletAllServices':
               return MaterialPageRoute(
                 builder: (_) => WalletAllServicesPage(
                     token: args['token'] as String? ?? ''),
               );
-
             case '/walletAccount':
               return MaterialPageRoute(
                 builder: (_) =>
                     WalletAccountPage(token: args['token'] as String? ?? ''),
               );
-
             case '/walletChangeAccount':
               return MaterialPageRoute(
                 builder: (_) => WalletChangeAccountPage(
                     token: args['token'] as String? ?? ''),
               );
-
             case '/walletChangePin':
               return MaterialPageRoute(
                 builder: (_) =>
@@ -399,12 +387,14 @@ class _MyAppState extends State<MyApp> {
                   currentOrganizationId: args['organizationId'],
                 ),
               );
+
             case '/chatbot':
               return MaterialPageRoute(
                 builder: (_) => ChatbotPage(
                   organizationId: args['organizationId']?.toString(),
                 ),
               );
+
             case '/cmiPaymentBoutique':
               return MaterialPageRoute(
                 builder: (_) => CMIPaymentWebViewBoutique(
@@ -425,6 +415,48 @@ class _MyAppState extends State<MyApp> {
               return MaterialPageRoute(
                 builder: (_) => MesCommandesPage(
                   token: args['token'] ?? '',
+                ),
+              );
+
+            case '/ticketplace':
+              return MaterialPageRoute(
+                builder: (_) => TicketplaceEventsScreen(
+                  token: args['token'] ?? '',
+                ),
+              );
+
+            case '/mesAnnonces':
+              return MaterialPageRoute(
+                builder: (_) => MyListingsScreen(
+                  token: args['token'] ?? '',
+                ),
+              );
+
+            case '/ticketplaceListings':
+              return MaterialPageRoute(
+                builder: (_) => EventListingsScreen(
+                  token: args['token'] ?? '',
+                  eventId: args['eventId'] ?? 0,
+                  eventName: args['eventName'] ?? '',
+                ),
+              );
+
+            case '/ticketplaceBuy':
+              return MaterialPageRoute(
+                builder: (_) => BuyListingScreen(
+                  token: args['token'] ?? '',
+                  listingId: args['listingId'] ?? 0,
+                  currentOrganizationId: args['organizationId']?.toString(),
+                ),
+              );
+
+            case '/ticketplacePublish':
+              return MaterialPageRoute(
+                builder: (_) => PublishResaleScreen(
+                  token: args['token'] ?? '',
+                  orderChildIds: List<int>.from(args['orderChildIds'] ?? []),
+                  originalPrice: (args['originalPrice'] ?? 0).toDouble(),
+                  matchName: args['matchName'] ?? '',
                 ),
               );
 
@@ -568,11 +600,15 @@ class _HomePageState extends State<HomePage> {
   @override
   void didUpdateWidget(HomePage oldWidget) {
     super.didUpdateWidget(oldWidget);
+    // ✅ Mise à jour de _currentIndex si initialIndex change
+    if (widget.initialIndex != oldWidget.initialIndex) {
+      _currentIndex = widget.initialIndex;
+    }
     if (widget.currentLocale != oldWidget.currentLocale ||
         widget.isDarkMode != oldWidget.isDarkMode) {
       _initPages();
-      setState(() {});
     }
+    setState(() {});
   }
 
   // Navigation interne déclenchée par les pages enfants
@@ -608,8 +644,9 @@ class _SecureAppState extends State<SecureApp> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    //_initializeSecurity();
+    // _initializeSecurity(); // décommenter si tu veux activer la protection
   }
+
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);

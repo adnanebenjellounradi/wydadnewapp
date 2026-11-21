@@ -1169,6 +1169,11 @@
         "received": "Received",
         "noTransfers": "No transfers",
         "transferHistoryExplanation": "A transfer remains \"pending\" until the recipient responds. Only they can accept or refuse it: a sent transfer cannot be cancelled. Once accepted, the ticket is reissued in their name and the old QR code is no longer valid. If refused, the ticket returns to you.",
-        "ticketSingularLower": "ticket"
+        "ticketSingularLower": "ticket",
+          "saleOpenLabel": "SALE OPEN",
+          "saleClosedLabel": "SALE CLOSED",
+          "readMore": "Read more",
+          "allEvents": "All events",
+          "allNews" : "All news"
 
 }

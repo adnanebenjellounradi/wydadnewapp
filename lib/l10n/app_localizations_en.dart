@@ -3038,4 +3038,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get ticketSingularLower => 'ticket';
+
+  @override
+  String get saleOpenLabel => 'SALE OPEN';
+
+  @override
+  String get saleClosedLabel => 'SALE CLOSED';
+
+  @override
+  String get readMore => 'Read more';
+
+  @override
+  String get allEvents => 'All events';
+
+  @override
+  String get allNews => 'All news';
 }

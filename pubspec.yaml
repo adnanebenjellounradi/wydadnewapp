@@ -59,6 +59,7 @@ dependencies:
   video_player: ^2.9.2
   chewie: ^1.8.5
   mobile_scanner: ^4.0.0
+  video_player_win: ^3.3.1
 
 
 dev_dependencies:
@@ -106,6 +107,15 @@ flutter:
     - assets/englishhevents.png
     - assets/739679bd3a8e68433f6bcda33167a31e.svg
     - assets/e813ca5a1bf519b759ad1bbbedef53e3.jpg
+    - assets/wydadpay.jpg
+    - assets/supporters.jpg
+    - assets/wacbrand.jpg
+    - assets/ticketplace.jpg
+    - assets/store.jpg
+    - assets/firstimage.jpg
+    - assets/secondimage.jpg
+    - assets/thirdimage.jpg
+    - assets/videolancement.mp4
 
 
   # The following line ensures that the Material Icons font is

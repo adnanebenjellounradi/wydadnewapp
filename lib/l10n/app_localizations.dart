@@ -6030,6 +6030,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'ticket'**
   String get ticketSingularLower;
+
+  /// No description provided for @saleOpenLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'SALE OPEN'**
+  String get saleOpenLabel;
+
+  /// No description provided for @saleClosedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'SALE CLOSED'**
+  String get saleClosedLabel;
+
+  /// No description provided for @readMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Read more'**
+  String get readMore;
+
+  /// No description provided for @allEvents.
+  ///
+  /// In en, this message translates to:
+  /// **'All events'**
+  String get allEvents;
+
+  /// No description provided for @allNews.
+  ///
+  /// In en, this message translates to:
+  /// **'All news'**
+  String get allNews;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

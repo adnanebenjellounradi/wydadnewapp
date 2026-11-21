@@ -1,105 +1,91 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:video_player/video_player.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'l10n/app_localizations.dart';
 
 class LoadingPage extends StatefulWidget {
+  const LoadingPage({super.key});
+
   @override
-  _LoadingPageState createState() => _LoadingPageState();
+  State<LoadingPage> createState() => _LoadingPageState();
 }
 
-class _LoadingPageState extends State<LoadingPage>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
+class _LoadingPageState extends State<LoadingPage> {
+  late final VideoPlayerController _controller;
+  Timer? _navTimer;
+  bool _navigated = false;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      duration: Duration(seconds: 1),
-      vsync: this,
-    )..repeat(reverse: true);
 
-    Timer(Duration(seconds: 3), _navigateNext);
+    _controller = VideoPlayerController.asset('assets/videolancement.mp4')
+      ..setLooping(true)
+      ..setVolume(0)
+      ..initialize().then((_) {
+        if (!mounted) return;
+        setState(() {});
+        _controller.play();
+        // Durée du splash, comme dans le proto (3900 ms)
+        _navTimer = Timer(const Duration(milliseconds: 3900), _goNext);
+      }).catchError((e) {
+        // Si la vidéo échoue (émulateur, codec…), on continue quand même
+        debugPrint('Video init failed: $e');
+        _navTimer = Timer(const Duration(milliseconds: 3900), _goNext);
+      });
   }
 
-  Future<void> _navigateNext() async {
-    if (!mounted) return;
+  Future<void> _goNext() async {
+    if (_navigated || !mounted) return;
+    _navigated = true;
 
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token') ?? '';
-    final organizationId = 20;
+    const organizationId = 20;
+
+    if (!mounted) return;
 
     if (token.isNotEmpty) {
-      // Already logged in → main app
-      Navigator.pushReplacementNamed(context, '/acceuil', arguments: {
-        'token': token,
-        'organizationId': organizationId,
-      });
+      // Déjà connecté → accueil
+      Navigator.of(context).pushReplacementNamed(
+        '/acceuil',
+        arguments: {
+          'token': token,
+          'organizationId': organizationId,
+        },
+      );
     } else {
-      // Not logged in → show presentation (with "Passer" skip option)
-      Navigator.pushReplacementNamed(context, '/presentation');
+      // Pas connecté → présentation
+      Navigator.of(context).pushReplacementNamed('/presentation');
     }
   }
 
   @override
   void dispose() {
+    _navTimer?.cancel();
     _controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-
     return Scaffold(
-      backgroundColor: Colors.black,
-      body: Center(
-        child: AnimatedBuilder(
-          animation: _controller,
-          builder: (context, child) {
-            return Transform.scale(
-              scale: 0.8 + _controller.value * 0.2,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    width: 90,
-                    height: 90,
-                    decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Image.asset(
-                      'assets/animation.gif',
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                  SizedBox(height: 40),
-                  Text(
-                    l10n.loading,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: 'Urbanist',
-                      fontSize: 16,
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
-      ),
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.only(bottom: 80),
-        child: Text(
-          l10n.byPmg,
-          style: TextStyle(
-            color: Colors.white,
-            fontFamily: 'Urbanist',
-            fontSize: 14,
-          ),
-          textAlign: TextAlign.center,
+      backgroundColor: const Color(0xFF120104),
+      body: GestureDetector(
+        // Tap pour sauter le splash (comme le <a> du proto)
+        onTap: _goNext,
+        behavior: HitTestBehavior.opaque,
+        child: SizedBox.expand(
+          child: _controller.value.isInitialized
+              ? FittedBox(
+            fit: BoxFit.cover,
+            child: SizedBox(
+              width: _controller.value.size.width,
+              height: _controller.value.size.height,
+              child: VideoPlayer(_controller),
+            ),
+          )
+              : const SizedBox.shrink(),
         ),
       ),
     );

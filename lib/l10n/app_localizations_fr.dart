@@ -3038,4 +3038,19 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get ticketSingularLower => 'billet';
+
+  @override
+  String get saleOpenLabel => 'VENTE OUVERTE';
+
+  @override
+  String get saleClosedLabel => 'VENTE FERMÉE';
+
+  @override
+  String get readMore => 'Lire l\'actu';
+
+  @override
+  String get allEvents => 'Tous les événements';
+
+  @override
+  String get allNews => 'Actualités';
 }

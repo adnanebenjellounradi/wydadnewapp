@@ -3038,4 +3038,19 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get ticketSingularLower => 'تذكرة';
+
+  @override
+  String get saleOpenLabel => 'التذاكر متوفرة';
+
+  @override
+  String get saleClosedLabel => 'التذاكر مغلقة';
+
+  @override
+  String get readMore => 'اقرأ الخبر';
+
+  @override
+  String get allEvents => 'كل المباريات';
+
+  @override
+  String get allNews => ' الخبر';
 }

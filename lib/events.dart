@@ -27,6 +27,9 @@ class _EventsPageState extends State<EventsPage> {
   String filter = "all";
   String? userEmail;
 
+  // Onglet actif (billetterie ou ticketplace)
+  String currentTab = "billetterie";
+
   // Pagination pour les événements à venir
   int currentPage = 0;
   final int eventsPerPage = 3;
@@ -611,14 +614,25 @@ class _EventsPageState extends State<EventsPage> {
             bottom: false,
             child: Column(
               children: [
-                // En-tête
+                // En-tête avec Titre, Bouton "Mes annonces" et Onglets
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: 12),
-                      _buildFilters(),
+                      // 1. Header (Titre + Mes annonces)
+                      _buildTopHeader(),
+
+                      // 2. Onglets Billetterie / Ticketplace
+                      const SizedBox(height: 18),
+                      _buildTabs(),
+
+                      // 3. Filtres (seulement si on est sur Billetterie)
+                      if (currentTab == "billetterie") ...[
+                        const SizedBox(height: 14),
+                        _buildFilters(),
+                      ],
                     ],
                   ),
                 ),
@@ -643,7 +657,7 @@ class _EventsPageState extends State<EventsPage> {
                         Padding(
                           padding: const EdgeInsets.only(left: 4, bottom: 12),
                           child: Text(
-                            "ÉVÉNEMENTS À VENIR",
+                            l10n.events,
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.w800,
@@ -746,6 +760,144 @@ class _EventsPageState extends State<EventsPage> {
     );
   }
 
+  // ─────────────────────────────────────────────────────────────
+  // HEADER & ONGLETS
+  // ─────────────────────────────────────────────────────────────
+
+  Widget _buildTopHeader() {
+    return SizedBox(
+      height: 44,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            l10n.eventsTitle, // Ex: "Événements"
+            style: const TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.w900,
+              color: Colors.white,
+              fontFamily: 'Urbanist',
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              if (widget.token == null || widget.token!.isEmpty) {
+                _showLoginDialog();
+              } else {
+                // 🔴 REDIRECTION VERS MES ANNONCES
+                Navigator.pushNamed(
+                  context,
+                  '/mesAnnonces',
+                  arguments: {'token': widget.token},
+                );
+              }
+            },
+            child: Container(
+              height: 36,
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.white.withOpacity(0.08),
+                border: Border.all(color: Colors.white.withOpacity(0.14)),
+              ),
+              alignment: Alignment.center,
+              child: const Text(
+                "Mes annonces",
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                  fontFamily: 'Urbanist',
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTabs() {
+    return Container(
+      height: 48,
+      padding: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: Colors.white.withOpacity(0.06),
+        border: Border.all(color: Colors.white.withOpacity(0.10)),
+      ),
+      child: Row(
+        children: [
+          // Onglet Billetterie
+          Expanded(
+            child: GestureDetector(
+              onTap: () {
+                setState(() => currentTab = "billetterie");
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(9),
+                  color: currentTab == "billetterie"
+                      ? Colors.white.withOpacity(0.14)
+                      : Colors.transparent,
+                ),
+                alignment: Alignment.center,
+                child: Text(
+                  "Billetterie",
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: currentTab == "billetterie"
+                        ? const Color(0xFFFEE15A)
+                        : Colors.white.withOpacity(0.72),
+                    fontFamily: 'Urbanist',
+                  ),
+                ),
+              ),
+            ),
+          ),
+          // Onglet Ticketplace
+          Expanded(
+            child: GestureDetector(
+              onTap: () {
+                if (widget.token == null || widget.token!.isEmpty) {
+                  _showLoginDialog();
+                } else {
+                  // 🔴 REDIRECTION VERS TICKETPLACE
+                  Navigator.pushNamed(
+                    context,
+                    '/ticketplace',
+                    arguments: {'token': widget.token},
+                  );
+                }
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(9),
+                  color: currentTab == "ticketplace"
+                      ? Colors.white.withOpacity(0.14)
+                      : Colors.transparent,
+                ),
+                alignment: Alignment.center,
+                child: Text(
+                  "Ticketplace",
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: currentTab == "ticketplace"
+                        ? const Color(0xFFFEE15A)
+                        : Colors.white.withOpacity(0.72),
+                    fontFamily: 'Urbanist',
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _paginationButton({
     required IconData icon,
     required bool enabled,
@@ -776,26 +928,6 @@ class _EventsPageState extends State<EventsPage> {
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
-    return SizedBox(
-      height: 44,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Text(
-            l10n.eventsTitle,
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w900,
-              color: Colors.white,
-              fontFamily: 'Urbanist',
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildFilters() {
     final filters = [
       {'id': 'upcoming', 'label': l10n.upcoming},
@@ -812,7 +944,7 @@ class _EventsPageState extends State<EventsPage> {
               if (filter != f['id']) {
                 setState(() {
                   filter = f['id'] as String;
-                  currentPage = 0; // Reset page au changement de filtre
+                  currentPage = 0;
                 });
                 fetchEvents();
               }
@@ -880,9 +1012,6 @@ class _EventsPageState extends State<EventsPage> {
   // ─────────────────────────────────────────────────────────────
   // ÉVÉNEMENT À LA UNE (HERO)
   // ─────────────────────────────────────────────────────────────
-  // ─────────────────────────────────────────────────────────────
-  // ÉVÉNEMENT À LA UNE (HERO)
-  // ─────────────────────────────────────────────────────────────
   Widget _buildFeaturedEvent(Map<String, dynamic> event) {
     final eventName = event["name"] as String? ?? '';
     final eventDate = DateFormat("EEEE d MMMM", 'fr')
@@ -910,7 +1039,6 @@ class _EventsPageState extends State<EventsPage> {
         borderRadius: BorderRadius.circular(22),
         child: Stack(
           children: [
-            // Image de fond
             Positioned.fill(
               child: hasImage
                   ? Image.network(
@@ -937,7 +1065,6 @@ class _EventsPageState extends State<EventsPage> {
                 ),
               ),
             ),
-            // Dégradé sombre
             Positioned.fill(
               child: Container(
                 decoration: const BoxDecoration(
@@ -954,7 +1081,6 @@ class _EventsPageState extends State<EventsPage> {
                 ),
               ),
             ),
-            // Tag en haut à gauche
             Positioned(
               top: 14,
               left: 14,
@@ -994,7 +1120,6 @@ class _EventsPageState extends State<EventsPage> {
                 ),
               ),
             ),
-            // ── ICÔNE TRANSFERT FIXÉE EN HAUT À DROITE ──
             Positioned(
               top: 14,
               right: 14,
@@ -1028,7 +1153,6 @@ class _EventsPageState extends State<EventsPage> {
                 ),
               ),
             ),
-            // Contenu en bas
             Positioned(
               left: 18,
               right: 18,
@@ -1067,12 +1191,10 @@ class _EventsPageState extends State<EventsPage> {
                     ),
                   ),
                   const SizedBox(height: 14),
-                  // Boutons d'action
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
                     children: [
-                      // Acheter
                       if (!isClosed && !eventPast && event["disable_ticket"] != 1)
                         _buildHeroButton(
                           label: l10n.buy,
@@ -1093,7 +1215,6 @@ class _EventsPageState extends State<EventsPage> {
                             }
                           },
                         ),
-                      // Voter
                       if (isEventOngoing(event["date"]) &&
                           event["enable_vote_player"] == 1)
                         _buildHeroButton(
@@ -1118,7 +1239,6 @@ class _EventsPageState extends State<EventsPage> {
                             }
                           },
                         ),
-                      // Mes billets
                       _buildHeroButton(
                         label: l10n.myTickets,
                         icon: Icons.confirmation_number_outlined,
@@ -1152,6 +1272,7 @@ class _EventsPageState extends State<EventsPage> {
       ),
     );
   }
+
   Widget _buildHeroButton({
     required String label,
     required IconData icon,
@@ -1214,7 +1335,6 @@ class _EventsPageState extends State<EventsPage> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Vignette
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: SizedBox(
@@ -1242,7 +1362,6 @@ class _EventsPageState extends State<EventsPage> {
               ),
             ),
             const SizedBox(width: 14),
-            // Infos
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -1268,7 +1387,6 @@ class _EventsPageState extends State<EventsPage> {
                     ),
                   ),
                   const SizedBox(height: 4),
-                  // Boutons d'action
                   Wrap(
                     spacing: 8,
                     runSpacing: 4,
@@ -1338,7 +1456,6 @@ class _EventsPageState extends State<EventsPage> {
                           }
                         },
                       ),
-                      // Bouton historique
                       GestureDetector(
                         onTap: () {
                           if (widget.token != null && widget.token!.isNotEmpty) {

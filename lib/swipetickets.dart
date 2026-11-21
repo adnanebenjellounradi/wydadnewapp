@@ -10,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:math' as math;
 import 'l10n/app_localizations.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'publish_resale_screen.dart';
 
 class SwipeTicketsPage extends StatefulWidget {
   final String token;
@@ -73,7 +74,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
   String? _cachedQRCodeTicketNumber;
 
   final Color primary = const Color(0xFFA8161F);
-  final Color gold = const Color(0xFFF5CD52);
+  final Color gold = const Color(0xFFFEE15A);
   final Color amber = const Color(0xFFFFC97A);
 
   AppLocalizations get l10n => AppLocalizations.of(context)!;
@@ -115,7 +116,6 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
   }
 
   List<dynamic> _filterTickets(List<dynamic> tickets) {
-    // Le filtrage est fait par l'appelant (TicketsPage / OrdersOfOneEventPage).
     return tickets;
   }
 
@@ -171,9 +171,6 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
     }
   }
 
-  // ═══════════════════════════════════════════════════════════
-  // SCAN QR / SEARCH CUSTOMER (inchangé)
-  // ═══════════════════════════════════════════════════════════
   Future<String?> _scanQRCodeForEmail() async {
     return await showDialog<String>(
       context: context,
@@ -195,7 +192,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                     Text(
                       l10n.scanQRCode,
                       style: const TextStyle(
-                        fontFamily: 'urbanist',
+                        fontFamily: 'Inter',
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
                         color: Colors.white,
@@ -245,7 +242,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                 Text(
                   l10n.positionQRCodeInFrame,
                   style: TextStyle(
-                    fontFamily: 'urbanist',
+                    fontFamily: 'Inter',
                     fontSize: 12,
                     color: Colors.white.withOpacity(0.7),
                   ),
@@ -334,7 +331,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                 l10n.userNotFound,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
-                  fontFamily: 'urbanist',
+                  fontFamily: 'Inter',
                   fontSize: 20,
                   fontWeight: FontWeight.w900,
                   color: Colors.white,
@@ -344,7 +341,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
               Text(
                 "${l10n.userNotFoundMessage} $scannedEmail,\n${l10n.inviteQuestion}",
                 style: TextStyle(
-                  fontFamily: 'urbanist',
+                  fontFamily: 'Inter',
                   fontSize: 13,
                   height: 1.45,
                   color: Colors.white.withOpacity(0.75),
@@ -475,7 +472,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                       child: Text(
                         "${l10n.transfer} ${_selectedTickets.length} ${l10n.ticketPlural}",
                         style: const TextStyle(
-                          fontFamily: 'urbanist',
+                          fontFamily: 'Inter',
                           fontWeight: FontWeight.w900,
                           fontSize: 18,
                           color: Colors.white,
@@ -486,7 +483,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                     Text(
                       l10n.enterRecipientEmail,
                       style: TextStyle(
-                        fontFamily: 'urbanist',
+                        fontFamily: 'Inter',
                         fontSize: 12,
                         color: Colors.white.withOpacity(0.7),
                       ),
@@ -497,7 +494,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                       keyboardType: TextInputType.emailAddress,
                       cursorColor: Colors.white,
                       style: const TextStyle(
-                        fontFamily: 'urbanist',
+                        fontFamily: 'Inter',
                         fontSize: 13,
                         color: Colors.white,
                       ),
@@ -506,7 +503,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                             color: Colors.white.withOpacity(0.6), size: 18),
                         hintText: l10n.emailExample,
                         hintStyle: TextStyle(
-                          fontFamily: 'urbanist',
+                          fontFamily: 'Inter',
                           fontSize: 12,
                           color: Colors.white.withOpacity(0.4),
                         ),
@@ -578,7 +575,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                             Text(
                               l10n.scanQRCode,
                               style: TextStyle(
-                                fontFamily: 'urbanist',
+                                fontFamily: 'Inter',
                                 fontSize: 13,
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white.withOpacity(0.9),
@@ -643,10 +640,6 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
     };
   }
 
-  void _navigateBackToTickets() {
-    Navigator.pop(context, true);
-  }
-
   @override
   void dispose() {
     _timer.cancel();
@@ -655,19 +648,15 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
     super.dispose();
   }
 
-  // ═══════════════════════════════════════════════════════════
-  // HELPERS UI
-  // ═══════════════════════════════════════════════════════════
-
   BoxDecoration _dialogDecoration() {
     return BoxDecoration(
       borderRadius: BorderRadius.circular(24),
       gradient: const LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
-        colors: [Color(0xFF5E0A13), Color(0xFF2E0409)],
+        colors: [Color(0xFF3A060D), Color(0xFF1A0206)],
       ),
-      border: Border.all(color: Colors.white.withOpacity(0.16)),
+      border: Border.all(color: Colors.white.withOpacity(0.14)),
       boxShadow: const [
         BoxShadow(
           color: Color(0x80000000),
@@ -690,7 +679,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
         child: Text(
           label,
           style: TextStyle(
-            fontFamily: 'urbanist',
+            fontFamily: 'Inter',
             fontSize: 14,
             fontWeight: FontWeight.w600,
             color: Colors.white.withOpacity(0.9),
@@ -706,14 +695,14 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(14),
         gradient: const LinearGradient(
-          colors: [Color(0xFFD11A2A), Color(0xFFA8161F)],
+          colors: [Color(0xFFB0141F), Color(0xFF860D16)],
         ),
       ),
       child: Center(
         child: Text(
           label,
           style: const TextStyle(
-            fontFamily: 'urbanist',
+            fontFamily: 'Inter',
             fontSize: 14,
             fontWeight: FontWeight.w700,
             color: Colors.white,
@@ -726,7 +715,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
   void _snack(String message, {bool error = false, bool warn = false}) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(message, style: const TextStyle(fontFamily: 'urbanist')),
+        content: Text(message, style: const TextStyle(fontFamily: 'Inter')),
         backgroundColor:
         error ? const Color(0xFFE5484D) : (warn ? amber : primary),
         behavior: SnackBarBehavior.floating,
@@ -752,7 +741,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
               Text(
                 label,
                 style: TextStyle(
-                  fontFamily: 'urbanist',
+                  fontFamily: 'Inter',
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
                   color: Colors.white.withOpacity(0.9),
@@ -764,10 +753,6 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
       ),
     );
   }
-
-  // ═══════════════════════════════════════════════════════════
-  // BUILD — DESIGN HTML
-  // ═══════════════════════════════════════════════════════════
 
   @override
   Widget build(BuildContext context) {
@@ -818,9 +803,9 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
               child: Column(
                 children: [
                   _buildHeader(),
-                  const SizedBox(height: 14),
+                  const SizedBox(height: 10),
                   _buildEventTitle(),
-                  const SizedBox(height: 18),
+                  const SizedBox(height: 14),
                   Expanded(
                     child: PageView.builder(
                       controller: _pageController,
@@ -835,22 +820,71 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                         return SingleChildScrollView(
                           child: Column(
                             children: [
-                              // Carte rouge (QR uniquement)
-                              _buildTicketCard(ticket),
+                              // Carte rouge avec flèches overlay
+                              Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  _buildTicketCard(ticket),
+                                  // Flèches de navigation
+                                  Positioned(
+                                    left: -6,
+                                    child: _buildNavArrow(
+                                      icon: Icons.chevron_left,
+                                      enabled: _currentIndex > 0,
+                                      onTap: () {
+                                        if (_currentIndex > 0) {
+                                          _pageController.previousPage(
+                                            duration: const Duration(milliseconds: 300),
+                                            curve: Curves.easeInOut,
+                                          );
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                  Positioned(
+                                    right: -6,
+                                    child: _buildNavArrow(
+                                      icon: Icons.chevron_right,
+                                      enabled: _currentIndex < _filteredTickets.length - 1,
+                                      onTap: () {
+                                        if (_currentIndex < _filteredTickets.length - 1) {
+                                          _pageController.nextPage(
+                                            duration: const Duration(milliseconds: 300),
+                                            curve: Curves.easeInOut,
+                                          );
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
                               const SizedBox(height: 14),
-                              // Note personnelle hors carte
+                              // Pagination
+                              _buildPagination(),
+                              const SizedBox(height: 14),
+                              // Note personnelle
                               _buildPersonalNote(),
                               const SizedBox(height: 14),
-                              // Boutons Transférer / Revendre hors carte
+                              // Boutons d'action
                               _buildActionButtons(),
+                              const SizedBox(height: 20),
+                              // Pied de page
+                              Text(
+                                "Présentez ce code à l'entrée. Luminosité augmentée automatiquement.",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.white.withOpacity(0.6),
+                                  fontFamily: 'Inter',
+                                  height: 1.5,
+                                ),
+                              ),
                             ],
                           ),
                         );
                       },
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  _buildPagination(),
                 ],
               ),
             ),
@@ -860,8 +894,30 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
     );
   }
 
-  // ── Header ────────────────────────────────────────────────
   Widget _buildHeader() {
+    // Calcul du temps restant avant le match (converti en j/h/min)
+    String? countdown;
+    try {
+      final eventDate = DateTime.parse(widget.event["date"]);
+      final now = DateTime.now();
+      if (now.isBefore(eventDate)) {
+        final diff = eventDate.difference(now);
+
+        if (diff.inDays > 0) {
+          // Ex: "Coup d'envoi dans 2 j 5 h"
+          countdown = "Coup d'envoi dans ${diff.inDays} j ${diff.inHours.remainder(24)} h";
+        } else if (diff.inHours > 0) {
+          // Ex: "Coup d'envoi dans 3 h 33"
+          countdown = "Coup d'envoi dans ${diff.inHours} h ${diff.inMinutes.remainder(60)}";
+        } else if (diff.inMinutes > 0) {
+          // Ex: "Coup d'envoi dans 45 min"
+          countdown = "Coup d'envoi dans ${diff.inMinutes} min";
+        } else {
+          countdown = "Coup d'envoi imminent";
+        }
+      }
+    } catch (_) {}
+
     return SizedBox(
       height: 44,
       child: Row(
@@ -880,26 +936,46 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                   color: Colors.white, size: 20),
             ),
           ),
-          const Expanded(
-            child: Center(
-              child: Text(
-                'Mes billets',
-                style: TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                  fontFamily: 'urbanist',
-                ),
+          const Spacer(),
+          if (countdown != null)
+            Container(
+              height: 30,
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color: const Color(0xFFF5CD52).withOpacity(0.14),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 7,
+                    height: 7,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Color(0xFFF5CD52),
+                    ),
+                  ),
+                  const SizedBox(width: 6),
+                  Text(
+                    countdown,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                      color: Color(0xFFF5CD52),
+                      fontFamily: 'Inter',
+                    ),
+                  ),
+                ],
               ),
             ),
-          ),
+          const Spacer(),
           const SizedBox(width: 44),
         ],
       ),
     );
   }
 
-  // ── Titre de l'évènement ──────────────────────────────────
   Widget _buildEventTitle() {
     final name = widget.event["name"]?.toString() ?? "";
     final date = _formatDateShort(widget.event["date"]);
@@ -913,30 +989,29 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
           style: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w700,
-            letterSpacing: -0.3,
+            fontSize: 18,
+            fontWeight: FontWeight.w800,
+            letterSpacing: -0.2,
             color: Colors.white,
-            fontFamily: 'urbanist',
+            fontFamily: 'Inter',
           ),
         ),
-        const SizedBox(height: 4),
+        const SizedBox(height: 2),
         Text(
           "$date · $address",
           textAlign: TextAlign.center,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(
-            fontSize: 13,
-            color: Colors.white.withOpacity(0.72),
-            fontFamily: 'urbanist',
+            fontSize: 12,
+            color: Colors.white.withOpacity(0.7),
+            fontFamily: 'Inter',
           ),
         ),
       ],
     );
   }
 
-  // ── Carte du billet (QR uniquement, sans boutons/note) ────
   Widget _buildTicketCard(Map<String, dynamic> ticket) {
     final ticketData = ticket["ticket_data"];
     final ticketStatus = ticket["status"];
@@ -956,7 +1031,6 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
         ticketStatus != 3 &&
         !isEventEnded(widget.event["date"]);
 
-    // Contenu du bloc QR / message
     Widget qrBlock;
     if (isEventEnded(widget.event["date"])) {
       qrBlock = _qrPlaceholderMessage(
@@ -1006,7 +1080,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
 
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(26),
         gradient: const LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -1027,7 +1101,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
         ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(26),
         child: Stack(
           children: [
             Positioned(
@@ -1038,70 +1112,48 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                 height: 240,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.white.withOpacity(0.10),
+                  color: Colors.white.withOpacity(0.08),
                 ),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(20, 18, 20, 16),
+              padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // En-tête : CATÉGORIE + titulaire (alignés en haut)
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  // En-tête centré : CATÉGORIE + Titulaire
+                  Column(
                     children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              l10n.category.toUpperCase(),
-                              style: TextStyle(
-                                fontSize: 11,
-                                fontWeight: FontWeight.w600,
-                                letterSpacing: 1.4,
-                                color: Colors.white.withOpacity(0.8),
-                                fontFamily: 'urbanist',
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              category,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w700,
-                                color: Colors.white,
-                                fontFamily: 'urbanist',
-                              ),
-                            ),
-                          ],
+
+                      Text(
+                        category.toUpperCase(),
+                        maxLines: 2,
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 26,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 0.3,
+                          color: Colors.white,
+                          fontFamily: 'Inter',
                         ),
                       ),
-                      const SizedBox(width: 12),
-                      // Titulaire aligné sur le label CATÉGORIE
+                      const SizedBox(height: 2),
                       Text(
-                        holder,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                        "$holder · titulaire",
                         style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 1.4,
-                          color: Colors.white.withOpacity(0.8),
-                          fontFamily: 'urbanist',
+                          fontSize: 12,
+                          color: Colors.white.withOpacity(0.78),
+                          fontFamily: 'Inter',
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 12),
                   // Bloc QR / message
                   qrBlock,
-                  // Grille uniquement si données de placement
+                  // Grille de placement
                   if (hasSeatingData) ...[
-                    const SizedBox(height: 14),
+                    const SizedBox(height: 12),
                     _buildSeatingGrid(ticketData),
                   ],
                   if (showAcceptReject) ...[
@@ -1117,15 +1169,45 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
     );
   }
 
+  Widget _buildNavArrow({
+    required IconData icon,
+    required bool enabled,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Colors.white.withOpacity(0.22)),
+          color: const Color(0xFF120104).withOpacity(0.82),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0x66000000),
+              blurRadius: 16,
+              offset: Offset(0, 6),
+            ),
+          ],
+        ),
+        child: Icon(
+          icon,
+          size: 18,
+          color: enabled ? Colors.white : Colors.white24,
+        ),
+      ),
+    );
+  }
+
   Widget _qrPlaceholderMessage({
     required IconData icon,
     required String title,
   }) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 0),
       height: 176,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(20),
         color: const Color(0xFF07060F).withOpacity(0.35),
         border: Border.all(
           color: Colors.white.withOpacity(0.3),
@@ -1145,7 +1227,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                 title,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
-                  fontFamily: 'urbanist',
+                  fontFamily: 'Inter',
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
                   color: Colors.white,
@@ -1162,7 +1244,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
     return Container(
       height: 176,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(20),
         color: const Color(0xFF07060F).withOpacity(0.35),
         border: Border.all(color: Colors.white.withOpacity(0.3)),
       ),
@@ -1178,7 +1260,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                 l10n.qrCodeWillAppearBeforeMatch,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
-                  fontFamily: 'urbanist',
+                  fontFamily: 'Inter',
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
                   color: Colors.white,
@@ -1189,7 +1271,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                 "Disponible dans $remaining",
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontFamily: 'urbanist',
+                  fontFamily: 'Inter',
                   fontSize: 12,
                   color: Colors.white.withOpacity(0.78),
                 ),
@@ -1217,7 +1299,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
               fontWeight: FontWeight.w600,
               letterSpacing: 1,
               color: Colors.white.withOpacity(0.72),
-              fontFamily: 'urbanist',
+              fontFamily: 'Inter',
             ),
           ),
           const SizedBox(height: 4),
@@ -1229,7 +1311,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
               fontSize: 16,
               fontWeight: FontWeight.w700,
               color: Colors.white,
-              fontFamily: 'urbanist',
+              fontFamily: 'Inter',
             ),
           ),
         ],
@@ -1237,8 +1319,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
     }
 
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 0),
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
+      padding: const EdgeInsets.symmetric(vertical: 11, horizontal: 4),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         color: const Color(0xFF07060F).withOpacity(0.28),
@@ -1273,7 +1354,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
               child: Text(
                 l10n.refuse.toUpperCase(),
                 style: const TextStyle(
-                  fontFamily: 'urbanist',
+                  fontFamily: 'Inter',
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
                   color: Colors.white,
@@ -1298,7 +1379,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
               child: Text(
                 l10n.accept.toUpperCase(),
                 style: const TextStyle(
-                  fontFamily: 'urbanist',
+                  fontFamily: 'Inter',
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
                   color: Colors.white,
@@ -1313,72 +1394,34 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
 
   Widget _buildPagination() {
     final total = _filteredTickets.length;
-    final canPrev = _currentIndex > 0;
-    final canNext = _currentIndex < total - 1;
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Column(
       children: [
-        _pagerButton(
-          icon: Icons.chevron_left,
-          enabled: canPrev,
-          onTap: () {
-            if (canPrev) {
-              _pageController.previousPage(
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeInOut,
-              );
-            }
-          },
-        ),
-        const SizedBox(width: 14),
         Text(
           "Billet ${_currentIndex + 1} / $total",
           style: const TextStyle(
             fontSize: 14,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w700,
             color: Colors.white,
-            fontFamily: 'urbanist',
+            fontFamily: 'Inter',
           ),
         ),
-        const SizedBox(width: 14),
-        _pagerButton(
-          icon: Icons.chevron_right,
-          enabled: canNext,
-          onTap: () {
-            if (canNext) {
-              _pageController.nextPage(
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeInOut,
-              );
-            }
-          },
+        const SizedBox(height: 8),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: List.generate(total, (index) {
+            final isActive = index == _currentIndex;
+            return Container(
+              margin: const EdgeInsets.symmetric(horizontal: 3),
+              width: isActive ? 18 : 6,
+              height: 6,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(3),
+                color: isActive ? gold : Colors.white.withOpacity(0.3),
+              ),
+            );
+          }),
         ),
       ],
-    );
-  }
-
-  Widget _pagerButton({
-    required IconData icon,
-    required bool enabled,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.white.withOpacity(0.14)),
-          color: Colors.white.withOpacity(0.06),
-        ),
-        child: Icon(
-          icon,
-          size: 18,
-          color: enabled ? Colors.white : Colors.white24,
-        ),
-      ),
     );
   }
 
@@ -1395,12 +1438,12 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
           const SizedBox(width: 10),
           Expanded(
             child: Text(
-              "Chaque billet est strictement personnel. Un enfant doit avoir son propre billet.",
+              "Chaque billet est individuel et donne accès à une seule personne. Chaque enfant accompagné doit avoir son propre billet.",
               style: TextStyle(
-                fontFamily: 'urbanist',
+                fontFamily: 'Inter',
                 fontSize: 12,
                 height: 1.5,
-                color: Colors.white.withOpacity(0.72),
+                color: Colors.white.withOpacity(0.75),
               ),
             ),
           ),
@@ -1411,10 +1454,11 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
 
   Widget _buildActionButtons() {
     final canTransfer = _selectedTickets.isNotEmpty;
+    final canResell = _selectedTickets.isNotEmpty;
 
     return Row(
       children: [
-        // Bouton Transférer (blanc / rouge)
+        // ─── Bouton Transférer ───
         Expanded(
           child: GestureDetector(
             onTap: canTransfer ? _showBulkTransferModal : null,
@@ -1438,7 +1482,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                         ? "${l10n.transfer.toUpperCase()} ${_selectedTickets.length}"
                         : "Transférer",
                     style: TextStyle(
-                      fontFamily: 'urbanist',
+                      fontFamily: 'Inter',
                       fontSize: 15,
                       fontWeight: FontWeight.w700,
                       color: canTransfer
@@ -1452,31 +1496,41 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
           ),
         ),
         const SizedBox(width: 10),
-        // Bouton Revendre (glass) — visuel seulement, action à brancher
+        // ─── Bouton Revendre ───
         Expanded(
           child: GestureDetector(
-            onTap: () {
-              // TODO: brancher la mise en vente
-            },
+            onTap: canResell ? _handleResellTap : null,
             child: Container(
               height: 54,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(27),
-                color: Colors.white.withOpacity(0.08),
-                border: Border.all(color: Colors.white.withOpacity(0.18)),
+                color: canResell
+                    ? const Color(0xFFFEE15A)
+                    : Colors.white.withOpacity(0.08),
+                border: Border.all(
+                  color: canResell
+                      ? Colors.transparent
+                      : Colors.white.withOpacity(0.18),
+                ),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Icon(Icons.swap_horiz, size: 17, color: Colors.white),
-                  SizedBox(width: 8),
+                children: [
+                  Icon(
+                    Icons.swap_horiz,
+                    size: 17,
+                    color: canResell ? Colors.black87 : Colors.white,
+                  ),
+                  const SizedBox(width: 8),
                   Text(
-                    "Revendre",
+                    canResell
+                        ? "Revendre ${_selectedTickets.length}"
+                        : "Revendre",
                     style: TextStyle(
-                      fontFamily: 'urbanist',
+                      fontFamily: 'Inter',
                       fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
+                      fontWeight: FontWeight.w700,
+                      color: canResell ? Colors.black87 : Colors.white,
                     ),
                   ),
                 ],
@@ -1487,8 +1541,83 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
       ],
     );
   }
+  // ═══════════════════════════════════════════════════════════
+  // HANDLER : Bouton "Revendre"
+  // ═══════════════════════════════════════════════════════════
+  Future<void> _handleResellTap() async {
+    if (_selectedTickets.isEmpty) return;
 
-  // ── État vide ─────────────────────────────────────────────
+    // Vérification côté client : le match doit être dans > 2h
+    // (l'API renverra 422 sinon, mais autant éviter un appel inutile)
+    if (!_canStillResell(widget.event["date"]?.toString() ?? "")) {
+      _snack(
+        "La revente est fermée (moins de 2h avant le match).",
+        error: true,
+      );
+      return;
+    }
+
+    // Calcul du prix original total pour pré-remplir le slider
+    // On utilise le prix unitaire du ticket × nombre de billets sélectionnés
+    final unitPrice = _getOriginalUnitPrice();
+    final totalOriginalPrice = unitPrice * _selectedTickets.length;
+
+    // Navigation vers PublishResaleScreen avec les IDs sélectionnés
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => PublishResaleScreen(
+          token: widget.token,
+          orderChildIds: _selectedTickets.toList(),
+          originalPrice: totalOriginalPrice,
+          matchName: widget.event["name"]?.toString() ?? "",
+        ),
+      ),
+    );
+
+    // Si la publication a réussi, on rafraîchit l'écran et on vide la sélection
+    if (result == true && mounted) {
+      setState(() {
+        _selectedTickets.clear();
+        _showTransferButton = false;
+      });
+      _snack("Vos billets sont maintenant en vente sur la Ticketplace !");
+    }
+  }
+
+  // Vérifie qu'on est encore dans la fenêtre de revente (> 2h avant match)
+  bool _canStillResell(String eventDate) {
+    try {
+      final event = DateTime.parse(eventDate.replaceAll('Z', ''));
+      final now = DateTime.now();
+      final cutoff = event.subtract(const Duration(hours: 2));
+      return now.isBefore(cutoff);
+    } catch (_) {
+      return false;
+    }
+  }
+
+  // Récupère le prix unitaire original depuis orderData ou ticket
+  double _getOriginalUnitPrice() {
+    // 1. Essaie depuis orderData (si dispo)
+    final fromOrder = widget.orderData["ticket_price"] ??
+        widget.orderData["price"] ??
+        widget.orderData["unit_price"];
+    if (fromOrder is num) return fromOrder.toDouble();
+    if (fromOrder is String) {
+      return double.tryParse(fromOrder) ?? 0.0;
+    }
+
+    // 2. Essaie depuis widget.ticket
+    final fromTicket = widget.ticket["price"] ?? widget.ticket["resale_price"];
+    if (fromTicket is num) return fromTicket.toDouble();
+    if (fromTicket is String) {
+      return double.tryParse(fromTicket) ?? 0.0;
+    }
+
+    // 3. Fallback : 0 (l'utilisateur saisira le prix dans PublishResaleScreen)
+    return 0.0;
+  }
   Widget _buildEmptyState() {
     return Scaffold(
       backgroundColor: const Color(0xFF170205),
@@ -1530,7 +1659,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                               ? l10n.ticketPendingAcceptance
                               : l10n.noTicketsAvailable,
                           style: TextStyle(
-                            fontFamily: 'urbanist',
+                            fontFamily: 'Inter',
                             fontWeight: FontWeight.w600,
                             fontSize: 15,
                             color: Colors.white.withOpacity(0.7),
@@ -1548,10 +1677,6 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
       ),
     );
   }
-
-  // ═══════════════════════════════════════════════════════════
-  // LOGIQUE QR (inchangée dans le fond, UI adaptée)
-  // ═══════════════════════════════════════════════════════════
 
   Future<String?> _getDeviceIdFromPrefs() async {
     final prefs = await SharedPreferences.getInstance();
@@ -1640,86 +1765,106 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
         Color borderColor = const Color(0xFFA8161F),
         String? scanMessage,
       }) {
-    return CustomPaint(
-      painter: _FourNDottedBorderPainter(
-        animation: _controller,
-        radius: 20,
-        color: borderColor,
-        strokeWidth: 12,
+    final now = DateTime.now();
+    final timeString =
+        "${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}:${now.second.toString().padLeft(2, '0')}";
+
+    return Container(
+      padding: const EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
       ),
-      child: Container(
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(14),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.4),
-              blurRadius: 24,
-              offset: const Offset(0, 10),
-            ),
-          ],
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const SizedBox(height: 6),
-            RichText(
-              textAlign: TextAlign.center,
-              text: TextSpan(
-                children: [
-                  TextSpan(
-                    text: "${l10n.category}: ",
-                    style: const TextStyle(
-                      fontFamily: 'urbanist',
-                      fontWeight: FontWeight.w700,
-                      fontSize: 16,
-                      color: Color(0xFFA8161F),
-                    ),
-                  ),
-                  TextSpan(
-                    text: widget.category ?? "",
-                    style: const TextStyle(
-                      fontFamily: 'urbanist',
-                      fontWeight: FontWeight.w900,
-                      fontSize: 20,
-                      color: Color(0xFFA8161F),
-                    ),
-                  ),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          // Effet de bordure rotative
+          Container(
+            width: 300,
+            height: 300,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: SweepGradient(
+                startAngle: 0,
+                endAngle: 2 * math.pi,
+                colors: [
+                  Color(0xFFFEE15A),
+                  Colors.transparent,
+                  Color(0xFFFEE15A),
+                  Colors.transparent,
                 ],
+                stops: [0.0, 0.3, 0.5, 0.8],
               ),
             ),
-            const SizedBox(height: 4),
-            QrImageView(
-              data: ticketNumber,
-              size: 220,
-              backgroundColor: Colors.white,
+          ),
+          // Bloc QR principal
+          Container(
+            padding: const EdgeInsets.fromLTRB(18, 12, 18, 18),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
             ),
-            if (scanMessage != null)
-              Padding(
-                padding: const EdgeInsets.only(top: 12),
-                child: Container(
-                  padding:
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: borderColor.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: borderColor),
-                  ),
-                  child: Text(
-                    scanMessage,
-                    style: TextStyle(
-                      fontFamily: 'urbanist',
-                      fontSize: 11,
-                      fontWeight: FontWeight.w700,
-                      color: borderColor,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Heure + point clignotant
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _BlinkingDot(color: const Color(0xFFC8172A)),
+                    const SizedBox(width: 7),
+                    Text(
+                      timeString,
+                      style: const TextStyle(
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w900,
+                        fontSize: 20,
+                        letterSpacing: 1,
+                        color: Color(0xFFC8172A),
+                      ),
                     ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                // QR Code
+                QrImageView(
+                  data: ticketNumber,
+                  size: 210,
+                  backgroundColor: Colors.white,
+                  eyeStyle: const QrEyeStyle(
+                    eyeShape: QrEyeShape.square,
+                    color: Color(0xFF07060F),
+                  ),
+                  dataModuleStyle: const QrDataModuleStyle(
+                    dataModuleShape: QrDataModuleShape.square,
+                    color: Color(0xFF07060F),
                   ),
                 ),
-              ),
-            const SizedBox(height: 18),
-          ],
-        ),
+                if (scanMessage != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 12),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: borderColor.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: borderColor),
+                      ),
+                      child: Text(
+                        scanMessage,
+                        style: TextStyle(
+                          fontFamily: 'Inter',
+                          fontSize: 11,
+                          fontWeight: FontWeight.w700,
+                          color: borderColor,
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -1748,7 +1893,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
           Text(
             l10n.ticketAlreadyScanned,
             style: const TextStyle(
-              fontFamily: 'urbanist',
+              fontFamily: 'Inter',
               fontWeight: FontWeight.w800,
               fontSize: 14,
               color: Colors.white,
@@ -1759,7 +1904,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
           Text(
             "$scanDate · ${l10n.otherDevice}",
             style: TextStyle(
-              fontFamily: 'urbanist',
+              fontFamily: 'Inter',
               fontSize: 11,
               color: Colors.white.withOpacity(0.75),
             ),
@@ -1769,10 +1914,6 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
       ),
     );
   }
-
-  // ═══════════════════════════════════════════════════════════
-  // HELPERS DATE / COUNTDOWN (inchangés)
-  // ═══════════════════════════════════════════════════════════
 
   String _formatDateTime(String dateTimeString) {
     try {
@@ -1991,7 +2132,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                 l10n.confirmTransfer,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
-                  fontFamily: 'urbanist',
+                  fontFamily: 'Inter',
                   fontSize: 20,
                   fontWeight: FontWeight.w900,
                   color: Colors.white,
@@ -2001,7 +2142,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
               Text(
                 l10n.recipient,
                 style: TextStyle(
-                  fontFamily: 'urbanist',
+                  fontFamily: 'Inter',
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
                   color: Colors.white.withOpacity(0.6),
@@ -2020,7 +2161,7 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
                 child: Text(
                   email,
                   style: const TextStyle(
-                    fontFamily: 'urbanist',
+                    fontFamily: 'Inter',
                     fontWeight: FontWeight.w800,
                     fontSize: 15,
                     color: Color(0xFFF5CD52),
@@ -2116,141 +2257,45 @@ class _SwipeTicketsPageState extends State<SwipeTicketsPage>
   }
 }
 
-// ═══════════════════════════════════════════════════════════
-// PAINTERS (inchangés)
-// ═══════════════════════════════════════════════════════════
-
-class _FourNDottedBorderPainter extends CustomPainter {
-  final Animation<double> animation;
-  final double radius;
+class _BlinkingDot extends StatefulWidget {
   final Color color;
-  final double strokeWidth;
-
-  _FourNDottedBorderPainter({
-    required this.animation,
-    required this.radius,
-    required this.color,
-    required this.strokeWidth,
-  }) : super(repaint: animation);
+  const _BlinkingDot({required this.color});
 
   @override
-  void paint(Canvas canvas, Size size) {
-    final rect = Rect.fromLTWH(0, 0, size.width, size.height);
-    final path = Path()
-      ..addRRect(RRect.fromRectAndRadius(rect, Radius.circular(radius)));
-
-    final metric = path.computeMetrics().first;
-    final totalLength = metric.length;
-    final offset = (animation.value * totalLength * 0.5) % totalLength;
-    final segmentLength = totalLength / 4;
-    final dashLength = segmentLength * 0.7;
-    final dashPath = Path();
-
-    for (int i = 0; i < 4; i++) {
-      double startPosition = (i * segmentLength + offset) % totalLength;
-      final extract =
-      metric.extractPath(startPosition, startPosition + dashLength);
-      dashPath.addPath(extract, Offset.zero);
-    }
-
-    final paint = Paint()
-      ..shader = LinearGradient(
-        colors: [
-          color.withOpacity(0.4),
-          color.withOpacity(0.9),
-          color.withOpacity(0.4),
-        ],
-        stops: const [0.0, 0.5, 1.0],
-      ).createShader(rect)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = strokeWidth
-      ..strokeCap = StrokeCap.round;
-
-    canvas.drawPath(dashPath, paint);
-
-    final glowPaint = Paint()
-      ..color = color.withOpacity(0.12)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = strokeWidth * 1.3
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 2);
-
-    canvas.drawPath(dashPath, glowPaint);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+  State<_BlinkingDot> createState() => _BlinkingDotState();
 }
 
-late AnimationController controller;
-
-class _ThreeNDottedBorderPainter extends CustomPainter {
-  final Animation<double> animation;
-  final double radius;
-  final Color color;
-  final double strokeWidth;
-
-  _ThreeNDottedBorderPainter({
-    required this.animation,
-    required this.radius,
-    required this.color,
-    required this.strokeWidth,
-  }) : super(repaint: animation);
+class _BlinkingDotState extends State<_BlinkingDot>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
 
   @override
-  void paint(Canvas canvas, Size size) {
-    final rect = Rect.fromLTWH(0, 0, size.width, size.height);
-    final path = Path()
-      ..addRRect(RRect.fromRectAndRadius(rect, Radius.circular(radius)));
-
-    final metric = path.computeMetrics().first;
-    final totalLength = metric.length;
-
-    final double t = (math.sin(animation.value * 2 * math.pi) * 0.3) + 0.5;
-    final offset =
-        (animation.value * totalLength * 0.15 + t * 20) % totalLength;
-    final segmentLength = totalLength / 3;
-    final dashLength = segmentLength * 0.7;
-    final dynamicOffset = offset + (t * 10);
-    final dashPath = Path();
-
-    for (int i = 0; i < 3; i++) {
-      double startPosition =
-          (i * segmentLength + dynamicOffset + (i * 5)) % totalLength;
-      final extract =
-      metric.extractPath(startPosition, startPosition + dashLength);
-      dashPath.addPath(extract, Offset.zero);
-
-      if (i == 1) {
-        final midPoint = metric.extractPath(
-            startPosition + dashLength / 2, startPosition + dashLength / 2 + 1);
-        dashPath.addPath(midPoint, Offset.zero);
-      }
-    }
-
-    final paint = Paint()
-      ..shader = LinearGradient(
-        colors: [
-          color.withOpacity(0.4),
-          color.withOpacity(0.8),
-          color.withOpacity(0.4),
-        ],
-        stops: const [0.0, 0.5, 1.0],
-      ).createShader(rect)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = strokeWidth * 0.7
-      ..strokeCap = StrokeCap.round;
-
-    canvas.drawPath(dashPath, paint);
-
-    final glowPaint = Paint()
-      ..color = color.withOpacity(0.1)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = strokeWidth * 1.2
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 2);
-
-    canvas.drawPath(dashPath, glowPaint);
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 1),
+    )..repeat(reverse: true);
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FadeTransition(
+      opacity: _controller,
+      child: Container(
+        width: 9,
+        height: 9,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: widget.color,
+        ),
+      ),
+    );
+  }
 }

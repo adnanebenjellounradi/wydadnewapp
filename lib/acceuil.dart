@@ -13,6 +13,9 @@ import 'wallet_service.dart';
 
 const String kMediaBase = 'https://quizzbackoff.ma';
 
+/// Délai max d'attente d'une API : au-delà, la section correspondante est masquée.
+const Duration kApiTimeout = Duration(seconds: 13);
+
 String mediaUrl(String? path) {
   if (path == null || path.trim().isEmpty) return '';
   final s = path.trim();
@@ -63,6 +66,8 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
 
   double _walletBalance = 0;
   bool _walletLoading = false;
+  /// true si l'API wallet n'a pas répondu à temps → carte Wydad Pay masquée
+  bool _walletUnavailable = false;
 
   bool _isUnderMaintenance = false;
   bool _shouldUpdateVersion = false;
@@ -188,12 +193,25 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
   Future<void> _loadWalletBalance() async {
     if (!isLoggedIn) return;
     setState(() => _walletLoading = true);
-    final wallet = await WalletService.getWalletInfo(widget.token);
-    if (!mounted) return;
-    setState(() {
-      _walletBalance = (wallet?['balance'] as num?)?.toDouble() ?? 0;
-      _walletLoading = false;
-    });
+    try {
+      final wallet = await WalletService.getWalletInfo(widget.token).timeout(kApiTimeout);
+      if (!mounted) return;
+      setState(() {
+        _walletBalance = (wallet?['balance'] as num?)?.toDouble() ?? 0;
+        _walletLoading = false;
+        _walletUnavailable = false;
+      });
+    } on TimeoutException {
+      if (!mounted) return;
+      setState(() {
+        _walletLoading = false;
+        _walletUnavailable = true;
+      });
+    } catch (e) {
+      print("Error loading wallet: $e");
+      if (!mounted) return;
+      setState(() => _walletLoading = false);
+    }
   }
 
   Future<void> _fetchOrganizationSettings() async {
@@ -201,7 +219,7 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
       final response = await http.get(
         Uri.parse("https://ticketing.ma/api/customer/organization-setting?organization_id=20"),
         headers: {"Authorization": "Bearer ${widget.token}", "Content-Type": "application/json"},
-      );
+      ).timeout(kApiTimeout);
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         if (data["success"] == true && mounted) {
@@ -225,7 +243,7 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
         headers: isLoggedIn
             ? {"Authorization": "Bearer ${widget.token}", "Content-Type": "application/json"}
             : {"Content-Type": "application/json"},
-      );
+      ).timeout(kApiTimeout);
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         if (data["success"] == true && mounted) {
@@ -233,6 +251,9 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
           setState(() => _homeEvents = _pickHomeEvents(raw));
         }
       }
+    } on TimeoutException {
+      // Pas de réponse en 13 s → aucun event, le slider n'est pas affiché
+      if (mounted) setState(() => _homeEvents = []);
     } catch (e) {
       print("Error fetching home events: $e");
     }
@@ -276,7 +297,8 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
       const String uniqueId = "dsqqqqqlkkkkljlkwwwwwww";
       final uri = Uri.parse("https://quizzbackoff.ma/api/public/organisation/5")
           .replace(queryParameters: {'mobileApp': 'true', 'unique_id': uniqueId});
-      final response = await http.get(uri);
+      // Timeout 13 s → retourne null : pas d'actus affichées, pas de blocage maintenance
+      final response = await http.get(uri).timeout(kApiTimeout);
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         if (data["success"] == true) {
@@ -937,8 +959,10 @@ class _AcceuilPageState extends State<AcceuilPage> with WidgetsBindingObserver {
                     if (_hasAnyActu) _buildActuSwiper(),
 
                     const SizedBox(height: 12),
-                    _buildWalletCard(context),
-                    const SizedBox(height: 12),
+                    if (!_walletUnavailable) ...[
+                      _buildWalletCard(context),
+                      const SizedBox(height: 12),
+                    ],
                     _buildGridCards(context),
                     const SizedBox(height: 12),
                     _buildBrandBanner(),

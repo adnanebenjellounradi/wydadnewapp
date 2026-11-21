@@ -51,7 +51,7 @@ class _LoadingPageState extends State<LoadingPage> {
         '/acceuil',
         arguments: {
           'token': token,
-          'organizationId': organizationId,
+          'organizationId': 20,
         },
       );
     } else {
